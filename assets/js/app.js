@@ -94,6 +94,18 @@
       $('wishes').append(row);
     });
 
+    // 選んでいる願い・体験の表示
+    var updateWishStatus = function () {
+      var sel = Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; });
+      $('wish-selected').textContent = sel.length ? '選択中：' + sel.join('・') + '（' + sel.length + '件）' : '選択中：なし';
+      $('wish-clear').hidden = !sel.length;
+    };
+    $('wishes').addEventListener('change', updateWishStatus);
+    $('wish-clear').addEventListener('click', function () {
+      document.querySelectorAll('input[name=wish]:checked').forEach(function (c) { c.checked = false; });
+      updateWishStatus();
+    });
+
     // 所要時間の選択肢
     cfg.timeLimits.forEach(function (m) {
       var o = el('option', null, limitText(m) + '以内'); o.value = String(m); $('time-limit').append(o);
