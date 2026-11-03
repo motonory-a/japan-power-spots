@@ -7,6 +7,7 @@ const assert = require('assert');
 const { SPOTS_OSM, SPOTS_OSM_META } = require('../data/spots-osm.js');
 global.PREFECTURES = require('../data/spots-demo.js').PREFECTURES;
 global.SPOTS = require('../data/spots-demo.js').SPOTS;
+global.WISH_OPTIONS = require('../data/spots-demo.js').WISH_OPTIONS;
 global.SPOTS_OSM = SPOTS_OSM;
 global.SPOTS_OSM_META = SPOTS_OSM_META;
 const SpotData = require('../assets/js/data.js');
@@ -79,6 +80,10 @@ console.log('代表的なスポットが入っている');
   '厳島神社', '日光東照宮', '太宰府天満宮', '箱根神社', '戸隠神社', '三峯神社', '宗像大社', '浅草寺', '清水寺', '善光寺',
   '春日大社', '熱田神宮', '住吉大社', '鶴岡八幡宮', '石清水八幡宮', '大神神社', '高千穂峰', '霧島神宮', '諏訪大社'].forEach((n) => {
   test(n, () => assert.ok(all.some((s) => s.name.indexOf(n) !== -1), n));
+});
+test('推定のご利益にはご利益の項目だけが入る', () => {
+  const benefit = new Set(WISH_OPTIONS.filter((w) => w.group === 'ご利益').map((w) => w.key));
+  all.forEach((s) => (s.wishesInferred || []).forEach((w) => assert.ok(benefit.has(w), s.name + ' ' + w)));
 });
 test('手入力の説明文が反映されている（明治神宮）', () => {
   const m = all.find((s) => s.name === '明治神宮' && s.prefecture === '東京都');

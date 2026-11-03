@@ -5,7 +5,7 @@
 公開ページ：https://motonory-a.github.io/japan-power-spots/
 関連サイト：https://motonory-a.github.io/my-first-project/ （魂の系統鑑定）
 
-## いまの状態（v2.3）
+## いまの状態（v2.4）
 
 - スポットは全国約5万件（OpenStreetMapをもとに選定）。知名度の高い約1万件を最初に読み込み、残り約4万件は表示後に読み込みます（data/extra/）。作り方と選び方は docs/DATA_SPEC.md、件数の内訳は docs/DATA_REPORT.md。
 - ご利益は、神社・寺院の名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。内容は全件「未確認」の扱いです。
@@ -26,6 +26,7 @@ assets/js/config.js     点数の配分・交通手段ごとの距離の目安�
 assets/js/diagnosis.js  数秘・距離・方角・点数の計算（画面に依存しない）
 assets/js/kyusei.js     九星気学（暦・年月日の盤・本命星・吉凶方位）
 assets/js/kigaku-board.js  八角形の方位盤の図（SVG）
+assets/js/photos.js     おすすめ上位の写真（Wikidata の代表写真を Wikimedia Commons から表示）
 assets/js/map.js        地図（Leaflet + OpenStreetMap）
 assets/js/origin.js     出発地のくわしい指定（住所検索・地図・現在地）
 assets/js/profiles.js   入力内容の保存（ニックネームごと、端末内のみ）
@@ -56,6 +57,7 @@ node tests/run-data-tests.js
 
 ## 更新履歴
 
+- v2.4（2026-11-03）おすすめ1〜5位に写真（Wikimedia Commons、撮影者・ライセンス表示）
 - v2.3（2026-11-03）八角形の方位盤の図（今年・今月・出かける日、五行の色、本命星・吉凶方位の表示）
 - v2.2（2026-11-03）全国約5万件（分割読み込み）、「あなたの気学」（今の状態と6か月の吉方位）
 - v2.1（2026-11-03）入力内容の保存とニックネーム登録（端末内のみ）

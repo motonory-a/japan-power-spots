@@ -3,3 +3,4 @@ node_modules/
 *.osm.pbf
 .DS_Store
 Thumbs.db
+__pycache__/

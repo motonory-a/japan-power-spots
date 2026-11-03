@@ -388,6 +388,7 @@
           : 'この日は年盤・月盤ともに吉になる方位がありません。') +
         '別の日を選ぶか、参考として下の候補をご覧ください。'));
     }
+    var photoCards = [];
     shown.forEach(function (s, i) {
       var c = baseCard(s);
       c.prepend(el('div', 'rank', '第' + (i + 1) + '位'));
@@ -421,9 +422,11 @@
       det.append(rl);
       c.append(det, actions(s, modeKey, origin));
       out.append(c);
+      photoCards.push({ spot: s, el: c });
     });
 
     $('diagnosis').hidden = false;
+    if (window.SpotPhotos) SpotPhotos.attach(photoCards);
     SpotMap.showRanking(shown, origin);
     $('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

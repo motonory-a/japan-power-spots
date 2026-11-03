@@ -67,8 +67,12 @@
       if (hit) {
         hit.description = c.description;
         hit.themes = c.themes.slice();
+        var benefit = {};
+        (root.WISH_OPTIONS || []).forEach(function (o) { if (o.group === 'ご利益') benefit[o.key] = true; });
         c.wishes.forEach(function (w) {
-          if (hit.wishes.indexOf(w) === -1) { hit.wishes.push(w); if (hit.wishesInferred.indexOf(w) === -1) hit.wishesInferred.push(w); }
+          if (hit.wishes.indexOf(w) === -1) hit.wishes.push(w);
+          // ご利益の項目だけを「推定のご利益」に入れる（森林・御神木などは特徴）
+          if (benefit[w] && hit.wishesInferred.indexOf(w) === -1) hit.wishesInferred.push(w);
         });
         hit.numbers = c.numbers.slice();
         if (c.access_note) hit.access_note = c.access_note;
