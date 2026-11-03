@@ -80,6 +80,14 @@ async function route(page) {
     check('別のタイルで選び直せる（前の選択は外れる）', JSON.stringify(checked2) === JSON.stringify(['森林', '浄化', '自然'].sort()), checked2.join('・'));
     check('選択状態は1つだけ', (await page.$$('.wish-tile[aria-pressed=true]')).length === 1);
 
+    // 診断ボタン：入力の途中でも画面の下に見えている
+    await page.$eval('#wishes', (e) => e.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await page.waitForTimeout(300);
+    const goBtn = await page.$eval('#diagnose', (b) => { const r = b.getBoundingClientRect(); return { top: r.top, bottom: r.bottom, h: r.height }; });
+    check('入力の途中でも診断ボタンが画面内に見える', goBtn.top >= 0 && goBtn.bottom <= viewport.height, 'top=' + Math.round(goBtn.top));
+    check('診断ボタンの高さが56px以上', goBtn.h >= 56, Math.round(goBtn.h) + 'px');
+    check('診断ボタンの文言', (await page.textContent('#diagnose')).replace(/✦/g, '').trim() === 'おすすめスポットを診断する');
+
     // 4. 診断が今まで通り動く（TOP5）
     await page.selectOption('#bd-y', '1974'); await page.selectOption('#bd-m', '4'); await page.selectOption('#bd-d', '15');
     await page.selectOption('#home', '東京都');

@@ -369,10 +369,10 @@
     if (!extrasReady && window.SpotData && SpotData.loadExtras) {
       var btn = $('diagnose');
       btn.disabled = true;
-      var label = btn.textContent;
+      var label = Array.from(btn.childNodes).map(function (n) { return n.cloneNode(true); });
       btn.textContent = '全国のデータを読み込み中…';
       var done = false;
-      var go = function () { if (done) return; done = true; btn.disabled = false; btn.textContent = label; runDiagnose(); };
+      var go = function () { if (done) return; done = true; btn.disabled = false; btn.replaceChildren.apply(btn, label); runDiagnose(); };
       SpotData.loadExtras().then(go);
       setTimeout(go, 15000); // 読み込みが遅いときは、読めた分で診断する
       return;
