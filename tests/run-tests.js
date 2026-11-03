@@ -140,7 +140,7 @@ test('スコアは0〜100、内訳の合計と一致', () => {
   const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: ['滝', '神社'], mode: 'car' }, cfg);
   r.forEach((s) => {
     const p = s.scoreParts;
-    assert.strictEqual(s.score, p.numerology + p.wish + p.distance + p.reliability);
+    assert.strictEqual(s.score, p.numerology + p.wish + p.distance + p.kyusei + p.fame + p.reliability);
     assert.ok(s.score >= 0 && s.score <= 100);
   });
 });
@@ -195,7 +195,7 @@ test('日付ありの点数は0〜25、内訳の合計とスコアが一致', ()
   r.forEach((s) => {
     assert.ok(s.fortune && s.scoreParts.kyusei >= 0 && s.scoreParts.kyusei <= cfg.weights.kyusei);
     const p = s.scoreParts;
-    assert.strictEqual(s.score, p.numerology + p.wish + p.distance + p.kyusei + p.reliability);
+    assert.strictEqual(s.score, p.numerology + p.wish + p.distance + p.kyusei + p.fame + p.reliability);
   });
 });
 test('年盤・月盤で凶の方位のスポットは後ろに並ぶ', () => {

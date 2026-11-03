@@ -168,9 +168,10 @@
         wish: wishes.length ? Math.round(w.wish * hitWishes.length / wishes.length) : 0,
         distance: Math.round(w.distance * Math.max(0, 1 - mins / refMin)),
         kyusei: fortune ? fortune.points : 0,
+        fame: Math.round((w.fame || 0) * Math.min(1, (s.fame || 0) / (cfg.fameFull || 120))),
         reliability: Math.round(w.reliability * reliabilityRatio(s.verification_status))
       };
-      var total = parts.numerology + parts.wish + parts.distance + parts.kyusei + parts.reliability;
+      var total = parts.numerology + parts.wish + parts.distance + parts.kyusei + parts.fame + parts.reliability;
 
       var reasons = [];
       reasons.push(numMatch ? '数秘ナンバー' + input.number + 'のテーマと一致' : '数秘ナンバーとの一致なし');

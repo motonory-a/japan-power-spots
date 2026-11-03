@@ -117,6 +117,10 @@ footer{text-align:center;padding:22px;color:#6b7a70;font-size:12px}
 .fortune-table .lv-kyo{background:#fdf0ee}
 .summary-list .warn{color:#7a5d00}
 .small-li{font-size:13px}
+.src a{margin:0 2px}
+.more{grid-column:1/-1;justify-self:center}
+.list-note{grid-column:1/-1;margin:0}
+footer a{color:inherit}
 @media (max-width:600px){
   .panel{padding:18px 16px}
   #map{height:360px}

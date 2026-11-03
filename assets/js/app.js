@@ -6,6 +6,8 @@
   'use strict';
 
   var cfg = APP_CONFIG, D = Diagnosis;
+  var SPOTS_ALL = window.ALL_SPOTS || SPOTS;
+  var PAGE = 60;
   var $ = function (id) { return document.getElementById(id); };
 
   function el(tag, cls, text) {
@@ -37,7 +39,7 @@
   function kmText(km) { return km < 10 ? km.toFixed(1) : String(Math.round(km)); }
 
   function statusBadge(s) {
-    var map = { demo: ['デモデータ', 'badge-demo'], unverified: ['未確認', 'badge-warn'], verified: ['確認済み', 'badge-ok'] };
+    var map = { demo: ['デモデータ', 'badge-demo'], unverified: ['OSM・未確認', 'badge-warn'], verified: ['確認済み', 'badge-ok'] };
     var v = map[s.verification_status] || map.demo;
     return el('span', 'badge ' + v[1], v[0]);
   }
@@ -66,6 +68,20 @@
     tags.append(el('span', 'tag', s.prefecture + (s.municipality ? ' ' + s.municipality : '')),
       el('span', 'tag tag-cat', s.category));
     card.append(head, tags, el('p', null, s.description));
+    var objTags = s.wishes.filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
+    if (objTags.length) card.append(el('p', 'small', '特徴：' + objTags.join('・')));
+    if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益（名称などからの推定）：' + s.wishesInferred.join('・')));
+    if (s.source_urls && s.source_urls.length) {
+      var src = el('p', 'small src');
+      src.append(document.createTextNode('情報元：'));
+      s.source_urls.forEach(function (u, i) {
+        var a = el('a', null, u.indexOf('wikipedia') !== -1 ? 'Wikipedia' : 'OpenStreetMap');
+        a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        if (i) src.append(document.createTextNode('・'));
+        src.append(a);
+      });
+      card.append(src);
+    }
     return card;
   }
 
@@ -112,9 +128,12 @@
     });
 
     // 検索の種類はデータから自動生成
-    Array.from(new Set(SPOTS.map(function (s) { return s.category; }))).forEach(function (c) {
+    Array.from(new Set(SPOTS_ALL.map(function (s) { return s.category; }))).forEach(function (c) {
       var o = el('option', null, c); o.value = c; $('category').append(o);
     });
+
+    // 検索用の願い・体験
+    WISH_OPTIONS.forEach(function (w) { var o = el('option', null, w.key); o.value = w.key; $('search-wish').append(o); });
 
     // 凡例
     Object.keys(SpotMap.CATEGORY_COLORS).forEach(function (c) {
@@ -195,7 +214,7 @@
     var n = D.lifePath(birthday);
     var person = Kyusei.birthStars(birthday);
     var boards = tripDate ? Kyusei.boardsFor(tripDate, person) : null;
-    var all = D.rankSpots(SPOTS, { number: n, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: boards }, cfg);
+    var all = D.rankSpots(SPOTS_ALL, { number: n, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: boards }, cfg);
     var within = all.filter(function (s) { return s.withinLimit; });
     var shown = within.length ? within.slice(0, cfg.resultCount) : all.slice(0, 3);
 
@@ -261,7 +280,7 @@
        ['所要時間', mode.label + 'で' + s.minutesText + '（目安）' + (s.withinLimit ? '' : '・指定時間を超えます')]].concat(
         s.fortune ? [['方位の運気', s.fortune.mark + ' ' + s.fortune.label + (s.fortune.nearEdge ? '（方位の境界付近）' : '')]] : []).concat([
        ['スコア', s.score + ' / 100'],
-       ['データ', s.verification_status === 'demo' ? 'デモデータ（参考候補・内容未確認）' : s.verification_status]]).forEach(function (r) {
+       ['データ', s.verification_status === 'demo' ? 'デモデータ（参考候補・内容未確認）' : s.verification_status === 'unverified' ? 'OpenStreetMapのデータ（内容は未確認）' : '確認済み']]).forEach(function (r) {
         meta.append(el('dt', null, r[0]), el('dd', null, r[1]));
       });
       c.append(meta);
@@ -276,7 +295,7 @@
         if (s.fortune.nearEdge) rl.append(el('li', 'small-li', '方位の区切り線から' + cfg.kyusei.edgeWarnDeg + '°以内です。出発地の位置で判定が変わることがあります。'));
       }
       rl.append(el('li', 'parts', '数秘 ' + p.numerology + '/' + w.numerology + '・願い ' + p.wish + '/' + w.wish +
-        '・近さ ' + p.distance + '/' + w.distance + '・運気 ' + p.kyusei + '/' + w.kyusei + '・データ信頼性 ' + p.reliability + '/' + w.reliability));
+        '・近さ ' + p.distance + '/' + w.distance + '・運気 ' + p.kyusei + '/' + w.kyusei + '・知名度 ' + p.fame + '/' + w.fame + '・データ信頼性 ' + p.reliability + '/' + w.reliability));
       if (s.access_note) rl.append(el('li', null, '訪問の注意：' + s.access_note));
       det.append(rl);
       c.append(det, actions(s, modeKey, origin));
@@ -289,41 +308,62 @@
   }
 
   /* ---------- 検索 ---------- */
-  function search() {
-    var q = $('keyword').value.trim().toLowerCase();
-    var pref = $('pref').value, cat = $('category').value;
-    var arr = SPOTS.filter(function (s) {
-      if (s.publication_status !== cfg.publicStatus) return false;
-      var text = [s.name, s.prefecture, s.municipality, s.description, s.themes.join(' '), s.wishes.join(' ')].join(' ').toLowerCase();
-      return (!pref || s.prefecture === pref) && (!cat || s.category === cat) && (!q || text.indexOf(q) !== -1);
-    });
-    $('count').textContent = '（' + arr.length + '件）';
+  var searchResult = [], shownCount = 0;
+  function renderMore() {
     var out = $('results');
-    out.replaceChildren();
-    if (!arr.length) out.append(el('p', 'notice', '該当するスポットはありません。条件を変えてお試しください。'));
-    arr.forEach(function (s) {
+    var old = $('more-results'); if (old) old.remove();
+    searchResult.slice(shownCount, shownCount + PAGE).forEach(function (s) {
       var c = baseCard(s);
-      var t = el('p', 'small', 'テーマ：' + s.themes.join('・'));
-      c.append(t, actions(s, 'transit'));
+      c.append(actions(s, 'transit'));
       out.append(c);
     });
-    SpotMap.showSpots(arr);
+    shownCount = Math.min(searchResult.length, shownCount + PAGE);
+    if (shownCount < searchResult.length) {
+      var b = el('button', 'btn-sub more', 'さらに表示（残り' + (searchResult.length - shownCount) + '件）');
+      b.type = 'button'; b.id = 'more-results';
+      b.addEventListener('click', renderMore);
+      out.append(b);
+    }
   }
+  function search() {
+    var q = $('keyword').value.trim().toLowerCase();
+    var pref = $('pref').value, cat = $('category').value, wish = $('search-wish').value;
+    searchResult = SPOTS_ALL.filter(function (s) {
+      if (s.publication_status !== cfg.publicStatus) return false;
+      if (pref && s.prefecture !== pref) return false;
+      if (cat && s.category !== cat) return false;
+      if (wish && s.wishes.indexOf(wish) === -1) return false;
+      if (!q) return true;
+      var text = s._text || (s._text = [s.name, s.prefecture, s.municipality, s.description, s.wishes.join(' ')].join(' ').toLowerCase());
+      return text.indexOf(q) !== -1;
+    }).sort(function (a, b) { return (b.fame || 0) - (a.fame || 0); });
+    $('count').textContent = '（' + searchResult.length.toLocaleString() + '件）';
+    var out = $('results');
+    out.replaceChildren();
+    shownCount = 0;
+    if (!searchResult.length) out.append(el('p', 'notice', '該当するスポットはありません。条件を変えてお試しください。'));
+    else out.append(el('p', 'note list-note', '知名度の高い順に表示しています。地図には条件に合うすべてのスポットを表示します。'));
+    renderMore();
+    SpotMap.showSpots(searchResult, !!(q || pref || cat || wish));
+  }
+  var searchTimer = null;
+  function searchLater() { clearTimeout(searchTimer); searchTimer = setTimeout(search, 250); }
 
   /* ---------- 起動 ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     $('version').textContent = 'v' + cfg.version;
-    $('spot-total').textContent = SPOTS.length;
+    $('spot-total').textContent = SPOTS_ALL.length.toLocaleString();
     var mapOk = SpotMap.init('map');
     setupForm();
     OriginPicker.init({ config: cfg, prefLookup: function () { return prefByName($('home').value); } });
     $('home').addEventListener('change', OriginPicker.prefChanged);
     $('diagnose-form').addEventListener('submit', function (e) { e.preventDefault(); diagnose(); });
-    $('keyword').addEventListener('input', search);
+    $('keyword').addEventListener('input', searchLater);
     $('pref').addEventListener('change', search);
     $('category').addEventListener('change', search);
+    $('search-wish').addEventListener('change', search);
     $('reset-search').addEventListener('click', function () {
-      $('keyword').value = ''; $('pref').value = ''; $('category').value = ''; search();
+      $('keyword').value = ''; $('pref').value = ''; $('category').value = ''; $('search-wish').value = ''; search();
     });
     search();
     if (mapOk) window.addEventListener('resize', SpotMap.invalidate);

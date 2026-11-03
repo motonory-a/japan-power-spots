@@ -16,7 +16,7 @@
 
 <main>
   <div class="trial-banner" role="note">
-    <strong>試作版です。</strong>現在のスポットは<span id="spot-total">8</span>件のデモデータで、内容は確認中です。全国のデータは順次追加していきます。
+    <strong>試作版です。</strong>全国<span id="spot-total">8</span>件のスポットを掲載しています。OpenStreetMapのデータをもとにしており、内容は順次確認中です。ご利益は名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。
   </div>
 
   <section class="panel" aria-labelledby="h-diagnose">
@@ -102,6 +102,7 @@
       <div><label for="keyword">キーワード</label><input id="keyword" type="search" placeholder="名称・地域・特徴など"></div>
       <div><label for="pref">都道府県</label><select id="pref"><option value="">全国すべて</option></select></div>
       <div><label for="category">種類</label><select id="category"><option value="">すべて</option></select></div>
+      <div><label for="search-wish">願い・体験</label><select id="search-wish"><option value="">すべて</option></select></div>
     </div>
     <button type="button" id="reset-search" class="btn-sub">条件をクリア</button>
   </section>
@@ -134,13 +135,15 @@
   </section>
 </main>
 
-<footer>日本全国パワースポット巡り！｜試作版 <span id="version"></span></footer>
+<footer>日本全国パワースポット巡り！｜試作版 <span id="version"></span><br>スポットデータ：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors（ODbL）</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/config.js"></script>
 <script src="data/solar-terms.js"></script>
 <script src="assets/js/kyusei.js"></script>
 <script src="data/spots-demo.js"></script>
+<script src="data/spots-osm.js"></script>
+<script src="assets/js/data.js"></script>
 <script src="assets/js/diagnosis.js"></script>
 <script src="assets/js/map.js"></script>
 <script src="assets/js/origin.js"></script>
