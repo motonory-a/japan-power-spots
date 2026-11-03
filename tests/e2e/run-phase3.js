@@ -49,8 +49,12 @@ const doorText = (p) => p.$eval('#door-content', (e) => e.innerText);
     await page.click('#door-open');
     await page.waitForSelector('#door-content', { timeout: 3000 });
     const t1 = await doorText(page);
-    check('ひらくと3つ現れる', /今日の聖地/.test(t1) && /今日の小さな幸せ/.test(t1) && /今日の開運ミッション/.test(t1));
-    check('効果を約束しない注意書き', /約束するものではありません/.test(t1));
+    check('ひらくと全部現れる', ['聖地みくじ', '今日のラッキーカラー', '今日のラッキーアイテム', '今日の聖地', '今日の小さな幸せ', '今日の開運ミッション'].every((w) => t1.includes(w)));
+    check('運勢は6段階のどれか', ['大吉', '中吉', '小吉', '吉', '末吉', '凶'].includes((await page.textContent('.mikuji-level')).trim()));
+    check('みくじの5項目', (await page.$$('.mikuji-items dt')).length === 5);
+    check('ラッキーカラーは日盤の星から（11/4は六白金星）', /六白金星/.test(t1) && /白・金の色/.test(t1));
+    check('ふだんはプレゼンモードの表示なし', !(await page.$('.presenter-badge')));
+    check('効果を約束しない注意書き', /約束するもの/.test(t1));
     await page.check('#mission-done');
     check('ミッションの記録は任意でできる', await page.isVisible('.door-thanks'));
     const t1b = await doorText(page);
@@ -159,6 +163,38 @@ const doorText = (p) => p.$eval('#door-content', (e) => e.innerText);
   await p2.waitForSelector('#door-content');
   check('数秘ナンバー4のあなたへ', /数秘ナンバー4（安定・内省）のあなたへ/.test(await p2.textContent('#door-content')));
   await c2.close();
+
+  // プレゼンモード
+  console.log('[プレゼンモード]');
+  const c5 = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const p5 = await c5.newPage();
+  await route(p5);
+  await p5.goto('file://' + target + '?presenter=on');
+  await p5.waitForSelector('.presenter-badge');
+  check('?presenter=on でプレゼンモード', /プレゼンモード/.test(await p5.textContent('.presenter-badge')));
+  const seen = new Set();
+  for (let i = 0; i < 8; i++) {
+    await p5.click('#door-open');
+    await p5.waitForSelector('#door-content');
+    seen.add(await p5.textContent('.mikuji'));
+    await p5.click('.door-again');
+    await p5.waitForSelector('#door-open');
+  }
+  check('何度でもひらけて、結果が変わる', seen.size >= 4, seen.size + '通り');
+  check('ふだんの「今日の扉」の記録には残さない', await p5.evaluate(() => localStorage.getItem('jps.door.v1')) === null);
+  await p5.goto('file://' + target);
+  await p5.waitForSelector('#door-open');
+  check('URLを戻しても、この端末ではプレゼンモードが続く', !!(await p5.$('.presenter-badge')));
+  await p5.click('.presenter-badge .btn-text');
+  check('「終了する」で通常に戻る', !(await p5.$('.presenter-badge')) && await p5.evaluate(() => localStorage.getItem('jps.presenter.v1')) === null);
+  await p5.click('#door-open');
+  await p5.waitForSelector('#door-content');
+  await p5.reload();
+  await p5.waitForSelector('#door-content');
+  check('通常に戻ると、1日1回（ひらいたまま）', !(await p5.$('#door-open')));
+  await p5.goto('file://' + target + '?presenter=off');
+  check('?presenter=off でも終了', !(await p5.$('.presenter-badge')));
+  await c5.close();
 
   // 動きを減らす設定
   console.log('[動きを減らす設定]');

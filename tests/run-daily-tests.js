@@ -13,7 +13,8 @@ global.localStorage = {
 };
 global.window = global;
 global.JSTDate = require('../assets/js/jst-date.js');
-const { DAILY_MESSAGES, DAILY_MISSIONS } = require('../data/daily-content.js');
+const { DAILY_MESSAGES, DAILY_MISSIONS, OMIKUJI_LEVELS, OMIKUJI_ITEMS, LUCKY_COLORS, LUCKY_ITEMS } = require('../data/daily-content.js');
+Object.assign(global, require('../data/daily-content.js'));
 const { SPOTS_OSM, SPOTS_OSM_META } = require('../data/spots-osm.js');
 global.PREFECTURES = require('../data/spots-demo.js').PREFECTURES;
 global.SPOTS_OSM_META = SPOTS_OSM_META;
@@ -64,6 +65,23 @@ test('どれも短い（60文字以内）', () => DAILY_MESSAGES.concat(DAILY_MI
 test('重複がない', () => {
   assert.strictEqual(new Set(DAILY_MESSAGES).size, DAILY_MESSAGES.length);
   assert.strictEqual(new Set(DAILY_MISSIONS).size, DAILY_MISSIONS.length);
+});
+
+console.log('聖地みくじ・ラッキーカラー・ラッキーアイテム');
+const allKuji = OMIKUJI_LEVELS.map((l) => l.word).concat(...OMIKUJI_ITEMS.map((i) => i.high.concat(i.gentle)));
+test('運勢は大吉〜凶の6段階', () => assert.deepStrictEqual(OMIKUJI_LEVELS.map((l) => l.name), ['大吉', '中吉', '小吉', '吉', '末吉', '凶']));
+test('出やすさの合計は100', () => assert.strictEqual(OMIKUJI_LEVELS.reduce((a, l) => a + l.weight, 0), 100));
+test('凶にも前向きなことば', () => assert.ok(/ていねい|やさしく|整える/.test(OMIKUJI_LEVELS[5].word)));
+test('みくじのことばに効果の約束・支出の勧めがない', () => allKuji.forEach((t) => assert.ok(!ng.test(t), t)));
+test('9つの星すべてに色4つとアイテム4つ', () => { for (let i = 1; i <= 9; i++) { assert.strictEqual(LUCKY_COLORS[i].colors.length, 4); assert.strictEqual(LUCKY_ITEMS[i].length, 4); } });
+test('色はすべて正しい色コード', () => { for (let i = 1; i <= 9; i++) LUCKY_COLORS[i].colors.forEach((c) => assert.ok(/^#[0-9A-F]{6}$/i.test(c[1]), c)); });
+test('1万回引いた割合が設定どおり（±2%）', () => {
+  const total = OMIKUJI_LEVELS.reduce((a, l) => a + l.weight, 0), cnt = {};
+  for (let i = 0; i < 10000; i++) {
+    let r = Daily.hash('lv|seed' + i) % total;
+    for (const l of OMIKUJI_LEVELS) { if (r < l.weight) { cnt[l.name] = (cnt[l.name] || 0) + 1; break; } r -= l.weight; }
+  }
+  OMIKUJI_LEVELS.forEach((l) => assert.ok(Math.abs(cnt[l.name] / 100 - l.weight) <= 2, l.name + ' ' + cnt[l.name]));
 });
 
 console.log('コレクション（行きたい・行った・お気に入り）');

@@ -457,3 +457,29 @@ h2::before{width:20px;height:20px;background:url(../img/flower-of-life-icon.svg)
 .foot-copy{margin:0 0 10px!important}
 footer .copyurl{font-size:13.5px;padding:8px 14px;background:rgba(255,255,255,.12);border-color:rgba(234,215,174,.6);color:#F3E6C6}
 footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
+
+/* ---------- 聖地みくじ ---------- */
+.mikuji{position:relative;max-width:520px;margin:0 auto 22px;background:#FFFDF8;border:1px solid var(--gold-soft);border-radius:6px;box-shadow:0 10px 26px rgba(98,64,156,.14);padding:0 0 18px;overflow:hidden}
+.mikuji::before{content:"";display:block;height:8px;background:var(--grad)}
+.mikuji-top{text-align:center;padding:16px 16px 12px;border-bottom:1px dashed var(--gold-soft);background:url(../img/flower-of-life-soft.svg) center/170px no-repeat}
+.mikuji-name{margin:0;font-family:var(--serif);font-weight:700;font-size:14px;letter-spacing:.4em;color:var(--muted)}
+.mikuji-level{margin:4px 0 2px;font-family:var(--serif);font-weight:700;font-size:56px;line-height:1.2;letter-spacing:.15em;color:#9A2F4E;text-shadow:0 2px 0 #fff}
+.mikuji-word{margin:0;font-family:var(--serif);font-size:15px;color:var(--ink)}
+.mikuji-items{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:14px 20px 0;font-size:14.5px}
+.mikuji-items dt{font-family:var(--serif);font-weight:700;color:var(--ink);white-space:nowrap;padding:2px 10px;border-radius:999px;background:#F3EAFB;font-size:13px;align-self:start;text-align:center}
+.mikuji-items dd{margin:0;line-height:1.75}
+.door-items{grid-template-columns:repeat(2,1fr)}
+.color-row{display:flex;align-items:center;justify-content:center;gap:12px;margin:4px 0 6px}
+.color-swatch{width:46px;height:46px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--gold),0 4px 10px rgba(98,64,156,.18)}
+.color-name{font-family:var(--serif);font-weight:700;font-size:22px}
+.lucky-item-title{margin-top:12px!important}
+.lucky-item{margin:0;text-align:center;font-family:var(--serif);font-weight:700;font-size:19px}
+.presenter-badge{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:0 0 12px;padding:8px 12px;border-radius:10px;background:#FFF6DD;border:1px solid var(--gold-soft);font-size:13px;color:var(--gold-text)}
+.presenter-badge .btn-text{margin:0}
+.door-again{display:block;margin:16px auto 0}
+@media (max-width:640px){
+  .door-items{grid-template-columns:1fr}
+  .mikuji-level{font-size:48px}
+  .mikuji-items{margin:12px 14px 0;grid-template-columns:1fr;gap:2px}
+  .mikuji-items dt{justify-self:start;margin-top:8px}
+}

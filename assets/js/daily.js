@@ -57,13 +57,76 @@
     return Diagnosis.lifePath(b);
   }
 
+  /* ---------- プレゼンモード ----------
+   * サイトの説明（プレゼン）用に、扉を何度でもひらけるようにする。
+   * URLの末尾に ?presenter=on を付けて開くと、その端末のブラウザで有効になる（?presenter=off で終了）。
+   * プレゼンモードでは、ひらくたびに違う結果になる（いつもの「1日1回・同じ内容」の記録には残さない）。
+   */
+  var PRESENTER_KEY = 'jps.presenter.v1';
+  function presenter() {
+    var q = (root.location && root.location.search) || '';
+    var m = /[?&]presenter=([^&]*)/.exec(q);
+    var s = store();
+    if (m) {
+      var on = m[1] !== 'off';
+      if (s) { try { if (on) s.setItem(PRESENTER_KEY, '1'); else s.removeItem(PRESENTER_KEY); } catch (e) { /* 無視 */ } }
+      return on;
+    }
+    return !!(s && s.getItem(PRESENTER_KEY) === '1');
+  }
+
+  /* ---------- 聖地みくじ・ラッキーカラー ---------- */
+  function omikuji(seed) {
+    var total = OMIKUJI_LEVELS.reduce(function (a, l) { return a + l.weight; }, 0);
+    var r = hash('lv|' + seed) % total, lv = OMIKUJI_LEVELS[0];
+    for (var i = 0; i < OMIKUJI_LEVELS.length; i++) { if (r < OMIKUJI_LEVELS[i].weight) { lv = OMIKUJI_LEVELS[i]; break; } r -= OMIKUJI_LEVELS[i].weight; }
+    var items = OMIKUJI_ITEMS.map(function (it, k) {
+      var list = it[lv.tier];
+      return { label: it.label, text: list[hash('it|' + k + '|' + seed) % list.length] };
+    });
+    return { level: lv, items: items };
+  }
+  function luckyColor(dateStr, seed) {
+    var p = dateStr.split('-').map(Number);
+    var star = root.Kyusei ? Kyusei.dayStarInfo(p[0], p[1], p[2]).star : (hash('star|' + dateStr) % 9) + 1;
+    var set = LUCKY_COLORS[star];
+    var c = set.colors[hash('color|' + seed) % set.colors.length];
+    var items = LUCKY_ITEMS[star];
+    return { star: star, starName: root.Kyusei ? Kyusei.STAR_NAMES[star] : '', base: set.base, name: c[0], hex: c[1], item: items[hash('item|' + seed) % items.length] };
+  }
+
   /* ---------- 今日の幸せの扉 ---------- */
   function doorContent(today, rec) {
     var box = el('div', 'door-content');
     box.id = 'door-content';
     box.append(el('p', 'door-date', dateLabel(today) + 'の扉'));
+    var seed = rec.seed || (today + '|' + (rec.n || 0));
+
+    // 聖地みくじ
+    var k = omikuji(seed);
+    var paper = el('div', 'mikuji');
+    var top = el('div', 'mikuji-top');
+    top.append(el('p', 'mikuji-name', '聖地みくじ'), el('p', 'mikuji-level', k.level.name), el('p', 'mikuji-word', k.level.word));
+    paper.append(top);
+    var dl = el('dl', 'mikuji-items');
+    k.items.forEach(function (it) { dl.append(el('dt', null, it.label), el('dd', null, it.text)); });
+    paper.append(dl);
+    box.append(paper);
+
     var list = el('div', 'door-items');
 
+    // ラッキーカラー
+    var lc = luckyColor(today, seed);
+    var cItem = el('div', 'door-item door-color');
+    cItem.append(el('p', 'door-item-title', '今日のラッキーカラー'));
+    var sw = el('div', 'color-row');
+    var chip = el('span', 'color-swatch'); chip.style.background = lc.hex; chip.setAttribute('aria-hidden', 'true');
+    sw.append(chip, el('span', 'color-name', lc.name));
+    cItem.append(sw);
+    cItem.append(el('p', 'door-item-title lucky-item-title', '今日のラッキーアイテム'), el('p', 'lucky-item', lc.item));
+    cItem.append(el('p', 'door-sub', (lc.starName ? '今日の日盤の中宮は' + lc.starName + '。' : '') + 'ラッキーカラーは' + lc.base + 'にちなんだ伝統色、アイテムはこの星が表すものから選んでいます。'));
+
+    // 今日の聖地
     var s = todaySpot;
     var a = el('div', 'door-item');
     a.append(el('p', 'door-item-title', '今日の聖地'));
@@ -92,21 +155,33 @@
     lab.append(cb, document.createTextNode(' やってみた（記録は任意です）'));
     c.append(lab, thanks);
 
-    list.append(a, b, c);
+    list.append(cItem, a, b, c);
     box.append(list);
-    box.append(el('p', 'note', '日替わりの読みものです。毎日0時（日本時間）に新しい扉になります。ご利益や効果を約束するものではありません。'));
+    box.append(el('p', 'note', '聖地みくじ・ラッキーカラー・ラッキーアイテムなどは日替わりの読みものです。毎日0時（日本時間）に新しい扉になります。結果やご利益を約束するものではなく、その日の心がけのヒントとしてお楽しみください。'));
     return box;
   }
 
   function renderDoor() {
     var sec = $('daily-door');
     var today = JSTDate.today();
+    var demo = presenter();
     var saved = readJSON(DOOR_KEY);
-    var opened = saved && saved.date === today;
+    var opened = !demo && saved && saved.date === today;
     var wrap = el('div', 'door-wrap');
     sec.querySelectorAll('.door-wrap, .lead-small').forEach(function (n) { n.remove(); });
-    sec.append(el('p', 'lead-small', '1日に1回、扉をひらくと、今日の聖地・小さな幸せ・開運ミッションが現れます。'), wrap);
+    sec.append(el('p', 'lead-small', '1日に1回、扉をひらくと、聖地みくじ・ラッキーカラー・ラッキーアイテム・今日の聖地・開運ミッションが現れます。'), wrap);
     sec.hidden = false;
+    var badge = sec.querySelector('.presenter-badge');
+    if (badge) badge.remove();
+    if (demo) {
+      badge = el('p', 'presenter-badge');
+      badge.append(document.createTextNode('プレゼンモード：扉を何度でもひらけます（ひらくたびに結果が変わります）。'));
+      var off = el('button', 'btn-text', '終了する');
+      off.type = 'button';
+      off.addEventListener('click', function () { var st = store(); if (st) st.removeItem(PRESENTER_KEY); renderDoor(); });
+      badge.append(off);
+      sec.insertBefore(badge, wrap);
+    }
 
     if (opened) { wrap.append(doorContent(today, saved)); wrap.classList.add('is-open'); return; }
 
@@ -121,13 +196,20 @@
     wrap.append(btn);
     btn.addEventListener('click', function () {
       var n = personalNumber();
-      var rec = { date: today, n: n, msg: hash('msg|' + today + '|' + (n || 0)) % DAILY_MESSAGES.length, mis: hash('mis|' + today + '|' + (n || 0)) % DAILY_MISSIONS.length };
-      writeJSON(DOOR_KEY, rec);
+      var seed = demo ? 'demo|' + Date.now() + '|' + Math.random() : today + '|' + (n || 0);
+      var rec = { date: today, n: n, seed: seed, msg: hash('msg|' + seed) % DAILY_MESSAGES.length, mis: hash('mis|' + seed) % DAILY_MISSIONS.length };
+      if (!demo) writeJSON(DOOR_KEY, rec);
       var show = function () {
         btn.remove();
         var content = doorContent(today, rec);
         wrap.append(content);
         wrap.classList.add('is-open');
+        if (demo) {
+          var again = el('button', 'btn-sub door-again', 'もう一度ひらく（プレゼンモード）');
+          again.type = 'button';
+          again.addEventListener('click', function () { wrap.classList.remove('is-open'); renderDoor(); });
+          content.append(again);
+        }
         content.setAttribute('tabindex', '-1');
         content.focus({ preventScroll: true });
       };
