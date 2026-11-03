@@ -114,6 +114,27 @@ test('出発地が変わると方角も変わる（新宿駅付近は南、八�
   assert.strictEqual(b.direction, '東');
 });
 
+test('自転車：10kmで約57分、30kmで約2時間40分（時速15km・迂回1.3倍）', () => {
+  assert.strictEqual(D.formatMinutes(D.estimateMinutes(10, cfg.travelModes.bike)), '約57分');
+  assert.strictEqual(D.formatMinutes(D.estimateMinutes(30, cfg.travelModes.bike)), '約2時間40分');
+});
+test('自転車は徒歩より速く、近距離では車より遅い', () => {
+  const m = cfg.travelModes;
+  assert.ok(D.estimateMinutes(10, m.bike) < D.estimateMinutes(10, m.walk));
+  assert.ok(D.estimateMinutes(10, m.bike) > D.estimateMinutes(10, m.car));
+});
+test('願いの選択肢：30個・重複なし', () => {
+  const { WISH_OPTIONS } = require('../data/spots-demo.js');
+  assert.strictEqual(WISH_OPTIONS.length, 30);
+  assert.strictEqual(new Set(WISH_OPTIONS.map((w) => w.key)).size, WISH_OPTIONS.length);
+  assert.ok(WISH_OPTIONS.some((w) => w.key === '商売繁盛'));
+});
+test('デモデータの願いタグはすべて選択肢に存在する', () => {
+  const { WISH_OPTIONS } = require('../data/spots-demo.js');
+  const keys = new Set(WISH_OPTIONS.map((w) => w.key));
+  SPOTS.forEach((s) => s.wishes.forEach((w) => assert.ok(keys.has(w), s.name + ' ' + w)));
+});
+
 console.log('推薦スコア');
 test('スコアは0〜100、内訳の合計と一致', () => {
   const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: ['滝', '神社'], mode: 'car' }, cfg);
@@ -141,8 +162,8 @@ test('願いを選ぶと一致スポットが先に並ぶ（東京・数秘4・�
   assert.ok(r.slice(firstMiss).every((s) => s.hitWishes.length === 0), r.map((s) => s.name).join(','));
   assert.notStrictEqual(r[0].name, '明治神宮');
 });
-test('願い「恋愛」で出雲大社が願い点満点', () => {
-  const r = D.rankSpots(SPOTS, { number: 1, origin: pref('島根県'), wishes: ['恋愛'], mode: 'car' }, cfg);
+test('願い「恋愛・縁結び」で出雲大社が願い点満点', () => {
+  const r = D.rankSpots(SPOTS, { number: 1, origin: pref('島根県'), wishes: ['恋愛・縁結び'], mode: 'car' }, cfg);
   assert.strictEqual(r.find((s) => s.name === '出雲大社').scoreParts.wish, cfg.weights.wish);
 });
 test('デモデータは信頼性0点・低信頼扱い', () => {

@@ -220,6 +220,9 @@
     } else if (limit && within.length < cfg.resultCount) {
       out.append(el('p', 'notice', mode.label + 'で' + limitText(limit) + '以内（目安）のスポットは' + within.length + '件でした。'));
     }
+    if (wishes.length && !all.some(function (s) { return s.hitWishes.length; })) {
+      out.append(el('p', 'notice', '選んだ願い・体験（' + wishes.join('・') + '）に当てはまるスポットは、いまのデモデータにはまだありません。全国のデータを追加すると表示されるようになります。参考として、ほかの条件で選んだ候補を表示します。'));
+    }
     if (boards && shown.length && shown.every(function (s) { return s.fortune && s.fortune.tier === 0; })) {
       var goodDirs = [], cautionDirs = [];
       Kyusei.PALACES.forEach(function (p) {

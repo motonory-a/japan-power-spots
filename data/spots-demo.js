@@ -1,7 +1,7 @@
 /*
  * デモデータ（8件）
  * 全国データ（Phase 2）が入るまでの仮データです。
- * numbers（数秘との対応）と wishes のうちご利益系（恋愛・金運・学業・仕事・健康祈願）は
+ * numbers（数秘との対応）と wishes のうちご利益系（恋愛・縁結び、金運、商売繁盛 など）は
  * 出典未確認の仮設定です。verification_status は全件 'demo' のままにしてください。
  * 項目名は引継ぎ仕様書の必須スキーマに合わせています。
  */
@@ -21,45 +21,63 @@ var PREFECTURES = [
 ];
 
 var WISH_OPTIONS = [
-  { key: '恋愛',     group: 'ご利益' },
-  { key: '金運',     group: 'ご利益' },
-  { key: '学業',     group: 'ご利益' },
-  { key: '仕事',     group: 'ご利益' },
+  { key: '恋愛・縁結び', group: 'ご利益' },
+  { key: '金運', group: 'ご利益' },
+  { key: '商売繁盛', group: 'ご利益' },
+  { key: '仕事・出世', group: 'ご利益' },
+  { key: '学業・合格', group: 'ご利益' },
+  { key: '勝負運', group: 'ご利益' },
+  { key: '開運', group: 'ご利益' },
+  { key: '厄除け', group: 'ご利益' },
   { key: '健康祈願', group: 'ご利益' },
-  { key: '浄化',     group: '体験' },
-  { key: '自然',     group: '体験' },
-  { key: '滝',       group: '体験' },
-  { key: '登山',     group: '体験' },
-  { key: '森林',     group: '体験' },
-  { key: '神社',     group: '種類' },
-  { key: '寺院',     group: '種類' }
+  { key: '安産・子宝', group: 'ご利益' },
+  { key: '家内安全', group: 'ご利益' },
+  { key: '交通安全', group: 'ご利益' },
+  { key: '芸事上達', group: 'ご利益' },
+  { key: '美容', group: 'ご利益' },
+  { key: '浄化', group: '体験' },
+  { key: '自然', group: '体験' },
+  { key: '森林', group: '体験' },
+  { key: '御神木・巨木', group: '体験' },
+  { key: '滝', group: '体験' },
+  { key: '登山', group: '体験' },
+  { key: '海・島', group: '体験' },
+  { key: '湖・湧水', group: '体験' },
+  { key: '岩・磐座', group: '体験' },
+  { key: '洞窟', group: '体験' },
+  { key: '絶景', group: '体験' },
+  { key: '巡礼', group: '体験' },
+  { key: '温泉', group: '体験' },
+  { key: '神社', group: '種類' },
+  { key: '寺院', group: '種類' },
+  { key: '霊山', group: '種類' }
 ];
 
 var SPOTS = [
   { id: 'demo-001', name: '明治神宮', category: '神社', prefecture_code: '13', prefecture: '東京都', municipality: '渋谷区',
     lat: 35.6764, lon: 139.6993, description: '都心に広がる鎮守の森に囲まれた神社。',
-    themes: ['静寂', '自然', '再出発'], wishes: ['神社', '森林', '自然'], numbers: [1, 4, 7] },
+    themes: ['静寂', '自然', '再出発'], wishes: ['神社', '森林', '自然', '御神木・巨木', '恋愛・縁結び'], numbers: [1, 4, 7] },
   { id: 'demo-002', name: '鹿島神宮', category: '神社', prefecture_code: '08', prefecture: '茨城県', municipality: '鹿嶋市',
     lat: 35.9689, lon: 140.6312, description: '武甕槌大神を祀る歴史ある神社。',
-    themes: ['決断', '挑戦', '歴史'], wishes: ['神社', '森林', '仕事'], numbers: [1, 8, 9] },
+    themes: ['決断', '挑戦', '歴史'], wishes: ['神社', '森林', '御神木・巨木', '湖・湧水', '仕事・出世', '勝負運'], numbers: [1, 8, 9] },
   { id: 'demo-003', name: '伊勢神宮 内宮', category: '神社', prefecture_code: '24', prefecture: '三重県', municipality: '伊勢市',
     lat: 34.4550, lon: 136.7258, description: '天照大御神を祀る皇大神宮。',
-    themes: ['感謝', '再出発', '伝統'], wishes: ['神社', '森林', '浄化'], numbers: [1, 3, 6] },
+    themes: ['感謝', '再出発', '伝統'], wishes: ['神社', '森林', '浄化', '開運'], numbers: [1, 3, 6] },
   { id: 'demo-004', name: '出雲大社', category: '神社', prefecture_code: '32', prefecture: '島根県', municipality: '出雲市',
     lat: 35.4020, lon: 132.6855, description: '大国主大神を祀る神社。',
-    themes: ['ご縁', '交流', '伝統'], wishes: ['神社', '恋愛'], numbers: [2, 6, 9] },
+    themes: ['ご縁', '交流', '伝統'], wishes: ['神社', '恋愛・縁結び'], numbers: [2, 6, 9] },
   { id: 'demo-005', name: '熊野那智大社', category: '神社', prefecture_code: '30', prefecture: '和歌山県', municipality: '那智勝浦町',
     lat: 33.6686, lon: 135.8902, description: '熊野三山の一社。',
-    themes: ['巡礼', '浄化', '自然'], wishes: ['神社', '浄化', '自然', '登山'], numbers: [3, 7, 9] },
+    themes: ['巡礼', '浄化', '自然'], wishes: ['神社', '浄化', '自然', '登山', '巡礼', '御神木・巨木'], numbers: [3, 7, 9] },
   { id: 'demo-006', name: '那智の滝', category: '滝', prefecture_code: '30', prefecture: '和歌山県', municipality: '那智勝浦町',
     lat: 33.6752, lon: 135.8875, description: '那智山にある大きな滝。',
-    themes: ['水', '自然', '浄化'], wishes: ['滝', '浄化', '自然', '森林'], numbers: [2, 5, 7] },
+    themes: ['水', '自然', '浄化'], wishes: ['滝', '浄化', '自然', '森林', '絶景', '健康祈願'], numbers: [2, 5, 7] },
   { id: 'demo-007', name: '高野山 金剛峯寺', category: '寺院', prefecture_code: '30', prefecture: '和歌山県', municipality: '高野町',
     lat: 34.2130, lon: 135.5844, description: '高野山真言宗の総本山。',
-    themes: ['内省', '学び', '歴史'], wishes: ['寺院', '森林', '浄化'], numbers: [4, 7, 9] },
+    themes: ['内省', '学び', '歴史'], wishes: ['寺院', '森林', '浄化', '巡礼', '御神木・巨木'], numbers: [4, 7, 9] },
   { id: 'demo-008', name: '富士山', category: '山', prefecture_code: '22', prefecture: '静岡県', municipality: '',
     lat: 35.3606, lon: 138.7274, description: '古くから信仰の対象となってきた山。',
-    themes: ['挑戦', '自然', '展望'], wishes: ['登山', '自然'], numbers: [1, 5, 8],
+    themes: ['挑戦', '自然', '展望'], wishes: ['霊山', '登山', '自然', '絶景'], numbers: [1, 5, 8],
     access_note: '登山道の開通は夏季の限られた期間のみです。' }
 ].map(function (s) {
   // 共通の既定値（スキーマの残り項目）

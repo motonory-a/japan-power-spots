@@ -1,0 +1,5 @@
+node_modules/
+*.pbf
+*.osm.pbf
+.DS_Store
+Thumbs.db

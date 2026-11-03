@@ -3,7 +3,7 @@
  * 重み（点数配分）や交通手段ごとの距離の目安はここだけ変更すれば反映されます。
  */
 var APP_CONFIG = {
-  version: '1.3.0',
+  version: '1.4.0',
 
   // 推薦スコアの配分（合計100点満点になるようにしています）
   weights: {
@@ -32,7 +32,8 @@ var APP_CONFIG = {
   travelModes: {
     walk:    { label: '徒歩',     detour: 1.3, localKm: 9999, localSpeedKmh: 4,  longSpeedKmh: 4,   overheadMin: 0,  refMinutes: 120, gmaps: 'walking' },
     transit: { label: '公共交通', detour: 1.3, localKm: 40,   localSpeedKmh: 30, longSpeedKmh: 130, overheadMin: 30, refMinutes: 480, gmaps: 'transit' },
-    car:     { label: '車',       detour: 1.3, localKm: 20,   localSpeedKmh: 30, longSpeedKmh: 80,  overheadMin: 10, refMinutes: 420, gmaps: 'driving' }
+    car:     { label: '車',       detour: 1.3, localKm: 20,   localSpeedKmh: 30, longSpeedKmh: 80,  overheadMin: 10, refMinutes: 420, gmaps: 'driving' },
+    bike:    { label: '自転車',   detour: 1.3, localKm: 9999, localSpeedKmh: 15, longSpeedKmh: 15, overheadMin: 5,  refMinutes: 180, gmaps: 'bicycling' }
   },
 
   // 「◯時間以内」の選択肢（分）
