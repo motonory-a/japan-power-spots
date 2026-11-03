@@ -22,6 +22,20 @@
   <section class="panel" aria-labelledby="h-diagnose">
     <h2 id="h-diagnose">あなたに合うパワースポットを探す</h2>
     <form id="diagnose-form" novalidate>
+      <div id="profile-box" class="profile-box">
+        <div class="profile-row">
+          <label for="profile-select">保存した入力</label>
+          <select id="profile-select"><option value="">新しく入力する</option></select>
+          <button type="button" id="profile-delete" class="btn-text" hidden>この人を削除</button>
+        </div>
+        <div id="profile-msg" class="profile-msg" role="status" hidden></div>
+      </div>
+      <div class="fields">
+        <div>
+          <label for="nickname">ニックネーム <span class="opt">任意・保存用（例：わたし、母、友人A）</span></label>
+          <input type="text" id="nickname" maxlength="20" autocomplete="off" placeholder="わたし">
+        </div>
+      </div>
       <div class="fields">
         <div>
           <label for="birthday">生年月日 <span class="req">必須</span></label>
@@ -83,8 +97,12 @@
       </fieldset>
 
       <div id="form-error" class="form-error" role="alert" tabindex="-1" hidden></div>
+      <div id="save-row" class="save-row">
+        <label class="check"><input type="checkbox" id="save-input" checked> 入力内容をこの端末に保存する（次回から自動で入ります）</label>
+        <button type="button" id="profile-clear-all" class="btn-text" hidden>保存した内容をすべて消す</button>
+      </div>
       <button type="submit" id="diagnose" class="btn-main">おすすめスポットを診断する</button>
-      <p class="note">番地などの住所は不要です。入力内容はこのページの中だけで計算に使い、サーバーへの送信や保存はしません。</p>
+      <p class="note">入力内容はこのページの中だけで計算に使い、サーバーへは送りません。「この端末に保存する」にチェックがあるときは、生年月日・出発地などをこの端末のブラウザの中にだけ保存します（ほかの端末や人からは見えません）。共用のパソコンではチェックを外してください。</p>
     </form>
   </section>
 
@@ -147,6 +165,7 @@
 <script src="assets/js/diagnosis.js"></script>
 <script src="assets/js/map.js"></script>
 <script src="assets/js/origin.js"></script>
+<script src="assets/js/profiles.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

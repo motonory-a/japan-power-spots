@@ -194,5 +194,11 @@
     }
   }
 
-  root.OriginPicker = { init: init, current: current, clear: clear, prefChanged: prefChanged, buildQuery: buildQuery, SOURCE_LABEL: SOURCE_LABEL };
+  // 保存した出発地を戻す
+  function restore(o) {
+    if (!o || typeof o.lat !== 'number' || typeof o.lon !== 'number') return;
+    set({ lat: o.lat, lon: o.lon, label: o.label || '保存した地点', source: o.source || 'map' });
+  }
+
+  root.OriginPicker = { init: init, current: current, clear: clear, restore: restore, prefChanged: prefChanged, buildQuery: buildQuery, SOURCE_LABEL: SOURCE_LABEL };
 })(this);

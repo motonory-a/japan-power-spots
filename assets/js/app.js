@@ -207,6 +207,7 @@
     $('home').setAttribute('aria-invalid', origin ? 'false' : 'true');
     showError(errs);
     if (errs.length) { $('form-error').focus(); return; }
+    if (window.Profiles) Profiles.remember();
 
     var wishes = Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; });
     var modeKey = document.querySelector('input[name=mode]:checked').value;
@@ -358,6 +359,7 @@
     setupForm();
     OriginPicker.init({ config: cfg, prefLookup: function () { return prefByName($('home').value); } });
     $('home').addEventListener('change', OriginPicker.prefChanged);
+    if (window.Profiles) Profiles.init();
     $('diagnose-form').addEventListener('submit', function (e) { e.preventDefault(); diagnose(); });
     $('keyword').addEventListener('input', searchLater);
     $('pref').addEventListener('change', search);
