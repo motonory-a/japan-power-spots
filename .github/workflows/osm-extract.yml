@@ -1,0 +1,69 @@
+# OSM 全国データからパワースポット候補を抽出し、data-raw ブランチに保存する
+# ・osm-extract-run ブランチに push したとき、または Actions 画面から手動実行したときに動く
+# ・公開中の main ブランチには何も書き込まない
+# ・元データ（約2GBの .pbf）はリポジトリに保存しない
+name: osm-extract
+
+on:
+  push:
+    branches: [osm-extract-run]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ツールの準備
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq osmium-tool
+          pip install -q shapely==2.*
+
+      - name: 日本のOSMデータをダウンロード（Geofabrik）
+        run: |
+          curl -sSL -o japan.pbf https://download.geofabrik.de/asia/japan-latest.osm.pbf
+          ls -lh japan.pbf
+          osmium fileinfo -e japan.pbf | grep -E "Timestamp|timestamp" | head -3 || true
+
+      - name: 候補と行政界を絞り込み
+        run: |
+          osmium tags-filter japan.pbf \
+            nwr/amenity=place_of_worship \
+            nwr/natural=peak,volcano,cave_entrance,spring,hot_spring,rock,stone,tree,waterfall,water \
+            nwr/waterway=waterfall \
+            nwr/historic=shrine,wayside_shrine \
+            nwr/tourism=viewpoint \
+            -o poi.pbf
+          osmium tags-filter japan.pbf r/admin_level=4,7 -o admin.pbf
+          osmium export poi.pbf -f geojsonseq --add-unique-id=type_id -x print_record_separator=false -o poi.geojsonseq
+          osmium export admin.pbf -f geojsonseq -x print_record_separator=false -o admin.geojsonseq
+          ls -lh poi.pbf admin.pbf poi.geojsonseq admin.geojsonseq
+          rm japan.pbf
+
+      - name: 候補ファイルを作成
+        run: |
+          mkdir -p out
+          python scripts/osm_candidates.py poi.geojsonseq admin.geojsonseq out/candidates.jsonl.gz out/summary.json
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > out/extracted_at.txt
+          ls -lh out
+
+      - name: data-raw ブランチへ保存
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir /tmp/raw && cp out/* /tmp/raw/
+          git fetch origin data-raw || true
+          git checkout --orphan data-raw-new
+          git rm -rq --cached . || true
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp /tmp/raw/* .
+          printf "OSM候補データ（自動生成）。© OpenStreetMap contributors / ODbL\n" > README.md
+          git add -A
+          git commit -qm "OSM候補データ $(cat extracted_at.txt)"
+          git push -f origin data-raw-new:data-raw
