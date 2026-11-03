@@ -1,0 +1,38 @@
+# Wikidata から神社・寺院の知名度・祭神・文化財の情報を取得し、data-raw ブランチに追加する
+# ・wikidata-extract-run ブランチに push したとき、または Actions 画面から手動実行したときに動く
+# ・公開中の main ブランチには何も書き込まない
+name: wikidata-extract
+
+on:
+  push:
+    branches: [wikidata-extract-run]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wikidata から取得
+        run: |
+          mkdir -p out
+          python scripts/wikidata_fetch.py out/wikidata.jsonl.gz out/wikidata_summary.json
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > out/wikidata_fetched_at.txt
+          ls -lh out
+
+      - name: data-raw ブランチへ追加
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp out/* /tmp/
+          git fetch --depth 1 origin data-raw
+          git checkout -B data-raw origin/data-raw
+          cp /tmp/wikidata.jsonl.gz /tmp/wikidata_summary.json /tmp/wikidata_fetched_at.txt .
+          git add wikidata.jsonl.gz wikidata_summary.json wikidata_fetched_at.txt
+          git commit -qm "Wikidata $(cat wikidata_fetched_at.txt)" || echo "変更なし"
+          git push origin data-raw
