@@ -154,6 +154,74 @@
     box.hidden = false;
   }
 
+  /* ---------- あなたの気学（今の状態と吉方位） ---------- */
+  function todayStr() {
+    var t = new Date();
+    return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+  }
+  function renderKigaku(person) {
+    var K = Kyusei, box = $('kigaku-panel');
+    box.replaceChildren();
+    var today = todayStr();
+    var o;
+    try { o = K.outlook(person, today, 6); } catch (e) { return; }
+    var td = today.split('-').map(Number);
+    box.append(el('h3', null, 'あなたの気学 ― 今の状態と吉方位（' + td[0] + '年' + td[1] + '月' + td[2] + '日時点）'));
+
+    var dl = el('dl', 'kg-stars');
+    dl.append(el('dt', null, '本命星　' + K.STAR_NAMES[o.honmei]), el('dd', null, o.honmeiNature + '（生まれ年の星。運気の流れを見る基本の星）'));
+    dl.append(el('dt', null, '月命星　' + K.STAR_NAMES[o.getsumei]), el('dd', null, o.getsumeiNature + '（生まれ月の星。性格や、吉方位を絞るときに使う星）'));
+    box.append(dl);
+
+    var st = el('div', 'kg-state');
+    var y1 = el('p');
+    y1.append(el('strong', null, '今年（' + o.kYear + '年・' + K.STAR_SHORT[o.yearCenter] + '中宮）：'),
+      document.createTextNode('本命星は「' + (o.yearPlace === '中宮' ? '中宮' : o.yearPlace + '（' + o.yearMeaning.name + '）') + '」に入っています。' + o.yearMeaning.text));
+    var cm = o.months[0];
+    var m1 = el('p');
+    m1.append(el('strong', null, '今月（' + cm.start.m + '月' + cm.start.d + '日〜・' + K.STAR_SHORT[o.monthCenter] + '中宮）：'),
+      document.createTextNode('本命星は「' + (o.monthPlace === '中宮' ? '中宮' : o.monthPlace + '（' + o.monthMeaning.name + '）') + '」。' + o.monthMeaning.text));
+    st.append(y1, m1);
+    box.append(st);
+
+    var yg = el('p', 'kg-dirs');
+    yg.append(el('strong', null, '今年の方位：'),
+      document.createTextNode('吉方位 ' + (o.yearGood.length ? o.yearGood.join('・') : 'なし') +
+        (o.yearBest.length ? '（最大吉方：' + o.yearBest.join('・') + '）' : '') + '／避けたい方位 ' +
+        o.yearKyo.map(function (k) { return k.dir + '（' + k.why.join('・') + '）'; }).join('、')));
+    box.append(yg);
+
+    box.append(el('h4', null, 'これからの6か月の吉方位（年盤・月盤で判定）'));
+    var wrap = el('div', 'kg-table');
+    var tbl = el('table'), hr = el('tr');
+    ['期間', '◎ 年・月とも吉', '○ 年か月が吉', '× 避けたい方位'].forEach(function (h) { hr.append(el('th', null, h)); });
+    tbl.append(hr);
+    o.months.forEach(function (m, i) {
+      var next = o.months[i + 1];
+      var tr = el('tr');
+      var period = m.start.m + '/' + m.start.d + '〜' + (next ? (function () {
+        var d = new Date(Date.UTC(next.start.y, next.start.m - 1, next.start.d - 1));
+        return (d.getUTCMonth() + 1) + '/' + d.getUTCDate();
+      })() : '');
+      var th = el('th', null, period);
+      th.append(el('span', 'sub', K.STAR_SHORT[m.monthCenter] + '中宮' + (m.kYear !== o.kYear ? '・' + m.kYear + '年' : '')));
+      if (m.honmeiInCenter) th.append(el('span', 'sub warn', '本命星が中宮（八方塞がり）'));
+      tr.append(th);
+      var good2 = m.dirs.best.map(function (d) { return d + '（最大吉方）'; }).concat(m.dirs.good2);
+      tr.append(el('td', 'lv-best', good2.length ? good2.join('・') : 'なし'));
+      tr.append(el('td', 'lv-good', m.dirs.good1.length ? m.dirs.good1.join('・') : 'なし'));
+      tr.append(el('td', 'lv-kyo', m.dirs.kyo.join('・')));
+      if (i === 0) tr.classList.add('now');
+      tbl.append(tr);
+    });
+    wrap.append(tbl);
+    box.append(wrap);
+    if (o.months.some(function (m) { return m.honmeiInCenter; })) {
+      box.append(el('p', 'note warn', '「本命星が中宮（八方塞がり）」の期間は、どの方位にも吉方位が出にくく、遠出や大きな決断を控えるとする流派もあります。'));
+    }
+    box.append(el('p', 'note', '方位の吉凶は九星気学の一般的な考え方（年盤・月盤、東西南北30°・四隅60°）による目安で、流派によって異なります。出かける日を入れると、その日の日盤も含めた早見表が下に出ます。'));
+  }
+
   /* ---------- 方位の早見表 ---------- */
   var MARK = { best: '◎', good: '○', normal: '―', kyo: '×' };
   var PALACE_DEG = { '北': 0, '北東': 45, '東': 90, '南東': 135, '南': 180, '南西': 225, '西': 270, '北西': 315 };
@@ -260,6 +328,7 @@
       ul.append(el('li', null, '出かける日：指定なし（日付を入れると方位の吉凶も判定します）'));
     }
     sum.append(ul);
+    renderKigaku(person);
     renderFortuneTable(boards);
 
     var out = $('recommended');

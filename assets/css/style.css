@@ -132,7 +132,27 @@ footer a{color:inherit}
 .check{display:inline-flex;align-items:center;gap:8px;font-weight:normal;font-size:14px;margin:0;cursor:pointer}
 .check input{width:18px;height:18px;margin:0}
 .save-row .btn-text{margin-top:0}
+/* あなたの気学 */
+.kigaku-panel{border:1px solid #d9e6dc;background:#fbfdf9;border-radius:12px;padding:16px;margin-bottom:15px}
+.kigaku-panel:empty{display:none}
+.kigaku-panel h3{font-size:17px;margin:0 0 10px}
+.kigaku-panel h4{font-size:15px;margin:14px 0 6px}
+.kg-stars{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px;margin:0 0 8px}
+.kg-stars dt{font-weight:bold;white-space:nowrap}
+.kg-stars dd{margin:0}
+.kg-state p,.kg-dirs{font-size:14px;margin:6px 0}
+.kg-table{overflow-x:auto}
+.kg-table table{border-collapse:collapse;width:100%;font-size:13px;min-width:480px}
+.kg-table th,.kg-table td{border:1px solid #e1e7df;padding:6px 8px;text-align:left;vertical-align:top}
+.kg-table tr:first-child th{background:#eef5ee}
+.kg-table .sub{display:block;font-size:11px;font-weight:normal;color:#64766c}
+.kg-table .sub.warn{color:#7a5d00;font-weight:bold}
+.kg-table .lv-best{background:#e4f3e8}
+.kg-table .lv-kyo{color:#922b21}
+.kg-table tr.now th:first-child{border-left:4px solid #22684b}
+.note.warn{color:#7a5d00}
 @media (max-width:600px){
+  .kg-stars{grid-template-columns:1fr}
   .panel{padding:18px 16px}
   #map{height:360px}
   .chip-group{width:100%}

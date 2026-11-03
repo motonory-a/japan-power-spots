@@ -232,7 +232,97 @@
     return min;
   }
 
+  /* ---------- 今の状態と吉方位（一般的な解釈） ---------- */
+  var STAR_NATURE = {
+    1: '水の星。柔軟で、人とのつながりを大切にするとされます。',
+    2: '大地の星。まじめで面倒見がよく、コツコツ積み上げるとされます。',
+    3: '雷・若木の星。明るく行動力があり、新しいことに積極的とされます。',
+    4: '風の星。調和を重んじ、ご縁や信用を育てるとされます。',
+    5: '中心の土の星。強い意志と統率力を持つとされます。',
+    6: '天の星。責任感が強く、目標に向かって進むとされます。',
+    7: '沢の星。社交的で楽しみ上手、人を和ませるとされます。',
+    8: '山の星。粘り強く、変化を乗り越えて積み上げるとされます。',
+    9: '火の星。直感と美意識に優れ、物事を明らかにするとされます。'
+  };
+  var PALACE_MEANING = {
+    '北': { name: '坎宮', text: '静かに力を蓄える時期とされます。無理をせず、休養や学び、準備に向きます。' },
+    '北東': { name: '艮宮', text: '変化・転換の時期とされます。見直しや切り替え、整理に向きます。' },
+    '東': { name: '震宮', text: '物事が動き出す時期とされます。新しいことを始めたり、行動を起こしたりするのに向きます。' },
+    '南東': { name: '巽宮', text: '整い、信用やご縁が広がる時期とされます。人付き合いや交渉ごとに向きます。' },
+    '南': { name: '離宮', text: '運気の頂点で、物事がはっきりする時期とされます。一方で、離れるものもあるとされます。' },
+    '南西': { name: '坤宮', text: '地道な努力の時期とされます。基礎固めや、家庭・身近な人を大切にするのに向きます。' },
+    '西': { name: '兌宮', text: '実りと楽しみの時期とされます。これまでの成果を受け取り、人との交流を楽しむのに向きます。' },
+    '北西': { name: '乾宮', text: '充実と責任の時期とされます。仕事や目上の人との関係に力を注ぐのに向きます。' },
+    '中宮': { name: '中宮', text: '運気の転換点とされます。注目を集めやすい一方、「八方塞がり」として遠出や大きな決断に慎重さが求められるとされます。' }
+  };
+
+  // 年盤・月盤を合わせた方位の判定（日盤は含めない）
+  function combineYM(y, m) {
+    if (y.level === 'kyo' || m.level === 'kyo') return 'kyo';
+    if (y.level === 'best' && m.level === 'best') return 'best';
+    if (y.level !== 'normal' && m.level !== 'normal') return 'good2';
+    if (y.level !== 'normal' || m.level !== 'normal') return 'good1';
+    return 'normal';
+  }
+
+  // 本命星が盤のどこにあるか
+  function placeOfStar(center, star) {
+    var b = board(center);
+    for (var i = 0; i < PALACES.length; i++) if (b[PALACES[i]] === star) return PALACES[i];
+    return '中宮';
+  }
+
+  /*
+   * 今の状態と、これからの月ごとの吉方位
+   * todayStr：基準日、months：何か月先まで
+   */
+  function outlook(person, todayStr, months) {
+    months = months || 6;
+    var t = parseDate(todayStr);
+    var ym = kigakuYM(t.y, t.m, t.d);
+    var yc = yearStar(ym.kYear), mc = monthStar(ym.kYear, ym.monthIdx);
+    var yearJ = judgeBoard(yc, yearBranch(ym.kYear), '歳破', person);
+    var list = [];
+    // 今の月の節入りから、月ごとに
+    var cur = { kYear: ym.kYear, monthIdx: ym.monthIdx };
+    for (var i = 0; i < months; i++) {
+      var ycI = yearStar(cur.kYear), mcI = monthStar(cur.kYear, cur.monthIdx);
+      var yj = judgeBoard(ycI, yearBranch(cur.kYear), '歳破', person);
+      var mj = judgeBoard(mcI, monthBranch(cur.monthIdx), '月破', person);
+      // この月の始まり（節入り日）と終わり
+      var termIdx = cur.monthIdx === 12 ? 0 : cur.monthIdx * 2;
+      var tY = cur.monthIdx === 12 ? cur.kYear + 1 : cur.kYear;
+      var start = terms(tY)[termIdx];
+      var dirs = { best: [], good2: [], good1: [], kyo: [] }, why = {};
+      PALACES.forEach(function (p) {
+        var c = combineYM(yj.palaces[p], mj.palaces[p]);
+        if (dirs[c]) dirs[c].push(p);
+        if (c === 'kyo') why[p] = yj.palaces[p].bad.concat(mj.palaces[p].bad).filter(function (v, k, a) { return a.indexOf(v) === k; });
+      });
+      list.push({
+        kYear: cur.kYear, monthIdx: cur.monthIdx, monthName: MONTH_BRANCH_NAMES[cur.monthIdx] + '月',
+        start: { y: start.y, m: start.m, d: start.d, name: start.name },
+        yearCenter: ycI, monthCenter: mcI, dirs: dirs, why: why,
+        honmeiInCenter: yj.honmeiInCenter || mj.honmeiInCenter,
+        monthHonmeiPlace: placeOfStar(mcI, person.honmei)
+      });
+      cur = cur.monthIdx === 12 ? { kYear: cur.kYear + 1, monthIdx: 1 } : { kYear: cur.kYear, monthIdx: cur.monthIdx + 1 };
+    }
+    var yp = placeOfStar(yc, person.honmei), mp = placeOfStar(mc, person.honmei);
+    return {
+      honmei: person.honmei, getsumei: person.getsumei,
+      honmeiNature: STAR_NATURE[person.honmei], getsumeiNature: STAR_NATURE[person.getsumei],
+      kYear: ym.kYear, yearCenter: yc, monthCenter: mc, monthIdx: ym.monthIdx,
+      yearPlace: yp, yearMeaning: PALACE_MEANING[yp], monthPlace: mp, monthMeaning: PALACE_MEANING[mp],
+      yearGood: PALACES.filter(function (p) { return yearJ.palaces[p].level === 'best' || yearJ.palaces[p].level === 'good'; }),
+      yearBest: PALACES.filter(function (p) { return yearJ.palaces[p].level === 'best'; }),
+      yearKyo: PALACES.filter(function (p) { return yearJ.palaces[p].level === 'kyo'; }).map(function (p) { return { dir: p, why: yearJ.palaces[p].bad }; }),
+      months: list
+    };
+  }
+
   var api = {
+    STAR_NATURE: STAR_NATURE, PALACE_MEANING: PALACE_MEANING, outlook: outlook, placeOfStar: placeOfStar, combineYM: combineYM,
     STAR_NAMES: STAR_NAMES, STAR_SHORT: STAR_SHORT, ELEMENT_NAMES: ELEMENT_NAMES, ELEMENT: ELEMENT, PALACES: PALACES,
     MONTH_BRANCH_NAMES: MONTH_BRANCH_NAMES,
     dayNum: dayNum, dayGanzhiIndex: dayGanzhiIndex, ganzhiName: ganzhiName, terms: terms, kigakuYM: kigakuYM,

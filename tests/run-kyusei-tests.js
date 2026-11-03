@@ -160,5 +160,35 @@ test('方位の区切り（30°・60°）', () => {
 });
 test('区切り線までの角度', () => { assert.strictEqual(K.edgeDistance(16), 1); assert.strictEqual(K.edgeDistance(0), 15); });
 
+console.log('今の状態と吉方位');
+test('1974-04-15生まれ・2026-11-03：本命星は年盤で東（震宮）、今月は南東', () => {
+  const o = K.outlook(K.birthStars('1974-04-15'), '2026-11-03', 6);
+  assert.strictEqual(o.yearPlace, '東'); assert.strictEqual(o.yearMeaning.name, '震宮'); assert.strictEqual(o.monthPlace, '南東');
+});
+test('6か月分、節入り日から始まる（10/8・11/7・12/7・1/5・2/4・3/6）', () => {
+  const o = K.outlook(K.birthStars('1974-04-15'), '2026-11-03', 6);
+  assert.deepStrictEqual(o.months.map((m) => m.start.m + '/' + m.start.d), ['10/8', '11/7', '12/7', '1/5', '2/4', '3/6']);
+});
+test('立春後は新しい年の盤（2027年は九紫中宮）', () => {
+  const o = K.outlook(K.birthStars('1974-04-15'), '2026-11-03', 6);
+  assert.strictEqual(o.months[4].kYear, 2027); assert.strictEqual(o.months[4].yearCenter, 9);
+});
+test('各月の方位は8つすべてどれかに分類', () => {
+  const o = K.outlook(K.birthStars('1974-04-15'), '2026-11-03', 6);
+  o.months.forEach((m) => {
+    const n = m.dirs.best.length + m.dirs.good2.length + m.dirs.good1.length + m.dirs.kyo.length;
+    assert.ok(n <= 8);
+  });
+});
+test('八白中宮の月（2026年11月）は本命星（八白）が中宮', () => {
+  const o = K.outlook(K.birthStars('1974-04-15'), '2026-11-03', 6);
+  assert.strictEqual(o.months[1].monthCenter, 8); assert.ok(o.months[1].honmeiInCenter);
+});
+test('今年の吉方位と年盤の判定が一致', () => {
+  const p = K.birthStars('1974-04-15'), o = K.outlook(p, '2026-11-03', 1);
+  const j = K.judgeBoard(1, K.yearBranch(2026), '歳破', p);
+  assert.deepStrictEqual(o.yearGood, K.PALACES.filter((d) => ['best', 'good'].includes(j.palaces[d].level)));
+});
+
 console.log('\n結果：' + pass + '件成功 / ' + fail + '件失敗');
 process.exit(fail ? 1 : 0);
