@@ -268,3 +268,12 @@ footer a{color:#E4D6B0}
   .kg-board .kg-you-label{font-size:14px}
   .kg-board .kg-ns{font-size:15px}
 }
+
+/* 公式LINEの案内（LINEの画像や計測タグは読み込まず、リンクのみ） */
+.line-box{margin:28px 0 18px;padding:20px 18px;border:1px solid var(--gold);border-radius:12px;background:#fff;text-align:center}
+.line-label{margin:0;font-size:12px;letter-spacing:.2em;color:var(--ink);opacity:.75}
+.line-name{margin:6px 0 4px;font-family:var(--serif);font-size:18px;color:var(--ink)}
+.line-text{margin:0 0 14px;font-size:14px}
+.btn-line{display:inline-block;min-height:44px;padding:11px 26px;border-radius:999px;background:#06C755;color:#fff;font-weight:700;text-decoration:none}
+.btn-line:hover,.btn-line:focus-visible{background:#05A948;color:#fff}
+.foot-line{margin:0 0 10px}
