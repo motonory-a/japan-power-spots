@@ -71,6 +71,13 @@
     var objTags = s.wishes.filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) card.append(el('p', 'small', '特徴：' + objTags.join('・')));
     if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益（' + (s.deities && s.deities.length ? '祭神・名称' : '名称') + 'からの推定）：' + s.wishesInferred.join('・')));
+    if (cfg.reportForms && cfg.reportForms.fix) {
+      var fix = el('a', 'report-link', '情報の誤りを報告');
+      fix.href = cfg.reportForms.fix + (cfg.reportForms.fix.indexOf('github.com') !== -1
+        ? '&title=' + encodeURIComponent('【訂正】' + s.name) + '&name=' + encodeURIComponent(s.name) + '&spot_id=' + encodeURIComponent(s.id) : '');
+      fix.target = '_blank'; fix.rel = 'noopener noreferrer';
+      card.append(fix);
+    }
     if (s.source_urls && s.source_urls.length) {
       var src = el('p', 'small src');
       src.append(document.createTextNode('情報元：'));
@@ -481,6 +488,7 @@
   /* ---------- 起動 ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     $('version').textContent = 'v' + cfg.version;
+    if (cfg.reportForms && cfg.reportForms.add) $('report-add').href = cfg.reportForms.add; else $('report-panel').hidden = true;
     $('spot-total').textContent = SPOTS_ALL.length.toLocaleString();
     var mapOk = SpotMap.init('map');
     setupForm();

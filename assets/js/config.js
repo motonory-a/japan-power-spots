@@ -55,6 +55,12 @@ var APP_CONFIG = {
     maxCandidates: 5
   },
 
+  // 投稿フォーム（GitHub の Issue フォーム。Googleフォームなどに替える場合はURLを書き換える）
+  reportForms: {
+    add: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-add.yml',
+    fix: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-fix.yml'
+  },
+
   // 診断結果に表示する件数
   resultCount: 5,
 

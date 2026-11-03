@@ -1,0 +1,36 @@
+name: 情報の誤りを報告
+description: 掲載している情報の誤り（場所・名前・閉鎖など）を教えてください
+title: "【訂正】"
+labels: ["情報訂正"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ご報告ありがとうございます。確認のうえ修正します。この投稿は公開されます。
+  - type: input
+    id: name
+    attributes:
+      label: スポットの名前
+    validations:
+      required: true
+  - type: input
+    id: spot_id
+    attributes:
+      label: スポットのID（サイトから開いた場合は自動で入ります）
+  - type: dropdown
+    id: kind
+    attributes:
+      label: どんな誤りですか
+      options: [場所（地図の位置）がちがう, 名前がちがう, 種類・ご利益がちがう, もう存在しない・立入禁止, 重複している, その他]
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: 正しい内容・詳しい説明
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: 参考になるページ

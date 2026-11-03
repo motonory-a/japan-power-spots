@@ -179,6 +179,9 @@ footer a{color:inherit}
 .card .photo figcaption a{color:#666}
 .photo-loading{height:190px;background:linear-gradient(90deg,#eef0ea 25%,#f6f7f3 50%,#eef0ea 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.btn-inline{display:inline-block;text-decoration:none;margin-top:4px}
+.btn-inline:hover{color:#fff}
+.report-link{font-size:12px;color:#7a7a7a;margin-top:8px;align-self:flex-start}
 @media (max-width:600px){
   .kg-stars{grid-template-columns:1fr}
   .kigaku-panel{padding:12px 10px}
