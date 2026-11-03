@@ -3,21 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>日本全国パワースポット巡り！</title>
+<title>日本全国パワースポット巡り</title>
+<meta name="theme-color" content="#1E2944">
 <meta name="description" content="生年月日とお住まいの都道府県から、あなたに合いそうなパワースポットを探す旅のサイト（試作版）。">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<header class="site-header">
-  <h1>⛩ 日本全国パワースポット巡り！</h1>
-  <p>生年月日とお住まいから、あなたに響く聖地を探す旅。</p>
+<header class="hero">
+  <svg class="hero-board" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="currentColor">
+      <polygon points="276.5,15.2 384.8,123.5 384.8,276.5 276.5,384.8 123.5,384.8 15.2,276.5 15.2,123.5 123.5,15.2" stroke-width="1.4"/>
+      <polygon points="249.8,79.6 320.4,150.2 320.4,249.8 249.8,320.4 150.2,320.4 79.6,249.8 79.6,150.2 150.2,79.6" stroke-width="1"/>
+      <polygon points="222.6,145.4 254.6,177.4 254.6,222.6 222.6,254.6 177.4,254.6 145.4,222.6 145.4,177.4 177.4,145.4" stroke-width="1"/>
+      <path d="M200 0V145M200 255V400M0 200H145M255 200H400M58.6 58.6L161 161M239 239L341.4 341.4M341.4 58.6L239 161M161 239L58.6 341.4" stroke-width=".8"/>
+    </g>
+  </svg>
+  <div class="hero-inner">
+    <h1>日本全国<br>パワースポット巡り</h1>
+    <p class="hero-lead">生まれた日、出かける日、そして方位。<br>九星気学と数秘から、いまのあなたに合う聖地を探します。</p>
+    <a class="hero-cta" href="#h-diagnose">診断をはじめる</a>
+  </div>
 </header>
 
 <main>
-  <div class="trial-banner" role="note">
-    <strong>試作版です。</strong>全国<span id="spot-total">8</span>件のスポットを掲載しています<span id="load-status"></span>。OpenStreetMap・Wikidata・環境省の巨樹調査のデータをもとにしており、内容は順次確認中です。ご利益は祭神・本尊や名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。
-  </div>
+  <p class="trial-banner" role="note">
+    全国<span id="spot-total">8</span>件の神社・寺院・滝・霊山・巨樹を掲載しています<span id="load-status"></span>。試作版のため、内容は順次確認中です。ご利益は祭神・本尊や名称から一般的なものを推定しています。
+  </p>
 
   <section class="panel" aria-labelledby="h-diagnose">
     <h2 id="h-diagnose">あなたに合うパワースポットを探す</h2>
@@ -30,70 +45,84 @@
         </div>
         <div id="profile-msg" class="profile-msg" role="status" hidden></div>
       </div>
-      <div class="fields">
-        <div>
-          <label for="nickname">ニックネーム <span class="opt">任意・保存用（例：わたし、母、友人A）</span></label>
-          <input type="text" id="nickname" maxlength="20" autocomplete="off" placeholder="わたし">
+      <fieldset class="step">
+        <legend><span class="step-no" aria-hidden="true">一</span>あなたのこと</legend>
+        <div class="fields fields-me">
+          <div>
+            <label for="nickname">ニックネーム <span class="opt">任意・保存用</span></label>
+            <input type="text" id="nickname" maxlength="20" autocomplete="off" placeholder="わたし、母 など">
+          </div>
+          <div class="bd-field">
+            <label for="bd-y">生年月日 <span class="req">必須</span></label>
+            <div class="bd-row" role="group" aria-label="生年月日">
+              <select id="bd-y" aria-label="生まれた年"><option value="">年</option></select>
+              <select id="bd-m" aria-label="生まれた月"><option value="">月</option></select>
+              <select id="bd-d" aria-label="生まれた日"><option value="">日</option></select>
+            </div>
+            <input type="hidden" id="birthday">
+          </div>
         </div>
-      </div>
-      <div class="fields">
-        <div>
-          <label for="birthday">生年月日 <span class="req">必須</span></label>
-          <input type="date" id="birthday" required>
-        </div>
-        <div>
-          <label for="home">お住まいの都道府県 <span class="req">必須</span></label>
-          <select id="home" required><option value="">選択してください</option></select>
-        </div>
-        <div>
-          <label for="trip-date">出かける日 <span class="opt">任意</span></label>
-          <input type="date" id="trip-date">
-        </div>
-      </div>
-      <p class="note">出かける日を入れると、九星気学でその日の方位の吉凶（年盤・月盤・日盤）を判定し、運気の良い方位のスポットを優先します。</p>
-
-      <fieldset class="group origin-box">
-        <legend>出発地をくわしく指定する <span class="opt">任意・方角と所要時間がより正確になります</span></legend>
-        <div class="addr-row">
-          <label for="address" class="sr-only">住所</label>
-          <input id="address" type="text" autocomplete="street-address" placeholder="例：新宿区西新宿二丁目（町名や番地まで）">
-          <button type="button" id="address-search" class="btn-sub">住所から探す</button>
-        </div>
-        <div id="address-candidates" class="candidates"></div>
-        <div class="origin-actions">
-          <button type="button" id="use-gps" class="btn-sub">📍 現在地を使う</button>
-        </div>
-        <details id="origin-map-box" class="origin-map-box">
-          <summary>地図で位置を指定・調整する</summary>
-          <p class="note">地図をタップ（クリック）するとピンが立ちます。ピンはドラッグで動かせます。</p>
-          <div id="origin-map"></div>
-        </details>
-        <div id="origin-msg" class="origin-msg" role="status" hidden></div>
-        <div id="origin-status" class="origin-status"></div>
-        <p class="note">「住所から探す」を押したときだけ、入力した住所の文字を国土地理院の住所検索へ送って位置を調べます。地図での指定と現在地は、外部へ送りません。住所や位置はどこにも保存しません。</p>
       </fieldset>
 
-      <fieldset class="group">
-        <legend>願い・体験したいこと <span class="opt">任意・いくつでも選べます</span></legend>
+      <fieldset class="step">
+        <legend><span class="step-no" aria-hidden="true">二</span>出発地</legend>
+        <div class="fields">
+          <div>
+            <label for="home">お住まいの都道府県 <span class="req">必須</span></label>
+            <select id="home" required><option value="">選択してください</option></select>
+          </div>
+        </div>
+        <div class="origin-box">
+          <p class="sub-label">出発地をくわしく指定する <span class="opt">任意・方角と所要時間がより正確になります</span></p>
+          <div class="addr-row">
+            <label for="address" class="sr-only">住所</label>
+            <input id="address" type="text" autocomplete="street-address" placeholder="例：新宿区西新宿二丁目">
+            <button type="button" id="address-search" class="btn-sub">住所から探す</button>
+          </div>
+          <div id="address-candidates" class="candidates"></div>
+          <div class="origin-actions">
+            <button type="button" id="use-gps" class="btn-sub">現在地を使う</button>
+          </div>
+          <details id="origin-map-box" class="origin-map-box">
+            <summary>地図で位置を指定・調整する</summary>
+            <p class="note">地図をタップ（クリック）するとピンが立ちます。ピンはドラッグで動かせます。</p>
+            <div id="origin-map"></div>
+          </details>
+          <div id="origin-msg" class="origin-msg" role="status" hidden></div>
+          <div id="origin-status" class="origin-status"></div>
+          <p class="note">「住所から探す」を押したときだけ、入力した住所の文字を国土地理院の住所検索へ送って位置を調べます。地図での指定と現在地は外部へ送りません。</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="step">
+        <legend><span class="step-no" aria-hidden="true">三</span>願い・体験したいこと <span class="opt">任意・いくつでも</span></legend>
         <div id="wishes"></div>
         <div class="wish-status"><span id="wish-selected" aria-live="polite">選択中：なし</span>
           <button type="button" id="wish-clear" class="btn-text" hidden>選択をすべて解除</button></div>
-        <p class="note">ご利益の項目は、デモデータでは仮の設定です。</p>
+        <p class="note">ご利益は、祭神・本尊や名称からの一般的な推定です。</p>
       </fieldset>
 
-      <fieldset class="group">
-        <legend>主な交通手段</legend>
+      <fieldset class="step">
+        <legend><span class="step-no" aria-hidden="true">四</span>日程と交通手段</legend>
+        <div class="fields">
+          <div>
+            <label for="trip-date">出かける日 <span class="opt">任意</span></label>
+            <input type="date" id="trip-date">
+          </div>
+          <div>
+            <label for="time-limit">所要時間</label>
+            <select id="time-limit"><option value="">指定しない</option></select>
+          </div>
+        </div>
+        <p class="note">出かける日を入れると、その日の方位の吉凶（年盤・月盤・日盤）で、運気の良い方位のスポットを優先します。</p>
+        <p class="sub-label">主な交通手段</p>
         <div class="radio-row">
           <label class="chip"><input type="radio" name="mode" value="transit" checked><span>公共交通</span></label>
           <label class="chip"><input type="radio" name="mode" value="car"><span>車</span></label>
-          <label class="chip"><input type="radio" name="mode" value="bike"><span>🚲 自転車</span></label>
+          <label class="chip"><input type="radio" name="mode" value="bike"><span>自転車</span></label>
           <label class="chip"><input type="radio" name="mode" value="walk"><span>徒歩</span></label>
         </div>
-        <div class="time-row">
-          <label for="time-limit">所要時間</label>
-          <select id="time-limit"><option value="">指定しない</option></select>
-        </div>
-        <p class="note">所要時間は、直線距離と交通手段ごとの平均的な速さから出した<strong>目安</strong>です。乗り換えや渋滞は細かく反映していません。正確な時間は各スポットの「経路を調べる」でご確認ください（Googleマップの自転車ルートは、東京・大阪など一部の都道府県のみ対応しています）。</p>
+        <p class="note">所要時間は、直線距離と交通手段ごとの平均的な速さから出した目安です。正確な時間は各スポットの「経路を調べる」でご確認ください（Googleマップの自転車ルートは一部の都道府県のみ）。</p>
       </fieldset>
 
       <div id="form-error" class="form-error" role="alert" tabindex="-1" hidden></div>
@@ -101,7 +130,7 @@
         <label class="check"><input type="checkbox" id="save-input" checked> 入力内容をこの端末に保存する（次回から自動で入ります）</label>
         <button type="button" id="profile-clear-all" class="btn-text" hidden>保存した内容をすべて消す</button>
       </div>
-      <button type="submit" id="diagnose" class="btn-main">おすすめスポットを診断する</button>
+      <button type="submit" id="diagnose" class="btn-main btn-go">おすすめスポットを診断する</button>
       <p class="note">入力内容はこのページの中だけで計算に使い、サーバーへは送りません。「この端末に保存する」にチェックがあるときは、生年月日・出発地などをこの端末のブラウザの中にだけ保存します（ほかの端末や人からは見えません）。共用のパソコンではチェックを外してください。</p>
     </form>
   </section>
@@ -152,7 +181,7 @@
   <section id="report-panel" class="panel" aria-labelledby="h-report">
     <h2 id="h-report">載っていない場所を教えてください</h2>
     <p>あなたの知っているパワースポットや、掲載情報の誤りを教えてください。内容を確認してから反映します。</p>
-    <a id="report-add" class="btn-main btn-inline" href="#" target="_blank" rel="noopener noreferrer">＋ 載っていない場所を教える</a>
+    <a id="report-add" class="btn-sub btn-inline" href="#" target="_blank" rel="noopener noreferrer">載っていない場所を教える</a>
     <p class="note">投稿フォーム（GitHub）が開きます。投稿にはGitHubのアカウント（無料）が必要で、投稿内容は公開されます。個人の住所や連絡先は書かないでください。情報の誤りは、各スポットの「情報の誤りを報告」から送れます。</p>
   </section>
 
@@ -162,7 +191,7 @@
   </section>
 </main>
 
-<footer>日本全国パワースポット巡り！｜試作版 <span id="version"></span><br>スポットデータ：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors（ODbL）・<a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）<br>巨樹：環境省生物多様性センター「自然環境保全基礎調査 巨樹・巨木林調査」（<a href="https://www.biodic.go.jp/" target="_blank" rel="noopener noreferrer">生物多様性センター</a>）を加工して作成</footer>
+<footer><p class="foot-title">日本全国パワースポット巡り　試作版 <span id="version"></span></p><p>スポットデータ：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors（ODbL）・<a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）<br>巨樹：環境省生物多様性センター「自然環境保全基礎調査 巨樹・巨木林調査」（<a href="https://www.biodic.go.jp/" target="_blank" rel="noopener noreferrer">生物多様性センター</a>）を加工して作成</p></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/config.js"></script>

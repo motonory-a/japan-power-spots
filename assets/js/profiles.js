@@ -53,6 +53,7 @@
   function apply(p) {
     $('nickname').value = p.nickname || '';
     $('birthday').value = p.birthday || '';
+    if (root.BirthdayInput) root.BirthdayInput.sync();
     $('home').value = p.home || '';
     $('home').dispatchEvent(new Event('change'));
     $('address').value = p.address || '';
@@ -65,6 +66,7 @@
   function clearForm() {
     $('nickname').value = '';
     $('birthday').value = '';
+    if (root.BirthdayInput) root.BirthdayInput.sync();
     $('home').value = '';
     $('home').dispatchEvent(new Event('change'));
     $('address').value = '';

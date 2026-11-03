@@ -92,6 +92,59 @@
     return card;
   }
 
+  /* ---------- 生年月日（年・月・日の選択） ---------- */
+  // 和暦の表示（改元の年は両方）
+  function eraLabel(y) {
+    var eras = [[2019, '令和'], [1989, '平成'], [1926, '昭和'], [1912, '大正'], [1868, '明治']];
+    var out = [];
+    for (var i = 0; i < eras.length; i++) {
+      var e = eras[i];
+      if (y >= e[0]) {
+        var n = y - e[0] + 1;
+        out.unshift(e[1] + (n === 1 ? '元' : n));
+        // 改元の年は、前の元号の最終年も
+        if (n === 1 && eras[i + 1]) out.unshift(eras[i + 1][1] + (y - eras[i + 1][0] + 1));
+        break;
+      }
+    }
+    return out.join('・') + '年';
+  }
+  function daysIn(y, m) { return new Date(y || 2000, m, 0).getDate(); }
+  var Birthday = {
+    init: function () {
+      var thisYear = new Date().getFullYear();
+      for (var y = thisYear; y >= 1920; y--) {
+        var o = el('option', null, y + '年（' + eraLabel(y) + '）'); o.value = String(y); $('bd-y').append(o);
+      }
+      for (var m = 1; m <= 12; m++) { var om = el('option', null, m + '月'); om.value = String(m); $('bd-m').append(om); }
+      Birthday.fillDays();
+      ['bd-y', 'bd-m', 'bd-d'].forEach(function (id) {
+        $(id).addEventListener('change', function () { if (id !== 'bd-d') Birthday.fillDays(); Birthday.toHidden(); });
+      });
+    },
+    fillDays: function () {
+      var y = Number($('bd-y').value), m = Number($('bd-m').value), cur = $('bd-d').value;
+      var n = m ? daysIn(y, m) : 31;
+      $('bd-d').replaceChildren(el('option', null, '日'));
+      $('bd-d').firstChild.value = '';
+      for (var d = 1; d <= n; d++) { var o = el('option', null, d + '日'); o.value = String(d); $('bd-d').append(o); }
+      if (cur && Number(cur) <= n) $('bd-d').value = cur;
+    },
+    toHidden: function () {
+      var y = $('bd-y').value, m = $('bd-m').value, d = $('bd-d').value;
+      $('birthday').value = (y && m && d) ? y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0') : '';
+    },
+    // 隠し項目（保存した内容の読み込みなど）から選択欄へ
+    sync: function () {
+      var v = $('birthday').value, p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || '');
+      if (!p) { $('bd-y').value = ''; $('bd-m').value = ''; Birthday.fillDays(); $('bd-d').value = ''; return; }
+      $('bd-y').value = String(Number(p[1])); $('bd-m').value = String(Number(p[2]));
+      Birthday.fillDays(); $('bd-d').value = String(Number(p[3]));
+    },
+    setInvalid: function (bad) { ['bd-y', 'bd-m', 'bd-d'].forEach(function (id) { $(id).setAttribute('aria-invalid', bad ? 'true' : 'false'); }); }
+  };
+  window.BirthdayInput = Birthday;
+
   /* ---------- 入力欄の準備 ---------- */
   function setupForm() {
     PREFECTURES.forEach(function (p) {
@@ -99,9 +152,7 @@
         var o = el('option', null, p[1]); o.value = p[1]; $(id).append(o);
       });
     });
-    var t = new Date();
-    $('birthday').max = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
-    $('birthday').min = '1900-01-01';
+    Birthday.init();
 
     var groups = {};
     WISH_OPTIONS.forEach(function (w) { (groups[w.group] = groups[w.group] || []).push(w.key); });
@@ -328,10 +379,10 @@
       if (tErr) errs.push(tErr);
     }
     $('trip-date').setAttribute('aria-invalid', tErr ? 'true' : 'false');
-    $('birthday').setAttribute('aria-invalid', bErr ? 'true' : 'false');
+    Birthday.setInvalid(!!bErr);
     $('home').setAttribute('aria-invalid', origin ? 'false' : 'true');
     showError(errs);
-    if (errs.length) { $('form-error').focus(); return; }
+    if (errs.length) { $('form-error').focus(); $('form-error').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
     if (window.Profiles) Profiles.remember();
 
     var wishes = Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; });

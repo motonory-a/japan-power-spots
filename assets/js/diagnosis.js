@@ -33,7 +33,7 @@
 
   // 生年月日のチェック。問題なければ null、あればメッセージを返す
   function validateBirthday(dateStr, today) {
-    if (!dateStr) return '生年月日を入力してください。';
+    if (!dateStr) return '生年月日の年・月・日を選んでください。';
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return '生年月日の形式が正しくありません。';
     var p = dateStr.split('-').map(Number);
     var d = new Date(p[0], p[1] - 1, p[2]);
