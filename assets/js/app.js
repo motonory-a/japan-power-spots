@@ -112,7 +112,7 @@
   function daysIn(y, m) { return new Date(y || 2000, m, 0).getDate(); }
   var Birthday = {
     init: function () {
-      var thisYear = new Date().getFullYear();
+      var thisYear = window.JSTDate ? JSTDate.parts().y : new Date().getFullYear();
       for (var y = thisYear; y >= 1920; y--) {
         var o = el('option', null, y + '年（' + eraLabel(y) + '）'); o.value = String(y); $('bd-y').append(o);
       }
@@ -180,6 +180,28 @@
       updateWishStatus();
     });
 
+    // トップの「願いごとから探す」：押すと診断の願いに入れて、診断へ移動する
+    (cfg.wishCategories || []).forEach(function (cat) {
+      var keys = cat.wishes.filter(function (k) { return document.querySelector('input[name=wish][value="' + k + '"]'); });
+      if (!keys.length) return;
+      var b = el('button', 'wish-tile');
+      b.type = 'button';
+      b.append(el('span', 'wish-tile-label', cat.label));
+      if (keys.join('・') !== cat.label) b.append(el('span', 'wish-tile-sub', keys.join('・')));
+      b.addEventListener('click', function () {
+        document.querySelectorAll('input[name=wish]').forEach(function (c) { c.checked = keys.indexOf(c.value) !== -1; });
+        updateWishStatus();
+        document.querySelectorAll('.wish-tile').forEach(function (t) { t.setAttribute('aria-pressed', String(t === b)); });
+        $('wish-tile-msg').textContent = '「' + cat.label + '」を診断の願いに入れました。生年月日と出発地を入れて診断してください。';
+        var target = $('h-diagnose');
+        target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        var first = $('bd-y').value ? $('home') : $('bd-y');
+        setTimeout(function () { first.focus({ preventScroll: true }); }, 400);
+      });
+      b.setAttribute('aria-pressed', 'false');
+      $('wish-tiles').append(b);
+    });
+
     // 所要時間の選択肢
     cfg.timeLimits.forEach(function (m) {
       var o = el('option', null, limitText(m) + '以内'); o.value = String(m); $('time-limit').append(o);
@@ -213,10 +235,8 @@
   }
 
   /* ---------- あなたの気学（今の状態と吉方位） ---------- */
-  function todayStr() {
-    var t = new Date();
-    return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
-  }
+  // 「今日」は日本時間で決める（海外の端末設定でも日付がずれないように）
+  function todayStr() { return JSTDate.today(); }
   function renderKigaku(person, boards) {
     var K = Kyusei, box = $('kigaku-panel');
     box.replaceChildren();

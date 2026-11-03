@@ -44,6 +44,10 @@ scripts/osm_candidates.py / wikidata_fetch.py / bigtree_fetch.py / build_spots.p
 data/solar-terms.js     二十四節気の日本時間（1899〜2101年、scripts/build_solar_terms.js で生成）
 tests/run-tests.js      計算部分の自動テスト
 tests/run-kyusei-tests.js 九星気学のテスト（国立天文台・実在の暦と照合）
+tests/run-jst-tests.js  日本時間の日付処理のテスト
+tests/e2e/              画面の自動テスト（ブラウザで操作して確認）
+assets/js/jst-date.js   日本時間の「今日」を求める道具
+assets/img/             メイン画像・バナー（WebPとJPEG）
 docs/                   報告書・更新手順
 ```
 
@@ -57,10 +61,21 @@ Node.js 16以上が入っていれば：
 node tests/run-tests.js
 node tests/run-kyusei-tests.js
 node tests/run-data-tests.js
+node tests/run-jst-tests.js
+```
+
+画面のテスト（Playwright を使います）：
+
+```
+cd tests/e2e
+npm install
+npx playwright install chromium
+npm test
 ```
 
 ## 更新履歴
 
+- v3.0（開発中・未公開）仕様書v2.0 Phase 2：メイン画像と新しいトップコピー、アイボリー・桜色・シャンパンゴールド・深紫の配色、「願いごとから探す」8分類、使い方、日本時間の日付処理、公式LINEの案内、魂の系統鑑定バナー（広告表示）、画面テストをリポジトリへ
 - v2.7（2026-11-03）デザイン刷新（藍と金・明朝の見出し・方位盤のヒーロー・入力を4段階に）、生年月日を年・月・日の選択式に（和暦つき）
 - v2.6（2026-11-03）環境省の巨樹・巨木林調査から巨木 約5,300件を追加（全国約9.6万件）、載っていない場所・誤りの投稿フォーム
 - v2.5（2026-11-03）全国約9.1万件（Wikidata で知名度・祭神・文化財を追加、OSMにない寺社を補充）、推薦計算の高速化

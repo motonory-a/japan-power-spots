@@ -1,0 +1,13 @@
+{
+  "name": "japan-power-spots-e2e",
+  "private": true,
+  "description": "画面の自動テスト（ブラウザで実際に操作して確かめる）。サイトの公開には使わない。",
+  "scripts": {
+    "test": "node run-main.js && node run-profiles.js && node run-photos.js && node run-phase2.js"
+  },
+  "devDependencies": {
+    "@fontsource/shippori-mincho": "^5.3.0",
+    "leaflet": "1.9.4",
+    "playwright": "^1.40.0"
+  }
+}

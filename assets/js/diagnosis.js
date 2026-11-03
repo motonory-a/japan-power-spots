@@ -39,7 +39,7 @@
     var d = new Date(p[0], p[1] - 1, p[2]);
     if (d.getFullYear() !== p[0] || d.getMonth() !== p[1] - 1 || d.getDate() !== p[2]) return '存在しない日付です。';
     if (p[0] < 1900) return '1900年以降の日付を入力してください。';
-    var t = today || new Date();
+    var t = today || (typeof JSTDate !== 'undefined' ? JSTDate.todayDate() : new Date());
     var todayMid = new Date(t.getFullYear(), t.getMonth(), t.getDate());
     if (d > todayMid) return '未来の日付は入力できません。';
     return null;

@@ -3,7 +3,7 @@
  * 重み（点数配分）や交通手段ごとの距離の目安はここだけ変更すれば反映されます。
  */
 var APP_CONFIG = {
-  version: '2.7.0',
+  version: '3.0.0-dev',
 
   // 推薦スコアの配分（合計100点満点になるようにしています）
   weights: {
@@ -60,6 +60,19 @@ var APP_CONFIG = {
     add: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-add.yml',
     fix: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-fix.yml'
   },
+
+  // トップの「願いごとから探す」（仕様書v2.0の8分類）。
+  // 押すと、診断フォームの「三 願い・体験」で wishes の項目が選ばれた状態になる。
+  wishCategories: [
+    { label: '恋愛・結婚', wishes: ['恋愛・縁結び'] },
+    { label: '金運', wishes: ['金運', '商売繁盛'] },
+    { label: '仕事', wishes: ['仕事・出世'] },
+    { label: '健康祈願', wishes: ['健康祈願'] },
+    { label: '厄除け', wishes: ['厄除け'] },
+    { label: '癒やし', wishes: ['浄化', '自然', '森林'] },
+    { label: '人生の転機', wishes: ['開運'] },
+    { label: '総合運', wishes: ['開運', '家内安全'] }
+  ],
 
   // 診断結果に表示する件数
   resultCount: 5,

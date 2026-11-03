@@ -4,28 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>日本全国パワースポット巡り</title>
-<meta name="theme-color" content="#1E2944">
+<meta name="theme-color" content="#493B59">
 <meta name="description" content="生年月日とお住まいの都道府県から、あなたに合いそうなパワースポットを探す旅のサイト（試作版）。">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&display=swap">
+<link rel="preload" as="image" type="image/webp" href="assets/img/hero-800.webp" imagesrcset="assets/img/hero-800.webp 800w, assets/img/hero-1200.webp 1200w, assets/img/hero-1672.webp 1672w" imagesizes="(max-width: 1240px) 100vw, 1240px">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <header class="hero">
-  <svg class="hero-board" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
-    <g fill="none" stroke="currentColor">
-      <polygon points="276.5,15.2 384.8,123.5 384.8,276.5 276.5,384.8 123.5,384.8 15.2,276.5 15.2,123.5 123.5,15.2" stroke-width="1.4"/>
-      <polygon points="249.8,79.6 320.4,150.2 320.4,249.8 249.8,320.4 150.2,320.4 79.6,249.8 79.6,150.2 150.2,79.6" stroke-width="1"/>
-      <polygon points="222.6,145.4 254.6,177.4 254.6,222.6 222.6,254.6 177.4,254.6 145.4,222.6 145.4,177.4 177.4,145.4" stroke-width="1"/>
-      <path d="M200 0V145M200 255V400M0 200H145M255 200H400M58.6 58.6L161 161M239 239L341.4 341.4M341.4 58.6L239 161M161 239L58.6 341.4" stroke-width=".8"/>
-    </g>
-  </svg>
-  <div class="hero-inner">
-    <h1>日本全国<br>パワースポット巡り</h1>
-    <p class="hero-lead">生まれた日、出かける日、そして方位。<br>九星気学と数秘から、いまのあなたに合う聖地を探します。</p>
-    <a class="hero-cta" href="#h-diagnose">診断をはじめる</a>
+  <h1 class="hero-title">
+    <picture>
+      <source type="image/webp" srcset="assets/img/hero-800.webp 800w, assets/img/hero-1200.webp 1200w, assets/img/hero-1672.webp 1672w" sizes="(max-width: 1240px) 100vw, 1240px">
+      <img class="hero-img" src="assets/img/hero-1200.jpg" srcset="assets/img/hero-800.jpg 800w, assets/img/hero-1200.jpg 1200w, assets/img/hero-1672.jpg 1672w" sizes="(max-width: 1240px) 100vw, 1240px" width="1672" height="941" fetchpriority="high" decoding="async" alt="日本全国パワースポット巡り　生年月日とお住まいから、あなたにぴったりの聖地をご案内">
+    </picture>
+  </h1>
+  <div class="hero-copy">
+    <svg class="hero-board" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor">
+        <polygon points="276.5,15.2 384.8,123.5 384.8,276.5 276.5,384.8 123.5,384.8 15.2,276.5 15.2,123.5 123.5,15.2" stroke-width="1.4"/>
+        <polygon points="249.8,79.6 320.4,150.2 320.4,249.8 249.8,320.4 150.2,320.4 79.6,249.8 79.6,150.2 150.2,79.6" stroke-width="1"/>
+        <polygon points="222.6,145.4 254.6,177.4 254.6,222.6 222.6,254.6 177.4,254.6 145.4,222.6 145.4,177.4 177.4,145.4" stroke-width="1"/>
+        <path d="M200 0V145M200 255V400M0 200H145M255 200H400M58.6 58.6L161 161M239 239L341.4 341.4M341.4 58.6L239 161M161 239L58.6 341.4" stroke-width=".8"/>
+      </g>
+    </svg>
+    <p class="hero-catch">次のお休み、運命の聖地へ。</p>
+    <p class="hero-sub">あなたの毎日に、<br class="sp-br">小さな奇跡とときめくお出かけを。</p>
+    <a class="hero-cta" href="#h-diagnose">私だけの聖地を見つける</a>
   </div>
 </header>
 
@@ -34,8 +41,21 @@
     全国<span id="spot-total">8</span>件の神社・寺院・滝・霊山・巨樹を掲載しています<span id="load-status"></span>。試作版のため、内容は順次確認中です。ご利益は祭神・本尊や名称から一般的なものを推定しています。
   </p>
 
+  <!-- 03-2 今日の幸せの扉（Phase 3で中身を入れるまで非表示） -->
+  <section id="daily-door" class="panel panel-daily" aria-labelledby="h-door" hidden>
+    <h2 id="h-door">今日の幸せの扉</h2>
+  </section>
+
+  <!-- 03-3 願いごとから探す -->
+  <section id="wish-entry" class="panel panel-wish" aria-labelledby="h-wish-entry">
+    <h2 id="h-wish-entry">願いごとから探す</h2>
+    <p class="lead-small">いちばん叶えたいことを選ぶと、下の診断にその願いが入ります。</p>
+    <div class="wish-tiles" id="wish-tiles"></div>
+    <p id="wish-tile-msg" class="wish-tile-msg" role="status" aria-live="polite"></p>
+  </section>
+
   <section class="panel" aria-labelledby="h-diagnose">
-    <h2 id="h-diagnose">あなたに合うパワースポットを探す</h2>
+    <h2 id="h-diagnose">あなたにおすすめの聖地診断</h2>
     <form id="diagnose-form" novalidate>
       <div id="profile-box" class="profile-box">
         <div class="profile-row">
@@ -150,6 +170,16 @@
     <p class="note">写真は Wikimedia Commons から表示しています（撮影者・ライセンスは各写真の下に記載）。数秘術・九星気学は文化的・占術的な考え方のひとつで、スポットのご利益や効果を保証するものではありません。表示している方角は、出発地から見た真北基準の向きで、東西南北30°・四隅60°で区切っています。出かける日の吉凶は九星気学（日盤は冬至・夏至にいちばん近い甲子日で切り替える方式）による判定で、流派によって結果が異なることがあります。所要時間は目安です。</p>
   </section>
 
+  <!-- 03-5 今日の運命の聖地と週末のお出かけ提案（Phase 3で中身を入れるまで非表示） -->
+  <section id="daily-spot" class="panel" aria-labelledby="h-daily-spot" hidden>
+    <h2 id="h-daily-spot">今日の運命の聖地</h2>
+  </section>
+
+  <!-- 03-6 開運スタンプ帳・行きたい聖地コレクション（Phase 3で中身を入れるまで非表示） -->
+  <section id="collection" class="panel" aria-labelledby="h-collection" hidden>
+    <h2 id="h-collection">開運スタンプ帳</h2>
+  </section>
+
   <section class="panel" aria-labelledby="h-search">
     <h2 id="h-search">全国スポット検索</h2>
     <div class="fields">
@@ -172,6 +202,16 @@
   <section class="panel" aria-labelledby="h-results">
     <h2 id="h-results">検索結果 <span id="count"></span></h2>
     <div id="results" class="cards"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-howto">
+    <h2 id="h-howto">使い方</h2>
+    <ol class="howto">
+      <li><b>願いごとを選ぶ</b><span>「願いごとから探す」か、診断の「三」で選びます。選ばなくても診断できます。</span></li>
+      <li><b>生年月日と出発地を入れる</b><span>九星気学と数秘で、あなたに合う方位と聖地を調べます。</span></li>
+      <li><b>出かける日を入れる（任意）</b><span>その日の方位の吉凶も合わせて、おすすめを選びます。</span></li>
+      <li><b>おすすめの聖地を見る</b><span>上位5件を、選ばれた理由・方角・所要時間の目安と一緒に表示します。</span></li>
+    </ol>
   </section>
 
   <section class="panel" aria-labelledby="h-caution">
@@ -210,6 +250,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/config.js"></script>
+<script src="assets/js/jst-date.js"></script>
 <script src="data/solar-terms.js"></script>
 <script src="assets/js/kyusei.js"></script>
 <script src="assets/js/kigaku-board.js"></script>
