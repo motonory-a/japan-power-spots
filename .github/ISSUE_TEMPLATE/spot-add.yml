@@ -1,0 +1,50 @@
+name: 載っていない場所を教える
+description: サイトに載っていないパワースポットを教えてください（内容を確認してから掲載します）
+title: "【追加】"
+labels: ["スポット追加"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ご協力ありがとうございます。いただいた内容は確認のうえ、サイトに反映します。
+        この投稿は公開されます。個人の住所や連絡先など、公開して困る情報は書かないでください。
+  - type: input
+    id: name
+    attributes:
+      label: 場所の名前
+      placeholder: 例：分杭峠
+    validations:
+      required: true
+  - type: input
+    id: pref
+    attributes:
+      label: 都道府県・市区町村
+      placeholder: 例：長野県伊那市
+    validations:
+      required: true
+  - type: input
+    id: place
+    attributes:
+      label: 場所がわかる情報（住所の目安・Googleマップのリンク・緯度経度など）
+      placeholder: 例：https://maps.app.goo.gl/... または 35.7375,138.0631
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: 種類
+      options: [神社, 寺院, 山・霊山, 滝, 巨木・御神木, 岩・磐座, 湧水, 洞窟, 温泉, 湖・池, 海・島, 展望地, その他]
+    validations:
+      required: true
+  - type: textarea
+    id: features
+    attributes:
+      label: どんな場所か（ご利益・言い伝え・見どころなど）
+  - type: input
+    id: source
+    attributes:
+      label: 参考になるページ（公式サイト・自治体の観光ページなど）
+  - type: textarea
+    id: note
+    attributes:
+      label: 訪問の注意（参拝時間・立入制限・駐車場など）

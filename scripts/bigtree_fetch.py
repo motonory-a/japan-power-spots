@@ -16,7 +16,7 @@ from collections import Counter
 
 import shapefile  # pyshp
 
-CKAN = 'https://www.geospatial.jp/ckan/api/3/action/package_show?id=biodic-bigtree'
+BASE = 'https://www.biodic.go.jp/shapedata/big6/big6_all/big6_%d.zip'  # 第6回調査、1=北海道〜47=沖縄県
 UA = 'japan-power-spots-data/1.0 (https://github.com/motonory-a/japan-power-spots)'
 
 
@@ -38,8 +38,7 @@ def decode(v):
 
 
 def main(out_path, summary_path):
-    pkg = json.loads(get(CKAN))['result']
-    resources = [r for r in pkg['resources'] if r.get('url', '').lower().endswith('.zip')]
+    resources = [{'name': 'pref%02d' % i, 'url': BASE % i, 'pref_code': '%02d' % i} for i in range(1, 48)]
     summary = {'resources': len(resources), 'files': [], 'fields': {}, 'shape_types': Counter()}
     n = 0
     with gzip.open(out_path, 'wt', encoding='utf-8') as out:
@@ -72,7 +71,7 @@ def main(out_path, summary_path):
                         continue
                     xs = [p[0] for p in sr.shape.points]
                     ys = [p[1] for p in sr.shape.points]
-                    rec = {'file': shp.split('/')[-1], 'res': res.get('name', ''), 'type': shp_t,
+                    rec = {'file': shp.split('/')[-1], 'res': res.get('name', ''), 'pref_code': res['pref_code'], 'type': shp_t,
                            'x': sum(xs) / len(xs), 'y': sum(ys) / len(ys),
                            'attr': {k: decode(v) for k, v in zip(fields, list(sr.record))}}
                     out.write(json.dumps(rec, ensure_ascii=False, default=str) + '\n')
