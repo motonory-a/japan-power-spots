@@ -236,6 +236,52 @@ def wishes_for(cat, name, t, near_shrine_peak, deities=()):
     return obj, inferred
 
 
+def load_bigtrees(path, rep):
+    """環境省 巨樹・巨木林調査（第6回）から候補を作る。名前のある木・天然記念物・幹周の大きい木を優先"""
+    out, best_at = [], {}
+    with gzip.open(path, 'rt', encoding='utf-8') as f:
+        for line in f:
+            r = json.loads(line)
+            if r.get('type') != 'POINT':
+                continue
+            a = r['attr']
+            lat, lon = float(a.get('緯度') or r['y']), float(a.get('経度') or r['x'])
+            if not (20 < lat < 46 and 122 < lon < 154):
+                continue
+            name = (a.get('名称') or '').strip()
+            sp = (a.get('樹種') or '').strip()
+            try:
+                girth = float(a.get('樹幹') or 0)
+            except ValueError:
+                girth = 0
+            try:
+                height = float(a.get('樹高') or 0)
+            except ValueError:
+                height = 0
+            hogo = a.get('保護単木') or ''
+            level = 3 if ('天然記念物' in hogo and '（国）' in hogo) else (2 if ('天然記念物' in hogo and '都道府県' in hogo) else (1 if '天然記念物' in hogo else 0))
+            if not (name or level or girth >= 600):
+                rep['bigtree_skip_minor'] += 1
+                continue
+            if name and (not JP_CHARS.search(name) or EXCLUDE_NAME.search(name)):
+                name = ''
+            prio = 25 + min(30, girth / 100 * 3) + [0, 10, 20, 35][level] + (10 if name else 0)
+            rec = {'name': name, 'species': sp, 'girth': girth, 'height': height, 'level': level, 'lat': lat, 'lon': lon,
+                   'muni_old': (a.get('市町村名') or '').replace(a.get('都道府県名') or a.get('県名') or '', ''),
+                   'pref_code': r.get('pref_code'), 'prio': prio, 'id': str(int(float(a.get('連番') or a.get('ID') or 0)))}
+            if not name:
+                # 名前のない木は、同じ地点のうち最も大きい1本だけ
+                key = (round(lat, 4), round(lon, 4))
+                cur = best_at.get(key)
+                if cur is None or girth > cur['girth']:
+                    best_at[key] = rec
+                continue
+            out.append(rec)
+    out += list(best_at.values())
+    rep['bigtree_candidates'] = len(out)
+    return out
+
+
 def numbers_for(tags):
     out = []
     for tg in tags:
@@ -271,6 +317,7 @@ def main():
     ap.add_argument('--total', type=int, default=0, help='追加分を含めた合計件数（0なら追加なし）')
     ap.add_argument('--extra-parts', type=int, default=4)
     ap.add_argument('--wikidata', default='', help='wikidata.jsonl.gz（scripts/wikidata_fetch.py の出力）')
+    ap.add_argument('--bigtrees', default='', help='bigtrees.jsonl.gz（scripts/bigtree_fetch.py の出力）')
     ap.add_argument('--extracted-at', default='')
     args = ap.parse_args()
 
@@ -494,6 +541,49 @@ def main():
         rep['extra_selected'] = len(extra)
         chosen = chosen + extra
 
+    # 巨樹・巨木林調査の木を、合計件数の残り枠まで追加（OSMの巨木と150m以内は重複として除く）
+    if args.bigtrees and args.total > len(chosen):
+        trees = load_bigtrees(args.bigtrees, rep)
+        tg = Grid()
+        for it in chosen:
+            if it['cat'] == '巨木':
+                tg.add(it)
+        code2pref = {v: k for k, v in PREF_CODE.items()}
+        ref = Grid()
+        for it in uniq:
+            ref.add(it)
+        trees.sort(key=lambda x: -x['prio'])
+        room = args.total - len(chosen)
+        added = 0
+        for t in trees:
+            if added >= room:
+                break
+            if any(haversine_m((o['lat'], o['lon']), (t['lat'], t['lon'])) < 150 for o in tg.near(t['lat'], t['lon'])):
+                rep['bigtree_dup_osm'] += 1
+                continue
+            pref = code2pref.get(t['pref_code'])
+            if not pref:
+                continue
+            # 市区町村は近くの現在の候補から（合併前の名前が残っているため）
+            near, bd = None, 1e9
+            for o in ref.near(t['lat'], t['lon']):
+                d = haversine_m((o['lat'], o['lon']), (t['lat'], t['lon']))
+                if d < bd:
+                    near, bd = o, d
+            muni = near['muni'] if near and bd < 3000 and near['pref'] == pref else re.sub(r'^.*郡', '', t['muni_old'])
+            nm = t['name'] or (muni + 'の' + (t['species'] or '巨木'))
+            if any(o['name'] == nm and haversine_m((o['lat'], o['lon']), (t['lat'], t['lon'])) < 1000
+                   for o in list(tg.near(t['lat'], t['lon'])) + list(ref.near(t['lat'], t['lon']))):
+                rep['bigtree_dup_name'] += 1
+                continue
+            it = {'osm': 'bt:' + t['pref_code'] + '-' + t['id'], 'name': nm, 'cat': '巨木', 'lat': t['lat'], 'lon': t['lon'],
+                  'pref': pref, 'muni': muni, 'area': 0, 'tags': {'name': nm, 'natural': 'tree'}, 'prio': t['prio'], 'tier': 2,
+                  'bt': t}
+            chosen.append(it)
+            tg.add(it)
+            added += 1
+        rep['bigtree_added'] = added
+
     # 親子関係：大きな境内（多角形）の中にある小さな神社・寺院
     polys = [it for it in chosen if it['area'] > 2000 and it['cat'] in ('神社', '寺院')]
     pg = Grid()
@@ -518,7 +608,7 @@ def main():
     # 出力
     chosen.sort(key=lambda x: (PREF_CODE[x['pref']], -x['prio']))
     def osm_id(o):
-        # osmium の面ID（a）を元の way / relation のIDに戻す。Wikidataだけのものは wd:Q... のまま
+        # osmium の面ID（a）を元の way / relation のIDに戻す。Wikidataだけのものは wd:Q...、巨樹調査は bt:都道府県-番号 のまま
         if o.startswith('a'):
             n = int(o[1:])
             return ('w%d' % (n // 2)) if n % 2 == 0 else ('r%d' % ((n - 1) // 2))
@@ -530,6 +620,10 @@ def main():
     for it in chosen:
         t = it['tags']
         w = it.get('wd') or {}
+        bt = it.get('bt')
+        if bt:
+            w = {'deities': [], 'heritage': [['', '天然記念物（市町村）', '天然記念物（都道府県）', '天然記念物（国）'][bt['level']]] if bt['level'] else [],
+                 'sitelinks': 0}
         obj, inferred = wishes_for(it['cat'], it['name'], t, it['cat'] == '山' and near_shrine(it), w.get('deities', []))
         nums = numbers_for(obj + inferred)
         wiki = t.get('wikipedia:ja') or t.get('wikipedia') or ''
@@ -538,7 +632,8 @@ def main():
             round(it['lat'], 5), round(it['lon'], 5),
             '|'.join(obj), '|'.join(inferred), ''.join(str(n) for n in nums),
             wiki, t.get('wikidata', ''), idmap.get(it['parent'], '') if it['parent'] else '', round(it['prio']),
-            '|'.join([d for d in w.get('deities', []) if JP_CHARS.search(d)][:4]), best_heritage(w), w.get('sitelinks', 0),
+            '|'.join([d for d in w.get('deities', []) if JP_CHARS.search(d)][:4]), best_heritage(w) or ((w.get('heritage') or [''])[0] if bt else ''), w.get('sitelinks', 0),
+            ('%s|%g|%g' % (bt['species'], bt['girth'], bt['height'])) if bt else '',
         ])
         cat_count[it['cat']] += 1
         pref_out[it['pref']] += 1
@@ -549,8 +644,8 @@ def main():
     header = ('/* 全国スポットデータ（自動生成：scripts/build_spots.py）\n'
               ' * 出典：© OpenStreetMap contributors（ODbL 1.0）https://www.openstreetmap.org/copyright\n'
               ' * 列：osm, 名称, 種類, 都道府県コード, 市区町村, 緯度, 経度, 体験・種類タグ, 名称から推定したご利益,\n'
-              ' *     数秘(暫定), Wikipedia, Wikidata, 親スポットのosm, 優先度, 祭神・本尊, 文化財, Wikipedia言語版数\n'
-              ' * 祭神・文化財は Wikidata（CC0）から\n */\n')
+              ' *     数秘(暫定), Wikipedia, Wikidata, 親スポットのosm, 優先度, 祭神・本尊, 文化財, Wikipedia言語版数, 巨樹（樹種|幹周cm|樹高m）\n'
+              ' * 祭神・文化財は Wikidata（CC0）から。巨樹は環境省生物多様性センター 自然環境保全基礎調査 巨樹・巨木林調査（政府標準利用規約）を加工\n */\n')
     core_rows = [r for r, it in zip(rows, chosen) if it['tier'] == 1]
     extra_rows = [r for r, it in zip(rows, chosen) if it['tier'] == 2]
     parts = []

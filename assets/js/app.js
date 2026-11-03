@@ -82,7 +82,7 @@
       var src = el('p', 'small src');
       src.append(document.createTextNode('情報元：'));
       s.source_urls.forEach(function (u, i) {
-        var a = el('a', null, u.indexOf('wikipedia') !== -1 ? 'Wikipedia' : (u.indexOf('wikidata') !== -1 ? 'Wikidata' : 'OpenStreetMap'));
+        var a = el('a', null, u.indexOf('wikipedia') !== -1 ? 'Wikipedia' : (u.indexOf('wikidata') !== -1 ? 'Wikidata' : (u.indexOf('biodic') !== -1 ? '環境省 巨樹・巨木林データベース' : 'OpenStreetMap')));
         a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer';
         if (i) src.append(document.createTextNode('・'));
         src.append(a);

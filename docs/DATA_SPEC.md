@@ -1,4 +1,4 @@
-# 全国スポットデータの作り方（v2.5）
+# 全国スポットデータの作り方（v2.6）
 
 ## 流れ
 
@@ -8,10 +8,12 @@
    結果は `data-raw` ブランチ（公開しないブランチ）に `candidates.jsonl.gz` として保存します。元の2GBのデータはリポジトリに入れません。
 2. **Wikidata の取得（GitHub Actions）**
    `wikidata-extract-run` ブランチに push すると、`.github/workflows/wikidata-extract.yml` が Wikidata（CC0）から日本の神社・寺院 約3.7万件の日本語名・座標・Wikipedia の言語版の数・種類（式内社・官幣社など）・祭神／本尊・文化財の指定を取得し、`data-raw` ブランチに `wikidata.jsonl.gz` として追加します。
-3. **選定（手元で実行）**
-   `python3 scripts/build_spots.py candidates.jsonl.gz --wikidata wikidata.jsonl.gz --target 10000 --total 100000 --extra-parts 8`
+3. **巨樹・巨木林データの取得（GitHub Actions）**
+   `bigtree-extract-run` ブランチに push すると、`.github/workflows/bigtree-extract.yml` が環境省生物多様性センターの「自然環境保全基礎調査 巨樹・巨木林調査（第6回）」の Shape データ（都道府県別）を取得し、`data-raw` ブランチに `bigtrees.jsonl.gz` として追加します（政府標準利用規約。出典を明記し、加工して利用）。
+4. **選定（手元で実行）**
+   `python3 scripts/build_spots.py candidates.jsonl.gz --wikidata wikidata.jsonl.gz --bigtrees bigtrees.jsonl.gz --target 10000 --total 100000 --extra-parts 8`
    で、最初に読み込む中心データ1万件（`data/spots-osm.js`）と、表示後に読み込む追加データ（`data/extra/spots-extra-1〜8.js`）、`data/manifest.json`・`docs/DATA_REPORT.md` を作ります。合計は10万件以内です。
-4. **検査**
+5. **検査**
    `node tests/run-data-tests.js` で件数・重複・座標・都道府県・代表的なスポットの有無などを確かめます。
 
 ## Wikidata の使い方
@@ -20,6 +22,18 @@
 - OSM にない神社・寺院は、Wikidata の座標で新しく加えます。都道府県・市区町村は近くの OSM 候補から判定します（15km以内に候補がないものは加えません）。
 - 廃寺・合祀などは除外します。
 - 知名度の加点：Wikipedia の言語版の数×4（最大60）、一宮30・官幣社25・国幣社15・式内社15・勅願寺15・総本山／大本山15、文化財（世界遺産・国宝40、重要文化財25、特別史跡・特別名勝20、史跡・名勝10、登録有形5 のうち最も高いもの）。
+
+## 巨樹・巨木林調査の使い方
+
+- 対象は「名前のある木」「天然記念物（国・都道府県・市町村）」「幹周6m以上」のいずれか。名前のない木は、同じ地点のうち最も大きい1本だけにします。
+- 優先度：幹周（最大30）、天然記念物（国35・都道府県20・市町村10）、名前あり10。合計10万件までの残り枠に、優先度の高い順に入れます。
+- OSM の巨木と150m以内のもの、同じ名前で1km以内のものは重複として除きます。
+- 市区町村名は調査当時（2000年）のため、近くのOSM候補から現在の市区町村名を付けます。名前のない木は「市区町村名＋樹種」の名前にします。
+- 位置は調査時の記録によるもので、目安です。
+
+## 投稿の受け付け
+
+サイトの「載っていない場所を教える」と、各スポットの「情報の誤りを報告」から、GitHub の Issue フォーム（`.github/ISSUE_TEMPLATE/`）が開きます。内容を確認したうえで、`data/spots-demo.js`（手入力のスポット）への追加や、選定ルールの修正で反映します。Google フォームなどに替える場合は `assets/js/config.js` の `reportForms` のURLを書き換えます。
 
 ## 除外するもの
 
@@ -74,5 +88,5 @@
 
 ## 出典とライセンス
 
-スポットデータは © OpenStreetMap contributors（ODbL 1.0）と Wikidata（CC0）。サイトのフッターと各スポットの「情報元」に表示しています。
+スポットデータは © OpenStreetMap contributors（ODbL 1.0）、Wikidata（CC0）、環境省生物多様性センター「自然環境保全基礎調査 巨樹・巨木林調査」（政府標準利用規約、加工して利用）。サイトのフッターと各スポットの「情報元」に表示しています。
 データの内容（参拝時間・立入制限など）は確認していないため、全件「未確認」として扱っています。

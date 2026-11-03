@@ -28,7 +28,7 @@ const all = core.concat(extraRows.map(SpotData.fromRow));
 
 console.log('全国データ');
 test('最初に読み込む中心データは1万件前後（9,900件以上）', () => assert.ok(SPOTS_OSM.length >= 9900, String(SPOTS_OSM.length)));
-test('追加分を含めて8万件以上・10万件以内', () => assert.ok(all.length >= 80000 && all.length <= 100000, String(all.length)));
+test('追加分を含めて9万件以上・10万件以内', () => assert.ok(all.length >= 90000 && all.length <= 100000, String(all.length)));
 test('追加データは複数ファイル（各2MB以下）', () => {
   const fs = require('fs');
   assert.ok((SPOTS_OSM_META.extraParts || []).length >= 4);
@@ -67,6 +67,13 @@ test('親スポットは実在する', () => {
   all.filter((s) => s.parent_id).forEach((s) => assert.ok(ids.has(s.parent_id), s.name));
 });
 test('出典URL（OpenStreetMap）が付いている', () => all.filter((s) => s.id.indexOf('osm-') === 0).forEach((s) => assert.ok(/^https:\/\/www\.openstreetmap\.org\/(node|way|relation)\/\d+$/.test(s.source_urls[0]), s.id)));
+test('巨樹調査のスポット：出典・樹種・幹周の説明', () => {
+  const t = all.filter((s) => s.id.indexOf('bt-') === 0);
+  assert.ok(t.length > 3000, String(t.length));
+  t.forEach((s) => { assert.strictEqual(s.source_urls[0], 'https://kyoju.biodic.go.jp/'); assert.strictEqual(s.category, '巨木'); });
+  assert.ok(t.filter((s) => /幹周 約[0-9.]+m/.test(s.description)).length > t.length * 0.9);
+  assert.ok(t.some((s) => s.heritage === '天然記念物（国）'));
+});
 test('Wikidataだけのスポットは出典がWikidata', () => {
   const w = all.filter((s) => s.id.indexOf('wd-') === 0);
   assert.ok(w.length > 1000);
