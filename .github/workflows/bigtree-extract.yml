@@ -1,0 +1,38 @@
+# 環境省「巨樹・巨木林調査」のデータを取得し、data-raw ブランチに追加する
+# ・bigtree-extract-run ブランチに push したとき、または Actions 画面から手動実行したときに動く
+name: bigtree-extract
+
+on:
+  push:
+    branches: [bigtree-extract-run]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 巨樹・巨木林データを取得
+        run: |
+          pip install -q pyshp
+          mkdir -p out
+          python scripts/bigtree_fetch.py out/bigtrees.jsonl.gz out/bigtrees_summary.json
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > out/bigtrees_fetched_at.txt
+          ls -lh out
+
+      - name: data-raw ブランチへ追加
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp out/* /tmp/
+          git fetch --depth 1 origin data-raw
+          git checkout -B data-raw origin/data-raw
+          cp /tmp/bigtrees.jsonl.gz /tmp/bigtrees_summary.json /tmp/bigtrees_fetched_at.txt .
+          git add bigtrees.jsonl.gz bigtrees_summary.json bigtrees_fetched_at.txt
+          git commit -qm "巨樹・巨木林 $(cat bigtrees_fetched_at.txt)" || echo "変更なし"
+          git push origin data-raw
