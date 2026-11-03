@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>日本全国パワースポット巡り！</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f7f5ef;color:#24372e;font-family:"Yu Gothic",Meiryo,sans-serif}
+header{background:linear-gradient(120deg,#163c32,#39765c);color:white;text-align:center;padding:48px 16px}
+h1{font-size:clamp(25px,5vw,42px);margin:0 0 12px}
+header p{margin:0;color:#e4efe8}
+main{max-width:1100px;margin:auto;padding:24px 16px}
+.panel{background:white;border:1px solid #e5e7e0;border-radius:16px;padding:22px;margin-bottom:20px}
+h2{margin-top:0;font-size:21px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+input,select{width:100%;padding:12px;border:1px solid #ccd6cd;border-radius:8px;font-size:16px}
+label{display:block;font-size:14px;font-weight:bold;margin-bottom:6px}
+#map{height:430px;border-radius:12px;z-index:0}
+#results{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.spot{padding:17px;border:1px solid #e2e8e2;border-radius:12px;background:#fff}
+.spot h3{margin:0 0 8px}
+.tag{display:inline-block;background:#e5f0e8;color:#24533a;border-radius:20px;padding:4px 10px;font-size:12px}
+.spot p{font-size:14px;line-height:1.7}
+a{color:#246b4d}
+footer{text-align:center;padding:24px;color:#66766b;font-size:13px}
+.note{font-size:13px;color:#69766c}
+</style>
+</head>
+<body>
+<header>
+<h1>⛩ 日本全国パワースポット巡り！</h1>
+<p>あなたの心に響く、日本の聖地を見つける旅。</p>
+</header>
+<main>
+<section class="panel">
+<h2>聖地を探す</h2>
+<div class="filters">
+<div><label for="keyword">キーワード</label><input id="keyword" placeholder="神社・滝・地域名など"></div>
+<div><label for="pref">都道府県</label><select id="pref"><option value="">全国すべて</option></select></div>
+<div><label for="category">スポットの種類</label>
+<select id="category">
+<option value="">すべて</option>
+<option value="神社">神社</option>
+<option value="寺院">寺院</option>
+<option value="滝">滝</option>
+<option value="山">山</option>
+<option value="自然">自然</option>
+</select></div>
+</div>
+<p class="note">現在は機能確認用のサンプル地点を表示しています。全国データは今後追加します。</p>
+</section>
+<section class="panel">
+<h2>全国パワースポットマップ</h2>
+<div id="map"></div>
+</section>
+<section class="panel">
+<h2>検索結果 <span id="count"></span></h2>
+<div id="results"></div>
+</section>
+<section class="panel">
+<h2>魂の系統鑑定</h2>
+<p>自分の魂の系統も知りたい方はこちら。</p>
+<a href="https://motonory-a.github.io/my-first-project/" target="_blank" rel="noopener">魂の系統鑑定サイトを開く</a>
+</section>
+</main>
+<footer>日本全国パワースポット巡り！｜試作版</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const prefectures=["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県","静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県","鳥取県","島根県","岡山県","広島県","山口県","徳島県","香川県","愛媛県","高知県","福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"];
+const spots=[
+{name:"明治神宮",pref:"東京都",category:"神社",lat:35.6764,lon:139.6993,description:"都心に広がる鎮守の森に囲まれた神社。"},
+{name:"鹿島神宮",pref:"茨城県",category:"神社",lat:35.9689,lon:140.6312,description:"武甕槌大神を祀る歴史ある神社。"},
+{name:"伊勢神宮 内宮",pref:"三重県",category:"神社",lat:34.4550,lon:136.7258,description:"天照大御神を祀る皇大神宮。"},
+{name:"出雲大社",pref:"島根県",category:"神社",lat:35.4020,lon:132.6855,description:"大国主大神を祀る神社。"},
+{name:"熊野那智大社",pref:"和歌山県",category:"神社",lat:33.6686,lon:135.8902,description:"熊野三山の一社。"},
+{name:"那智の滝",pref:"和歌山県",category:"滝",lat:33.6752,lon:135.8875,description:"那智山にある大きな滝。"},
+{name:"高野山 金剛峯寺",pref:"和歌山県",category:"寺院",lat:34.2130,lon:135.5844,description:"高野山真言宗の総本山。"},
+{name:"富士山",pref:"静岡県",category:"山",lat:35.3606,lon:138.7274,description:"古くから信仰の対象となってきた山。"}
+];
+const prefSelect=document.getElementById("pref");
+prefectures.forEach(p=>{
+const option=document.createElement("option");
+option.value=p;option.textContent=p;prefSelect.appendChild(option);
+});
+const map=L.map("map").setView([36.4,138],5);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
+attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+maxZoom:18
+}).addTo(map);
+const markers=L.layerGroup().addTo(map);
+function render(){
+const keyword=document.getElementById("keyword").value.trim().toLowerCase();
+const pref=prefSelect.value;
+const category=document.getElementById("category").value;
+const filtered=spots.filter(s=>
+(!pref||s.pref===pref)&&
+(!category||s.category===category)&&
+(!keyword||(s.name+s.pref+s.description).toLowerCase().includes(keyword))
+);
+markers.clearLayers();
+const results=document.getElementById("results");
+results.replaceChildren();
+document.getElementById("count").textContent="("+filtered.length+"件)";
+filtered.forEach(s=>{
+const marker=L.marker([s.lat,s.lon]).addTo(markers);
+marker.bindPopup(s.name);
+const card=document.createElement("article");
+card.className="spot";
+const title=document.createElement("h3");
+title.textContent=s.name;
+const tag=document.createElement("span");
+tag.className="tag";
+tag.textContent=s.category+"・"+s.pref;
+const description=document.createElement("p");
+description.textContent=s.description;
+const link=document.createElement("a");
+link.href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.name+" "+s.pref);
+link.target="_blank";link.rel="noopener";
+link.textContent="地図で場所を確認";
+card.append(title,tag,description,link);
+results.appendChild(card);
+});
+if(filtered.length){
+const bounds=L.latLngBounds(filtered.map(s=>[s.lat,s.lon]));
+map.fitBounds(bounds.pad(.25),{maxZoom:12});
+}else{
+const empty=document.createElement("p");
+empty.textContent="該当するスポットはありません。";
+results.appendChild(empty);
+map.setView([36.4,138],5);
+}
+}
+["keyword","pref","category"].forEach(id=>{
+document.getElementById(id).addEventListener(id==="keyword"?"input":"change",render);
+});
+render();
+</script>
+</body>
+</html>
