@@ -72,7 +72,7 @@
     homeLayer.clearLayers();
     var pts = [[origin.lat, origin.lon]];
     L.circleMarker([origin.lat, origin.lon], { radius: 8, color: '#163b32', fillColor: '#f2c94c', fillOpacity: 1, weight: 2 })
-      .bindPopup('出発地の目安：' + origin.name + '（都道府県庁付近）').addTo(homeLayer);
+      .bindPopup('出発地：' + origin.label).addTo(homeLayer);
     ranked.forEach(function (s, i) {
       L.marker([s.lat, s.lon], { icon: icon(colorOf(s.category), String(i + 1)), zIndexOffset: 1000, title: (i + 1) + '位 ' + s.name })
         .bindPopup(popupHtml(s)).addTo(rankLayer);

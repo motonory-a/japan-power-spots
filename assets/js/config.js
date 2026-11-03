@@ -3,22 +3,52 @@
  * 重み（点数配分）や交通手段ごとの距離の目安はここだけ変更すれば反映されます。
  */
 var APP_CONFIG = {
-  version: '1.1.0',
+  version: '1.3.0',
 
   // 推薦スコアの配分（合計100点満点になるようにしています）
   weights: {
-    numerology: 30,   // 数秘ナンバーとスポットのテーマが一致
-    wish: 40,         // 選んだ願い・体験との一致（一致した割合で按分）
-    distance: 20,     // 出発地からの近さ（交通手段の目安距離で按分）
+    numerology: 20,   // 数秘ナンバーとスポットのテーマが一致
+    wish: 30,         // 選んだ願い・体験との一致（一致した割合で按分）
+    distance: 15,     // 出発地からの近さ（所要時間の目安で按分）
+    kyusei: 25,       // 出かける日の方位の吉凶（九星気学。日付を入れたときだけ加点）
     reliability: 10   // データの確認状態（verified=満点 / unverified=半分 / demo=0）
   },
 
-  // 交通手段ごとの「近い」と見なす直線距離の目安（km）
-  // ※実際の所要時間ではありません。正確な経路データが入るまでは概算扱い。
+  // 九星気学：盤ごとの重み（合計1）と、判定ごとの点数の割合
+  kyusei: {
+    boardWeights: { year: 0.35, month: 0.4, day: 0.25 },
+    levelRatio: { best: 1, good: 0.6, normal: 0.25, kyo: 0 },
+    edgeWarnDeg: 3     // 方位の区切り線からこの角度以内なら「境界付近」と表示
+  },
+
+
+  // 交通手段ごとの所要時間の推計に使う数値（実際の経路検索ではありません）
+  //   detour       … 直線距離に掛ける迂回係数（道のりは直線より長い）
+  //   localKm      … 一般道・在来線などで走る最初の距離（km）
+  //   localSpeedKmh… その区間の平均時速
+  //   longSpeedKmh … それより先（高速道路・新幹線・特急など）の平均時速
+  //   overheadMin  … 乗り継ぎ・待ち時間・駐車などの上乗せ（分）
+  //   refMinutes   … 時間の指定がないとき「近さ」の点数がゼロになる時間（分）
   travelModes: {
-    walk:    { label: '徒歩',     rangeKm: 8,   gmaps: 'walking' },
-    transit: { label: '公共交通', rangeKm: 600, gmaps: 'transit' },
-    car:     { label: '車',       rangeKm: 400, gmaps: 'driving' }
+    walk:    { label: '徒歩',     detour: 1.3, localKm: 9999, localSpeedKmh: 4,  longSpeedKmh: 4,   overheadMin: 0,  refMinutes: 120, gmaps: 'walking' },
+    transit: { label: '公共交通', detour: 1.3, localKm: 40,   localSpeedKmh: 30, longSpeedKmh: 130, overheadMin: 30, refMinutes: 480, gmaps: 'transit' },
+    car:     { label: '車',       detour: 1.3, localKm: 20,   localSpeedKmh: 30, longSpeedKmh: 80,  overheadMin: 10, refMinutes: 420, gmaps: 'driving' }
+  },
+
+  // 「◯時間以内」の選択肢（分）
+  timeLimits: [30, 60, 90, 120, 180, 240, 300, 480],
+
+  // 方角の計算方法
+  //   'greatCircle' … 地球を球として、出発地から目的地へ向かう最短コースの向き（初期方位角）
+  //   'rhumb'       … メルカトル地図上で2点を直線で結んだ向き（等角航路）
+  // どちらも真北が基準です。近い場所ではほぼ同じ、数百km離れると数度ずれます。
+  bearingMethod: 'greatCircle',
+
+  // 住所検索（国土地理院の住所検索。無料・登録不要。提供の継続は保証されていません）
+  geocoder: {
+    url: 'https://msearch.gsi.go.jp/address-search/AddressSearch?q=',
+    timeoutMs: 8000,
+    maxCandidates: 5
   },
 
   // 診断結果に表示する件数

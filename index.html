@@ -31,7 +31,33 @@
           <label for="home">お住まいの都道府県 <span class="req">必須</span></label>
           <select id="home" required><option value="">選択してください</option></select>
         </div>
+        <div>
+          <label for="trip-date">出かける日 <span class="opt">任意</span></label>
+          <input type="date" id="trip-date">
+        </div>
       </div>
+      <p class="note">出かける日を入れると、九星気学でその日の方位の吉凶（年盤・月盤・日盤）を判定し、運気の良い方位のスポットを優先します。</p>
+
+      <fieldset class="group origin-box">
+        <legend>出発地をくわしく指定する <span class="opt">任意・方角と所要時間がより正確になります</span></legend>
+        <div class="addr-row">
+          <label for="address" class="sr-only">住所</label>
+          <input id="address" type="text" autocomplete="street-address" placeholder="例：新宿区西新宿二丁目（町名や番地まで）">
+          <button type="button" id="address-search" class="btn-sub">住所から探す</button>
+        </div>
+        <div id="address-candidates" class="candidates"></div>
+        <div class="origin-actions">
+          <button type="button" id="use-gps" class="btn-sub">📍 現在地を使う</button>
+        </div>
+        <details id="origin-map-box" class="origin-map-box">
+          <summary>地図で位置を指定・調整する</summary>
+          <p class="note">地図をタップ（クリック）するとピンが立ちます。ピンはドラッグで動かせます。</p>
+          <div id="origin-map"></div>
+        </details>
+        <div id="origin-msg" class="origin-msg" role="status" hidden></div>
+        <div id="origin-status" class="origin-status"></div>
+        <p class="note">「住所から探す」を押したときだけ、入力した住所の文字を国土地理院の住所検索へ送って位置を調べます。地図での指定と現在地は、外部へ送りません。住所や位置はどこにも保存しません。</p>
+      </fieldset>
 
       <fieldset class="group">
         <legend>願い・体験したいこと <span class="opt">任意・複数選択可</span></legend>
@@ -46,7 +72,11 @@
           <label class="chip"><input type="radio" name="mode" value="car"><span>車</span></label>
           <label class="chip"><input type="radio" name="mode" value="walk"><span>徒歩</span></label>
         </div>
-        <p class="note">所要時間ではなく、直線距離の目安で「近さ」を判断しています。</p>
+        <div class="time-row">
+          <label for="time-limit">所要時間</label>
+          <select id="time-limit"><option value="">指定しない</option></select>
+        </div>
+        <p class="note">所要時間は、直線距離と交通手段ごとの平均的な速さから出した<strong>目安</strong>です。乗り換えや渋滞は細かく反映していません。正確な時間は各スポットの「経路を調べる」でご確認ください。</p>
       </fieldset>
 
       <div id="form-error" class="form-error" role="alert" tabindex="-1" hidden></div>
@@ -58,8 +88,9 @@
   <section id="diagnosis" class="panel" aria-labelledby="h-result" hidden>
     <h2 id="h-result">あなたへのおすすめ</h2>
     <div id="summary" class="summary"></div>
+    <div id="fortune-table" class="fortune-table" hidden></div>
     <div id="recommended" class="cards"></div>
-    <p class="note">数秘術は文化的・占術的な解釈のひとつで、スポットのご利益や効果を保証するものではありません。表示している方角は地図上の向きで、九星気学などによる吉方位の判定ではありません（九星気学は準備中です）。</p>
+    <p class="note">数秘術・九星気学は文化的・占術的な考え方のひとつで、スポットのご利益や効果を保証するものではありません。表示している方角は、出発地から見た真北基準の向きで、東西南北30°・四隅60°で区切っています。出かける日の吉凶は九星気学（日盤は冬至・夏至にいちばん近い甲子日で切り替える方式）による判定で、流派によって結果が異なることがあります。所要時間は目安です。</p>
   </section>
 
   <section class="panel" aria-labelledby="h-search">
@@ -74,7 +105,7 @@
 
   <section id="map-panel" class="panel" aria-labelledby="h-map">
     <h2 id="h-map">スポットマップ</h2>
-    <div id="legend" class="legend"><span class="legend-item"><span class="legend-dot legend-home"></span>出発地の目安</span></div>
+    <div id="legend" class="legend"><span class="legend-item"><span class="legend-dot legend-home"></span>出発地</span></div>
     <div id="map" role="region" aria-label="スポットの地図"></div>
     <p class="note">番号つきの印は診断結果の順位です。地図をスクロールで拡大縮小するには、地図を一度クリックするか「＋」「－」ボタンを使ってください。</p>
   </section>
@@ -89,7 +120,8 @@
     <ul class="caution">
       <li>参拝時間・入山期間・立入制限は、必ず各寺社や自治体の公式情報で確認してください。</li>
       <li>立入禁止の場所や危険な場所には入らないでください。</li>
-      <li>距離と方角は都道府県庁付近を出発点とした直線の概算です。</li>
+      <li>出発地をくわしく指定しない場合、距離・方角・所要時間は都道府県庁付近を出発点とした概算です。</li>
+      <li>所要時間は推計の目安です。運行状況や道路事情で大きく変わることがあります。</li>
     </ul>
   </section>
 
@@ -103,9 +135,12 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/config.js"></script>
+<script src="data/solar-terms.js"></script>
+<script src="assets/js/kyusei.js"></script>
 <script src="data/spots-demo.js"></script>
 <script src="assets/js/diagnosis.js"></script>
 <script src="assets/js/map.js"></script>
+<script src="assets/js/origin.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

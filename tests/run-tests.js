@@ -58,6 +58,62 @@ test('東京都→出雲大社は西', () => {
   assert.strictEqual(D.direction8(D.bearingDeg(t.lat, t.lon, 35.4020, 132.6855)), '西');
 });
 
+test('等角航路：真東は90°、東京→出雲大社も西', () => {
+  assert.ok(Math.abs(D.rhumbBearingDeg(35, 139, 35, 140) - 90) < 1e-9);
+  assert.strictEqual(D.direction8(D.rhumbBearingDeg(35.690, 139.692, 35.4020, 132.6855)), '西');
+});
+test('近距離では大圏と等角航路の差が0.1°未満（新宿→明治神宮）', () => {
+  const a = D.bearingDeg(35.690, 139.692, 35.6764, 139.6993), b = D.rhumbBearingDeg(35.690, 139.692, 35.6764, 139.6993);
+  assert.ok(Math.abs(a - b) < 0.1, a + ' / ' + b);
+});
+test('bearingBy は設定どおりに切り替わる', () => {
+  assert.strictEqual(D.bearingBy('rhumb', 35, 139, 34, 133), D.rhumbBearingDeg(35, 139, 34, 133));
+  assert.strictEqual(D.bearingBy('greatCircle', 35, 139, 34, 133), D.bearingDeg(35, 139, 34, 133));
+});
+
+console.log('所要時間の目安');
+test('表示形式：45分・1時間・2時間30分', () => {
+  assert.strictEqual(D.formatMinutes(45), '約45分');
+  assert.strictEqual(D.formatMinutes(60), '約1時間');
+  assert.strictEqual(D.formatMinutes(150), '約2時間30分');
+  assert.strictEqual(D.formatMinutes(117), '約2時間');
+});
+test('距離が延びるほど時間も延びる（全手段）', () => {
+  for (const k of Object.keys(cfg.travelModes)) {
+    let prev = 0;
+    for (const km of [0, 1, 5, 20, 50, 100, 300, 800]) {
+      const m = D.estimateMinutes(km, cfg.travelModes[k]);
+      assert.ok(m >= prev, k + ' ' + km); prev = m;
+    }
+  }
+});
+test('徒歩2kmは30分前後、公共交通で東京→伊勢は4〜6時間、車は5〜7時間', () => {
+  const w = D.estimateMinutes(2, cfg.travelModes.walk);
+  assert.ok(w >= 25 && w <= 45, String(w));
+  const km = D.distanceKm(35.690, 139.692, 34.455, 136.7258);
+  const t = D.estimateMinutes(km, cfg.travelModes.transit), c = D.estimateMinutes(km, cfg.travelModes.car);
+  assert.ok(t >= 240 && t <= 360, String(t));
+  assert.ok(c >= 300 && c <= 420, String(c));
+});
+test('時間指定：上限内のスポットが先、上限外は withinLimit=false', () => {
+  const r = D.rankSpots(SPOTS, { number: 7, origin: pref('東京都'), wishes: ['滝'], mode: 'transit', limitMinutes: 180 }, cfg);
+  const firstOut = r.findIndex((s) => !s.withinLimit);
+  assert.ok(firstOut > 0, '上限内が1件以上');
+  assert.ok(r.slice(firstOut).every((s) => !s.withinLimit));
+  r.forEach((s) => assert.strictEqual(s.withinLimit, s.minutes <= 180));
+  assert.ok(!r.slice(0, firstOut).some((s) => s.name === '那智の滝'));
+});
+test('時間指定なしは全件 withinLimit=true', () => {
+  const r = D.rankSpots(SPOTS, { number: 7, origin: pref('東京都'), wishes: [], mode: 'car' }, cfg);
+  assert.ok(r.every((s) => s.withinLimit));
+});
+test('出発地が変わると方角も変わる（新宿駅付近は南、八王子市は東）', () => {
+  const a = D.rankSpots(SPOTS, { number: 1, origin: { lat: 35.6938, lon: 139.7034 }, wishes: [], mode: 'walk' }, cfg).find((s) => s.name === '明治神宮');
+  const b = D.rankSpots(SPOTS, { number: 1, origin: { lat: 35.6664, lon: 139.3160 }, wishes: [], mode: 'walk' }, cfg).find((s) => s.name === '明治神宮');
+  assert.strictEqual(a.direction, '南');
+  assert.strictEqual(b.direction, '東');
+});
+
 console.log('推薦スコア');
 test('スコアは0〜100、内訳の合計と一致', () => {
   const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: ['滝', '神社'], mode: 'car' }, cfg);
@@ -107,6 +163,43 @@ test('47都道府県すべてで計算できる', () => {
     const r = D.rankSpots(SPOTS, { number: 5, origin: { lat: p[2], lon: p[3] }, wishes: ['自然'], mode: 'walk' }, cfg);
     assert.strictEqual(r.length, 8);
   });
+});
+
+console.log('出かける日の方位（九星気学）の反映');
+const K = require('../assets/js/kyusei.js');
+const person = K.birthStars('1974-04-15');
+const boards = K.boardsFor('2026-11-21', person);
+test('日付ありの点数は0〜25、内訳の合計とスコアが一致', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car', boards }, cfg);
+  r.forEach((s) => {
+    assert.ok(s.fortune && s.scoreParts.kyusei >= 0 && s.scoreParts.kyusei <= cfg.weights.kyusei);
+    const p = s.scoreParts;
+    assert.strictEqual(s.score, p.numerology + p.wish + p.distance + p.kyusei + p.reliability);
+  });
+});
+test('年盤・月盤で凶の方位のスポットは後ろに並ぶ', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car', boards }, cfg);
+  const first = r.findIndex((s) => s.fortune.tier === 0);
+  if (first !== -1) assert.ok(r.slice(first).every((s) => s.fortune.tier === 0), r.map((s) => s.name + s.fortune.mark).join(','));
+});
+test('凶の方位は運気の点が0、判定記号は×', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car', boards }, cfg);
+  r.filter((s) => s.fortune.tier === 0).forEach((s) => { assert.strictEqual(s.scoreParts.kyusei, 0); assert.strictEqual(s.fortune.mark, '×'); });
+});
+test('判定は盤の吉凶と一致（出雲大社：東京から西）', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car', boards }, cfg);
+  const iz = r.find((s) => s.name === '出雲大社');
+  assert.strictEqual(iz.fortune.palace, '西');
+  assert.strictEqual(iz.fortune.levels.year, boards.year.palaces['西'].level);
+  assert.strictEqual(iz.fortune.levels.month, boards.month.palaces['西'].level);
+});
+test('日付なしなら運気は判定しない（0点）', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car' }, cfg);
+  r.forEach((s) => { assert.strictEqual(s.fortune, null); assert.strictEqual(s.scoreParts.kyusei, 0); });
+});
+test('1km未満は方位なし', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: { lat: 35.6764, lon: 139.6990 }, wishes: [], mode: 'walk', boards }, cfg);
+  assert.strictEqual(r.find((s) => s.name === '明治神宮').fortune.palace, null);
 });
 
 console.log('データ');
