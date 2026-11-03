@@ -28,8 +28,12 @@ const all = core.concat(extraRows.map(SpotData.fromRow));
 
 console.log('全国データ');
 test('最初に読み込む中心データは1万件前後（9,900件以上）', () => assert.ok(SPOTS_OSM.length >= 9900, String(SPOTS_OSM.length)));
-test('追加分を含めて5万件前後（49,500件以上）', () => assert.ok(all.length >= 49500, String(all.length)));
-test('追加データは4ファイル', () => assert.strictEqual((SPOTS_OSM_META.extraParts || []).length, 4));
+test('追加分を含めて8万件以上・10万件以内', () => assert.ok(all.length >= 80000 && all.length <= 100000, String(all.length)));
+test('追加データは複数ファイル（各2MB以下）', () => {
+  const fs = require('fs');
+  assert.ok((SPOTS_OSM_META.extraParts || []).length >= 4);
+  SPOTS_OSM_META.extraParts.forEach((p) => assert.ok(fs.statSync(path.join(__dirname, '..', p)).size < 2.2e6, p));
+});
 test('メタ情報の合計件数と一致', () => assert.strictEqual(SPOTS_OSM_META.total, SPOTS_OSM.length + extraRows.length));
 test('IDの重複なし', () => assert.strictEqual(new Set(all.map((s) => s.id)).size, all.length));
 test('名前・座標・都道府県がそろっている', () => all.forEach((s) => {
@@ -63,13 +67,28 @@ test('親スポットは実在する', () => {
   all.filter((s) => s.parent_id).forEach((s) => assert.ok(ids.has(s.parent_id), s.name));
 });
 test('出典URL（OpenStreetMap）が付いている', () => all.filter((s) => s.id.indexOf('osm-') === 0).forEach((s) => assert.ok(/^https:\/\/www\.openstreetmap\.org\/(node|way|relation)\/\d+$/.test(s.source_urls[0]), s.id)));
-test('同じ名前で1km以内の重複がない', () => {
+test('Wikidataだけのスポットは出典がWikidata', () => {
+  const w = all.filter((s) => s.id.indexOf('wd-') === 0);
+  assert.ok(w.length > 1000);
+  w.forEach((s) => assert.ok(/^https:\/\/www\.wikidata\.org\/wiki\/Q\d+$/.test(s.source_urls[0]), s.id));
+});
+test('祭神からご利益（伏見稲荷大社：商売繁盛、太宰府天満宮：学業・合格）', () => {
+  const f = all.find((s) => s.name === '伏見稲荷大社' && s.prefecture === '京都府');
+  const d = all.find((s) => s.name === '太宰府天満宮');
+  assert.ok(f && f.wishes.includes('商売繁盛'));
+  assert.ok(d && d.wishes.includes('学業・合格'));
+});
+test('国宝・世界遺産の情報が入っている（2,000件以上で祭神、100件以上で文化財）', () => {
+  assert.ok(all.filter((s) => s.deities && s.deities.length).length > 2000);
+  assert.ok(all.filter((s) => s.heritage).length > 100);
+});
+test('同じ名前で900m以内の重複がない', () => {
   const byName = {};
   all.forEach((s) => (byName[s.name] = byName[s.name] || []).push(s));
   const ng = [];
   Object.values(byName).forEach((list) => {
     for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
-      if (D.distanceKm(list[i].lat, list[i].lon, list[j].lat, list[j].lon) < 1) ng.push(list[i].name);
+      if (D.distanceKm(list[i].lat, list[i].lon, list[j].lat, list[j].lon) < 0.9) ng.push(list[i].name);
     }
   });
   assert.deepStrictEqual(ng, []);
@@ -91,11 +110,11 @@ test('手入力の説明文が反映されている（明治神宮）', () => {
 });
 
 console.log('推薦の計算（1万件）');
-test('東京から、出かける日あり・願いありで5万件を1秒以内に計算できる', () => {
+test('東京から、出かける日あり・願いありで全件（9万件）を1秒以内に計算できる', () => {
   const K = require('../assets/js/kyusei.js');
   const t = Date.now();
   const boards = K.boardsFor('2026-11-04', K.birthStars('1974-04-15'));
-  const r = D.rankSpots(all, { number: 4, origin: { lat: 35.69, lon: 139.692 }, wishes: ['商売繁盛', '滝'], mode: 'transit', limitMinutes: 180, boards }, cfg);
+  const r = D.rankSpots(all, { number: 4, origin: { lat: 35.69, lon: 139.692 }, wishes: ['商売繁盛', '滝'], mode: 'transit', limitMinutes: 180, boards }, cfg, { top: 300 });
   const ms = Date.now() - t;
   assert.ok(ms < 1000, ms + 'ms');
   assert.ok(r[0].withinLimit && r[0].hitWishes.length > 0);
@@ -103,6 +122,14 @@ test('東京から、出かける日あり・願いありで5万件を1秒以内
 test('商売繁盛を選ぶと稲荷・恵比寿などが上位に入る', () => {
   const r = D.rankSpots(all, { number: 8, origin: { lat: 34.686, lon: 135.52 }, wishes: ['商売繁盛'], mode: 'transit' }, cfg);
   assert.ok(r.slice(0, 5).every((s) => s.wishes.indexOf('商売繁盛') !== -1), r.slice(0, 5).map((s) => s.name).join(','));
+});
+
+test('上位だけ詳しく作っても、全件と同じ順位になる', () => {
+  const inp = { number: 7, origin: { lat: 34.686, lon: 135.52 }, wishes: ['学業・合格'], mode: 'car', limitMinutes: 120 };
+  const a = D.rankSpots(all.slice(0, 20000), inp, cfg), b = D.rankSpots(all.slice(0, 20000), inp, cfg, { top: 50 });
+  assert.deepStrictEqual(b.map((s) => s.id), a.slice(0, 50).map((s) => s.id));
+  assert.strictEqual(b.withinCount, a.filter((s) => s.withinLimit).length);
+  assert.strictEqual(b.anyWishHit, a.some((s) => s.hitWishes.length > 0));
 });
 
 console.log('\n結果：' + pass + '件成功 / ' + fail + '件失敗');

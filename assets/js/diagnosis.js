@@ -116,7 +116,7 @@
    * boards：Kyusei.boardsFor() の結果、deg：方位角、km：距離
    */
   var LEVEL_TEXT = { best: '最大吉方', good: '吉方', normal: '吉凶なし', kyo: '凶' };
-  function judgeFortune(boards, deg, km, cfg) {
+  function judgeFortune(boards, deg, km, cfg, light) {
     if (!boards) return null;
     if (km < 1) return { tier: 1, mark: '―', label: '出発地のすぐ近くのため方位なし', points: 0, palace: null, detail: [] };
     var palace = K.palaceFromBearing(deg);
@@ -131,12 +131,12 @@
     else if (y.level !== 'normal' || m.level !== 'normal') { mark = '○'; label = (y.level !== 'normal' ? '年盤' : '月盤') + 'で吉方位'; }
     else { mark = '―'; label = '吉凶なし（普通）'; }
     var points = yearMonthKyo ? 0 : Math.round(cfg.weights.kyusei * (bw.year * r[y.level] + bw.month * r[m.level] + bw.day * r[d.level]));
-    var detail = [['年盤', y], ['月盤', m], ['日盤', d]].map(function (x) {
+    var detail = light ? [] : [['年盤', y], ['月盤', m], ['日盤', d]].map(function (x) {
       return x[0] + '：' + palace + 'に' + K.STAR_SHORT[x[1].star] + '→' + LEVEL_TEXT[x[1].level] + (x[1].bad.length ? '（' + x[1].bad.join('・') + '）' : '');
     });
     return {
       tier: yearMonthKyo ? 0 : 1, mark: mark, label: label, points: points, palace: palace, detail: detail,
-      nearEdge: K.edgeDistance(deg) < kc.edgeWarnDeg, levels: { year: y.level, month: m.level, day: d.level }
+      nearEdge: light ? false : K.edgeDistance(deg) < kc.edgeWarnDeg, levels: { year: y.level, month: m.level, day: d.level }
     };
   }
 
@@ -147,52 +147,79 @@
    * 戻り値は点数の内訳と根拠の文章を含む配列。
    * 並び順：所要時間の上限内 → 年盤・月盤で凶でない → 願いに一致 → スコア → 近さ
    */
-  function rankSpots(spots, input, cfg) {
+  /*
+   * opts.top を指定すると、全件を数値だけで採点・並べ替えたあと、上位 top 件だけ詳しい結果を作る（9万件でも速い）。
+   * 戻り値の配列には、全件についての集計 anyWishHit（願いに一致するスポットがあるか）・withinCount（時間内の件数）・count を付ける。
+   */
+  function rankSpots(spots, input, cfg, opts) {
     var w = cfg.weights;
     var mode = cfg.travelModes[input.mode] || cfg.travelModes.transit;
     var wishes = input.wishes || [];
     var limit = input.limitMinutes || null;
     var refMin = limit || mode.refMinutes;
+    var top = opts && opts.top;
+    var boards = input.boards || null;
+    var famW = w.fame || 0, famFull = cfg.fameFull || 120;
 
-    return spots.filter(function (s) { return isRecommendable(s, cfg); }).map(function (s) {
+    // 1) 全件を数値だけで採点
+    var light = [];
+    for (var i = 0; i < spots.length; i++) {
+      var s = spots[i];
+      if (!isRecommendable(s, cfg)) continue;
       var km = distanceKm(input.origin.lat, input.origin.lon, s.lat, s.lon);
       var deg = bearingBy(cfg.bearingMethod, input.origin.lat, input.origin.lon, s.lat, s.lon);
       var mins = estimateMinutes(km, mode);
       var numMatch = s.numbers.indexOf(input.number) !== -1;
-      var hitWishes = wishes.filter(function (k) { return s.wishes.indexOf(k) !== -1; });
+      var hit = 0;
+      for (var j = 0; j < wishes.length; j++) if (s.wishes.indexOf(wishes[j]) !== -1) hit++;
       var withinLimit = !limit || mins <= limit;
-      var fortune = judgeFortune(input.boards || null, deg, km, cfg);
-
+      var f = judgeFortune(boards, deg, km, cfg, true);
       var parts = {
         numerology: numMatch ? w.numerology : 0,
-        wish: wishes.length ? Math.round(w.wish * hitWishes.length / wishes.length) : 0,
+        wish: wishes.length ? Math.round(w.wish * hit / wishes.length) : 0,
         distance: Math.round(w.distance * Math.max(0, 1 - mins / refMin)),
-        kyusei: fortune ? fortune.points : 0,
-        fame: Math.round((w.fame || 0) * Math.min(1, (s.fame || 0) / (cfg.fameFull || 120))),
+        kyusei: f ? f.points : 0,
+        fame: Math.round(famW * Math.min(1, (s.fame || 0) / famFull)),
         reliability: Math.round(w.reliability * reliabilityRatio(s.verification_status))
       };
-      var total = parts.numerology + parts.wish + parts.distance + parts.kyusei + parts.fame + parts.reliability;
+      light.push({
+        s: s, km: km, deg: deg, mins: mins, numMatch: numMatch, hit: hit, withinLimit: withinLimit,
+        tier: f ? f.tier : 1, parts: parts,
+        score: parts.numerology + parts.wish + parts.distance + parts.kyusei + parts.fame + parts.reliability,
+        wishTier: wishes.length && hit ? 1 : 0
+      });
+    }
+    // 並び順：所要時間の上限内 → 年盤・月盤で凶でない → 願いに一致 → スコア → 近さ
+    light.sort(function (a, b) {
+      return (b.withinLimit - a.withinLimit) || (b.tier - a.tier) || (b.wishTier - a.wishTier) || (b.score - a.score) || (a.km - b.km);
+    });
 
+    // 2) 上位だけ詳しい結果を作る
+    var subset = top ? light.slice(0, top) : light;
+    var out = subset.map(function (x) {
+      var s = x.s;
+      var hitWishes = wishes.filter(function (k) { return s.wishes.indexOf(k) !== -1; });
+      var fortune = judgeFortune(boards, x.deg, x.km, cfg);
       var reasons = [];
-      reasons.push(numMatch ? '数秘ナンバー' + input.number + 'のテーマと一致' : '数秘ナンバーとの一致なし');
+      reasons.push(x.numMatch ? '数秘ナンバー' + input.number + 'のテーマと一致' : '数秘ナンバーとの一致なし');
       if (wishes.length) reasons.push(hitWishes.length ? '願い・体験：' + hitWishes.join('・') + 'が一致' : '選んだ願い・体験との一致なし');
-      reasons.push(mode.label + 'で' + formatMinutes(mins) + '（目安）' +
-        (limit ? (withinLimit ? '：指定時間内' : '：指定時間を超える') : ''));
+      reasons.push(mode.label + 'で' + formatMinutes(x.mins) + '（目安）' +
+        (limit ? (x.withinLimit ? '：指定時間内' : '：指定時間を超える') : ''));
       if (fortune) reasons.push('出かける日の方位：' + fortune.mark + ' ' + fortune.label);
-
       return Object.assign({}, s, {
-        km: km, bearing: deg, direction: km < 0.05 ? '—' : (K ? K.palaceFromBearing(deg) : direction8(deg)),
-        minutes: mins, minutesText: formatMinutes(mins), withinLimit: withinLimit, fortune: fortune,
-        numMatch: numMatch, hitWishes: hitWishes,
-        scoreParts: parts, score: total, reasons: reasons,
+        km: x.km, bearing: x.deg, direction: x.km < 0.05 ? '—' : (K ? K.palaceFromBearing(x.deg) : direction8(x.deg)),
+        minutes: x.mins, minutesText: formatMinutes(x.mins), withinLimit: x.withinLimit, fortune: fortune,
+        numMatch: x.numMatch, hitWishes: hitWishes,
+        scoreParts: x.parts, score: x.score, reasons: reasons,
         lowConfidence: s.verification_status !== 'verified',
         // 願いを選んだときは、1つ以上一致したスポットを先に並べる
-        wishTier: wishes.length && hitWishes.length ? 1 : 0
+        wishTier: x.wishTier
       });
-    }).sort(function (a, b) {
-      var fa = a.fortune ? a.fortune.tier : 1, fb = b.fortune ? b.fortune.tier : 1;
-      return (b.withinLimit - a.withinLimit) || (fb - fa) || (b.wishTier - a.wishTier) || (b.score - a.score) || (a.km - b.km);
     });
+    out.count = light.length;
+    out.anyWishHit = light.some(function (x) { return x.hit > 0; });
+    out.withinCount = light.filter(function (x) { return x.withinLimit; }).length;
+    return out;
   }
 
   var api = {

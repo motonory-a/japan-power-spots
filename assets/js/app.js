@@ -70,12 +70,12 @@
     card.append(head, tags, el('p', null, s.description));
     var objTags = s.wishes.filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) card.append(el('p', 'small', '特徴：' + objTags.join('・')));
-    if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益（名称などからの推定）：' + s.wishesInferred.join('・')));
+    if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益（' + (s.deities && s.deities.length ? '祭神・名称' : '名称') + 'からの推定）：' + s.wishesInferred.join('・')));
     if (s.source_urls && s.source_urls.length) {
       var src = el('p', 'small src');
       src.append(document.createTextNode('情報元：'));
       s.source_urls.forEach(function (u, i) {
-        var a = el('a', null, u.indexOf('wikipedia') !== -1 ? 'Wikipedia' : 'OpenStreetMap');
+        var a = el('a', null, u.indexOf('wikipedia') !== -1 ? 'Wikipedia' : (u.indexOf('wikidata') !== -1 ? 'Wikidata' : 'OpenStreetMap'));
         a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer';
         if (i) src.append(document.createTextNode('・'));
         src.append(a);
@@ -334,7 +334,7 @@
     var n = D.lifePath(birthday);
     var person = Kyusei.birthStars(birthday);
     var boards = tripDate ? Kyusei.boardsFor(tripDate, person) : null;
-    var all = D.rankSpots(SPOTS_ALL, { number: n, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: boards }, cfg);
+    var all = D.rankSpots(SPOTS_ALL, { number: n, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: boards }, cfg, { top: 300 });
     var within = all.filter(function (s) { return s.withinLimit; });
     var shown = within.length ? within.slice(0, cfg.resultCount) : all.slice(0, 3);
 
@@ -369,10 +369,10 @@
     out.replaceChildren();
     if (limit && !within.length) {
       out.append(el('p', 'notice', mode.label + 'で' + limitText(limit) + '以内（目安）に行けるスポットは見つかりませんでした。いまはデモデータが8件だけのためです。参考として、条件に近い候補を表示します。'));
-    } else if (limit && within.length < cfg.resultCount) {
-      out.append(el('p', 'notice', mode.label + 'で' + limitText(limit) + '以内（目安）のスポットは' + within.length + '件でした。'));
+    } else if (limit && all.withinCount < cfg.resultCount) {
+      out.append(el('p', 'notice', mode.label + 'で' + limitText(limit) + '以内（目安）のスポットは' + all.withinCount + '件でした。'));
     }
-    if (wishes.length && !all.some(function (s) { return s.hitWishes.length; })) {
+    if (wishes.length && !all.anyWishHit) {
       out.append(el('p', 'notice', '選んだ願い・体験（' + wishes.join('・') + '）に当てはまるスポットは、いまのデモデータにはまだありません。全国のデータを追加すると表示されるようになります。参考として、ほかの条件で選んだ候補を表示します。'));
     }
     if (boards && shown.length && shown.every(function (s) { return s.fortune && s.fortune.tier === 0; })) {

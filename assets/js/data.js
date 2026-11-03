@@ -33,18 +33,24 @@
     var obj = r[7] ? r[7].split('|') : [];
     var inferred = r[8] ? r[8].split('|') : [];
     var pref = prefName(r[3]);
-    var urls = [osmUrl(r[0])];
+    var fromWd = r[0].indexOf('wd:') === 0;
+    var urls = fromWd ? ['https://www.wikidata.org/wiki/' + r[0].slice(3)] : [osmUrl(r[0])];
     if (r[10]) urls.push(wikiUrl(r[10]));
+    var deities = r[14] ? r[14].split('|') : [];
+    var heritage = r[15] || '';
+    var desc = pref + (r[4] ? r[4] : '') + 'にある' + (CAT_LABEL[r[2]] || r[2]) + '。';
+    if (deities.length) desc += (r[2] === '寺院' ? '本尊・ご本尊：' : '祭神：') + deities.join('・') + '。';
+    if (heritage) desc += heritage + '。';
     return {
-      id: 'osm-' + r[0], source_ids: ['osm:' + r[0]], name: r[1], aliases: [], category: r[2],
+      id: fromWd ? 'wd-' + r[0].slice(3) : 'osm-' + r[0], source_ids: [fromWd ? r[0] : 'osm:' + r[0]], name: r[1], aliases: [], category: r[2],
       prefecture_code: r[3], prefecture: pref, municipality: r[4], lat: r[5], lon: r[6],
-      geometry_type: 'point', parent_id: r[12] ? 'osm-' + r[12] : null,
+      geometry_type: 'point', parent_id: r[12] ? (r[12].indexOf('wd:') === 0 ? 'wd-' + r[12].slice(3) : 'osm-' + r[12]) : null,
       wishes: obj.concat(inferred), wishesInferred: inferred,
       themes: obj.concat(inferred).slice(0, 4),
       numbers: r[9].split('').map(Number),
-      description: pref + (r[4] ? r[4] : '') + 'にある' + (CAT_LABEL[r[2]] || r[2]) + '。',
+      description: desc, deities: deities, heritage: heritage, sitelinks: r[16] || 0,
       source_urls: urls, wikipedia: r[10] || '', wikidata: r[11] || '',
-      license: 'ODbL 1.0（© OpenStreetMap contributors）',
+      license: fromWd ? 'CC0（Wikidata）' : 'ODbL 1.0（© OpenStreetMap contributors）',
       verification_status: 'unverified', access_status: 'open', publication_status: 'public',
       updated_at: (root.SPOTS_OSM_META || {}).built || '', fame: r[13] || 0
     };

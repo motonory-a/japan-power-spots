@@ -5,10 +5,10 @@
 公開ページ：https://motonory-a.github.io/japan-power-spots/
 関連サイト：https://motonory-a.github.io/my-first-project/ （魂の系統鑑定）
 
-## いまの状態（v2.4）
+## いまの状態（v2.5）
 
-- スポットは全国約5万件（OpenStreetMapをもとに選定）。知名度の高い約1万件を最初に読み込み、残り約4万件は表示後に読み込みます（data/extra/）。作り方と選び方は docs/DATA_SPEC.md、件数の内訳は docs/DATA_REPORT.md。
-- ご利益は、神社・寺院の名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。内容は全件「未確認」の扱いです。
+- スポットは全国約9.1万件（OpenStreetMap と Wikidata をもとに選定、10万件以内）。知名度の高い約1万件を最初に読み込み、残りは表示後に読み込みます（data/extra/）。作り方と選び方は docs/DATA_SPEC.md、件数の内訳は docs/DATA_REPORT.md。
+- ご利益は、Wikidata の祭神・本尊と、神社・寺院の名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。内容は全件「未確認」の扱いです。
 - 診断は数秘術（暫定ロジック）・願いと体験・近さ・方位の運気・知名度・データの信頼性を合わせた点数で並べます。
 - 診断結果の最初に「あなたの気学」として、本命星・月命星、今年・今月の本命星の位置とその意味、今年の吉方位、これから6か月の月ごとの吉方位を表示します。
 - 出かける日を入れると、九星気学（年盤・月盤・日盤）で方位の吉凶を判定し、運気の良い方位のスポットを優先します。決まりごとと検証結果は docs/KYUSEI_SPEC.md。
@@ -35,7 +35,8 @@ data/spots-demo.js      手入力のスポット（説明文など）・都道�
 data/spots-osm.js       全国スポットデータ約1万件（scripts/build_spots.py で生成）
 data/manifest.json      全国データの件数・都道府県別件数
 assets/js/data.js       全国データの読み込み
-scripts/osm_candidates.py / build_spots.py  OSMからの抽出・選定
+scripts/osm_candidates.py / wikidata_fetch.py / build_spots.py  OSM・Wikidataからの抽出・選定
+.github/workflows/wikidata-extract.yml  Wikidata取得（GitHub Actions）
 .github/workflows/osm-extract.yml  OSM抽出（GitHub Actions）
 data/solar-terms.js     二十四節気の日本時間（1899〜2101年、scripts/build_solar_terms.js で生成）
 tests/run-tests.js      計算部分の自動テスト
@@ -57,6 +58,7 @@ node tests/run-data-tests.js
 
 ## 更新履歴
 
+- v2.5（2026-11-03）全国約9.1万件（Wikidata で知名度・祭神・文化財を追加、OSMにない寺社を補充）、推薦計算の高速化
 - v2.4（2026-11-03）おすすめ1〜5位に写真（Wikimedia Commons、撮影者・ライセンス表示）
 - v2.3（2026-11-03）八角形の方位盤の図（今年・今月・出かける日、五行の色、本命星・吉凶方位の表示）
 - v2.2（2026-11-03）全国約5万件（分割読み込み）、「あなたの気学」（今の状態と6か月の吉方位）

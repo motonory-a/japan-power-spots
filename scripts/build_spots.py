@@ -40,8 +40,8 @@ QUOTA = {
 
 # 合計（--total）での種類ごとの枠（上限）
 QUOTA_TOTAL = {
-    '神社': 21500, '寺院': 17000, '滝': 1300, '山': 3500, '湧水': 700, '温泉': 220,
-    '巨木': 2700, '岩・磐座': 750, '洞窟': 200, '絶景': 1200, '湖': 400, '祠': 1000,
+    '神社': 46000, '寺院': 36000, '滝': 1300, '山': 5000, '湧水': 700, '温泉': 220,
+    '巨木': 2700, '岩・磐座': 750, '洞窟': 200, '絶景': 2000, '湖': 500, '祠': 2500,
 }
 
 # 名称から推定するご利益（祭神・信仰の一般的なご利益）
@@ -62,6 +62,38 @@ NAME_WISHES = [
     (r'交通', ['交通安全']),
     (r'美(人|容|御前)', ['美容']),
 ]
+
+# 祭神・本尊（Wikidata P825）から付けるご利益
+DEITY_WISHES = [
+    (r'稲荷|ウカノミタマ|宇迦之御魂|倉稲魂|豊宇気|豊受', ['商売繁盛', '金運']),
+    (r'八幡|応神天皇|誉田別', ['勝負運', '厄除け']),
+    (r'神功皇后', ['勝負運', '安産・子宝']),
+    (r'素戔嗚|スサノオ|須佐之男|牛頭天王', ['厄除け']),
+    (r'天照|大日孁', ['開運']),
+    (r'大国主|大己貴|大穴牟遅', ['恋愛・縁結び']),
+    (r'菅原道真|天満|天神', ['学業・合格']),
+    (r'経津主|タケミカヅチ|武甕槌|建御雷|建御名方|日本武尊|ヤマトタケル', ['勝負運']),
+    (r'熊野', ['開運']),
+    (r'伊奘[冉諾]|伊邪那[岐美]|イザナ[ギミ]|菊理媛|ククリヒメ', ['恋愛・縁結び']),
+    (r'大山咋|山王', ['厄除け']),
+    (r'スクナビコナ|少彦名|少名毘古那|薬師', ['健康祈願']),
+    (r'猿田彦|道祖神|塞の神', ['交通安全', '開運']),
+    (r'住吉|筒男', ['交通安全']),
+    (r'事代主|恵比[寿須]|蛭子|戎', ['商売繁盛']),
+    (r'木花|コノハナ|鬼子母神|訶梨帝母', ['安産・子宝']),
+    (r'市杵島|弁財天|弁才天|辯才天|宗像|厳島', ['芸事上達', '金運']),
+    (r'金山彦|金山毘古', ['金運']),
+    (r'不動明王', ['厄除け']),
+    (r'毘沙門', ['勝負運', '金運']),
+    (r'大黒天', ['金運', '商売繁盛']),
+    (r'歓喜天|聖天|愛染', ['恋愛・縁結び']),
+    (r'文殊|虚空蔵', ['学業・合格']),
+]
+
+# Wikidata の情報による加点
+WD_TYPE_BONUS = [(r'一宮', 30), (r'官幣', 25), (r'国幣', 15), (r'式内社', 15), (r'勅願寺', 15), (r'総本山|大本山', 15)]
+WD_HERITAGE_BONUS = [(r'世界遺産', 40), (r'国宝', 40), (r'重要文化財', 25), (r'特別史跡|特別名勝', 20), (r'史跡|名勝', 10), (r'登録有形', 5)]
+WD_EXCLUDE_TYPES = re.compile(r'廃寺|合祀|廃社')
 
 # 数秘ナンバーとの対応（暫定ルール。数秘の意味：1挑戦 2ご縁 3表現 4安定・内省 5変化・探究 6交流 7静寂・探究 8実行・目標 9感謝・広い視野）
 TAG_NUMBERS = {
@@ -156,7 +188,32 @@ def haversine_m(a, b):
     return 6371000 * 2 * math.atan2(math.sqrt(x), math.sqrt(1 - x))
 
 
-def wishes_for(cat, name, t, near_shrine_peak):
+def wd_bonus(w):
+    if not w:
+        return 0
+    b = min(60, w.get('sitelinks', 0) * 4)
+    types = ' '.join(w.get('types', []))
+    for pat, pt in WD_TYPE_BONUS:
+        if re.search(pat, types):
+            b += pt
+    her = ' '.join(w.get('heritage', []))
+    hb = 0
+    for pat, pt in WD_HERITAGE_BONUS:
+        if re.search(pat, her):
+            hb = max(hb, pt)
+    return b + hb
+
+
+def best_heritage(w):
+    her = (w or {}).get('heritage', [])
+    for pat in ('世界遺産', '国宝', '重要文化財', '特別史跡', '特別名勝', '史跡', '名勝', '登録有形'):
+        for h in her:
+            if pat in h:
+                return h
+    return ''
+
+
+def wishes_for(cat, name, t, near_shrine_peak, deities=()):
     obj, inferred = [], []
     base = {'神社': ['神社'], '寺院': ['寺院'], '滝': ['滝', '自然', '浄化'], '山': ['登山', '自然'], '湧水': ['湖・湧水', '自然', '浄化'],
             '温泉': ['温泉'], '巨木': ['御神木・巨木', '自然'], '岩・磐座': ['岩・磐座', '自然'], '洞窟': ['洞窟', '自然'],
@@ -165,6 +222,12 @@ def wishes_for(cat, name, t, near_shrine_peak):
     if cat == '山' and near_shrine_peak:
         obj.append('霊山')
     if cat in ('神社', '寺院'):
+        for d in deities:
+            for pat, ws in DEITY_WISHES:
+                if re.search(pat, d):
+                    for w in ws:
+                        if w not in inferred:
+                            inferred.append(w)
         for pat, ws in NAME_WISHES:
             if re.search(pat, name):
                 for w in ws:
@@ -207,6 +270,7 @@ def main():
     ap.add_argument('--target', type=int, default=10000, help='中心データ（最初に読み込む）の件数')
     ap.add_argument('--total', type=int, default=0, help='追加分を含めた合計件数（0なら追加なし）')
     ap.add_argument('--extra-parts', type=int, default=4)
+    ap.add_argument('--wikidata', default='', help='wikidata.jsonl.gz（scripts/wikidata_fetch.py の出力）')
     ap.add_argument('--extracted-at', default='')
     args = ap.parse_args()
 
@@ -251,6 +315,80 @@ def main():
                 'muni': r.get('muni', ''), 'area': r.get('area', 0), 'tags': t,
                 'prio': priority(t, cat, name, r.get('area', 0)),
             })
+    rep['usable_osm'] = len(raw)
+
+    # ---------- Wikidata を重ねる ----------
+    wd = {}
+    if args.wikidata:
+        with gzip.open(args.wikidata, 'rt', encoding='utf-8') as f:
+            for line in f:
+                w = json.loads(line)
+                wd[w['qid']] = w
+    used_q = set()
+    kept = []
+    for it in raw:
+        q = it['tags'].get('wikidata')
+        w = wd.get(q) if q else None
+        if w and WD_EXCLUDE_TYPES.search(' '.join(w.get('types', []))):
+            rep['skip:wikidata_abolished'] += 1
+            continue
+        it['wd'] = w
+        if w:
+            used_q.add(q)
+            it['prio'] += wd_bonus(w)
+        kept.append(it)
+    raw = kept
+    if wd:
+        # 名前と位置で突き合わせ（1km以内・同じ種類）
+        g_raw = Grid()
+        for it in raw:
+            g_raw.add(it)
+        coarse = defaultdict(list)  # 都道府県の判定用（約10km四方）
+        for it in raw:
+            coarse[(int(it['lat'] * 10), int(it['lon'] * 10))].append(it)
+        added = 0
+        for q, w in wd.items():
+            if q in used_q or not w.get('label') or WD_EXCLUDE_TYPES.search(' '.join(w.get('types', []))):
+                continue
+            cat = '神社' if w['kind'] == 'shrine' else '寺院'
+            lab = w['label']
+            hit = None
+            for o in g_raw.near(w['lat'], w['lon']):
+                if o['cat'] != cat or o.get('wd'):
+                    continue
+                if (o['name'] == lab or (len(lab) >= 3 and (lab in o['name'] or o['name'] in lab))) and \
+                        haversine_m((o['lat'], o['lon']), (w['lat'], w['lon'])) < 1000:
+                    hit = o
+                    break
+            if hit:
+                hit['wd'] = w
+                hit['tags']['wikidata'] = q
+                hit['prio'] += 50 + wd_bonus(w)
+                used_q.add(q)
+                rep['wikidata_matched_by_name'] += 1
+                continue
+            if not JP_CHARS.search(lab) or EXCLUDE_NAME.search(lab):
+                continue
+            # OSMにないもの：近くのOSM候補から都道府県・市区町村を借りる
+            near, best = None, 1e9
+            k = (int(w['lat'] * 10), int(w['lon'] * 10))
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    for o in coarse.get((k[0] + dy, k[1] + dx), []):
+                        d = haversine_m((o['lat'], o['lon']), (w['lat'], w['lon']))
+                        if d < best:
+                            near, best = o, d
+            if not near or best > 15000:
+                rep['skip:wikidata_no_prefecture'] += 1
+                continue
+            tags = {'name': lab, 'wikidata': q, 'religion': 'shinto' if cat == '神社' else 'buddhist'}
+            raw.append({'osm': 'wd:' + q, 'name': lab, 'cat': cat, 'lat': w['lat'], 'lon': w['lon'], 'pref': near['pref'],
+                        'muni': near['muni'] if best < 3000 else '', 'area': 0, 'tags': tags, 'wd': w,
+                        'prio': priority(tags, cat, lab, 0) + wd_bonus(w)})
+            added += 1
+        rep['wikidata_items'] = len(wd)
+        rep['wikidata_matched_by_id'] = len([1 for it in raw if it.get('wd') and not it['osm'].startswith('wd:')]) - rep['wikidata_matched_by_name']
+        rep['wikidata_added_not_in_osm'] = added
     rep['usable'] = len(raw)
 
     # 重複：同じ名前・200m以内 → 優先度の高い方（面積の大きい方）を残す
@@ -271,6 +409,8 @@ def main():
             for k in ('wikidata', 'wikipedia', 'wikipedia:ja', 'heritage', 'website'):
                 if k in it['tags'] and k not in dup['tags']:
                     dup['tags'][k] = it['tags'][k]
+            if it.get('wd') and not dup.get('wd'):
+                dup['wd'] = it['wd']
             continue
         grid.add(it)
         uniq.append(it)
@@ -378,7 +518,7 @@ def main():
     # 出力
     chosen.sort(key=lambda x: (PREF_CODE[x['pref']], -x['prio']))
     def osm_id(o):
-        # osmium の面ID（a）を元の way / relation のIDに戻す
+        # osmium の面ID（a）を元の way / relation のIDに戻す。Wikidataだけのものは wd:Q... のまま
         if o.startswith('a'):
             n = int(o[1:])
             return ('w%d' % (n // 2)) if n % 2 == 0 else ('r%d' % ((n - 1) // 2))
@@ -389,7 +529,8 @@ def main():
     cat_count, wish_count, pref_out = Counter(), Counter(), Counter()
     for it in chosen:
         t = it['tags']
-        obj, inferred = wishes_for(it['cat'], it['name'], t, it['cat'] == '山' and near_shrine(it))
+        w = it.get('wd') or {}
+        obj, inferred = wishes_for(it['cat'], it['name'], t, it['cat'] == '山' and near_shrine(it), w.get('deities', []))
         nums = numbers_for(obj + inferred)
         wiki = t.get('wikipedia:ja') or t.get('wikipedia') or ''
         rows.append([
@@ -397,6 +538,7 @@ def main():
             round(it['lat'], 5), round(it['lon'], 5),
             '|'.join(obj), '|'.join(inferred), ''.join(str(n) for n in nums),
             wiki, t.get('wikidata', ''), idmap.get(it['parent'], '') if it['parent'] else '', round(it['prio']),
+            '|'.join([d for d in w.get('deities', []) if JP_CHARS.search(d)][:4]), best_heritage(w), w.get('sitelinks', 0),
         ])
         cat_count[it['cat']] += 1
         pref_out[it['pref']] += 1
@@ -407,7 +549,8 @@ def main():
     header = ('/* 全国スポットデータ（自動生成：scripts/build_spots.py）\n'
               ' * 出典：© OpenStreetMap contributors（ODbL 1.0）https://www.openstreetmap.org/copyright\n'
               ' * 列：osm, 名称, 種類, 都道府県コード, 市区町村, 緯度, 経度, 体験・種類タグ, 名称から推定したご利益,\n'
-              ' *     数秘(暫定), Wikipedia, Wikidata, 親スポットのosm, 優先度\n */\n')
+              ' *     数秘(暫定), Wikipedia, Wikidata, 親スポットのosm, 優先度, 祭神・本尊, 文化財, Wikipedia言語版数\n'
+              ' * 祭神・文化財は Wikidata（CC0）から\n */\n')
     core_rows = [r for r, it in zip(rows, chosen) if it['tier'] == 1]
     extra_rows = [r for r, it in zip(rows, chosen) if it['tier'] == 2]
     parts = []
