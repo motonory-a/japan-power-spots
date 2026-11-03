@@ -151,8 +151,41 @@ footer a{color:inherit}
 .kg-table .lv-kyo{color:#922b21}
 .kg-table tr.now th:first-child{border-left:4px solid #22684b}
 .note.warn{color:#7a5d00}
+/* 八角形の方位盤 */
+.kg-board-wrap{margin:4px 0 14px}
+.kg-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.kg-tab{border:1px solid #bac9bd;background:#fff;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:inherit}
+.kg-tab[aria-selected=true]{background:#22684b;border-color:#22684b;color:#fff}
+.kg-board-holder{max-width:480px;margin:0 auto}
+.kg-board{width:100%;height:auto;display:block}
+.kg-board text{font-family:Meiryo,"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif}
+.kg-board .kg-el{fill:#fff;font-size:15px;font-weight:bold}
+.kg-board .kg-star{font-size:14px;font-weight:bold}
+.kg-board .kg-bad{fill:#b03a2e;font-size:9.5px}
+.kg-board .kg-dir{fill:#4b4b4b;font-size:13px;font-weight:bold}
+.kg-board .kg-br{fill:#8a8270;font-size:11px}
+.kg-board .kg-center{fill:#fff;font-size:21px;font-weight:bold}
+.kg-board .kg-center-sub{fill:#fff;font-size:12px}
+.kg-board .kg-you-label{fill:#fff;font-size:11px;font-weight:bold}
+.kg-board .kg-ns{fill:#8a8270;font-size:12px}
+.kg-caption{text-align:center;font-size:13px;margin:4px 0}
+.kg-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 12px;font-size:12px;color:#555}
+.kg-legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.kg-legend-note{flex-basis:100%;text-align:center}
 @media (max-width:600px){
   .kg-stars{grid-template-columns:1fr}
+  .kigaku-panel{padding:12px 10px}
+  .kg-board-holder{margin:0 auto}
+  .kg-tab{font-size:12px;padding:5px 10px}
+  .kg-board .kg-star{font-size:19px}
+  .kg-board .kg-el{font-size:17px}
+  .kg-board .kg-bad{font-size:13px}
+  .kg-board .kg-dir{font-size:17px}
+  .kg-board .kg-br{font-size:14px}
+  .kg-board .kg-center{font-size:26px}
+  .kg-board .kg-center-sub{font-size:15px}
+  .kg-board .kg-you-label{font-size:14px}
+  .kg-board .kg-ns{font-size:15px}
   .panel{padding:18px 16px}
   #map{height:360px}
   .chip-group{width:100%}

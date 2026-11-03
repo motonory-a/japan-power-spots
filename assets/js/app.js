@@ -159,7 +159,7 @@
     var t = new Date();
     return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
   }
-  function renderKigaku(person) {
+  function renderKigaku(person, boards) {
     var K = Kyusei, box = $('kigaku-panel');
     box.replaceChildren();
     var today = todayStr();
@@ -167,6 +167,40 @@
     try { o = K.outlook(person, today, 6); } catch (e) { return; }
     var td = today.split('-').map(Number);
     box.append(el('h3', null, 'あなたの気学 ― 今の状態と吉方位（' + td[0] + '年' + td[1] + '月' + td[2] + '日時点）'));
+
+    // 八角形の方位盤（今年・今月・出かける日を切り替え）
+    if (window.KigakuBoard) {
+      var t0 = today.split('-').map(Number), ym = K.kigakuYM(t0[0], t0[1], t0[2]);
+      var views = [
+        { key: 'year', label: '今年の盤（' + o.kYear + '年）', judged: K.judgeBoard(o.yearCenter, K.yearBranch(ym.kYear), '歳破', person) },
+        { key: 'month', label: '今月の盤（' + o.months[0].start.m + '/' + o.months[0].start.d + '〜）', judged: K.judgeBoard(o.monthCenter, K.monthBranch(ym.monthIdx), '月破', person) }
+      ];
+      if (boards) {
+        var bd = boards.date.split('-').map(Number);
+        views.push({ key: 'day', label: '出かける日（' + bd[1] + '/' + bd[2] + '）の日盤', judged: boards.day });
+      }
+      var bwrap = el('div', 'kg-board-wrap');
+      var tabs = el('div', 'kg-tabs');
+      tabs.setAttribute('role', 'tablist');
+      var holder = el('div', 'kg-board-holder');
+      var caption = el('p', 'kg-caption');
+      var show = function (i) {
+        holder.replaceChildren(KigakuBoard.draw(views[i].judged, person, { title: views[i].label }));
+        Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute('aria-selected', i === j ? 'true' : 'false'); });
+        var place = K.placeOfStar(views[i].judged.center, person.honmei);
+        caption.textContent = views[i].label + '：中宮は' + K.STAR_NAMES[views[i].judged.center] + '。あなたの本命星（' + K.STAR_SHORT[person.honmei] + '）は' +
+          (place === '中宮' ? '中宮' : place) + 'にあります。';
+      };
+      views.forEach(function (v, i) {
+        var b = el('button', 'kg-tab', v.label);
+        b.type = 'button'; b.setAttribute('role', 'tab');
+        b.addEventListener('click', function () { show(i); });
+        tabs.append(b);
+      });
+      bwrap.append(tabs, holder, caption, KigakuBoard.legend());
+      box.append(bwrap);
+      show(boards ? views.length - 1 : 0);
+    }
 
     var dl = el('dl', 'kg-stars');
     dl.append(el('dt', null, '本命星　' + K.STAR_NAMES[o.honmei]), el('dd', null, o.honmeiNature + '（生まれ年の星。運気の流れを見る基本の星）'));
@@ -328,7 +362,7 @@
       ul.append(el('li', null, '出かける日：指定なし（日付を入れると方位の吉凶も判定します）'));
     }
     sum.append(ul);
-    renderKigaku(person);
+    renderKigaku(person, boards);
     renderFortuneTable(boards);
 
     var out = $('recommended');
