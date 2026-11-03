@@ -34,15 +34,6 @@
     if (opts.heading) wrap.append(el('p', 'share-heading', opts.heading));
     var row = el('div', 'share-row');
 
-    var cp = el('button', 'share-btn share-copy', 'リンクをコピー');
-    cp.type = 'button';
-    var msg = el('p', 'share-msg'); msg.setAttribute('role', 'status');
-    cp.addEventListener('click', function () {
-      copy(url).then(function (ok) {
-        msg.textContent = ok ? 'リンクをコピーしました。LINEやメールに貼り付けて送れます。' : 'コピーできませんでした。お手数ですが、次のURLを長押ししてコピーしてください：' + url;
-      });
-    });
-
     var line = el('a', 'share-btn share-line', 'LINEで友だちに送る');
     line.href = 'https://line.me/R/share?text=' + encodeURIComponent((text ? text + '\n' : '') + url);
     var x = el('a', 'share-btn share-x', 'Xでポスト');
@@ -51,7 +42,7 @@
     fb.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
     [line, x, fb].forEach(function (a) { a.target = '_blank'; a.rel = 'noopener noreferrer'; });
 
-    row.append(cp, line, x, fb);
+    row.append(line, x, fb);
     // スマホなど、端末の共有メニューが使えるときだけ
     if (root.navigator && typeof navigator.share === 'function') {
       var more = el('button', 'share-btn share-more', 'その他のアプリ');
@@ -61,9 +52,34 @@
       });
       row.append(more);
     }
-    wrap.append(row, msg);
+    wrap.append(row);
     return wrap;
   }
 
-  root.Share = { box: box, siteUrl: siteUrl };
+  // 「🔗 このサイトのリンクをコピー」（魂の系統鑑定サイトと同じ形：ページのいちばん上と、いちばん下）
+  function copyButton() {
+    var wrap = el('span', 'copyurl-wrap');
+    var b = el('button', 'copyurl', '🔗 このサイトのリンクをコピー');
+    b.type = 'button';
+    var orig = b.textContent, timer = null;
+    var fail = el('span', 'copyurl-fail'); fail.hidden = true;
+    b.addEventListener('click', function () {
+      var url = siteUrl();
+      copy(url).then(function (ok) {
+        if (ok) {
+          b.textContent = '✓ コピーしました！';
+          b.classList.add('done');
+          clearTimeout(timer);
+          timer = setTimeout(function () { b.textContent = orig; b.classList.remove('done'); }, 2200);
+        } else {
+          fail.textContent = 'コピーできませんでした。このURLを長押ししてコピーしてください：' + url;
+          fail.hidden = false;
+        }
+      });
+    });
+    wrap.append(b, fail);
+    return wrap;
+  }
+
+  root.Share = { box: box, copyButton: copyButton, siteUrl: siteUrl };
 })(typeof window !== 'undefined' ? window : globalThis);

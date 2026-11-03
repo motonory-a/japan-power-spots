@@ -435,7 +435,6 @@ h2::before{width:20px;height:20px;background:url(../img/flower-of-life-icon.svg)
 .share-heading{margin:0 0 10px;font-family:var(--serif);font-weight:700;font-size:16px;color:var(--ink)}
 .share-row{display:flex;flex-wrap:wrap;gap:8px}
 .share-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 18px;border-radius:999px;font-family:inherit;font-size:14px;font-weight:bold;text-decoration:none;cursor:pointer;border:1px solid transparent;line-height:1.3}
-.share-copy{background:#fff;border-color:var(--indigo);color:var(--indigo)}
 .share-line{background:#057A36;color:#fff}
 .share-x{background:#0F1419;color:#fff}
 .share-fb{background:#1565D8;color:#fff}
@@ -446,5 +445,15 @@ h2::before{width:20px;height:20px;background:url(../img/flower-of-life-icon.svg)
 .share-msg:empty{display:none}
 @media (max-width:640px){
   .share-row{display:grid;grid-template-columns:1fr 1fr}
-  .share-copy,.share-line{grid-column:1/-1}
+  .share-line{grid-column:1/-1}
 }
+
+/* ---------- このサイトのリンクをコピー（ページの上と下） ---------- */
+.toplink{max-width:min(1240px,max(600px,calc((100vh - 300px) * 1.777)));margin:0 auto;padding:8px 12px;display:flex;justify-content:flex-start}
+.copyurl{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.85);color:var(--indigo);font:700 12.5px/1.2 var(--sans);padding:7px 12px;border-radius:999px;cursor:pointer;letter-spacing:.04em;min-height:34px}
+.copyurl:hover{border-color:var(--indigo)}
+.copyurl.done{background:var(--sakura);border-color:#C987A8}
+.copyurl-fail{display:block;margin-top:6px;font-size:12px;overflow-wrap:anywhere}
+.foot-copy{margin:0 0 10px!important}
+footer .copyurl{font-size:13.5px;padding:8px 14px;background:rgba(255,255,255,.12);border-color:rgba(234,215,174,.6);color:#F3E6C6}
+footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}

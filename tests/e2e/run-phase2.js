@@ -41,7 +41,7 @@ async function route(page) {
     // 1. メイン画像・コピー・ボタン
     const img = await page.$eval('.hero-img', (i) => ({ w: i.naturalWidth, alt: i.alt, top: i.getBoundingClientRect().top }));
     check('メイン画像が読み込まれる', img.w > 0, 'naturalWidth=' + img.w);
-    check('メイン画像が画面のいちばん上', Math.abs(img.top) < 1);
+    check('メイン画像が画面の上部（上にリンクのコピーだけ）', img.top < 60, 'top=' + Math.round(img.top));
     check('見出し(h1)がサイト名として読み上げられる', /日本全国パワースポット巡り/.test(img.alt) && await page.$eval('h1', (h) => !!h.querySelector('img')));
     check('トップコピー', (await page.textContent('.hero-catch')).trim() === '次のお休み、運命の聖地へ。');
     check('サブコピー', (await page.textContent('.hero-sub')).replace(/\s/g, '') === 'あなたの毎日に、小さな奇跡とときめくお出かけを。');

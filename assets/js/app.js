@@ -568,6 +568,8 @@
     $('home').addEventListener('change', OriginPicker.prefChanged);
     if (window.Profiles) Profiles.init();
     if (window.Share) {
+      $('toplink').append(Share.copyButton());
+      $('foot-copy').append(Share.copyButton());
       $('share-site').append(Share.box({ text: cfg.shareText }));
       $('share-result').append(Share.box({ heading: '診断が楽しかったら、お友だちにも', text: cfg.shareText }));
     }

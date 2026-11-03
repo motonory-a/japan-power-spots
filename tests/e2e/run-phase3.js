@@ -106,9 +106,16 @@ const doorText = (p) => p.$eval('#door-content', (e) => e.innerText);
     check('外部リンクは新しいタブ・noopener', await page.$$eval('.share-box a', (as) => as.every((a) => a.target === '_blank' && /noopener/.test(a.rel))));
     check('今日の聖地の紹介文に聖地の名前', decodeURIComponent(await page.getAttribute('#daily-spot .share-line', 'href')).includes(spotName));
     await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.click('#share-site .share-copy');
+    check('「このサイトのリンクをコピー」がページの上と下に', (await page.$$('#toplink .copyurl')).length === 1 && (await page.$$('footer .copyurl')).length === 1);
+    const topBtnY = await page.$eval('#toplink .copyurl', (b) => b.getBoundingClientRect().top + window.scrollY);
+    const heroY = await page.$eval('.hero-img', (i) => i.getBoundingClientRect().top + window.scrollY);
+    check('上のボタンはメイン画像より上', topBtnY < heroY);
+    await page.click('#toplink .copyurl');
     await page.waitForTimeout(300);
-    check('リンクをコピー：お知らせが出る', /コピー/.test(await page.textContent('#share-site .share-msg')));
+    const copiedText = await page.textContent('#toplink .copyurl');
+    const failShown = await page.isVisible('#toplink .copyurl-fail');
+    check('リンクをコピー：「コピーしました」と出る（できない環境ではURLを表示）', copiedText.includes('コピーしました') || failShown, copiedText);
+    if (copiedText.includes('コピーしました')) check('コピーされるのは公開URL', await page.evaluate(() => navigator.clipboard.readText()) === 'https://motonory-a.github.io/japan-power-spots/');
     check('紹介文に生年月日や住所を入れない', await page.$$eval('.share-box a', (as) => as.every((a) => !/1974|新宿|生年月日：/.test(decodeURIComponent(a.href)))));
 
     // 診断結果のカードにも保存ボタン
