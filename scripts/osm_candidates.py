@@ -18,7 +18,7 @@ from shapely.strtree import STRtree
 
 KEEP_TAGS = [
     'name', 'name:ja', 'name:ja-Hira', 'name:ja_kana', 'name:en', 'alt_name', 'official_name', 'old_name',
-    'amenity', 'religion', 'denomination', 'shrine:type', 'building', 'historic', 'heritage', 'heritage:operator',
+    'amenity', 'landuse', 'religion', 'denomination', 'shrine:type', 'building', 'historic', 'heritage', 'heritage:operator',
     'natural', 'waterway', 'tourism', 'leisure', 'place', 'ele', 'height', 'species', 'species:ja', 'denotation',
     'wikidata', 'wikipedia', 'wikipedia:ja', 'website', 'url', 'contact:website', 'opening_hours',
     'access', 'bath:type', 'description', 'note',
@@ -29,6 +29,10 @@ def is_candidate(tags):
     a = tags.get('amenity')
     n = tags.get('natural')
     if a == 'place_of_worship' and tags.get('religion') in ('shinto', 'buddhist'):
+        return True
+    # 境内の広い大社・大寺は landuse=religious や building=shrine で描かれていることがある
+    if tags.get('religion') in ('shinto', 'buddhist') and tags.get('name') and (
+            tags.get('landuse') == 'religious' or tags.get('building') in ('shrine', 'temple') or tags.get('wikidata')):
         return True
     if tags.get('waterway') == 'waterfall' or n == 'waterfall':
         return True

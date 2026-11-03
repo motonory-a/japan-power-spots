@@ -35,6 +35,9 @@ jobs:
         run: |
           osmium tags-filter japan.pbf \
             nwr/amenity=place_of_worship \
+            nwr/landuse=religious \
+            nwr/religion=shinto,buddhist \
+            nwr/building=shrine,temple \
             nwr/natural=peak,volcano,cave_entrance,spring,hot_spring,rock,stone,tree,waterfall,water \
             nwr/waterway=waterfall \
             nwr/historic=shrine,wayside_shrine \

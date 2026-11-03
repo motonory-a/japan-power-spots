@@ -1,0 +1,363 @@
+"""
+OSM候補（candidates.jsonl.gz）から公開用のスポットデータを作る。
+
+使い方:
+  python3 scripts/build_spots.py candidates.jsonl.gz --target 10000
+出力:
+  data/spots-osm.js      … サイトが読み込むデータ（コンパクトな配列形式）
+  data/manifest.json     … 件数・都道府県別件数・作成日時
+  docs/DATA_REPORT.md    … 検査レポート（欠損・重複候補・除外理由など）
+
+方針（docs/DATA_SPEC.md に詳しく記載）
+  ・名前のないもの、立入禁止（access=private/no）は除外。
+  ・同じ名前で近く（200m以内）にあるものは重複として1件にまとめる。
+  ・知名度の目安（Wikidata/Wikipedia、文化財、社格を示す名称、面積など）で優先度を付け、
+    種類ごとの枠（quota）を決めてから残りを優先度順に埋める。
+  ・ご利益は、名称に含まれる祭神・信仰（稲荷・天満宮・八幡など）から一般的なものを「推定」として付ける。
+"""
+import argparse
+import datetime
+import gzip
+import json
+import math
+import os
+import re
+from collections import Counter, defaultdict
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+PREFS = ['北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県', '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県',
+         '東京都', '神奈川県', '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県', '三重県',
+         '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県', '徳島県',
+         '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県']
+PREF_CODE = {p: '%02d' % (i + 1) for i, p in enumerate(PREFS)}
+
+# 種類 → 最低限確保する件数（足りなければあるだけ）
+QUOTA = {
+    '神社': 4000, '寺院': 3000, '滝': 650, '山': 650, '湧水': 220, '温泉': 120,
+    '巨木': 230, '岩・磐座': 100, '洞窟': 100, '絶景': 200, '湖': 80, '祠': 0,
+}
+
+# 名称から推定するご利益（祭神・信仰の一般的なご利益）
+NAME_WISHES = [
+    (r'稲荷', ['商売繁盛', '金運']),
+    (r'天満|天神|菅原', ['学業・合格']),
+    (r'八幡', ['勝負運', '厄除け']),
+    (r'金刀比羅|金比羅|金毘羅|琴平', ['交通安全', '商売繁盛']),
+    (r'恵比[寿須]|戎|蛭子|えびす|ゑびす', ['商売繁盛']),
+    (r'出雲|縁結び|恋', ['恋愛・縁結び']),
+    (r'子安|安産|子授|産泰', ['安産・子宝']),
+    (r'厄除|厄神|厄よけ', ['厄除け']),
+    (r'不動', ['厄除け']),
+    (r'弁天|弁財天|辯才天|厳島|嚴島', ['芸事上達', '金運']),
+    (r'薬師', ['健康祈願']),
+    (r'金(山|神社|運)|御金', ['金運']),
+    (r'宝山|宝来|寶', ['金運']),
+    (r'交通', ['交通安全']),
+    (r'美(人|容|御前)', ['美容']),
+]
+
+# 数秘ナンバーとの対応（暫定ルール。数秘の意味：1挑戦 2ご縁 3表現 4安定・内省 5変化・探究 6交流 7静寂・探究 8実行・目標 9感謝・広い視野）
+TAG_NUMBERS = {
+    '神社': [9, 1], '寺院': [7, 4], '霊山': [9, 1], '登山': [1], '滝': [5, 7], '浄化': [7], '自然': [9],
+    '湖・湧水': [2], '温泉': [6], '御神木・巨木': [4, 7], '岩・磐座': [4, 8], '洞窟': [5, 7], '絶景': [9],
+    '商売繁盛': [8], '金運': [8], '学業・合格': [7, 3], '勝負運': [1, 8], '厄除け': [4], '交通安全': [5],
+    '恋愛・縁結び': [2, 6], '安産・子宝': [6], '芸事上達': [3], '健康祈願': [4], '美容': [3, 6],
+}
+
+ACCESS_EXCLUDE = {'private', 'no'}
+GENERIC_NAMES = {'祠', 'ほこら', '地蔵', 'お地蔵様', 'お地蔵さん', '石仏', '社', '神社', '寺', '小祠', 'shrine', 'temple'}
+
+
+def norm_name(t):
+    n = (t.get('name:ja') or t.get('name') or '').strip()
+    return re.sub(r'\s+', ' ', n)
+
+
+def classify(t, area):
+    a, n, w = t.get('amenity'), t.get('natural'), t.get('waterway')
+    if a == 'place_of_worship':
+        return '神社' if t.get('religion') == 'shinto' else '寺院'
+    if w == 'waterfall' or n == 'waterfall':
+        return '滝'
+    if n in ('peak', 'volcano'):
+        return '山'
+    if n == 'spring':
+        return '湧水'
+    if n == 'hot_spring':
+        return '温泉'
+    if n == 'tree':
+        return '巨木'
+    if n in ('rock', 'stone'):
+        return '岩・磐座'
+    if n == 'cave_entrance':
+        return '洞窟'
+    if t.get('tourism') == 'viewpoint':
+        return '絶景'
+    if n == 'water':
+        return '湖'
+    if t.get('historic') in ('shrine', 'wayside_shrine'):
+        return '祠'
+    return None
+
+
+def priority(t, cat, name, area):
+    s = 0
+    if t.get('wikidata'):
+        s += 50
+    if t.get('wikipedia') or t.get('wikipedia:ja'):
+        s += 35
+    if t.get('heritage') or t.get('heritage:operator'):
+        s += 25
+    if t.get('denotation') == 'natural_monument':
+        s += 30
+    if t.get('website') or t.get('url') or t.get('contact:website'):
+        s += 8
+    if t.get('name:en'):
+        s += 5
+    if cat == '神社':
+        if re.search(r'神宮|大社|総本宮|総本社', name):
+            s += 40
+        elif re.search(r'八幡宮|天満宮|東照宮|稲荷|宮$', name):
+            s += 12
+    if cat == '寺院' and re.search(r'総本山|大本山|本山|大寺|観音|不動尊|大師', name):
+        s += 15
+    if area:
+        s += min(30, max(0, math.log10(max(area, 1)) * 6 - 12))   # 1,000㎡で約6点、100,000㎡で約18点
+    if cat == '山':
+        try:
+            s += min(20, float(str(t.get('ele', '0')).split(';')[0]) / 150)
+        except ValueError:
+            pass
+    if name in GENERIC_NAMES or len(name) <= 1:
+        s -= 100
+    return round(s, 1)
+
+
+def haversine_m(a, b):
+    r = math.pi / 180
+    dlat, dlon = (b[0] - a[0]) * r, (b[1] - a[1]) * r
+    x = math.sin(dlat / 2) ** 2 + math.cos(a[0] * r) * math.cos(b[0] * r) * math.sin(dlon / 2) ** 2
+    return 6371000 * 2 * math.atan2(math.sqrt(x), math.sqrt(1 - x))
+
+
+def wishes_for(cat, name, t, near_shrine_peak):
+    obj, inferred = [], []
+    base = {'神社': ['神社'], '寺院': ['寺院'], '滝': ['滝', '自然', '浄化'], '山': ['登山', '自然'], '湧水': ['湖・湧水', '自然', '浄化'],
+            '温泉': ['温泉'], '巨木': ['御神木・巨木', '自然'], '岩・磐座': ['岩・磐座', '自然'], '洞窟': ['洞窟', '自然'],
+            '絶景': ['絶景'], '湖': ['湖・湧水', '自然'], '祠': ['神社']}
+    obj += base.get(cat, [])
+    if cat == '山' and near_shrine_peak:
+        obj.append('霊山')
+    if cat in ('神社', '寺院'):
+        for pat, ws in NAME_WISHES:
+            if re.search(pat, name):
+                for w in ws:
+                    if w not in inferred:
+                        inferred.append(w)
+    return obj, inferred
+
+
+def numbers_for(tags):
+    out = []
+    for tg in tags:
+        for n in TAG_NUMBERS.get(tg, []):
+            if n not in out:
+                out.append(n)
+    return out[:3] or [9]
+
+
+class Grid:
+    """近くの点を探すための簡易グリッド（約1km四方）"""
+    def __init__(self):
+        self.cells = defaultdict(list)
+
+    @staticmethod
+    def key(lat, lon):
+        return (int(lat * 100), int(lon * 100))
+
+    def add(self, item):
+        self.cells[self.key(item['lat'], item['lon'])].append(item)
+
+    def near(self, lat, lon):
+        k = self.key(lat, lon)
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                yield from self.cells.get((k[0] + dy, k[1] + dx), [])
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('candidates')
+    ap.add_argument('--target', type=int, default=10000)
+    ap.add_argument('--extracted-at', default='')
+    args = ap.parse_args()
+
+    rep = Counter()
+    raw = []
+    with gzip.open(args.candidates, 'rt', encoding='utf-8') as f:
+        for line in f:
+            r = json.loads(line)
+            t = r['tags']
+            rep['candidates'] += 1
+            name = norm_name(t)
+            cat = classify(t, r.get('area', 0))
+            if not cat:
+                rep['skip:no_category'] += 1
+                continue
+            if not name:
+                rep['skip:no_name'] += 1
+                continue
+            if t.get('access') in ACCESS_EXCLUDE:
+                rep['skip:access'] += 1
+                continue
+            if r['pref'] not in PREF_CODE:
+                rep['skip:outside_prefecture'] += 1
+                continue
+            raw.append({
+                'osm': r['osm'], 'name': name, 'cat': cat, 'lat': r['lat'], 'lon': r['lon'], 'pref': r['pref'],
+                'muni': r.get('muni', ''), 'area': r.get('area', 0), 'tags': t,
+                'prio': priority(t, cat, name, r.get('area', 0)),
+            })
+    rep['usable'] = len(raw)
+
+    # 重複：同じ名前・200m以内 → 優先度の高い方（面積の大きい方）を残す
+    raw.sort(key=lambda x: (-x['prio'], -x['area']))
+    grid, uniq = Grid(), []
+    for it in raw:
+        dup = None
+        for o in grid.near(it['lat'], it['lon']):
+            if o['name'] == it['name'] and haversine_m((o['lat'], o['lon']), (it['lat'], it['lon'])) < 200:
+                dup = o
+                break
+        if dup:
+            rep['merged_duplicates'] += 1
+            for k in ('wikidata', 'wikipedia', 'wikipedia:ja', 'heritage', 'website'):
+                if k in it['tags'] and k not in dup['tags']:
+                    dup['tags'][k] = it['tags'][k]
+            continue
+        grid.add(it)
+        uniq.append(it)
+
+    # 霊山：山頂から500m以内に神社がある山
+    shrine_grid = Grid()
+    for it in uniq:
+        if it['cat'] == '神社':
+            shrine_grid.add(it)
+
+    def near_shrine(it):
+        return any(haversine_m((s['lat'], s['lon']), (it['lat'], it['lon'])) < 500 for s in shrine_grid.near(it['lat'], it['lon']))
+
+    # 選定：種類ごとの枠 → 残りを優先度順
+    by_cat = defaultdict(list)
+    for it in uniq:
+        by_cat[it['cat']].append(it)
+    chosen, chosen_ids = [], set()
+    for cat, q in QUOTA.items():
+        for it in by_cat.get(cat, [])[:q]:
+            chosen.append(it)
+            chosen_ids.add(it['osm'])
+    rest = [it for it in uniq if it['osm'] not in chosen_ids]
+    for it in rest:
+        if len(chosen) >= args.target:
+            break
+        chosen.append(it)
+        chosen_ids.add(it['osm'])
+    chosen = chosen[:args.target]
+
+    # 都道府県ごとに偏りすぎないよう、最低30件は確保（入れ替え）
+    pref_count = Counter(it['pref'] for it in chosen)
+    for p in PREFS:
+        need = 30 - pref_count[p]
+        if need > 0:
+            extra = [it for it in uniq if it['pref'] == p and it['osm'] not in chosen_ids][:need]
+            chosen.sort(key=lambda x: x['prio'])
+            removed = 0
+            for e in extra:
+                for i, c in enumerate(chosen):
+                    if pref_count[c['pref']] > 200:
+                        pref_count[c['pref']] -= 1
+                        chosen_ids.discard(c['osm'])
+                        chosen.pop(i)
+                        removed += 1
+                        break
+                chosen.append(e)
+                chosen_ids.add(e['osm'])
+                pref_count[p] += 1
+            rep['pref_rebalanced'] += len(extra)
+
+    # 親子関係：大きな境内（多角形）の中にある小さな神社・寺院
+    polys = [it for it in chosen if it['area'] > 2000 and it['cat'] in ('神社', '寺院')]
+    pg = Grid()
+    for it in polys:
+        pg.add(it)
+    for it in chosen:
+        it['parent'] = None
+        if it['cat'] not in ('神社', '寺院', '祠', '巨木', '岩・磐座', '湧水'):
+            continue
+        best = None
+        for p in pg.near(it['lat'], it['lon']):
+            if p is it or p['area'] <= it['area']:
+                continue
+            radius = math.sqrt(p['area'] / math.pi)
+            if haversine_m((p['lat'], p['lon']), (it['lat'], it['lon'])) < radius * 0.8:
+                if not best or p['area'] < best['area']:
+                    best = p
+        if best:
+            it['parent'] = best['osm']
+            rep['children'] += 1
+
+    # 出力
+    chosen.sort(key=lambda x: (PREF_CODE[x['pref']], -x['prio']))
+    rows = []
+    cat_count, wish_count, pref_out = Counter(), Counter(), Counter()
+    for it in chosen:
+        t = it['tags']
+        obj, inferred = wishes_for(it['cat'], it['name'], t, it['cat'] == '山' and near_shrine(it))
+        nums = numbers_for(obj + inferred)
+        wiki = t.get('wikipedia:ja') or t.get('wikipedia') or ''
+        rows.append([
+            it['osm'], it['name'], it['cat'], PREF_CODE[it['pref']], it['muni'],
+            round(it['lat'], 5), round(it['lon'], 5),
+            '|'.join(obj), '|'.join(inferred), ''.join(str(n) for n in nums),
+            wiki, t.get('wikidata', ''), it['parent'] or '', round(it['prio']),
+        ])
+        cat_count[it['cat']] += 1
+        pref_out[it['pref']] += 1
+        for w in obj + inferred:
+            wish_count[w] += 1
+
+    now = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
+    header = ('/* 全国スポットデータ（自動生成：scripts/build_spots.py）\n'
+              ' * 出典：© OpenStreetMap contributors（ODbL 1.0）https://www.openstreetmap.org/copyright\n'
+              ' * 列：osm, 名称, 種類, 都道府県コード, 市区町村, 緯度, 経度, 体験・種類タグ, 名称から推定したご利益,\n'
+              ' *     数秘(暫定), Wikipedia, Wikidata, 親スポットのosm, 優先度\n */\n')
+    with open(os.path.join(ROOT, 'data', 'spots-osm.js'), 'w', encoding='utf-8') as f:
+        f.write(header)
+        f.write('var SPOTS_OSM_META = ' + json.dumps({'count': len(rows), 'built': now, 'extracted': args.extracted_at}, ensure_ascii=False) + ';\n')
+        f.write('var SPOTS_OSM = [\n')
+        f.write(',\n'.join(json.dumps(r, ensure_ascii=False, separators=(',', ':')) for r in rows))
+        f.write('\n];\nif (typeof module !== "undefined") module.exports = { SPOTS_OSM: SPOTS_OSM, SPOTS_OSM_META: SPOTS_OSM_META };\n')
+
+    manifest = {'count': len(rows), 'built': now, 'osm_extracted_at': args.extracted_at, 'license': 'ODbL 1.0 (© OpenStreetMap contributors)',
+                'by_category': dict(cat_count.most_common()), 'by_prefecture': {p: pref_out[p] for p in PREFS}}
+    with open(os.path.join(ROOT, 'data', 'manifest.json'), 'w', encoding='utf-8') as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=1)
+
+    lines = ['# 全国スポットデータ 検査レポート', '', '作成日：' + now + '　OSM抽出日時：' + (args.extracted_at or '不明'), '',
+             '## 件数', '', '| 項目 | 件数 |', '|---|---|']
+    for k, v in sorted(rep.items()):
+        lines.append('| %s | %s |' % (k, v))
+    lines += ['| 公開件数 | %d |' % len(rows), '', '## 種類別', '', '| 種類 | 件数 |', '|---|---|']
+    lines += ['| %s | %d |' % (k, v) for k, v in cat_count.most_common()]
+    lines += ['', '## タグ別（体験・種類・推定ご利益）', '', '| タグ | 件数 |', '|---|---|']
+    lines += ['| %s | %d |' % (k, v) for k, v in wish_count.most_common()]
+    lines += ['', '## 都道府県別', '', '| 都道府県 | 件数 |', '|---|---|']
+    lines += ['| %s | %d |' % (p, pref_out[p]) for p in PREFS]
+    with open(os.path.join(ROOT, 'docs', 'DATA_REPORT.md'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines) + '\n')
+    print(json.dumps({'count': len(rows), 'report': dict(rep), 'by_category': dict(cat_count)}, ensure_ascii=False, indent=1))
+
+
+if __name__ == '__main__':
+    main()
