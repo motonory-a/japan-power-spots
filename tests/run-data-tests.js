@@ -20,10 +20,16 @@ function test(name, fn) {
   catch (e) { fail++; console.log('  NG  ' + name + '\n      ' + e.message); }
 }
 
-const all = SpotData.mergeCurated(SPOTS_OSM.map(SpotData.fromRow), global.SPOTS);
+const core = SpotData.mergeCurated(SPOTS_OSM.map(SpotData.fromRow), global.SPOTS);
+const path = require('path');
+const extraRows = (SPOTS_OSM_META.extraParts || []).map((p) => require(path.join('..', p))).reduce((a, b) => a.concat(b), []);
+const all = core.concat(extraRows.map(SpotData.fromRow));
 
 console.log('全国データ');
-test('1万件前後（9,900件以上）', () => assert.ok(SPOTS_OSM.length >= 9900, String(SPOTS_OSM.length)));
+test('最初に読み込む中心データは1万件前後（9,900件以上）', () => assert.ok(SPOTS_OSM.length >= 9900, String(SPOTS_OSM.length)));
+test('追加分を含めて5万件前後（49,500件以上）', () => assert.ok(all.length >= 49500, String(all.length)));
+test('追加データは4ファイル', () => assert.strictEqual((SPOTS_OSM_META.extraParts || []).length, 4));
+test('メタ情報の合計件数と一致', () => assert.strictEqual(SPOTS_OSM_META.total, SPOTS_OSM.length + extraRows.length));
 test('IDの重複なし', () => assert.strictEqual(new Set(all.map((s) => s.id)).size, all.length));
 test('名前・座標・都道府県がそろっている', () => all.forEach((s) => {
   assert.ok(s.name && s.prefecture, s.id);
@@ -80,7 +86,7 @@ test('手入力の説明文が反映されている（明治神宮）', () => {
 });
 
 console.log('推薦の計算（1万件）');
-test('東京から、出かける日あり・願いありで1秒以内に計算できる', () => {
+test('東京から、出かける日あり・願いありで5万件を1秒以内に計算できる', () => {
   const K = require('../assets/js/kyusei.js');
   const t = Date.now();
   const boards = K.boardsFor('2026-11-04', K.birthStars('1974-04-15'));

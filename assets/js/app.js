@@ -184,7 +184,23 @@
     box.hidden = false;
   }
 
+  var extrasReady = false;
   function diagnose() {
+    if (!extrasReady && window.SpotData && SpotData.loadExtras) {
+      var btn = $('diagnose');
+      btn.disabled = true;
+      var label = btn.textContent;
+      btn.textContent = '全国のデータを読み込み中…';
+      var done = false;
+      var go = function () { if (done) return; done = true; btn.disabled = false; btn.textContent = label; runDiagnose(); };
+      SpotData.loadExtras().then(go);
+      setTimeout(go, 15000); // 読み込みが遅いときは、読めた分で診断する
+      return;
+    }
+    runDiagnose();
+  }
+
+  function runDiagnose() {
     var birthday = $('birthday').value;
     var home = $('home').value;
     var origin = OriginPicker.current();
@@ -346,10 +362,15 @@
     if (!searchResult.length) out.append(el('p', 'notice', '該当するスポットはありません。条件を変えてお試しください。'));
     else out.append(el('p', 'note list-note', '知名度の高い順に表示しています。地図には条件に合うすべてのスポットを表示します。'));
     renderMore();
-    SpotMap.showSpots(searchResult, !!(q || pref || cat || wish));
+    var filtered = !!(q || pref || cat || wish);
+    var onMap = filtered ? searchResult : searchResult.filter(function (s) { return s.tier !== 2; });
+    if (onMap.length > 20000) onMap = onMap.slice(0, 20000);
+    $('map-note').textContent = filtered ? (onMap.length < searchResult.length ? '地図には知名度の高い順に' + onMap.length.toLocaleString() + '件を表示しています。' : '')
+      : '地図には知名度の高い' + onMap.length.toLocaleString() + '件を表示しています。種類や地域で絞り込むと、すべてのスポットを表示します。';
+    SpotMap.showSpots(onMap, filtered);
   }
-  var searchTimer = null;
-  function searchLater() { clearTimeout(searchTimer); searchTimer = setTimeout(search, 250); }
+  var searchTimer = null, searchTouched = false;
+  function searchLater() { searchTouched = true; clearTimeout(searchTimer); searchTimer = setTimeout(search, 250); }
 
   /* ---------- 起動 ---------- */
   document.addEventListener('DOMContentLoaded', function () {
@@ -370,5 +391,22 @@
     });
     search();
     if (mapOk) window.addEventListener('resize', SpotMap.invalidate);
+    if (window.SpotData && SpotData.loadExtras && (window.SPOTS_OSM_META || {}).extraParts && SPOTS_OSM_META.extraParts.length) {
+      var total = SPOTS_OSM_META.total || SPOTS_ALL.length;
+      $('spot-total').textContent = '約' + (Math.round(total / 1000) * 1000).toLocaleString();
+      $('load-status').textContent = '（追加データを読み込み中…）';
+      SpotData.onExtraProgress(function (n, all, err) {
+        $('load-status').textContent = err ? '（一部のデータを読み込めませんでした）' : (n < all ? '（追加データを読み込み中… ' + n + '/' + all + '）' : '');
+      });
+      setTimeout(function () {
+        SpotData.loadExtras().then(function () {
+          extrasReady = true;
+          $('spot-total').textContent = SPOTS_ALL.length.toLocaleString();
+          search();
+        });
+      }, 300);
+    } else {
+      extrasReady = true;
+    }
   });
 })();

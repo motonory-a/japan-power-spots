@@ -83,12 +83,51 @@
 
   function build() {
     var rows = root.SPOTS_OSM || [];
-    var list = rows.map(fromRow);
+    var list = rows.map(function (r) { var s = fromRow(r); s.tier = 1; return s; });
     if (!list.length) return (root.SPOTS || []).slice(); // 全国データがないときはデモデータ
     return mergeCurated(list, root.SPOTS || []);
   }
 
-  var api = { build: build, fromRow: fromRow, mergeCurated: mergeCurated, wikiUrl: wikiUrl, osmUrl: osmUrl, CAT_LABEL: CAT_LABEL };
+  /* ---------- 追加データ（後から読み込む） ---------- */
+  var listeners = [], loadedParts = 0, extraPromise = null;
+
+  // 追加データのファイルから呼ばれる。ALL_SPOTS に同じ配列のまま追加する
+  function addRows(rows) {
+    var all = root.ALL_SPOTS;
+    var seen = root.__spotIds || (root.__spotIds = new Set(all.map(function (s) { return s.id; })));
+    rows.forEach(function (r) {
+      var s = fromRow(r);
+      if (seen.has(s.id)) return;
+      s.tier = 2;
+      seen.add(s.id);
+      all.push(s);
+    });
+  }
+
+  function onExtraProgress(fn) { listeners.push(fn); }
+
+  // 追加データを順番に読み込む。すべて終わると解決する Promise を返す
+  function loadExtras() {
+    if (extraPromise) return extraPromise;
+    var parts = ((root.SPOTS_OSM_META || {}).extraParts) || [];
+    extraPromise = new Promise(function (resolve) {
+      var i = 0;
+      function next() {
+        if (i >= parts.length) { resolve({ loaded: loadedParts, total: parts.length }); return; }
+        var sc = document.createElement('script');
+        sc.src = parts[i++];
+        sc.async = true;
+        sc.onload = function () { loadedParts++; listeners.forEach(function (f) { f(loadedParts, parts.length); }); next(); };
+        sc.onerror = function () { listeners.forEach(function (f) { f(loadedParts, parts.length, true); }); next(); };
+        document.body.appendChild(sc);
+      }
+      next();
+    });
+    return extraPromise;
+  }
+
+  var api = { build: build, fromRow: fromRow, mergeCurated: mergeCurated, wikiUrl: wikiUrl, osmUrl: osmUrl, CAT_LABEL: CAT_LABEL,
+    addRows: addRows, loadExtras: loadExtras, onExtraProgress: onExtraProgress };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else { root.SpotData = api; root.ALL_SPOTS = build(); }
 })(this);

@@ -38,6 +38,12 @@ QUOTA = {
     '巨木': 230, '岩・磐座': 100, '洞窟': 100, '絶景': 200, '湖': 80, '祠': 0,
 }
 
+# 合計（--total）での種類ごとの枠（上限）
+QUOTA_TOTAL = {
+    '神社': 21500, '寺院': 17000, '滝': 1300, '山': 3500, '湧水': 700, '温泉': 220,
+    '巨木': 2700, '岩・磐座': 750, '洞窟': 200, '絶景': 1200, '湖': 400, '祠': 1000,
+}
+
 # 名称から推定するご利益（祭神・信仰の一般的なご利益）
 NAME_WISHES = [
     (r'稲荷', ['商売繁盛', '金運']),
@@ -198,7 +204,9 @@ class Grid:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('candidates')
-    ap.add_argument('--target', type=int, default=10000)
+    ap.add_argument('--target', type=int, default=10000, help='中心データ（最初に読み込む）の件数')
+    ap.add_argument('--total', type=int, default=0, help='追加分を含めた合計件数（0なら追加なし）')
+    ap.add_argument('--extra-parts', type=int, default=4)
     ap.add_argument('--extracted-at', default='')
     args = ap.parse_args()
 
@@ -317,6 +325,35 @@ def main():
                 pref_count[p] += 1
             rep['pref_rebalanced'] += len(extra)
 
+    for it in chosen:
+        it['tier'] = 1
+
+    # 追加分（2段目）：中心に入らなかったものから、種類ごとの枠まで優先度順に
+    if args.total > len(chosen):
+        core_count = Counter(it['cat'] for it in chosen)
+        extra = []
+        remain = [it for it in uniq if it['osm'] not in chosen_ids]
+        rem_by_cat = defaultdict(list)
+        for it in remain:
+            rem_by_cat[it['cat']].append(it)
+        for cat, q in QUOTA_TOTAL.items():
+            need = max(0, q - core_count[cat])
+            extra += rem_by_cat.get(cat, [])[:need]
+        extra.sort(key=lambda x: -x['prio'])
+        extra = extra[:args.total - len(chosen)]
+        if len(chosen) + len(extra) < args.total:
+            taken = set(it['osm'] for it in extra)
+            for it in remain:
+                if len(chosen) + len(extra) >= args.total:
+                    break
+                if it['osm'] not in taken and it['cat'] in FILL_CATS:
+                    extra.append(it)
+        for it in extra:
+            it['tier'] = 2
+            chosen_ids.add(it['osm'])
+        rep['extra_selected'] = len(extra)
+        chosen = chosen + extra
+
     # 親子関係：大きな境内（多角形）の中にある小さな神社・寺院
     polys = [it for it in chosen if it['area'] > 2000 and it['cat'] in ('神社', '寺院')]
     pg = Grid()
@@ -371,14 +408,35 @@ def main():
               ' * 出典：© OpenStreetMap contributors（ODbL 1.0）https://www.openstreetmap.org/copyright\n'
               ' * 列：osm, 名称, 種類, 都道府県コード, 市区町村, 緯度, 経度, 体験・種類タグ, 名称から推定したご利益,\n'
               ' *     数秘(暫定), Wikipedia, Wikidata, 親スポットのosm, 優先度\n */\n')
+    core_rows = [r for r, it in zip(rows, chosen) if it['tier'] == 1]
+    extra_rows = [r for r, it in zip(rows, chosen) if it['tier'] == 2]
+    parts = []
+    if extra_rows:
+        n = args.extra_parts
+        size = (len(extra_rows) + n - 1) // n
+        parts = [extra_rows[i:i + size] for i in range(0, len(extra_rows), size)]
+    meta = {'count': len(core_rows), 'total': len(rows), 'built': now, 'extracted': args.extracted_at,
+            'extraParts': ['data/extra/spots-extra-%d.js' % (i + 1) for i in range(len(parts))]}
     with open(os.path.join(ROOT, 'data', 'spots-osm.js'), 'w', encoding='utf-8') as f:
         f.write(header)
-        f.write('var SPOTS_OSM_META = ' + json.dumps({'count': len(rows), 'built': now, 'extracted': args.extracted_at}, ensure_ascii=False) + ';\n')
+        f.write('var SPOTS_OSM_META = ' + json.dumps(meta, ensure_ascii=False) + ';\n')
         f.write('var SPOTS_OSM = [\n')
-        f.write(',\n'.join(json.dumps(r, ensure_ascii=False, separators=(',', ':')) for r in rows))
+        f.write(',\n'.join(json.dumps(r, ensure_ascii=False, separators=(',', ':')) for r in core_rows))
         f.write('\n];\nif (typeof module !== "undefined") module.exports = { SPOTS_OSM: SPOTS_OSM, SPOTS_OSM_META: SPOTS_OSM_META };\n')
+    extra_dir = os.path.join(ROOT, 'data', 'extra')
+    os.makedirs(extra_dir, exist_ok=True)
+    for fn in os.listdir(extra_dir):
+        if fn.startswith('spots-extra-'):
+            os.remove(os.path.join(extra_dir, fn))
+    for i, part in enumerate(parts):
+        with open(os.path.join(extra_dir, 'spots-extra-%d.js' % (i + 1)), 'w', encoding='utf-8') as f:
+            f.write('/* 全国スポットデータ 追加分 %d/%d（自動生成）© OpenStreetMap contributors（ODbL 1.0）。列は data/spots-osm.js と同じ */\n' % (i + 1, len(parts)))
+            f.write('(function (rows) {\n  if (typeof module !== "undefined" && module.exports) module.exports = rows;\n'
+                    '  else if (typeof window !== "undefined" && window.SpotData) window.SpotData.addRows(rows);\n})([\n')
+            f.write(',\n'.join(json.dumps(r, ensure_ascii=False, separators=(',', ':')) for r in part))
+            f.write('\n]);\n')
 
-    manifest = {'count': len(rows), 'built': now, 'osm_extracted_at': args.extracted_at, 'license': 'ODbL 1.0 (© OpenStreetMap contributors)',
+    manifest = {'count': len(rows), 'core': len(core_rows), 'extra': len(extra_rows), 'built': now, 'osm_extracted_at': args.extracted_at, 'license': 'ODbL 1.0 (© OpenStreetMap contributors)',
                 'by_category': dict(cat_count.most_common()), 'by_prefecture': {p: pref_out[p] for p in PREFS}}
     with open(os.path.join(ROOT, 'data', 'manifest.json'), 'w', encoding='utf-8') as f:
         json.dump(manifest, f, ensure_ascii=False, indent=1)
@@ -387,7 +445,7 @@ def main():
              '## 件数', '', '| 項目 | 件数 |', '|---|---|']
     for k, v in sorted(rep.items()):
         lines.append('| %s | %s |' % (k, v))
-    lines += ['| 公開件数 | %d |' % len(rows), '', '## 種類別', '', '| 種類 | 件数 |', '|---|---|']
+    lines += ['| 公開件数（合計） | %d |' % len(rows), '| うち最初に読み込む中心データ | %d |' % len(core_rows), '| うち後から読み込む追加データ | %d |' % len(extra_rows), '', '## 種類別', '', '| 種類 | 件数 |', '|---|---|']
     lines += ['| %s | %d |' % (k, v) for k, v in cat_count.most_common()]
     lines += ['', '## タグ別（体験・種類・推定ご利益）', '', '| タグ | 件数 |', '|---|---|']
     lines += ['| %s | %d |' % (k, v) for k, v in wish_count.most_common()]

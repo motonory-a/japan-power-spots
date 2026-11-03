@@ -16,7 +16,7 @@
 
 <main>
   <div class="trial-banner" role="note">
-    <strong>試作版です。</strong>全国<span id="spot-total">8</span>件のスポットを掲載しています。OpenStreetMapのデータをもとにしており、内容は順次確認中です。ご利益は名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。
+    <strong>試作版です。</strong>全国<span id="spot-total">8</span>件のスポットを掲載しています<span id="load-status"></span>。OpenStreetMapのデータをもとにしており、内容は順次確認中です。ご利益は名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。
   </div>
 
   <section class="panel" aria-labelledby="h-diagnose">
@@ -129,6 +129,7 @@
     <h2 id="h-map">スポットマップ</h2>
     <div id="legend" class="legend"><span class="legend-item"><span class="legend-dot legend-home"></span>出発地</span></div>
     <div id="map" role="region" aria-label="スポットの地図"></div>
+    <p id="map-note" class="note"></p>
     <p class="note">番号つきの印は診断結果の順位です。地図をスクロールで拡大縮小するには、地図を一度クリックするか「＋」「－」ボタンを使ってください。</p>
   </section>
 
