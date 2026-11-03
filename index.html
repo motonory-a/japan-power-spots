@@ -5,7 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>日本全国パワースポット巡り</title>
 <meta name="theme-color" content="#4B2D7E">
-<meta name="description" content="生年月日とお住まいの都道府県から、あなたに合いそうなパワースポットを探す旅のサイト（試作版）。">
+<meta name="description" content="次のお休み、運命の聖地へ。生年月日とお住まいから、九星気学と数秘であなたに合う全国のパワースポットを探せるサイトです。">
+<link rel="canonical" href="https://motonory-a.github.io/japan-power-spots/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="日本全国パワースポット巡り">
+<meta property="og:title" content="日本全国パワースポット巡り｜次のお休み、運命の聖地へ。">
+<meta property="og:description" content="生年月日とお住まいから、あなたにぴったりの聖地をご案内。今日の幸せの扉、日替わりの聖地、開運スタンプ帳も。">
+<meta property="og:url" content="https://motonory-a.github.io/japan-power-spots/">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/hero-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta property="og:image:alt" content="日本全国パワースポット巡り　生年月日とお住まいから、あなたにぴったりの聖地をご案内">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +45,8 @@
     全国<span id="spot-total">8</span>件の神社・寺院・滝・霊山・巨樹を掲載しています<span id="load-status"></span>。試作版のため、内容は順次確認中です。ご利益は祭神・本尊や名称から一般的なものを推定しています。
   </p>
 
-  <!-- 03-2 今日の幸せの扉（Phase 3で中身を入れるまで非表示） -->
-  <section id="daily-door" class="panel panel-daily" aria-labelledby="h-door" hidden>
+  <!-- 03-2 今日の幸せの扉（中身は assets/js/daily.js で作る） -->
+  <section id="daily-door" class="panel panel-door" aria-labelledby="h-door" hidden>
     <h2 id="h-door">今日の幸せの扉</h2>
   </section>
 
@@ -159,17 +171,18 @@
       <p class="line-text">イベント情報やお得な情報を、LINEでお届けします。</p>
       <a class="btn-line" href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener noreferrer">LINEで友だち追加する</a>
     </aside>
+    <div id="share-result" class="share-slot"></div>
     <p class="note">写真は Wikimedia Commons から表示しています（撮影者・ライセンスは各写真の下に記載）。数秘術・九星気学は文化的・占術的な考え方のひとつで、スポットのご利益や効果を保証するものではありません。表示している方角は、出発地から見た真北基準の向きで、東西南北30°・四隅60°で区切っています。出かける日の吉凶は九星気学（日盤は冬至・夏至にいちばん近い甲子日で切り替える方式）による判定で、流派によって結果が異なることがあります。所要時間は目安です。</p>
   </section>
 
-  <!-- 03-5 今日の運命の聖地と週末のお出かけ提案（Phase 3で中身を入れるまで非表示） -->
+  <!-- 03-5 今日の運命の聖地と週末のお出かけ提案（assets/js/daily.js） -->
   <section id="daily-spot" class="panel" aria-labelledby="h-daily-spot" hidden>
     <h2 id="h-daily-spot">今日の運命の聖地</h2>
   </section>
 
-  <!-- 03-6 開運スタンプ帳・行きたい聖地コレクション（Phase 3で中身を入れるまで非表示） -->
+  <!-- 03-6 開運スタンプ帳・聖地コレクション（assets/js/daily.js・collection.js） -->
   <section id="collection" class="panel" aria-labelledby="h-collection" hidden>
-    <h2 id="h-collection">開運スタンプ帳</h2>
+    <h2 id="h-collection">開運スタンプ帳・聖地コレクション</h2>
   </section>
 
   <section class="panel" aria-labelledby="h-search">
@@ -223,6 +236,12 @@
     <p class="note">投稿フォーム（GitHub）が開きます。投稿にはGitHubのアカウント（無料）が必要で、投稿内容は公開されます。個人の住所や連絡先は書かないでください。情報の誤りは、各スポットの「情報の誤りを報告」から送れます。</p>
   </section>
 
+  <section id="share-panel" class="panel panel-share" aria-labelledby="h-share">
+    <h2 id="h-share">お友だちに紹介する</h2>
+    <p class="lead-small">このサイトが気に入ったら、大切な人にも教えてあげてください。</p>
+    <div id="share-site" class="share-slot"></div>
+  </section>
+
   <section class="panel" aria-labelledby="h-links">
     <h2 id="h-links">関連サイト</h2>
     <div class="ad-banner">
@@ -254,6 +273,10 @@
 <script src="assets/js/origin.js"></script>
 <script src="assets/js/profiles.js"></script>
 <script src="assets/js/photos.js"></script>
+<script src="data/daily-content.js"></script>
+<script src="assets/js/collection.js"></script>
+<script src="assets/js/share.js"></script>
+<script src="assets/js/daily.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

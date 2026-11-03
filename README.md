@@ -47,6 +47,11 @@ tests/run-kyusei-tests.js 九星気学のテスト（国立天文台・実在の
 tests/run-jst-tests.js  日本時間の日付処理のテスト
 tests/e2e/              画面の自動テスト（ブラウザで操作して確認）
 assets/js/jst-date.js   日本時間の「今日」を求める道具
+assets/js/daily.js      今日の幸せの扉・今日の運命の聖地・スタンプ帳
+assets/js/collection.js 行きたい／行った／お気に入りの保存（端末内）
+assets/js/share.js      友だちに紹介するボタン
+data/daily-content.js   日替わりのメッセージと開運ミッション（文章を足すときは最後に追加）
+tests/run-daily-tests.js 日替わり・コレクションのテスト
 assets/img/             メイン画像・バナー（WebPとJPEG）
 docs/                   報告書・更新手順
 ```
@@ -62,6 +67,7 @@ node tests/run-tests.js
 node tests/run-kyusei-tests.js
 node tests/run-data-tests.js
 node tests/run-jst-tests.js
+node tests/run-daily-tests.js
 ```
 
 画面のテスト（Playwright を使います）：
@@ -75,6 +81,7 @@ npm test
 
 ## 更新履歴
 
+- v3.1（2026-11-04）仕様書v2.0 Phase 3：今日の幸せの扉、今日の運命の聖地と週末のお出かけ提案、開運ミッション、行きたい／行った／お気に入りと都道府県スタンプ（端末内保存）、友だちに紹介するボタン（リンクのコピー・LINE・X・Facebook）、OGP
 - v3.0（2026-11-04）仕様書v2.0 Phase 2：メイン画像と新しいトップコピー、アイボリー・桜色・シャンパンゴールド・深紫の配色、「願いごとから探す」8分類、使い方、日本時間の日付処理、公式LINEの案内、魂の系統鑑定バナー（広告表示）、画面テストをリポジトリへ
 - v2.7（2026-11-03）デザイン刷新（藍と金・明朝の見出し・方位盤のヒーロー・入力を4段階に）、生年月日を年・月・日の選択式に（和暦つき）
 - v2.6（2026-11-03）環境省の巨樹・巨木林調査から巨木 約5,300件を追加（全国約9.6万件）、載っていない場所・誤りの投稿フォーム

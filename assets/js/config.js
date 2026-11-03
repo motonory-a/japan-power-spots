@@ -3,7 +3,7 @@
  * 重み（点数配分）や交通手段ごとの距離の目安はここだけ変更すれば反映されます。
  */
 var APP_CONFIG = {
-  version: '3.0.1',
+  version: '3.1.0',
 
   // 推薦スコアの配分（合計100点満点になるようにしています）
   weights: {
@@ -60,6 +60,10 @@ var APP_CONFIG = {
     add: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-add.yml',
     fix: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-fix.yml'
   },
+
+  // 公開しているURL（シェアで送るリンク）
+  siteUrl: 'https://motonory-a.github.io/japan-power-spots/',
+  shareText: '次のお休み、運命の聖地へ。生年月日とお住まいから、あなたにぴったりの聖地を探せるサイト『日本全国パワースポット巡り』',
 
   // トップの「願いごとから探す」（仕様書v2.0の8分類）。
   // 押すと、診断フォームの「三 願い・体験」で wishes の項目が選ばれた状態になる。

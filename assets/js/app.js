@@ -71,6 +71,7 @@
     var objTags = s.wishes.filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) card.append(el('p', 'small', '特徴：' + objTags.join('・')));
     if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益（' + (s.deities && s.deities.length ? '祭神・名称' : '名称') + 'からの推定）：' + s.wishesInferred.join('・')));
+    if (window.Collection) card.append(Collection.buttons(s));
     if (cfg.reportForms && cfg.reportForms.fix) {
       var fix = el('a', 'report-link', '情報の誤りを報告');
       fix.href = cfg.reportForms.fix + (cfg.reportForms.fix.indexOf('github.com') !== -1
@@ -566,6 +567,11 @@
     OriginPicker.init({ config: cfg, prefLookup: function () { return prefByName($('home').value); } });
     $('home').addEventListener('change', OriginPicker.prefChanged);
     if (window.Profiles) Profiles.init();
+    if (window.Share) {
+      $('share-site').append(Share.box({ text: cfg.shareText }));
+      $('share-result').append(Share.box({ heading: '診断が楽しかったら、お友だちにも', text: cfg.shareText }));
+    }
+    if (window.Daily) Daily.init({ spots: SPOTS_ALL.slice(), baseCard: baseCard, actions: actions, goMap: goMap });
     $('diagnose-form').addEventListener('submit', function (e) { e.preventDefault(); diagnose(); });
     $('keyword').addEventListener('input', searchLater);
     $('pref').addEventListener('change', search);

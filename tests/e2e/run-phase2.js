@@ -60,8 +60,8 @@ async function route(page) {
     check('並び順：幸せの扉 → 願いごと → 診断 → 今日の聖地 → スタンプ帳 → 検索',
       idx('daily-door') < idx('wish-entry') && idx('wish-entry') < idx('h-diagnose') && idx('h-diagnose') < idx('daily-spot') &&
       idx('daily-spot') < idx('collection') && idx('collection') < idx('h-search'), order.join(' / '));
-    const hiddenOk = await page.$$eval('#daily-door, #daily-spot, #collection', (ss) => ss.every((s) => s.hidden && s.offsetHeight === 0));
-    check('Phase 3 の枠は中身が入るまで表示しない', hiddenOk);
+    const shownOk = await page.$$eval('#daily-door, #daily-spot, #collection', (ss) => ss.every((s) => !s.hidden && s.offsetHeight > 0));
+    check('幸せの扉・今日の聖地・スタンプ帳が表示される', shownOk);
 
     // 3. 願いごとから探す
     check('願いごとのタイルが8つ', (await page.$$('.wish-tile')).length === 8);
