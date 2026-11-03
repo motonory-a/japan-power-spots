@@ -1,142 +1,26 @@
-
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>日本全国パワースポット巡り！</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#f7f5ef;color:#24372e;font-family:"Yu Gothic",Meiryo,sans-serif}
-header{background:linear-gradient(120deg,#163c32,#39765c);color:white;text-align:center;padding:48px 16px}
-h1{font-size:clamp(25px,5vw,42px);margin:0 0 12px}
-header p{margin:0;color:#e4efe8}
-main{max-width:1100px;margin:auto;padding:24px 16px}
-.panel{background:white;border:1px solid #e5e7e0;border-radius:16px;padding:22px;margin-bottom:20px}
-h2{margin-top:0;font-size:21px}
-.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-input,select{width:100%;padding:12px;border:1px solid #ccd6cd;border-radius:8px;font-size:16px}
-label{display:block;font-size:14px;font-weight:bold;margin-bottom:6px}
-#map{height:430px;border-radius:12px;z-index:0}
-#results{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.spot{padding:17px;border:1px solid #e2e8e2;border-radius:12px;background:#fff}
-.spot h3{margin:0 0 8px}
-.tag{display:inline-block;background:#e5f0e8;color:#24533a;border-radius:20px;padding:4px 10px;font-size:12px}
-.spot p{font-size:14px;line-height:1.7}
-a{color:#246b4d}
-footer{text-align:center;padding:24px;color:#66766b;font-size:13px}
-.note{font-size:13px;color:#69766c}
-</style>
-</head>
-<body>
-<header>
-<h1>⛩ 日本全国パワースポット巡り！</h1>
-<p>あなたの心に響く、日本の聖地を見つける旅。</p>
-</header>
-<main>
-<section class="panel">
-<h2>聖地を探す</h2>
-<div class="filters">
-<div><label for="keyword">キーワード</label><input id="keyword" placeholder="神社・滝・地域名など"></div>
-<div><label for="pref">都道府県</label><select id="pref"><option value="">全国すべて</option></select></div>
-<div><label for="category">スポットの種類</label>
-<select id="category">
-<option value="">すべて</option>
-<option value="神社">神社</option>
-<option value="寺院">寺院</option>
-<option value="滝">滝</option>
-<option value="山">山</option>
-<option value="自然">自然</option>
-</select></div>
-</div>
-<p class="note">現在は機能確認用のサンプル地点を表示しています。全国データは今後追加します。</p>
-</section>
-<section class="panel">
-<h2>全国パワースポットマップ</h2>
-<div id="map"></div>
-</section>
-<section class="panel">
-<h2>検索結果 <span id="count"></span></h2>
-<div id="results"></div>
-</section>
-<section class="panel">
-<h2>魂の系統鑑定</h2>
-<p>自分の魂の系統も知りたい方はこちら。</p>
-<a href="https://motonory-a.github.io/my-first-project/" target="_blank" rel="noopener">魂の系統鑑定サイトを開く</a>
-</section>
-</main>
-<footer>日本全国パワースポット巡り！｜試作版</footer>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-const prefectures=["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県","静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県","鳥取県","島根県","岡山県","広島県","山口県","徳島県","香川県","愛媛県","高知県","福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"];
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>日本全国パワースポット巡り！</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><style>
+*{box-sizing:border-box}body{margin:0;background:#f6f5ef;color:#203b32;font-family:Meiryo,"Yu Gothic",sans-serif}header{background:linear-gradient(115deg,#163b32,#39765d);color:white;text-align:center;padding:43px 16px}h1{font-size:clamp(24px,4vw,40px);margin:0 0 12px}header p{margin:0;color:#e3eee7}main{max-width:1050px;margin:auto;padding:20px 14px}.panel{background:white;border:1px solid #e1e7df;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px #163b3208}h2{font-size:21px;margin:0 0 16px}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}label{display:block;font-weight:bold;font-size:14px;margin-bottom:6px}input,select{width:100%;font-size:16px;padding:12px;border:1px solid #bac9bd;border-radius:9px;background:#fff}button{border:0;background:#22684b;color:white;border-radius:10px;padding:13px 24px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:17px}button:hover{background:#17513a}.note{color:#64766c;font-size:13px;line-height:1.7}.summary{background:#eef5ee;border-radius:12px;padding:16px;margin-bottom:15px;line-height:1.7}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{border:1px solid #e2e8e2;border-radius:13px;padding:17px}.card h3{margin:0 0 9px}.card p{font-size:14px;line-height:1.7}.tag{display:inline-block;border-radius:20px;padding:4px 10px;background:#e4efe7;color:#24543b;font-size:12px}.score{font-size:13px;font-weight:bold;color:#22684b}a{color:#1c6547}#map{height:410px;border-radius:12px}footer{text-align:center;padding:22px;color:#6b7a70;font-size:12px}[hidden]{display:none!important}
+</style></head><body><header><h1>⛩ 日本全国パワースポット巡り！</h1><p>生年月日とお住まいから、あなたに響く聖地を探す旅。</p></header><main><section class="panel"><h2>あなたに合うパワースポットを探す</h2><div class="fields"><div><label for="birthday">生年月日</label><input type="date" id="birthday" required></div><div><label for="home">現在お住まいの都道府県</label><select id="home"><option value="">選択してください</option></select></div></div><button id="diagnose">おすすめスポットを診断する</button><p class="note">住所の番地は不要です。生年月日と都道府県はこのページ内の計算だけに使用し、サーバーへ送信・保存しません。都道府県庁付近を出発地点の目安とするため、距離は概算です。</p></section><section id="diagnosis" class="panel" hidden><h2>あなたへのおすすめ</h2><div id="summary" class="summary"></div><div id="recommended" class="cards"></div><p class="note">数秘術は文化的・占術的な解釈であり、効果を保証するものではありません。吉方位や交通時間の判定ではありません。現在は8件のサンプルデータから選んでいます。</p></section><section class="panel"><h2>全国スポット検索</h2><div class="fields"><div><label for="keyword">キーワード</label><input id="keyword" placeholder="名称・地域・特徴"></div><div><label for="pref">都道府県</label><select id="pref"><option value="">全国すべて</option></select></div><div><label for="category">種類</label><select id="category"><option value="">すべて</option><option>神社</option><option>寺院</option><option>滝</option><option>山</option></select></div></div><p class="note">現在は8件のサンプル地点です。全国データは今後追加します。</p></section><section class="panel"><h2>スポットマップ</h2><div id="map"></div></section><section class="panel"><h2>検索結果 <span id="count"></span></h2><div id="results" class="cards"></div></section><section class="panel"><h2>魂の系統鑑定</h2><a href="https://motonory-a.github.io/my-first-project/" target="_blank" rel="noopener noreferrer">魂の系統鑑定サイトを開く</a></section></main><footer>日本全国パワースポット巡り！｜診断機能・試作版</footer><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+const prefectures=[['北海道',43.064,141.347],['青森県',40.825,140.741],['岩手県',39.704,141.153],['宮城県',38.269,140.872],['秋田県',39.718,140.103],['山形県',38.240,140.363],['福島県',37.750,140.468],['茨城県',36.342,140.447],['栃木県',36.566,139.884],['群馬県',36.391,139.060],['埼玉県',35.857,139.649],['千葉県',35.605,140.123],['東京都',35.690,139.692],['神奈川県',35.448,139.643],['新潟県',37.902,139.023],['富山県',36.695,137.211],['石川県',36.595,136.626],['福井県',36.065,136.222],['山梨県',35.664,138.568],['長野県',36.651,138.181],['岐阜県',35.391,136.722],['静岡県',34.977,138.383],['愛知県',35.180,136.907],['三重県',34.730,136.509],['滋賀県',35.005,135.868],['京都府',35.021,135.756],['大阪府',34.686,135.520],['兵庫県',34.691,135.183],['奈良県',34.685,135.833],['和歌山県',34.226,135.167],['鳥取県',35.503,134.238],['島根県',35.472,133.051],['岡山県',34.662,133.935],['広島県',34.396,132.460],['山口県',34.186,131.471],['徳島県',34.066,134.560],['香川県',34.340,134.043],['愛媛県',33.842,132.766],['高知県',33.560,133.531],['福岡県',33.607,130.418],['佐賀県',33.250,130.299],['長崎県',32.750,129.868],['熊本県',32.790,130.742],['大分県',33.238,131.613],['宮崎県',31.911,131.424],['鹿児島県',31.560,130.558],['沖縄県',26.212,127.681]];
 const spots=[
-{name:"明治神宮",pref:"東京都",category:"神社",lat:35.6764,lon:139.6993,description:"都心に広がる鎮守の森に囲まれた神社。"},
-{name:"鹿島神宮",pref:"茨城県",category:"神社",lat:35.9689,lon:140.6312,description:"武甕槌大神を祀る歴史ある神社。"},
-{name:"伊勢神宮 内宮",pref:"三重県",category:"神社",lat:34.4550,lon:136.7258,description:"天照大御神を祀る皇大神宮。"},
-{name:"出雲大社",pref:"島根県",category:"神社",lat:35.4020,lon:132.6855,description:"大国主大神を祀る神社。"},
-{name:"熊野那智大社",pref:"和歌山県",category:"神社",lat:33.6686,lon:135.8902,description:"熊野三山の一社。"},
-{name:"那智の滝",pref:"和歌山県",category:"滝",lat:33.6752,lon:135.8875,description:"那智山にある大きな滝。"},
-{name:"高野山 金剛峯寺",pref:"和歌山県",category:"寺院",lat:34.2130,lon:135.5844,description:"高野山真言宗の総本山。"},
-{name:"富士山",pref:"静岡県",category:"山",lat:35.3606,lon:138.7274,description:"古くから信仰の対象となってきた山。"}
+{name:'明治神宮',pref:'東京都',category:'神社',lat:35.6764,lon:139.6993,description:'都心に広がる鎮守の森に囲まれた神社。',themes:['静寂','自然','再出発'],numbers:[1,4,7]},
+{name:'鹿島神宮',pref:'茨城県',category:'神社',lat:35.9689,lon:140.6312,description:'武甕槌大神を祀る歴史ある神社。',themes:['決断','挑戦','歴史'],numbers:[1,8,9]},
+{name:'伊勢神宮 内宮',pref:'三重県',category:'神社',lat:34.4550,lon:136.7258,description:'天照大御神を祀る皇大神宮。',themes:['感謝','再出発','伝統'],numbers:[1,3,6]},
+{name:'出雲大社',pref:'島根県',category:'神社',lat:35.4020,lon:132.6855,description:'大国主大神を祀る神社。',themes:['ご縁','交流','伝統'],numbers:[2,6,9]},
+{name:'熊野那智大社',pref:'和歌山県',category:'神社',lat:33.6686,lon:135.8902,description:'熊野三山の一社。',themes:['巡礼','浄化','自然'],numbers:[3,7,9]},
+{name:'那智の滝',pref:'和歌山県',category:'滝',lat:33.6752,lon:135.8875,description:'那智山にある大きな滝。',themes:['水','自然','浄化'],numbers:[2,5,7]},
+{name:'高野山 金剛峯寺',pref:'和歌山県',category:'寺院',lat:34.2130,lon:135.5844,description:'高野山真言宗の総本山。',themes:['内省','学び','歴史'],numbers:[4,7,9]},
+{name:'富士山',pref:'静岡県',category:'山',lat:35.3606,lon:138.7274,description:'古くから信仰の対象となってきた山。',themes:['挑戦','自然','展望'],numbers:[1,5,8]}
 ];
-const prefSelect=document.getElementById("pref");
-prefectures.forEach(p=>{
-const option=document.createElement("option");
-option.value=p;option.textContent=p;prefSelect.appendChild(option);
-});
-const map=L.map("map").setView([36.4,138],5);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
-attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-maxZoom:18
-}).addTo(map);
-const markers=L.layerGroup().addTo(map);
-function render(){
-const keyword=document.getElementById("keyword").value.trim().toLowerCase();
-const pref=prefSelect.value;
-const category=document.getElementById("category").value;
-const filtered=spots.filter(s=>
-(!pref||s.pref===pref)&&
-(!category||s.category===category)&&
-(!keyword||(s.name+s.pref+s.description).toLowerCase().includes(keyword))
-);
-markers.clearLayers();
-const results=document.getElementById("results");
-results.replaceChildren();
-document.getElementById("count").textContent="("+filtered.length+"件)";
-filtered.forEach(s=>{
-const marker=L.marker([s.lat,s.lon]).addTo(markers);
-marker.bindPopup(s.name);
-const card=document.createElement("article");
-card.className="spot";
-const title=document.createElement("h3");
-title.textContent=s.name;
-const tag=document.createElement("span");
-tag.className="tag";
-tag.textContent=s.category+"・"+s.pref;
-const description=document.createElement("p");
-description.textContent=s.description;
-const link=document.createElement("a");
-link.href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.name+" "+s.pref);
-link.target="_blank";link.rel="noopener";
-link.textContent="地図で場所を確認";
-card.append(title,tag,description,link);
-results.appendChild(card);
-});
-if(filtered.length){
-const bounds=L.latLngBounds(filtered.map(s=>[s.lat,s.lon]));
-map.fitBounds(bounds.pad(.25),{maxZoom:12});
-}else{
-const empty=document.createElement("p");
-empty.textContent="該当するスポットはありません。";
-results.appendChild(empty);
-map.setView([36.4,138],5);
-}
-}
-["keyword","pref","category"].forEach(id=>{
-document.getElementById(id).addEventListener(id==="keyword"?"input":"change",render);
-});
-render();
-</script>
-</body>
-</html>
+for(const [name] of prefectures){for(const id of ['home','pref']){const opt=document.createElement('option');opt.value=name;opt.textContent=name;document.getElementById(id).append(opt)}}
+const map=L.map('map').setView([36.4,138],5);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:18}).addTo(map);const markers=L.layerGroup().addTo(map);
+function distance(a,b,c,d){const r=Math.PI/180,x=(c-a)*r,y=(d-b)*r,z=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;return 6371*2*Math.atan2(Math.sqrt(z),Math.sqrt(1-z))}
+function digitSum(n){return String(n).split('').reduce((a,c)=>a+Number(c),0)}
+function lifePath(date){let n=digitSum(date.replaceAll('-',''));while(n>9)n=digitSum(n);return n}
+const interpretations={1:'新しい一歩・挑戦',2:'調和・ご縁',3:'表現・創造',4:'安定・内省',5:'変化・探究',6:'思いやり・交流',7:'探究・静寂',8:'実行力・目標',9:'感謝・広い視野'};
+function card(s,extra=''){const el=document.createElement('article');el.className='card';const h=document.createElement('h3');h.textContent=s.name;const tag=document.createElement('span');tag.className='tag';tag.textContent=s.pref+'・'+s.category;const p=document.createElement('p');p.textContent=s.description;el.append(h,tag,p);if(extra){const info=document.createElement('p');info.textContent=extra;el.append(info)}const a=document.createElement('a');a.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.name+' '+s.pref);a.target='_blank';a.rel='noopener noreferrer';a.textContent='地図で確認';el.append(a);return el}
+function render(){const q=document.getElementById('keyword').value.trim().toLowerCase(),pref=document.getElementById('pref').value,cat=document.getElementById('category').value;const arr=spots.filter(s=>(!pref||s.pref===pref)&&(!cat||s.category===cat)&&(!q||(s.name+s.pref+s.description+s.themes.join('')).toLowerCase().includes(q)));markers.clearLayers();const out=document.getElementById('results');out.replaceChildren();document.getElementById('count').textContent='('+arr.length+'件)';for(const s of arr){L.marker([s.lat,s.lon]).bindPopup(s.name).addTo(markers);out.append(card(s))}if(arr.length)map.fitBounds(L.latLngBounds(arr.map(s=>[s.lat,s.lon])).pad(.25),{maxZoom:12});else{out.textContent='該当するスポットはありません。';map.setView([36.4,138],5)}}
+for(const id of ['keyword','pref','category'])document.getElementById(id).addEventListener(id==='keyword'?'input':'change',render);render();
+document.getElementById('diagnose').addEventListener('click',()=>{const birthday=document.getElementById('birthday').value,home=document.getElementById('home').value;if(!birthday||!home){alert('生年月日とお住まいの都道府県を入力してください。');return}const today=new Date();const dt=new Date(birthday+'T00:00:00');if(Number.isNaN(dt.getTime())||dt>today){alert('正しい生年月日を入力してください。');return}const n=lifePath(birthday),origin=prefectures.find(p=>p[0]===home);const ranked=spots.map(s=>{const km=distance(origin[1],origin[2],s.lat,s.lon);const match=s.numbers.includes(n);const score=(match?100:0)+Math.max(0,40-Math.round(km/35));return {...s,km,match,score}}).sort((a,b)=>b.score-a.score||a.km-b.km).slice(0,5);const section=document.getElementById('diagnosis');section.hidden=false;const summary=document.getElementById('summary');summary.replaceChildren();const strong=document.createElement('strong');strong.textContent='あなたの数秘ナンバー：'+n+' ／ '+interpretations[n];summary.append(strong,document.createElement('br'),document.createTextNode('出発地の目安：'+home+'（都道府県庁付近）'));const out=document.getElementById('recommended');out.replaceChildren();ranked.forEach((s,i)=>{out.append(card(s,'第'+(i+1)+'位｜'+(s.match?'数秘テーマと一致':'近さなどから選定')+'｜テーマ：'+s.themes.join('・')+'｜直線距離 約'+Math.round(s.km)+'km'))});section.scrollIntoView({behavior:'smooth',block:'start'})});
+</script></body></html>
