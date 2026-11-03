@@ -66,6 +66,8 @@ TAG_NUMBERS = {
 }
 
 ACCESS_EXCLUDE = {'private', 'no'}
+JP_CHARS = re.compile(r'[\u3040-\u30ff\u3400-\u9fff]')
+EXCLUDE_NAME = re.compile(r'(参集殿|社務所|手水舎|授与所|神楽殿|休憩所|駐車場|鳥居|参道|宝物殿|会館|教会|事務所|幼稚園|保育園|霊園|墓地|納骨|斎場|会堂|分教会|講社|社殿跡|陣地|壕|防空|扱所|講務|有毒|毒ガス|危険)')
 GENERIC_NAMES = {'祠', 'ほこら', '地蔵', 'お地蔵様', 'お地蔵さん', '石仏', '社', '神社', '寺', '小祠', 'shrine', 'temple'}
 
 
@@ -76,14 +78,12 @@ def norm_name(t):
 
 def classify(t, area):
     a, n, w = t.get('amenity'), t.get('natural'), t.get('waterway')
-    if a == 'place_of_worship':
-        return '神社' if t.get('religion') == 'shinto' else '寺院'
     if w == 'waterfall' or n == 'waterfall':
         return '滝'
     if n in ('peak', 'volcano'):
         return '山'
     if n == 'spring':
-        return '湧水'
+        return '温泉' if '温泉' in (t.get('name') or '') else '湧水'
     if n == 'hot_spring':
         return '温泉'
     if n == 'tree':
@@ -92,12 +92,21 @@ def classify(t, area):
         return '岩・磐座'
     if n == 'cave_entrance':
         return '洞窟'
+    if a == 'place_of_worship' or t.get('landuse') == 'religious' or t.get('building') in ('shrine', 'temple'):
+        if t.get('religion') == 'shinto':
+            return '神社'
+        if t.get('religion') == 'buddhist':
+            return '寺院'
+    if t.get('historic') in ('shrine', 'wayside_shrine'):
+        return '祠'
+    if t.get('religion') == 'shinto' and t.get('wikidata'):
+        return '神社'
+    if t.get('religion') == 'buddhist' and t.get('wikidata'):
+        return '寺院'
     if t.get('tourism') == 'viewpoint':
         return '絶景'
     if n == 'water':
         return '湖'
-    if t.get('historic') in ('shrine', 'wayside_shrine'):
-        return '祠'
     return None
 
 
@@ -117,7 +126,7 @@ def priority(t, cat, name, area):
         s += 5
     if cat == '神社':
         if re.search(r'神宮|大社|総本宮|総本社', name):
-            s += 40
+            s += 70
         elif re.search(r'八幡宮|天満宮|東照宮|稲荷|宮$', name):
             s += 12
     if cat == '寺院' and re.search(r'総本山|大本山|本山|大寺|観音|不動尊|大師', name):
@@ -195,9 +204,18 @@ def main():
 
     rep = Counter()
     raw = []
+    area_ids = set()
+    with gzip.open(args.candidates, 'rt', encoding='utf-8') as f:
+        for line in f:
+            o = json.loads(line)['osm']
+            if o.startswith('a'):
+                area_ids.add(int(o[1:]))
     with gzip.open(args.candidates, 'rt', encoding='utf-8') as f:
         for line in f:
             r = json.loads(line)
+            if r['osm'].startswith('w') and int(r['osm'][1:]) * 2 in area_ids:
+                rep['skip:outline_of_area'] += 1
+                continue
             t = r['tags']
             rep['candidates'] += 1
             name = norm_name(t)
@@ -207,6 +225,12 @@ def main():
                 continue
             if not name:
                 rep['skip:no_name'] += 1
+                continue
+            if not JP_CHARS.search(name):
+                rep['skip:no_japanese_name'] += 1
+                continue
+            if EXCLUDE_NAME.search(name) or ';' in name or name.count('\u3000') >= 2:
+                rep['skip:facility_or_mixed_name'] += 1
                 continue
             if t.get('access') in ACCESS_EXCLUDE:
                 rep['skip:access'] += 1
@@ -223,13 +247,17 @@ def main():
 
     # 重複：同じ名前・200m以内 → 優先度の高い方（面積の大きい方）を残す
     raw.sort(key=lambda x: (-x['prio'], -x['area']))
-    grid, uniq = Grid(), []
+    grid, uniq, by_wd = Grid(), [], {}
     for it in raw:
         dup = None
-        for o in grid.near(it['lat'], it['lon']):
-            if o['name'] == it['name'] and haversine_m((o['lat'], o['lon']), (it['lat'], it['lon'])) < 200:
-                dup = o
-                break
+        wd = it['tags'].get('wikidata')
+        if wd and wd in by_wd:
+            dup = by_wd[wd]
+        if not dup:
+            for o in grid.near(it['lat'], it['lon']):
+                if o['name'] == it['name'] and haversine_m((o['lat'], o['lon']), (it['lat'], it['lon'])) < 1000:
+                    dup = o
+                    break
         if dup:
             rep['merged_duplicates'] += 1
             for k in ('wikidata', 'wikipedia', 'wikipedia:ja', 'heritage', 'website'):
@@ -238,6 +266,8 @@ def main():
             continue
         grid.add(it)
         uniq.append(it)
+        if wd:
+            by_wd[wd] = it
 
     # 霊山：山頂から500m以内に神社がある山
     shrine_grid = Grid()
@@ -257,7 +287,8 @@ def main():
         for it in by_cat.get(cat, [])[:q]:
             chosen.append(it)
             chosen_ids.add(it['osm'])
-    rest = [it for it in uniq if it['osm'] not in chosen_ids]
+    FILL_CATS = {'神社', '寺院', '滝', '巨木', '岩・磐座', '洞窟', '湧水'}
+    rest = [it for it in uniq if it['osm'] not in chosen_ids and it['cat'] in FILL_CATS]
     for it in rest:
         if len(chosen) >= args.target:
             break
@@ -309,6 +340,14 @@ def main():
 
     # 出力
     chosen.sort(key=lambda x: (PREF_CODE[x['pref']], -x['prio']))
+    def osm_id(o):
+        # osmium の面ID（a）を元の way / relation のIDに戻す
+        if o.startswith('a'):
+            n = int(o[1:])
+            return ('w%d' % (n // 2)) if n % 2 == 0 else ('r%d' % ((n - 1) // 2))
+        return o
+
+    idmap = {it['osm']: osm_id(it['osm']) for it in chosen}
     rows = []
     cat_count, wish_count, pref_out = Counter(), Counter(), Counter()
     for it in chosen:
@@ -317,10 +356,10 @@ def main():
         nums = numbers_for(obj + inferred)
         wiki = t.get('wikipedia:ja') or t.get('wikipedia') or ''
         rows.append([
-            it['osm'], it['name'], it['cat'], PREF_CODE[it['pref']], it['muni'],
+            idmap[it['osm']], it['name'], it['cat'], PREF_CODE[it['pref']], it['muni'],
             round(it['lat'], 5), round(it['lon'], 5),
             '|'.join(obj), '|'.join(inferred), ''.join(str(n) for n in nums),
-            wiki, t.get('wikidata', ''), it['parent'] or '', round(it['prio']),
+            wiki, t.get('wikidata', ''), idmap.get(it['parent'], '') if it['parent'] else '', round(it['prio']),
         ])
         cat_count[it['cat']] += 1
         pref_out[it['pref']] += 1

@@ -136,7 +136,8 @@
     WISH_OPTIONS.forEach(function (w) { var o = el('option', null, w.key); o.value = w.key; $('search-wish').append(o); });
 
     // 凡例
-    Object.keys(SpotMap.CATEGORY_COLORS).forEach(function (c) {
+    var presentCats = new Set(SPOTS_ALL.map(function (x) { return x.category; }));
+    Object.keys(SpotMap.CATEGORY_COLORS).filter(function (c) { return presentCats.has(c); }).forEach(function (c) {
       var item = el('span', 'legend-item');
       var dot = el('span', 'legend-dot'); dot.style.background = SpotMap.CATEGORY_COLORS[c];
       item.append(dot, document.createTextNode(c));

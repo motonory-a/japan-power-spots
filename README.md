@@ -5,10 +5,11 @@
 公開ページ：https://motonory-a.github.io/japan-power-spots/
 関連サイト：https://motonory-a.github.io/my-first-project/ （魂の系統鑑定）
 
-## いまの状態（v1.4）
+## いまの状態（v2.0）
 
-- スポットは8件のデモデータです。ご利益などのタグは仮の設定で、出典の確認はまだです。
-- 診断は数秘術（暫定ロジック）・願いと体験・近さ・データの信頼性を合わせた点数で並べます。
+- スポットは全国約1万件（OpenStreetMapをもとに選定）。作り方と選び方は docs/DATA_SPEC.md、件数の内訳は docs/DATA_REPORT.md。
+- ご利益は、神社・寺院の名称（稲荷・天満宮・八幡など）から一般的なものを推定しています。内容は全件「未確認」の扱いです。
+- 診断は数秘術（暫定ロジック）・願いと体験・近さ・方位の運気・知名度・データの信頼性を合わせた点数で並べます。
 - 出かける日を入れると、九星気学（年盤・月盤・日盤）で方位の吉凶を判定し、運気の良い方位のスポットを優先します。決まりごとと検証結果は docs/KYUSEI_SPEC.md。
 - 出発地は、都道府県庁付近のほか、住所検索（国土地理院）・地図でのピン指定・現在地でくわしく指定できます。
 - 方角は真北基準の角度（大圏コース）で、東西南北30°・四隅60°で区切って表示します。計算方法は config.js の bearingMethod で切り替えられます。
@@ -25,7 +26,12 @@ assets/js/kyusei.js     九星気学（暦・年月日の盤・本命星・吉�
 assets/js/map.js        地図（Leaflet + OpenStreetMap）
 assets/js/origin.js     出発地のくわしい指定（住所検索・地図・現在地）
 assets/js/app.js        入力・診断・検索の画面処理
-data/spots-demo.js      デモデータ8件と都道府県の代表地点
+data/spots-demo.js      手入力のスポット（説明文など）・都道府県の代表地点・願いの選択肢
+data/spots-osm.js       全国スポットデータ約1万件（scripts/build_spots.py で生成）
+data/manifest.json      全国データの件数・都道府県別件数
+assets/js/data.js       全国データの読み込み
+scripts/osm_candidates.py / build_spots.py  OSMからの抽出・選定
+.github/workflows/osm-extract.yml  OSM抽出（GitHub Actions）
 data/solar-terms.js     二十四節気の日本時間（1899〜2101年、scripts/build_solar_terms.js で生成）
 tests/run-tests.js      計算部分の自動テスト
 tests/run-kyusei-tests.js 九星気学のテスト（国立天文台・実在の暦と照合）
@@ -41,10 +47,12 @@ Node.js 16以上が入っていれば：
 ```
 node tests/run-tests.js
 node tests/run-kyusei-tests.js
+node tests/run-data-tests.js
 ```
 
 ## 更新履歴
 
+- v2.0（2026-11-03）全国約1万件のスポットデータ（OpenStreetMap）、知名度の点数、願い・体験での検索、地図の高速表示
 - v1.4.1（2026-11-03）願い・体験の複数選択をわかりやすく（✓表示・選択中の一覧・すべて解除）
 - v1.4（2026-11-03）願い・体験のカテゴリーを30種類に拡充（商売繁盛・厄除け・御神木など）、交通手段に自転車を追加
 - v1.3（2026-11-03）出かける日の方位の吉凶（九星気学）、方位の早見表、方角表示を30°・60°の区切りに統一
