@@ -277,3 +277,10 @@ footer a{color:#E4D6B0}
 .btn-line{display:inline-block;min-height:44px;padding:11px 26px;border-radius:999px;background:#06C755;color:#fff;font-weight:700;text-decoration:none}
 .btn-line:hover,.btn-line:focus-visible{background:#05A948;color:#fff}
 .foot-line{margin:0 0 10px}
+
+/* 関連サイトのバナー（広告表示つき） */
+.ad-banner{max-width:720px;margin:0 auto 14px}
+.ad-label{margin:0 0 6px;font-size:12px;color:#5A6273}
+.ad-banner a{display:block;border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(30,41,68,.12);transition:transform .15s,box-shadow .15s}
+.ad-banner a:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(30,41,68,.18)}
+.ad-banner img{display:block;width:100%;height:auto}
