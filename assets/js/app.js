@@ -472,6 +472,16 @@
     inv.target = '_blank'; inv.rel = 'noopener noreferrer';
     row.append(route, inv);
     box.append(row);
+    // 近くのモデルコース（20km以内）
+    if (window.Courses) {
+      var nc = Courses.near(s, 20)[0];
+      if (nc) {
+        var cr = el('div', 'outing-course');
+        cr.append(el('p', 'outing-course-text', nc.includes ? '「' + s.name + '」をめぐるモデルコースもあります。' : 'このあたりには、近くの聖地をめぐるモデルコースもあります。'));
+        cr.append(Courses.linkButton(nc.c));
+        box.append(cr);
+      }
+    }
     box.append(el('p', 'note', '参拝時間・入山期間・交通の状況は、出かける前に公式情報でご確認ください。'));
     box.hidden = false;
   }
@@ -505,6 +515,7 @@
     showError(errs);
     if (errs.length) { $('form-error').focus(); $('form-error').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
     if (window.Profiles) Profiles.remember();
+    if (window.Courses) Courses.setOrigin(origin);
 
     var wishes = Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; });
     var modeKey = document.querySelector('input[name=mode]:checked').value;
@@ -738,6 +749,7 @@
       $('share-result').append(Share.box({ heading: '診断が楽しかったら、お友だちにも', text: cfg.shareText }));
     }
     if (window.SpotDetail) SpotDetail.init({ goMap: goMap, routeUrl: function (x) { return routeUrl(x, 'transit', null); } });
+    if (window.Courses) Courses.init();
     if (window.Daily) Daily.init({ spots: SPOTS_ALL.slice(), baseCard: baseCard, actions: actions, goMap: goMap });
     $('diagnose-form').addEventListener('submit', function (e) { e.preventDefault(); diagnose(); });
     $('keyword').addEventListener('input', searchLater);

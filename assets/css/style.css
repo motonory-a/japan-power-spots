@@ -590,3 +590,33 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .more-you-card span:last-child{font-size:13px;color:var(--muted)}
 .more-you-card .ad-label{margin:0;font-size:11px}
 @media (max-width:640px){.more-you-links{grid-template-columns:1fr}}
+
+/* ---------- モデルコース（v3.11） ---------- */
+.course-regions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 6px}
+.course-chip{border:1px solid #DCCFD8;border-radius:999px;padding:8px 14px;font-size:14px;background:#fff;color:var(--ink);cursor:pointer;font-family:inherit;min-height:40px}
+.course-chip:hover{border-color:var(--indigo)}
+.course-chip[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.course-chip:focus-visible{outline:3px solid var(--indigo);outline-offset:2px}
+.course-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin:8px 0 4px}
+.course-card{background:#fff;border:1px solid #E6DAEC;border-radius:16px;padding:18px 18px 14px;box-shadow:0 2px 10px rgba(98,64,156,.06);scroll-margin-top:16px;transition:box-shadow .3s}
+.course-card.course-focus{box-shadow:0 0 0 3px var(--gold),0 4px 16px rgba(98,64,156,.18)}
+.course-title{font-size:18px;margin:0 0 6px;color:var(--ink)}
+.course-head .tags{margin:0 0 8px}
+.tag-near{background:#FBF4E4;color:#7A5A1E}
+.course-lead{font-size:14px;margin:0 0 10px}
+.course-stops{list-style:none;padding:0;margin:0 0 8px}
+.course-stop{display:flex;gap:10px;align-items:flex-start}
+.course-num{flex:0 0 28px;height:28px;border-radius:50%;background:var(--grad);color:#fff;font-size:14px;font-weight:bold;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.course-stop-body{display:flex;flex-direction:column;min-width:0}
+.course-stop-name{all:unset;cursor:pointer;font-weight:bold;color:var(--indigo);text-decoration:underline;text-underline-offset:3px;font-size:15px;line-height:1.5}
+.course-stop-name:focus-visible{outline:3px solid var(--indigo);outline-offset:2px;border-radius:4px}
+.course-hours{font-size:12px;color:var(--muted);line-height:1.5}
+.course-leg{font-size:12px;color:var(--muted);margin:2px 0 2px 13px;padding:2px 0 2px 22px;border-left:2px dotted var(--gold)}
+.course-total{font-size:13px;margin:6px 0}
+.course-caution{font-size:13px;background:#FFF6E8;border-left:4px solid var(--gold);padding:6px 10px;border-radius:6px;margin:6px 0}
+.course-btns{display:flex;flex-wrap:wrap;gap:8px}
+.course-btns .btn-sub{margin-top:6px}
+.outing-course{margin-top:12px;padding-top:10px;border-top:1px dashed #E3D5EA}
+.outing-course-text{margin:0;font-size:14px}
+.detail-courses{margin-top:16px}
+.detail-courses .btn-sub{margin:6px 8px 0 0}

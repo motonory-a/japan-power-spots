@@ -214,6 +214,17 @@
     <h2 id="h-daily-spot">今日の運命の聖地</h2>
   </section>
 
+  <!-- 03-7 モデルコース（assets/js/courses.js・data/model-courses.js） -->
+  <section id="courses" class="panel" aria-labelledby="h-courses" hidden>
+    <h2 id="h-courses">モデルコース</h2>
+    <p class="lead-small">公式情報を確認したスポットだけで組んだ、1日でめぐれるコースです。地図上で近い順に並べています。</p>
+    <div id="course-regions" class="course-regions" role="group" aria-label="地方で選ぶ"></div>
+    <p id="course-note" class="note" aria-live="polite"></p>
+    <div id="course-list" class="course-list"></div>
+    <button type="button" id="course-more" class="btn-sub" hidden>ほかのコースも見る</button>
+    <p class="note">距離は直線距離です。実際の道のりと時間は「Googleマップで道順を見る」で、参拝時間・休みは各スポットの「くわしく見る」と公式サイトでご確認ください。</p>
+  </section>
+
   <!-- 03-6 開運スタンプ帳・聖地コレクション（assets/js/daily.js・collection.js） -->
   <section id="collection" class="panel" aria-labelledby="h-collection" hidden>
     <h2 id="h-collection">開運スタンプ帳・聖地コレクション</h2>
@@ -342,6 +353,8 @@
 <script src="data/daily-content.js"></script>
 <script src="assets/js/collection.js"></script>
 <script src="assets/js/share.js"></script>
+<script src="data/model-courses.js"></script>
+<script src="assets/js/courses.js"></script>
 <script src="assets/js/detail.js"></script>
 <script src="assets/js/daily.js"></script>
 <script src="assets/js/app.js"></script>

@@ -99,6 +99,17 @@
     act.append(row);
     body.append(act);
 
+    // このスポットをめぐるモデルコース
+    if (root.Courses) {
+      var cs = Courses.near(s, 0.3).filter(function (x) { return x.includes || x.km < 0.3; });
+      if (cs.length) {
+        var cbox = el('section', 'detail-courses');
+        cbox.append(el('h3', null, 'このスポットをめぐるモデルコース'));
+        cs.forEach(function (x) { cbox.append(Courses.linkButton(x.c, '「' + x.c.title + '」を見る')); });
+        body.append(cbox);
+      }
+    }
+
     // 近くの聖地
     var near = nearby(s, 5, 15);
     if (near.length) {

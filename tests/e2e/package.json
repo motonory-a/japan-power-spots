@@ -3,7 +3,7 @@
   "private": true,
   "description": "画面の自動テスト（ブラウザで実際に操作して確かめる）。サイトの公開には使わない。",
   "scripts": {
-    "test": "node run-main.js && node run-profiles.js && node run-photos.js && node run-phase2.js && node run-phase3.js && node run-phase4.js && node run-phase5.js && node run-phase6.js"
+    "test": "node run-main.js && node run-profiles.js && node run-photos.js && node run-phase2.js && node run-phase3.js && node run-phase4.js && node run-phase5.js && node run-phase6.js && node run-courses.js"
   },
   "devDependencies": {
     "@fontsource/shippori-mincho": "^5.3.0",
