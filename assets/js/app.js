@@ -30,6 +30,17 @@
     return url;
   }
 
+  // おすすめを同じ場所に固めない：すでに選んだスポットから spreadKm 以内のものは後回しにする（足りなければ順に補う）
+  function pickSpread(list, n, km) {
+    var out = [], rest = [];
+    for (var i = 0; i < list.length && out.length < n; i++) {
+      var s = list[i];
+      var close = out.some(function (t) { return D.distanceKm(s.lat, s.lon, t.lat, t.lon) < km; });
+      (close ? rest : out).push(s);
+    }
+    return out.concat(rest).slice(0, n);
+  }
+
   function limitText(min) {
     if (min < 60) return min + '分';
     var h = Math.floor(min / 60), m = min % 60;
@@ -538,7 +549,7 @@
     $('h-result').textContent = members.length ? who + 'へのおすすめ' : 'あなたへのおすすめ';
     var all = D.rankSpots(SPOTS_ALL, { number: n, numbers: numbers, group: group, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: dirBoards }, cfg, { top: 300 });
     var within = all.filter(function (s) { return s.withinLimit; });
-    var shown = within.length ? within.slice(0, cfg.resultCount) : all.slice(0, 3);
+    var shown = within.length ? pickSpread(within, cfg.resultCount, cfg.spreadKm || 5) : all.slice(0, 3);
 
     var sum = $('summary');
     sum.replaceChildren();

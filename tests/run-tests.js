@@ -288,6 +288,26 @@ test('1km未満は方位なし', () => {
   assert.strictEqual(r.find((s) => s.name === '明治神宮').fortune.palace, null);
 });
 
+console.log('所要時間を指定したときの距離の点（v3.11.1）');
+test('時間内なら、近くても遠くても距離の点は同じ（満点）', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car', limitMinutes: 180 }, cfg);
+  const inside = r.filter((s) => s.withinLimit);
+  assert.ok(inside.length >= 2);
+  inside.forEach((s) => assert.strictEqual(s.scoreParts.distance, cfg.weights.distance, s.name));
+  r.filter((s) => !s.withinLimit).forEach((s) => assert.strictEqual(s.scoreParts.distance, 0, s.name));
+});
+test('時間を指定しないときは、近いほど距離の点が高い', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car' }, cfg);
+  const near = r.reduce((a, b) => (a.km < b.km ? a : b)), far = r.reduce((a, b) => (a.km > b.km ? a : b));
+  assert.ok(near.scoreParts.distance > far.scoreParts.distance);
+});
+test('同じ点数なら、公式情報を確認済み→知名度の高い順（近さは最後）', () => {
+  const mk = (id, lat, fame, verified) => Object.assign({}, SPOTS[0], { id, name: id, lat, lon: 139.7, fame, verified: verified ? {} : undefined, wishes: [], numbers: [] });
+  const list = [mk('近い・無名', 35.70, 0, false), mk('遠い・有名', 35.95, 8, false), mk('遠い・確認済み', 35.96, 1, true)];
+  const r = D.rankSpots(list, { number: 4, origin: { lat: 35.69, lon: 139.7 }, wishes: [], mode: 'car', limitMinutes: 120 }, cfg);
+  assert.deepStrictEqual(r.map((s) => s.name), ['遠い・確認済み', '遠い・有名', '近い・無名']);
+});
+
 console.log('データ');
 test('必須項目がそろっている', () => {
   const req = ['id', 'source_ids', 'name', 'aliases', 'category', 'prefecture_code', 'prefecture', 'municipality', 'lat', 'lon',

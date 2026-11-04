@@ -181,7 +181,7 @@
    * input = { number, origin:{lat,lon}, wishes:[], mode:'walk'|'transit'|'car', limitMinutes: 数値 or null,
    *           boards: Kyusei.boardsFor() の結果 or null（出かける日を入れたとき） }
    * 戻り値は点数の内訳と根拠の文章を含む配列。
-   * 並び順：所要時間の上限内 → 年盤・月盤で凶でない → 願いに一致 → スコア → 近さ
+   * 並び順：所要時間の上限内 → 年盤・月盤で凶でない → 願いに一致 → スコア → 公式情報の確認済み → 知名度 → 近さ
    */
   /*
    * opts.top を指定すると、全件を数値だけで採点・並べ替えたあと、上位 top 件だけ詳しい結果を作る（9万件でも速い）。
@@ -223,7 +223,8 @@
         wish: wishes.length ? Math.round(w.wish * hit / wishes.length) : 0,
         kyusei: f ? f.points : 0,
         day: f ? (f.dayPoints || 0) : 0,
-        distance: Math.round(w.distance * Math.max(0, 1 - mins / refMin)),
+        // 所要時間を指定したとき：時間内ならどこでも満点（近いほど有利にはしない）。指定がないときは近いほど高い
+        distance: limit ? (withinLimit ? w.distance : 0) : Math.round(w.distance * Math.max(0, 1 - mins / refMin)),
         numerology: Math.round(w.numerology * numHits / numbers.length),
         fame: Math.round(famW * Math.min(1, (s.fame || 0) / famFull)),
         reliability: Math.round(w.reliability * reliabilityRatio(s.verification_status))
@@ -236,9 +237,10 @@
         wishTier: wishes.length && hit ? 1 : 0
       });
     }
-    // 並び順：所要時間の上限内 → 年盤・月盤で凶でない → 願いに一致 → スコア → 近さ
+    // 並び順：所要時間の上限内 → 年盤・月盤で凶でない → 願いに一致 → スコア → 確認済み → 知名度 → 近さ
     light.sort(function (a, b) {
-      return (b.withinLimit - a.withinLimit) || (b.tier - a.tier) || (b.wishTier - a.wishTier) || (b.score - a.score) || (a.km - b.km);
+      return (b.withinLimit - a.withinLimit) || (b.tier - a.tier) || (b.wishTier - a.wishTier) || (b.score - a.score) ||
+        ((b.s.verified ? 1 : 0) - (a.s.verified ? 1 : 0)) || ((b.s.fame || 0) - (a.s.fame || 0)) || (a.km - b.km);
     });
 
     // 2) 上位だけ詳しい結果を作る
