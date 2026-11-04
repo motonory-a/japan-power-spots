@@ -118,25 +118,61 @@
   var LEVEL_TEXT = { best: '最大吉方', good: '吉方', normal: '吉凶なし', kyo: '凶' };
   function judgeFortune(boards, deg, km, cfg, light) {
     if (!boards) return null;
-    if (km < 1) return { tier: 1, mark: '―', label: '出発地のすぐ近くのため方位なし', points: 0, palace: null, detail: [] };
+    var useDay = !boards.noDay;
+    if (km < 1) return { tier: 1, mark: '―', label: '出発地のすぐ近くのため方位なし', points: Math.round(cfg.weights.kyusei * cfg.kyusei.levelRatio.normal), dayPoints: useDay ? Math.round((cfg.weights.day || 0) * cfg.kyusei.levelRatio.normal) : 0, palace: null, detail: [] };
     var palace = K.palaceFromBearing(deg);
-    var y = boards.year.palaces[palace], m = boards.month.palaces[palace], d = boards.day.palaces[palace];
+    var y = boards.year.palaces[palace], m = boards.month.palaces[palace], d = useDay ? boards.day.palaces[palace] : null;
     var kc = cfg.kyusei, r = kc.levelRatio, bw = kc.boardWeights;
     var yearMonthKyo = y.level === 'kyo' || m.level === 'kyo';
+    var when = useDay ? '' : '（今月）';
     var mark, label;
-    if (yearMonthKyo) { mark = '×'; label = '避けたい方位（' + (y.level === 'kyo' ? '年盤' : '月盤') + 'で凶）'; }
-    else if (d.level === 'kyo') { mark = '△'; label = '年・月は問題ないが、この日は日盤で凶'; }
-    else if (y.level === 'best' && m.level === 'best') { mark = '◎'; label = '年・月とも最大吉方'; }
-    else if (y.level !== 'normal' && m.level !== 'normal') { mark = '◎'; label = '年・月とも吉方位'; }
-    else if (y.level !== 'normal' || m.level !== 'normal') { mark = '○'; label = (y.level !== 'normal' ? '年盤' : '月盤') + 'で吉方位'; }
+    if (yearMonthKyo) { mark = '×'; label = '避けたい方位' + when + '（' + (y.level === 'kyo' ? '年盤' : '月盤') + 'で凶）'; }
+    else if (d && d.level === 'kyo') { mark = '△'; label = '年・月は問題ないが、この日は日盤で凶'; }
+    else if (y.level === 'best' && m.level === 'best') { mark = '◎'; label = '年・月とも最大吉方' + when; }
+    else if (y.level !== 'normal' && m.level !== 'normal') { mark = '◎'; label = '年・月とも吉方位' + when; }
+    else if (y.level !== 'normal' || m.level !== 'normal') { mark = '○'; label = (y.level !== 'normal' ? '年盤' : '月盤') + 'で吉方位' + when; }
     else { mark = '―'; label = '吉凶なし（普通）'; }
-    var points = yearMonthKyo ? 0 : Math.round(cfg.weights.kyusei * (bw.year * r[y.level] + bw.month * r[m.level] + bw.day * r[d.level]));
-    var detail = light ? [] : [['年盤', y], ['月盤', m], ['日盤', d]].map(function (x) {
+    var ym = (bw.year * r[y.level] + bw.month * r[m.level]) / (bw.year + bw.month);
+    var points = yearMonthKyo ? 0 : Math.round(cfg.weights.kyusei * ym);
+    var dayPoints = (!useDay || yearMonthKyo) ? 0 : Math.round((cfg.weights.day || 0) * r[d.level]);
+    var rows = [['年盤', y], ['月盤', m]];
+    if (d) rows.push(['日盤', d]);
+    var detail = light ? [] : rows.map(function (x) {
       return x[0] + '：' + palace + 'に' + K.STAR_SHORT[x[1].star] + '→' + LEVEL_TEXT[x[1].level] + (x[1].bad.length ? '（' + x[1].bad.join('・') + '）' : '');
     });
     return {
-      tier: yearMonthKyo ? 0 : 1, mark: mark, label: label, points: points, palace: palace, detail: detail,
-      nearEdge: light ? false : K.edgeDistance(deg) < kc.edgeWarnDeg, levels: { year: y.level, month: m.level, day: d.level }
+      tier: yearMonthKyo ? 0 : 1, mark: mark, label: label, points: points, dayPoints: dayPoints, palace: palace, detail: detail,
+      nearEdge: light ? false : K.edgeDistance(deg) < kc.edgeWarnDeg, levels: { year: y.level, month: m.level, day: d ? d.level : null }
+    };
+  }
+
+  /*
+   * 一緒に行く人がいるとき：全員の盤で判定して、いちばん慎重な結果にまとめる
+   * group：[{ label:'あなた', boards }, { label:'パートナー', boards }, ...]
+   *   ・だれか一人でも年盤・月盤で凶 → 避けたい方位
+   *   ・点数は全員のうち最も低い人の点数
+   */
+  function judgeGroup(group, deg, km, cfg, light) {
+    if (!group || !group.length || !group[0].boards) return null;
+    var js = group.map(function (g) { return judgeFortune(g.boards, deg, km, cfg, light); });
+    if (group.length === 1) return js[0];
+    if (km < 1) return js[0];
+    var who = group.length === 2 ? 'お二人' : 'みなさん';
+    var marks = js.map(function (j) { return j.mark; });
+    var names = function (pred) { return group.filter(function (g, i) { return pred(js[i]); }).map(function (g) { return g.label; }).join('・'); };
+    var mark, label;
+    if (marks.indexOf('×') !== -1) { mark = '×'; label = '避けたい方位（' + names(function (j) { return j.mark === '×'; }) + 'にとって年盤・月盤で凶）'; }
+    else if (marks.indexOf('△') !== -1) { mark = '△'; label = 'この日は日盤で凶の人がいます（' + names(function (j) { return j.mark === '△'; }) + '）'; }
+    else if (marks.every(function (m) { return m === '◎'; })) { mark = '◎'; label = who + 'とも、年・月とも吉方位'; }
+    else if (marks.every(function (m) { return m === '◎' || m === '○'; })) { mark = '○'; label = who + 'とも吉方位'; }
+    else if (marks.some(function (m) { return m === '◎' || m === '○'; })) { mark = '―'; label = '吉凶なし（' + names(function (j) { return j.mark === '◎' || j.mark === '○'; }) + 'には吉方位）'; }
+    else { mark = '―'; label = '吉凶なし（普通）'; }
+    var detail = [];
+    if (!light) js.forEach(function (j, i) { detail.push('【' + group[i].label + '】' + j.mark + ' ' + j.label); j.detail.forEach(function (d) { detail.push('　' + d); }); });
+    return {
+      tier: Math.min.apply(null, js.map(function (j) { return j.tier; })), mark: mark, label: label,
+      points: Math.min.apply(null, js.map(function (j) { return j.points; })), dayPoints: Math.min.apply(null, js.map(function (j) { return j.dayPoints || 0; })), palace: js[0].palace, detail: detail,
+      nearEdge: js[0].nearEdge, levels: js[0].levels, members: js
     };
   }
 
@@ -159,7 +195,14 @@
     var refMin = limit || mode.refMinutes;
     var top = opts && opts.top;
     var boards = input.boards || null;
+    var group = input.group && input.group.length > 1 ? input.group : null;
+    var numbers = input.numbers && input.numbers.length ? input.numbers : [input.number];
+    var judge = function (deg, km, light) { return group ? judgeGroup(group, deg, km, cfg, light) : judgeFortune(boards, deg, km, cfg, light); };
     var famW = w.fame || 0, famFull = cfg.fameFull || 120;
+    // 入力された項目の配分だけで満点を決める（未入力の項目に架空の点を付けない）
+    var avail = { wish: wishes.length > 0, kyusei: !!(boards || group), day: !!(boards && !boards.noDay), distance: true, numerology: true, fame: true, reliability: true };
+    var maxW = 0;
+    Object.keys(avail).forEach(function (k) { if (avail[k]) maxW += (w[k] || 0); });
 
     // 1) 全件を数値だけで採点
     var light = [];
@@ -169,23 +212,27 @@
       var km = distanceKm(input.origin.lat, input.origin.lon, s.lat, s.lon);
       var deg = bearingBy(cfg.bearingMethod, input.origin.lat, input.origin.lon, s.lat, s.lon);
       var mins = estimateMinutes(km, mode);
-      var numMatch = s.numbers.indexOf(input.number) !== -1;
+      var numHits = 0;
+      for (var q = 0; q < numbers.length; q++) if (s.numbers.indexOf(numbers[q]) !== -1) numHits++;
+      var numMatch = numHits > 0;
       var hit = 0;
       for (var j = 0; j < wishes.length; j++) if (s.wishes.indexOf(wishes[j]) !== -1) hit++;
       var withinLimit = !limit || mins <= limit;
-      var f = judgeFortune(boards, deg, km, cfg, true);
+      var f = judge(deg, km, true);
       var parts = {
-        numerology: numMatch ? w.numerology : 0,
         wish: wishes.length ? Math.round(w.wish * hit / wishes.length) : 0,
-        distance: Math.round(w.distance * Math.max(0, 1 - mins / refMin)),
         kyusei: f ? f.points : 0,
+        day: f ? (f.dayPoints || 0) : 0,
+        distance: Math.round(w.distance * Math.max(0, 1 - mins / refMin)),
+        numerology: Math.round(w.numerology * numHits / numbers.length),
         fame: Math.round(famW * Math.min(1, (s.fame || 0) / famFull)),
         reliability: Math.round(w.reliability * reliabilityRatio(s.verification_status))
       };
+      var raw = parts.wish + parts.kyusei + parts.day + parts.distance + parts.numerology + parts.fame + parts.reliability;
       light.push({
-        s: s, km: km, deg: deg, mins: mins, numMatch: numMatch, hit: hit, withinLimit: withinLimit,
-        tier: f ? f.tier : 1, parts: parts,
-        score: parts.numerology + parts.wish + parts.distance + parts.kyusei + parts.fame + parts.reliability,
+        s: s, km: km, deg: deg, mins: mins, numMatch: numMatch, numHits: numHits, hit: hit, withinLimit: withinLimit,
+        tier: f ? f.tier : 1, parts: parts, raw: raw,
+        score: Math.round(100 * raw / maxW),
         wishTier: wishes.length && hit ? 1 : 0
       });
     }
@@ -199,9 +246,12 @@
     var out = subset.map(function (x) {
       var s = x.s;
       var hitWishes = wishes.filter(function (k) { return s.wishes.indexOf(k) !== -1; });
-      var fortune = judgeFortune(boards, x.deg, x.km, cfg);
+      var fortune = judge(x.deg, x.km, false);
       var reasons = [];
-      reasons.push(x.numMatch ? '数秘ナンバー' + input.number + 'のテーマと一致' : '数秘ナンバーとの一致なし');
+      if (numbers.length > 1) {
+        var hitNums = numbers.filter(function (nn, i) { return s.numbers.indexOf(nn) !== -1 && numbers.indexOf(nn) === i; });
+        reasons.push(hitNums.length ? '数秘ナンバー' + hitNums.join('・') + 'のテーマと一致（' + x.numHits + '/' + numbers.length + '人）' : 'どなたの数秘ナンバーとも一致なし');
+      } else reasons.push(x.numMatch ? '数秘ナンバー' + input.number + 'のテーマと一致' : '数秘ナンバーとの一致なし');
       if (wishes.length) reasons.push(hitWishes.length ? '願い・体験：' + hitWishes.join('・') + 'が一致' : '選んだ願い・体験との一致なし');
       reasons.push(mode.label + 'で' + formatMinutes(x.mins) + '（目安）' +
         (limit ? (x.withinLimit ? '：指定時間内' : '：指定時間を超える') : ''));
@@ -210,7 +260,7 @@
         km: x.km, bearing: x.deg, direction: x.km < 0.05 ? '—' : (K ? K.palaceFromBearing(x.deg) : direction8(x.deg)),
         minutes: x.mins, minutesText: formatMinutes(x.mins), withinLimit: x.withinLimit, fortune: fortune,
         numMatch: x.numMatch, hitWishes: hitWishes,
-        scoreParts: x.parts, score: x.score, reasons: reasons,
+        scoreParts: x.parts, score: x.score, scoreRaw: x.raw, scoreMax: maxW, scoreAvail: avail, reasons: reasons,
         lowConfidence: s.verification_status !== 'verified',
         // 願いを選んだときは、1つ以上一致したスポットを先に並べる
         wishTier: x.wishTier
@@ -227,7 +277,7 @@
     digitSum: digitSum, lifePath: lifePath, validateBirthday: validateBirthday,
     distanceKm: distanceKm, bearingDeg: bearingDeg, rhumbBearingDeg: rhumbBearingDeg, bearingBy: bearingBy, direction8: direction8,
     estimateMinutes: estimateMinutes, formatMinutes: formatMinutes, judgeFortune: judgeFortune,
-    isRecommendable: isRecommendable, rankSpots: rankSpots
+    isRecommendable: isRecommendable, rankSpots: rankSpots, judgeGroup: judgeGroup
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Diagnosis = api;

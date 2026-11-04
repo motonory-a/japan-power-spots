@@ -140,7 +140,8 @@ test('スコアは0〜100、内訳の合計と一致', () => {
   const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: ['滝', '神社'], mode: 'car' }, cfg);
   r.forEach((s) => {
     const p = s.scoreParts;
-    assert.strictEqual(s.score, p.numerology + p.wish + p.distance + p.kyusei + p.fame + p.reliability);
+    assert.strictEqual(s.scoreRaw, p.wish + p.kyusei + p.day + p.distance + p.numerology + p.fame + p.reliability);
+    assert.strictEqual(s.score, Math.round(100 * s.scoreRaw / s.scoreMax));
     assert.ok(s.score >= 0 && s.score <= 100);
   });
 });
@@ -190,12 +191,14 @@ console.log('出かける日の方位（九星気学）の反映');
 const K = require('../assets/js/kyusei.js');
 const person = K.birthStars('1974-04-15');
 const boards = K.boardsFor('2026-11-21', person);
-test('日付ありの点数は0〜25、内訳の合計とスコアが一致', () => {
+test('日付ありの方位の点は配分内、内訳の合計とスコアが一致', () => {
   const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car', boards }, cfg);
   r.forEach((s) => {
     assert.ok(s.fortune && s.scoreParts.kyusei >= 0 && s.scoreParts.kyusei <= cfg.weights.kyusei);
+    assert.ok(s.scoreParts.day >= 0 && s.scoreParts.day <= cfg.weights.day);
     const p = s.scoreParts;
-    assert.strictEqual(s.score, p.numerology + p.wish + p.distance + p.kyusei + p.fame + p.reliability);
+    assert.strictEqual(s.scoreRaw, p.wish + p.kyusei + p.day + p.distance + p.numerology + p.fame + p.reliability);
+    assert.strictEqual(s.score, Math.round(100 * s.scoreRaw / s.scoreMax));
   });
 });
 test('年盤・月盤で凶の方位のスポットは後ろに並ぶ', () => {
@@ -218,6 +221,68 @@ test('日付なしなら運気は判定しない（0点）', () => {
   const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car' }, cfg);
   r.forEach((s) => { assert.strictEqual(s.fortune, null); assert.strictEqual(s.scoreParts.kyusei, 0); });
 });
+console.log('点数の配分（未入力の項目は振り分け）');
+test('配分の合計は100', () => assert.strictEqual(Object.values(cfg.weights).reduce((a, b) => a + b, 0), 100));
+test('全部入力すると満点は100', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: ['滝'], mode: 'car', boards }, cfg);
+  assert.strictEqual(r[0].scoreMax, 100);
+});
+test('願いなし・日付なしなら、その配分を除いて100点満点に換算', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car' }, cfg);
+  const w = cfg.weights;
+  assert.strictEqual(r[0].scoreMax, 100 - w.wish - w.kyusei - w.day);
+  r.forEach((s) => { assert.strictEqual(s.scoreParts.wish, 0); assert.strictEqual(s.scoreParts.day, 0); });
+});
+test('日付が未定なら今月の盤で年・月だけ判定（日盤は使わない）', () => {
+  const nb = Object.assign(K.boardsFor('2026-11-21', person), { noDay: true });
+  const r = D.rankSpots(SPOTS, { number: 4, origin: pref('東京都'), wishes: [], mode: 'car', boards: nb }, cfg);
+  r.forEach((s) => { assert.strictEqual(s.scoreParts.day, 0); assert.ok(s.fortune.mark !== '△'); assert.strictEqual(s.fortune.levels.day, null); });
+  assert.strictEqual(r[0].scoreMax, 100 - cfg.weights.wish - cfg.weights.day);
+});
+test('同じスポットなら、願いで満点のとき願いの点は配分どおり', () => {
+  const r = D.rankSpots(SPOTS, { number: 1, origin: pref('島根県'), wishes: ['恋愛・縁結び'], mode: 'car' }, cfg);
+  assert.strictEqual(r.find((s) => s.name === '出雲大社').scoreParts.wish, cfg.weights.wish);
+});
+
+console.log('一緒に行く人（全員の盤で判定）');
+const partner = K.birthStars('1980-08-20');
+const pb = K.boardsFor('2026-11-21', partner);
+const grp = [{ label: 'あなた', boards }, { label: 'パートナー', boards: pb }];
+test('だれかが年盤・月盤で凶なら×（避けたい方位）', () => {
+  K.PALACES.forEach((p, i) => {
+    const deg = [0, 45, 90, 135, 180, 225, 270, 315][i];
+    const g = D.judgeGroup(grp, deg, 100, cfg);
+    const a = D.judgeFortune(boards, deg, 100, cfg), b = D.judgeFortune(pb, deg, 100, cfg);
+    assert.strictEqual(g.mark === '×', a.mark === '×' || b.mark === '×', p);
+    assert.strictEqual(g.points, Math.min(a.points, b.points));
+  });
+});
+test('全員◎のときだけ◎', () => {
+  K.PALACES.forEach((p, i) => {
+    const deg = [0, 45, 90, 135, 180, 225, 270, 315][i];
+    const g = D.judgeGroup(grp, deg, 100, cfg);
+    const a = D.judgeFortune(boards, deg, 100, cfg), b = D.judgeFortune(pb, deg, 100, cfg);
+    assert.strictEqual(g.mark === '◎', a.mark === '◎' && b.mark === '◎', p);
+  });
+});
+test('一人だけなら、ふつうの判定と同じ', () => {
+  const g = D.judgeGroup([{ label: 'あなた', boards }], 225, 100, cfg), a = D.judgeFortune(boards, 225, 100, cfg);
+  assert.strictEqual(g.mark, a.mark); assert.strictEqual(g.points, a.points);
+});
+test('数秘は一致した人数で按分', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, numbers: [4, 1], origin: pref('東京都'), wishes: [], mode: 'car' }, cfg);
+  r.forEach((s) => {
+    const k = [4, 1].filter((n) => s.numbers.indexOf(n) !== -1).length;
+    assert.strictEqual(s.scoreParts.numerology, Math.round(cfg.weights.numerology * k / 2));
+  });
+});
+test('グループで並べても、凶の方位は後ろ', () => {
+  const r = D.rankSpots(SPOTS, { number: 4, numbers: [4, 1], origin: pref('東京都'), wishes: [], mode: 'car', boards, group: grp }, cfg);
+  const first = r.findIndex((s) => s.fortune.tier === 0);
+  if (first !== -1) assert.ok(r.slice(first).every((s) => s.fortune.tier === 0));
+  assert.ok(r.some((s) => /お二人|避けたい|吉凶なし|日盤/.test(s.fortune.label)));
+});
+
 test('1km未満は方位なし', () => {
   const r = D.rankSpots(SPOTS, { number: 4, origin: { lat: 35.6764, lon: 139.6990 }, wishes: [], mode: 'walk', boards }, cfg);
   assert.strictEqual(r.find((s) => s.name === '明治神宮').fortune.palace, null);

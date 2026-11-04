@@ -28,9 +28,10 @@ const results = []; const check = (n, ok, i = '') => { results.push(ok); console
       if (u.includes('upload.wikimedia.org')) return r.fulfill({ status: 200, contentType: 'image/jpeg', body: fs.readFileSync(path.join(__dirname, 'fixtures/photo.jpg')) });
       if (u.startsWith('file')) return r.continue(); return r.abort(); });
     await p.goto('file://' + path.resolve(process.argv[2] || path.join(__dirname, '../../index.html'))); await p.waitForTimeout(400);
+    await p.evaluate(() => { document.getElementById('wish-more').open = true; });
     wdCalls = 0; // 今日の聖地の写真（読み込み時の1回）は数えない
     await setBD(p, '1974-04-15'); await p.selectOption('#home', '奈良県');
-    await p.click('label.chip:has(input[value="神社"])');
+    await p.click('#wishes label.chip:has(input[value="神社"])');
     await p.click('#diagnose'); await p.waitForSelector('#recommended .card', { timeout: 30000 }); await p.waitForTimeout(1500);
     const withWd = await p.$$eval('#recommended .card', (cs) => cs.length);
     const figs = await p.$$('#recommended .card figure.photo');

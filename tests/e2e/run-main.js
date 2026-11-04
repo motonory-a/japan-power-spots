@@ -48,6 +48,8 @@ async function route(page, { blockCdn = false } = {}) {
     let dialogs = 0; page.on('dialog', async (d) => { dialogs++; await d.dismiss(); });
     await route(page);
     await page.goto('file://' + target);
+  await page.evaluate(() => { const d = document.getElementById('wish-more'); if (d) d.open = true; });
+    await page.evaluate(() => { const d = document.getElementById('wish-more'); if (d) d.open = true; });
     await page.waitForTimeout(500);
 
     await page.waitForFunction(() => document.querySelector('#load-status') && document.querySelector('#load-status').textContent === '' && Number(document.querySelector('#spot-total').textContent.replace(/[^0-9]/g, '')) >= 90000, null, { timeout: 20000 }).catch(() => {});
@@ -112,8 +114,8 @@ async function route(page, { blockCdn = false } = {}) {
     await page.screenshot({ path: path.join(__dirname, `new_${label}_result1.png`), fullPage: true });
 
     // 願い「滝」「浄化」、車
-    await page.click('label.chip:has(input[value="滝"])');
-    await page.click('label.chip:has(input[value="浄化"])');
+    await page.click('#wishes label.chip:has(input[value="滝"])');
+    await page.click('#wishes label.chip:has(input[value="浄化"])');
     await page.click('label.chip:has(input[value=car])');
     await page.click('#diagnose');
     await page.waitForTimeout(700);
@@ -175,9 +177,9 @@ async function route(page, { blockCdn = false } = {}) {
 
     // ---- 自転車・カテゴリー ----
     // 複数選択の表示
-    await page.click('label.chip:has(input[value="金運"])'); await page.click('label.chip:has(input[value="温泉"])'); await page.click('label.chip:has(input[value="神社"])');
+    await page.click('#wishes label.chip:has(input[value="金運"])'); await page.click('#wishes label.chip:has(input[value="温泉"])'); await page.click('#wishes label.chip:has(input[value="神社"])');
     check('複数選択：選択中の表示', (await page.textContent('#wish-selected')).includes('金運・温泉・神社（3件）') || (await page.textContent('#wish-selected')).includes('（5件）'), await page.textContent('#wish-selected'));
-    await page.click('label.chip:has(input[value="金運"])'); await page.click('label.chip:has(input[value="温泉"])'); await page.click('label.chip:has(input[value="神社"])');
+    await page.click('#wishes label.chip:has(input[value="金運"])'); await page.click('#wishes label.chip:has(input[value="温泉"])'); await page.click('#wishes label.chip:has(input[value="神社"])');
     check('複数選択：解除で元に戻る', !(await page.textContent('#wish-selected')).includes('金運'));
     check('願いの選択肢が30個', (await page.$$('input[name=wish]')).length === 30);
     check('商売繁盛の選択肢がある', !!(await page.$('input[name=wish][value="商売繁盛"]')));
@@ -187,12 +189,12 @@ async function route(page, { blockCdn = false } = {}) {
     check('自転車：所要時間の目安を表示', (await page.textContent('#recommended .meta >> nth=0')).includes('自転車で約'));
     check('自転車：経路リンクがbicycling', (await page.getAttribute('#recommended .btn-link >> nth=0', 'href')).includes('travelmode=bicycling'));
     check('自転車：サマリーに表示', (await page.textContent('#summary')).includes('交通手段：自転車'));
-    await page.click('label.chip:has(input[value="滝"])'); await page.click('label.chip:has(input[value="浄化"])');
-    await page.click('label.chip:has(input[value="商売繁盛"])');
+    await page.click('#wishes label.chip:has(input[value="滝"])'); await page.click('#wishes label.chip:has(input[value="浄化"])');
+    await page.click('#wishes label.chip:has(input[value="商売繁盛"])');
     await page.click('#diagnose'); await page.waitForTimeout(400);
     check('商売繁盛：上位が一致', (await page.$$eval('#recommended .card', (cs) => cs.every((c) => c.innerText.includes('商売繁盛')))));
-    await page.click('label.chip:has(input[value="商売繁盛"])');
-    await page.click('label.chip:has(input[value="滝"])'); await page.click('label.chip:has(input[value="浄化"])');
+    await page.click('#wishes label.chip:has(input[value="商売繁盛"])');
+    await page.click('#wishes label.chip:has(input[value="滝"])'); await page.click('#wishes label.chip:has(input[value="浄化"])');
     await page.click('#diagnose'); await page.waitForTimeout(400);
     check('一致があればお知らせは出ない（滝・浄化）', !(await page.textContent('#recommended')).includes('いまのデモデータにはまだありません'));
     await page.click('label.chip:has(input[value=car])');
@@ -278,6 +280,7 @@ async function route(page, { blockCdn = false } = {}) {
   const errs = []; page.on('pageerror', (e) => errs.push(e.message));
   await route(page, { blockCdn: true });
   await page.goto('file://' + target);
+  await page.evaluate(() => { const d = document.getElementById('wish-more'); if (d) d.open = true; });
   await page.waitForTimeout(400);
   check('地図が読めない旨を表示', (await page.textContent('#map')).includes('読み込めません'));
   await setBD(page, '1974-04-15'); await page.selectOption('#home', '東京都');

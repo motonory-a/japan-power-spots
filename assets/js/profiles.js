@@ -1,7 +1,7 @@
 /*
  * 入力内容の保存（ニックネームごと）
  *  ・保存先はこの端末のブラウザの中（localStorage）だけ。サーバーへは送らない。
- *  ・保存する項目：ニックネーム・生年月日・都道府県・住所の文字・くわしい出発地（緯度経度）・願い・交通手段・所要時間
+ *  ・保存する項目：ニックネーム・生年月日・都道府県・住所の文字・くわしい出発地（緯度経度）・願い・交通手段・所要時間・一緒に行く人（関係と生年月日）
  *  ・ブラウザの設定で保存できない場合は、何もしない（画面の機能はそのまま使える）。
  */
 (function (root) {
@@ -61,6 +61,7 @@
     if (p.wishes) setChecked('wish', p.wishes);
     if (p.mode) { var r = document.querySelector('input[name=mode][value="' + p.mode + '"]'); if (r) r.checked = true; }
     if (p.limit != null) $('time-limit').value = p.limit;
+    if (root.Companions) root.Companions.set(p.companions || []);
   }
 
   function clearForm() {
@@ -72,6 +73,7 @@
     $('address').value = '';
     if (root.OriginPicker) root.OriginPicker.clear();
     setChecked('wish', []);
+    if (root.Companions) root.Companions.set([]);
   }
 
   function msg(text) {
@@ -94,6 +96,7 @@
       wishes: Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; }),
       mode: (document.querySelector('input[name=mode]:checked') || {}).value || 'transit',
       limit: $('time-limit').value,
+      companions: root.Companions ? root.Companions.get() : [],
       updatedAt: Date.now()
     };
     // 同じニックネームがあれば上書き
@@ -140,5 +143,11 @@
     });
   }
 
-  root.Profiles = { init: init, remember: remember, KEY: KEY };
+  // 保存した人の一覧（一緒に行く人を選ぶときに使う）
+  function list() {
+    var d = store || load();
+    return d ? d.list.map(function (p) { return { nickname: p.nickname, birthday: p.birthday }; }) : [];
+  }
+
+  root.Profiles = { init: init, remember: remember, list: list, KEY: KEY };
 })(this);

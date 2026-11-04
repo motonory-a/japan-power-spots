@@ -54,7 +54,7 @@
   <!-- 03-3 願いごとから探す -->
   <section id="wish-entry" class="panel panel-wish" aria-labelledby="h-wish-entry">
     <h2 id="h-wish-entry">願いごとから探す</h2>
-    <p class="lead-small">いちばん叶えたいことを選ぶと、下の診断にその願いが入ります。</p>
+    <p class="lead-small">いちばん叶えたいことを選ぶと、下の診断の「一 願いごと」に入ります。</p>
     <div class="wish-tiles" id="wish-tiles"></div>
     <p id="wish-tile-msg" class="wish-tile-msg" role="status" aria-live="polite"></p>
   </section>
@@ -71,7 +71,19 @@
         <div id="profile-msg" class="profile-msg" role="status" hidden></div>
       </div>
       <fieldset class="step">
-        <legend><span class="step-no" aria-hidden="true">一</span>あなたのこと</legend>
+        <legend><span class="step-no" aria-hidden="true">一</span>願いごと <span class="opt">任意・いくつでも</span></legend>
+        <div id="wish-cats" class="wish-cats" role="group" aria-label="願いごと（8分類）"></div>
+        <details id="wish-more" class="wish-more">
+          <summary>くわしく選ぶ（ご利益・体験・種類 30項目）</summary>
+          <div id="wishes"></div>
+        </details>
+        <div class="wish-status"><span id="wish-selected" aria-live="polite">選択中：なし</span>
+          <button type="button" id="wish-clear" class="btn-text" hidden>選択をすべて解除</button></div>
+        <p class="note">ご利益は、祭神・本尊や名称からの一般的な推定です。</p>
+      </fieldset>
+
+      <fieldset class="step">
+        <legend><span class="step-no" aria-hidden="true">二</span>あなたのこと</legend>
         <div class="fields fields-me">
           <div>
             <label for="nickname">ニックネーム <span class="opt">任意・保存用</span></label>
@@ -87,10 +99,16 @@
             <input type="hidden" id="birthday">
           </div>
         </div>
+        <div id="companion-box" class="companion-box">
+          <p class="sub-label">一緒に行く人 <span class="opt">任意・パートナーや友だちとのデート・お出かけに</span></p>
+          <p class="note companion-lead">一緒に行く人の生年月日を入れると、全員にとって方位の良い聖地を選びます。</p>
+          <div id="companion-list" class="companion-list"></div>
+          <button type="button" id="companion-add" class="btn-sub">＋ 一緒に行く人を追加</button>
+        </div>
       </fieldset>
 
       <fieldset class="step">
-        <legend><span class="step-no" aria-hidden="true">二</span>出発地</legend>
+        <legend><span class="step-no" aria-hidden="true">三</span>出発地</legend>
         <div class="fields">
           <div>
             <label for="home">お住まいの都道府県 <span class="req">必須</span></label>
@@ -120,15 +138,7 @@
       </fieldset>
 
       <fieldset class="step">
-        <legend><span class="step-no" aria-hidden="true">三</span>願い・体験したいこと <span class="opt">任意・いくつでも</span></legend>
-        <div id="wishes"></div>
-        <div class="wish-status"><span id="wish-selected" aria-live="polite">選択中：なし</span>
-          <button type="button" id="wish-clear" class="btn-text" hidden>選択をすべて解除</button></div>
-        <p class="note">ご利益は、祭神・本尊や名称からの一般的な推定です。</p>
-      </fieldset>
-
-      <fieldset class="step">
-        <legend><span class="step-no" aria-hidden="true">四</span>日程と交通手段</legend>
+        <legend><span class="step-no" aria-hidden="true">四</span>出かける日と交通手段</legend>
         <div class="fields">
           <div>
             <label for="trip-date">出かける日 <span class="opt">任意</span></label>
@@ -166,6 +176,7 @@
     <div id="kigaku-panel" class="kigaku-panel"></div>
     <div id="fortune-table" class="fortune-table" hidden></div>
     <div id="recommended" class="cards"></div>
+    <div id="outing" class="outing" hidden></div>
     <aside class="line-box" aria-label="公式LINEのご案内">
       <p class="line-label">公式LINE</p>
       <p class="line-name">アッキーの『ニギハヤヒと俺日記』公式</p>
@@ -272,6 +283,7 @@
 <script src="assets/js/diagnosis.js"></script>
 <script src="assets/js/map.js"></script>
 <script src="assets/js/origin.js"></script>
+<script src="assets/js/companions.js"></script>
 <script src="assets/js/profiles.js"></script>
 <script src="assets/js/photos.js"></script>
 <script src="data/daily-content.js"></script>

@@ -170,10 +170,32 @@
     });
 
     // 選んでいる願い・体験の表示
+    // 願いごと8分類（押すと、くわしい項目のまとまりをまとめて選ぶ）
+    var catBoxes = [];
+    (cfg.wishCategories || []).forEach(function (cat) {
+      var keys = cat.wishes.filter(function (k) { return document.querySelector('input[name=wish][value="' + k + '"]'); });
+      if (!keys.length) return;
+      var lab = el('label', 'chip chip-cat');
+      var cb = el('input'); cb.type = 'checkbox'; cb.name = 'wish-cat'; cb.value = cat.label;
+      lab.append(cb, el('span', null, cat.label));
+      cb.addEventListener('change', function () {
+        keys.forEach(function (k) { var w = document.querySelector('input[name=wish][value="' + k + '"]'); if (w) w.checked = cb.checked; });
+        // 分類を外したとき、ほかの選択中の分類が使っている項目は残す
+        if (!cb.checked) catBoxes.forEach(function (o) { if (o.cb.checked) o.keys.forEach(function (k) { document.querySelector('input[name=wish][value="' + k + '"]').checked = true; }); });
+        updateWishStatus();
+      });
+      catBoxes.push({ cb: cb, keys: keys });
+      $('wish-cats').append(lab);
+    });
     var updateWishStatus = function () {
       var sel = Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; });
       $('wish-selected').textContent = sel.length ? '選択中：' + sel.join('・') + '（' + sel.length + '件）' : '選択中：なし';
       $('wish-clear').hidden = !sel.length;
+      catBoxes.forEach(function (o) { o.cb.checked = o.keys.every(function (k) { return sel.indexOf(k) !== -1; }); });
+      // 8分類に含まれない項目が選ばれていたら、「くわしく選ぶ」を開いて見えるようにする
+      var covered = [];
+      catBoxes.forEach(function (o) { if (o.cb.checked) covered = covered.concat(o.keys); });
+      if (sel.some(function (k) { return covered.indexOf(k) === -1; })) $('wish-more').open = true;
     };
     $('wishes').addEventListener('change', updateWishStatus);
     $('wish-clear').addEventListener('click', function () {
@@ -304,7 +326,11 @@
         o.yearKyo.map(function (k) { return k.dir + '（' + k.why.join('・') + '）'; }).join('、')));
     box.append(yg);
 
-    box.append(el('h4', null, 'これからの6か月の吉方位（年盤・月盤で判定）'));
+    // ここから下は専門的な表なので、見たい人だけ開けるようにする
+    var pro = el('details', 'pro-details');
+    pro.append(el('summary', null, 'くわしく見る：これからの6か月の吉方位（専門的な表）'));
+    box.append(pro);
+    pro.append(el('h4', null, 'これからの6か月の吉方位（年盤・月盤で判定）'));
     var wrap = el('div', 'kg-table');
     var tbl = el('table'), hr = el('tr');
     ['期間', '◎ 年・月とも吉', '○ 年か月が吉', '× 避けたい方位'].forEach(function (h) { hr.append(el('th', null, h)); });
@@ -328,11 +354,11 @@
       tbl.append(tr);
     });
     wrap.append(tbl);
-    box.append(wrap);
+    pro.append(wrap);
     if (o.months.some(function (m) { return m.honmeiInCenter; })) {
-      box.append(el('p', 'note warn', '「本命星が中宮（八方塞がり）」の期間は、どの方位にも吉方位が出にくく、遠出や大きな決断を控えるとする流派もあります。'));
+      pro.append(el('p', 'note warn', '「本命星が中宮（八方塞がり）」の期間は、どの方位にも吉方位が出にくく、遠出や大きな決断を控えるとする流派もあります。'));
     }
-    box.append(el('p', 'note', '方位の吉凶は九星気学の一般的な考え方（年盤・月盤、東西南北30°・四隅60°）による目安で、流派によって異なります。出かける日を入れると、その日の日盤も含めた早見表が下に出ます。'));
+    pro.append(el('p', 'note', '方位の吉凶は九星気学の一般的な考え方（年盤・月盤、東西南北30°・四隅60°）による目安で、流派によって異なります。出かける日を入れると、その日の日盤も含めた早見表が下に出ます。'));
   }
 
   /* ---------- 方位の早見表 ---------- */
@@ -342,7 +368,10 @@
     var box = $('fortune-table');
     box.replaceChildren();
     if (!boards) { box.hidden = true; return; }
-    box.append(el('h3', null, 'この日の方位の早見表'));
+    var pro = el('details', 'pro-details');
+    pro.append(el('summary', null, 'くわしく見る：この日の方位の早見表（専門的な表）'));
+    box.append(pro);
+    pro.append(el('h3', null, 'この日の方位の早見表'));
     var tbl = el('table');
     var head = el('tr');
     ['方位', '年盤', '月盤', '日盤', '総合'].forEach(function (h) { head.append(el('th', null, h)); });
@@ -360,8 +389,10 @@
       tr.append(el('td', 'total', f.mark + ' ' + f.label));
       tbl.append(tr);
     });
-    box.append(tbl);
-    box.append(el('p', 'note', '◎最大吉方（本命星・月命星の両方に吉）　○吉方（本命星に吉）　―吉凶なし　×凶。方位は東西南北30°・四隅60°、真北基準。年盤か月盤で凶の方位は「避けたい方位」として後ろに並べています。'));
+    var tw = el('div', 'kg-table');
+    tw.append(tbl);
+    pro.append(tw);
+    pro.append(el('p', 'note', '◎最大吉方（本命星・月命星の両方に吉）　○吉方（本命星に吉）　―吉凶なし　×凶。方位は東西南北30°・四隅60°、真北基準。年盤か月盤で凶の方位は「避けたい方位」として後ろに並べています。'));
     box.hidden = false;
   }
 
@@ -379,6 +410,64 @@
       return;
     }
     runDiagnose();
+  }
+
+  var WD = ['日', '月', '火', '水', '木', '金', '土'];
+  function dateJ(str) {
+    var p = str.split('-').map(Number);
+    return p[1] + '月' + p[2] + '日（' + WD[new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay()] + '）';
+  }
+  // 次のお休み（土曜。今日が土日なら今日）
+  function nextHoliday() {
+    var p = JSTDate.parts(), add = p.wd === 6 || p.wd === 0 ? 0 : 6 - p.wd;
+    var d = new Date(Date.UTC(p.y, p.m - 1, p.d) + add * 864e5);
+    return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
+  }
+
+  // 「なぜ選ばれたか」を文章で（データにないことは書かない）
+  function whyText(s, ctx) {
+    var out = [];
+    var kind = s.category === '巨木' ? '巨木' : s.category;
+    if (s.hitWishes && s.hitWishes.length) out.push('「' + s.hitWishes.join('・') + '」の願いに合う' + kind + 'です。');
+    else out.push(s.prefecture + (s.municipality || '') + 'の' + kind + 'です。');
+    var f = s.fortune, when = ctx.tripDate ? dateJ(ctx.tripDate) + 'は' : '今月は';
+    if (f && f.palace) {
+      if (f.mark === '◎' || f.mark === '○') out.push(when + (ctx.who ? ctx.who + 'とも' : '') + (f.mark === '◎' ? '年・月とも' : '') + '吉方位の' + s.direction + 'にあります。');
+      else if (f.mark === '△') out.push('年・月では' + s.direction + 'は問題ありませんが、' + (ctx.tripDate ? 'この日は日盤で凶です。' : ''));
+      else if (f.mark === '×') out.push(when + s.direction + 'が避けたい方位にあたるため、参考の候補です。');
+      else out.push('方角は' + s.direction + '（' + (ctx.tripDate ? 'この日の' : '今月の') + '吉凶はなし）です。');
+    } else if (f) out.push('出発地のすぐ近くです。');
+    out.push(ctx.mode.label + 'で' + s.minutesText + '（目安）' + (s.withinLimit ? '' : '、指定の時間より少しかかります') + '。');
+    if (s.numMatch) {
+      var hits = ctx.numbers.filter(function (nn, i) { return s.numbers.indexOf(nn) !== -1 && ctx.numbers.indexOf(nn) === i; });
+      out.push('数秘ナンバー' + hits.join('・') + 'のテーマとも重なります。');
+    }
+    if (s.heritage) out.push(s.heritage + 'です。');
+    return out.join('');
+  }
+
+  // STEP5：お出かけの提案（1位のスポット）
+  function renderOuting(s, ctx) {
+    var box = $('outing');
+    box.replaceChildren();
+    if (!s) { box.hidden = true; return; }
+    var day = ctx.tripDate || nextHoliday();
+    box.append(el('p', 'outing-kicker', 'お出かけの提案'));
+    box.append(el('h3', null, (ctx.tripDate ? dateJ(day) + '、' : '次のお休み（' + dateJ(day) + '）、') + 'ここへ行ってみない？'));
+    var name = el('p', 'outing-spot', s.name);
+    box.append(name, el('p', 'outing-sub', s.prefecture + (s.municipality ? ' ' + s.municipality : '') + '・' + s.category + '・' + ctx.mode.label + 'で' + s.minutesText + '（目安）'));
+    if (!ctx.tripDate) box.append(el('p', 'note', '出かける日を入れて診断すると、その日の方位の吉凶も合わせて選び直します。'));
+    var row = el('div', 'outing-btns');
+    if (window.Collection) row.append(Collection.buttons(s));
+    var route = el('a', 'btn-sub', '経路を調べる（Googleマップ）');
+    route.href = routeUrl(s, ctx.modeKey, ctx.origin); route.target = '_blank'; route.rel = 'noopener noreferrer';
+    var inv = el('a', 'btn-sub btn-invite', 'LINEで誘う');
+    inv.href = 'https://line.me/R/share?text=' + encodeURIComponent(dateJ(day) + '、「' + s.name + '」（' + s.prefecture + '）へ行ってみない？\n' + (cfg.siteUrl || ''));
+    inv.target = '_blank'; inv.rel = 'noopener noreferrer';
+    row.append(route, inv);
+    box.append(row);
+    box.append(el('p', 'note', '参拝時間・入山期間・交通の状況は、出かける前に公式情報でご確認ください。'));
+    box.hidden = false;
   }
 
   function runDiagnose() {
@@ -399,6 +488,11 @@
       }
       if (tErr) errs.push(tErr);
     }
+    var comps = window.Companions ? Companions.get() : [];
+    var cErr = false;
+    if (window.Companions && Companions.incomplete()) { errs.push('一緒に行く人の生年月日を、年・月・日すべて選んでください（行かない人は「この人を外す」で外せます）。'); cErr = true; }
+    comps.forEach(function (c) { var e = D.validateBirthday(c.birthday); if (e && !cErr) { errs.push('一緒に行く人の生年月日：' + e); cErr = true; } });
+    if (window.Companions) Companions.setInvalid(cErr);
     $('trip-date').setAttribute('aria-invalid', tErr ? 'true' : 'false');
     Birthday.setInvalid(!!bErr);
     $('home').setAttribute('aria-invalid', origin ? 'false' : 'true');
@@ -413,7 +507,19 @@
     var n = D.lifePath(birthday);
     var person = Kyusei.birthStars(birthday);
     var boards = tripDate ? Kyusei.boardsFor(tripDate, person) : null;
-    var all = D.rankSpots(SPOTS_ALL, { number: n, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: boards }, cfg, { top: 300 });
+    // 一緒に行く人
+    // 方位の判定に使う盤：出かける日が未定なら、今日の年盤・月盤（日盤は使わない）
+    var dirBoardsFor = function (st) { return tripDate ? Kyusei.boardsFor(tripDate, st) : Object.assign(Kyusei.boardsFor(todayStr(), st), { noDay: true }); };
+    var dirBoards = boards || dirBoardsFor(person);
+    var members = comps.map(function (c, i) {
+      var st = Kyusei.birthStars(c.birthday);
+      return { label: Companions.label(c, i, comps), number: D.lifePath(c.birthday), stars: st, boards: dirBoardsFor(st) };
+    });
+    var group = members.length ? [{ label: 'あなた', boards: dirBoards }].concat(members.map(function (m) { return { label: m.label, boards: m.boards }; })) : null;
+    var numbers = [n].concat(members.map(function (m) { return m.number; }));
+    var who = members.length === 1 ? 'お二人' : 'みなさん';
+    $('h-result').textContent = members.length ? who + 'へのおすすめ' : 'あなたへのおすすめ';
+    var all = D.rankSpots(SPOTS_ALL, { number: n, numbers: numbers, group: group, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: dirBoards }, cfg, { top: 300 });
     var within = all.filter(function (s) { return s.withinLimit; });
     var shown = within.length ? within.slice(0, cfg.resultCount) : all.slice(0, 3);
 
@@ -426,6 +532,18 @@
     ul.append(el('li', null, '交通手段：' + mode.label + (limit ? '・' + limitText(limit) + '以内（目安）' : '・所要時間の指定なし')));
     ul.append(el('li', null, '九星：本命星 ' + Kyusei.STAR_NAMES[person.honmei] + '／月命星 ' + Kyusei.STAR_NAMES[person.getsumei]));
     person.notes.forEach(function (t) { ul.append(el('li', 'warn', t)); });
+    members.forEach(function (m) {
+      ul.append(el('li', null, '一緒に行く人（' + m.label + '）：数秘ナンバー ' + m.number + '（' + D.NUMEROLOGY_MEANINGS[m.number] + '）・本命星 ' + Kyusei.STAR_NAMES[m.stars.honmei] + '／月命星 ' + Kyusei.STAR_NAMES[m.stars.getsumei]));
+    });
+    if (members.length) {
+      var common = [];
+      Kyusei.PALACES.forEach(function (p) {
+        var g = D.judgeGroup(group, PALACE_DEG[p], 50, cfg, true);
+        if (g && (g.mark === '◎' || g.mark === '○')) common.push(p + (g.mark === '◎' ? '（◎）' : ''));
+      });
+      ul.append(el('li', 'group-dirs', (tripDate ? 'この日' : '今月') + '、' + who + 'ともに吉方位になる方角：' + (common.length ? common.join('・') : 'ありません（下のおすすめは、避けたい方位を後ろに回して選んでいます）')));
+      if (!tripDate) ul.append(el('li', null, '出かける日を入れると、その日の日盤も含めて' + who + '全員の吉凶で選びます。'));
+    }
     if (boards) {
       var td = tripDate.split('-').map(Number);
       ul.append(el('li', null, '出かける日：' + td[0] + '年' + td[1] + '月' + td[2] + '日（' + boards.dayGanzhi + '）　年盤 ' +
@@ -438,7 +556,7 @@
       if (boards.year.honmeiInCenter) ul.append(el('li', 'warn', '本命星が年盤の中宮にあります（八方塞がりとして、遠出を控える流派もあります）。'));
       if (boards.month.honmeiInCenter) ul.append(el('li', 'warn', '本命星が月盤の中宮にあります（八方塞がりとして、遠出を控える流派もあります）。'));
     } else {
-      ul.append(el('li', null, '出かける日：指定なし（日付を入れると方位の吉凶も判定します）'));
+      ul.append(el('li', null, '出かける日：未定（今月の年盤・月盤で方位を判定しています。日付を入れると、その日の日盤も加えて判定します）'));
     }
     sum.append(ul);
     renderKigaku(person, boards);
@@ -471,9 +589,9 @@
     shown.forEach(function (s, i) {
       var c = baseCard(s);
       c.prepend(el('div', 'rank', '第' + (i + 1) + '位'));
-      c.append(el('p', 'match', s.numMatch
-        ? 'このスポットのテーマ（' + s.themes.join('・') + '）が、数秘ナンバー' + n + '「' + D.NUMEROLOGY_MEANINGS[n] + '」と重なります。'
-        : 'テーマ：' + s.themes.join('・') + '。数秘ナンバーとの重なりはありませんが、他の条件から候補に入りました。'));
+      var why = el('div', 'why');
+      why.append(el('p', 'why-title', 'ここが選ばれた理由'), el('p', 'why-text', whyText(s, { tripDate: tripDate, who: members.length ? who : '', mode: mode, numbers: numbers })));
+      c.append(why);
 
       var meta = el('dl', 'meta');
       [['方角', s.direction === '—' ? '—（出発地のすぐ近く）' : s.direction + '（真北から' + Math.round(s.bearing) + '°）'],
@@ -504,6 +622,7 @@
       photoCards.push({ spot: s, el: c });
     });
 
+    renderOuting(shown[0] && shown[0].fortune && shown[0].fortune.tier === 0 ? null : shown[0], { tripDate: tripDate, mode: mode, modeKey: modeKey, origin: origin });
     $('diagnosis').hidden = false;
     if (window.SpotPhotos) SpotPhotos.attach(photoCards);
     SpotMap.showRanking(shown, origin);
@@ -566,6 +685,7 @@
     setupForm();
     OriginPicker.init({ config: cfg, prefLookup: function () { return prefByName($('home').value); } });
     $('home').addEventListener('change', OriginPicker.prefChanged);
+    if (window.Companions) Companions.init({ eraLabel: eraLabel, profiles: function () { return window.Profiles && Profiles.list ? Profiles.list() : []; } });
     if (window.Profiles) Profiles.init();
     if (window.Share) {
       $('toplink').append(Share.copyButton());
