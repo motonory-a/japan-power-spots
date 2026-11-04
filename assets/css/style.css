@@ -38,7 +38,7 @@ a:hover{color:var(--ink)}
 
 /* ---------- 見出しの領域（ヒーロー） ---------- */
 .hero{position:relative;background:linear-gradient(180deg,#E6D9F7 0%,#F3DDEE 55%,rgba(248,243,251,0) 100%)}
-.hero-title{max-width:min(1240px,max(600px,calc((100vh - 350px) * 1.777)));margin:0 auto;line-height:0;font-size:inherit}
+.hero-title{max-width:min(1240px,max(600px,calc((100vh - 390px) * 1.777)));margin:0 auto;line-height:0;font-size:inherit}
 .hero-img{display:block;width:100%;height:auto}
 .hero-copy{position:relative;overflow:hidden;max-width:760px;margin:0 auto;text-align:center;padding:34px 20px 44px;background:url(../img/flower-of-life-soft.svg) center/400px no-repeat}
 .hero-catch{position:relative;font-family:var(--serif);font-weight:700;font-size:clamp(23px,5.4vw,40px);letter-spacing:.08em;line-height:1.5;margin:0 0 10px;color:var(--ink)}
@@ -449,7 +449,7 @@ h2::before{width:20px;height:20px;background:url(../img/flower-of-life-icon.svg)
 }
 
 /* ---------- このサイトのリンクをコピー（ページの上と下） ---------- */
-.toplink{max-width:min(1240px,max(600px,calc((100vh - 350px) * 1.777)));margin:0 auto;padding:8px 12px;display:flex;justify-content:flex-start}
+.toplink{max-width:min(1240px,max(600px,calc((100vh - 390px) * 1.777)));margin:0 auto;padding:8px 12px;display:flex;justify-content:flex-start}
 .copyurl{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.85);color:var(--indigo);font:700 12.5px/1.2 var(--sans);padding:7px 12px;border-radius:999px;cursor:pointer;letter-spacing:.04em;min-height:34px}
 .copyurl:hover{border-color:var(--indigo)}
 .copyurl.done{background:var(--sakura);border-color:#C987A8}
