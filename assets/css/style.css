@@ -578,3 +578,15 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
   .detail-title{font-size:21px}
 }
 .hero-catch-sub{display:block;margin-top:4px;font-size:.62em;letter-spacing:.12em;color:var(--indigo)}
+
+/* ---------- もっと自分を知る（広告・販売サイトへの案内） ---------- */
+.more-you{margin:22px 0 6px;padding:18px;border-radius:16px;border:1px dashed var(--gold);background:#FFFDF8}
+.more-you h3{margin:0 0 4px;font-size:17px}
+.more-you .lead-small{margin:0 0 12px}
+.more-you-links{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.more-you-card{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;text-decoration:none;color:var(--ink)}
+.more-you-card:hover{border-color:var(--indigo);color:var(--ink)}
+.more-you-card b{font-family:var(--serif);font-size:17px}
+.more-you-card span:last-child{font-size:13px;color:var(--muted)}
+.more-you-card .ad-label{margin:0;font-size:11px}
+@media (max-width:640px){.more-you-links{grid-template-columns:1fr}}

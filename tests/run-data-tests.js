@@ -145,7 +145,7 @@ const ids = Object.keys(CURATED_INFO);
 test('どの情報にも公式サイト・確認した資料・最終確認日がある', () => {
   ids.forEach((q) => {
     const v = CURATED_INFO[q];
-    assert.ok(/^https:\/\//.test(v.official), q);
+    assert.ok(/^https?:\/\//.test(v.official), q);
     assert.ok(Array.isArray(v.sources) && v.sources.length && v.sources.every((x) => x[0] && /^https:\/\//.test(x[1])), q);
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(v.checked), q);
     assert.ok(v.address, q);

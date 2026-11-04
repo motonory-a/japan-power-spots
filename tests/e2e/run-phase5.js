@@ -82,8 +82,8 @@ async function route(page) {
     check('確認済みだけに絞り込める', Number(vCount) >= 8 && (await page.$$eval('#results .card .badge', (bs) => bs.every((b) => b.textContent === '公式情報あり'))), vCount + '件');
     await page.uncheck('#only-verified');
     await page.waitForTimeout(400);
-    const first = await page.textContent('#results .card h3');
-    check('ふだんの検索は確認済みのスポットが先頭', ['明治神宮', '出雲大社', '伊勢神宮 内宮', '伏見稲荷大社', '厳島神社', '太宰府天満宮', '鹿島神宮', '春日大社'].includes(first), first);
+    const firstBadge = await page.textContent('#results .card .badge');
+    check('ふだんの検索は確認済みのスポットが先頭', firstBadge === '公式情報あり', firstBadge);
 
     // 現在地の周辺
     await page.selectOption('#near-radius', '5');
