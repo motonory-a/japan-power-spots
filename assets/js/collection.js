@@ -10,7 +10,8 @@
   var KINDS = [
     { key: 'want', label: '行きたい', on: '行きたい', icon: '☆', iconOn: '★' },
     { key: 'visited', label: '行った', on: '行った', icon: '○', iconOn: '✓' },
-    { key: 'fav', label: 'お気に入り', on: 'お気に入り', icon: '♡', iconOn: '♥' }
+    { key: 'fav', label: 'お気に入り', on: 'お気に入り', icon: '♡', iconOn: '♥' },
+    { key: 'weekend', label: '週末の候補', on: '週末の候補', icon: '◇', iconOn: '◆', detailOnly: true }
   ];
   var listeners = [];
   var memory = null; // localStorage が使えないときの代わり（ページを閉じると消える）
@@ -36,7 +37,7 @@
 
   function get(id) {
     var it = load().items[id];
-    return it ? { want: !!it.want, visited: !!it.visited, fav: !!it.fav } : { want: false, visited: false, fav: false };
+    return it ? { want: !!it.want, visited: !!it.visited, fav: !!it.fav, weekend: !!it.weekend } : { want: false, visited: false, fav: false, weekend: false };
   }
 
   function set(spot, kind, on) {
@@ -47,7 +48,7 @@
     };
     it[kind] = !!on;
     if (on) it[kind + 'At'] = Date.now(); else delete it[kind + 'At'];
-    if (!it.want && !it.visited && !it.fav) delete d.items[spot.id];
+    if (!it.want && !it.visited && !it.fav && !it.weekend) delete d.items[spot.id];
     else d.items[spot.id] = it;
     save(d);
     emit();
@@ -80,13 +81,15 @@
       b.textContent = (on ? k.iconOn : k.icon) + ' ' + k.label;
     });
   }
-  function buttons(spot) {
+  // all=true のとき「週末の候補」も出す（スポットの詳しい画面用）
+  function buttons(spot, all) {
     var box = document.createElement('div');
     box.className = 'keep-row';
     box.dataset.spotId = spot.id;
     box.setAttribute('role', 'group');
     box.setAttribute('aria-label', spot.name + 'を保存');
     KINDS.forEach(function (k) {
+      if (k.detailOnly && !all) return;
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'keep-btn keep-' + k.key;

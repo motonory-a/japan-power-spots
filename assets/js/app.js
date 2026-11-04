@@ -39,7 +39,7 @@
   function kmText(km) { return km < 10 ? km.toFixed(1) : String(Math.round(km)); }
 
   function statusBadge(s) {
-    var map = { demo: ['デモデータ', 'badge-demo'], unverified: ['OSM・未確認', 'badge-warn'], verified: ['確認済み', 'badge-ok'] };
+    var map = { demo: ['デモデータ', 'badge-demo'], unverified: ['OSM・未確認', 'badge-warn'], verified: ['公式情報あり', 'badge-ok'] };
     var v = map[s.verification_status] || map.demo;
     return el('span', 'badge ' + v[1], v[0]);
   }
@@ -51,6 +51,12 @@
 
   function actions(s, modeKey, origin) {
     var box = el('div', 'actions');
+    if (window.SpotDetail) {
+      var more = el('button', 'btn-sub btn-detail', 'くわしく見る');
+      more.type = 'button';
+      more.addEventListener('click', function () { SpotDetail.open(s); });
+      box.append(more);
+    }
     var b = el('button', 'btn-sub', 'この地図で見る');
     b.type = 'button';
     b.addEventListener('click', function () { goMap(s); });
@@ -630,15 +636,45 @@
   }
 
   /* ---------- 検索 ---------- */
-  var searchResult = [], shownCount = 0;
+  var searchResult = [], shownCount = 0, nearOrigin = null;
+
+  // 現在地の周辺（ボタンを押したときだけ位置情報を使う。外部へは送らない）
+  function startNear() {
+    var msg = $('near-msg');
+    if (!navigator.geolocation) { msg.textContent = 'この端末やブラウザでは位置情報を使えません。都道府県やキーワードで探してください。'; return; }
+    msg.textContent = '現在地を確認しています…';
+    $('near-start').disabled = true;
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      $('near-start').disabled = false;
+      nearOrigin = { lat: pos.coords.latitude, lon: pos.coords.longitude, r: Number($('near-radius').value) };
+      $('near-stop').hidden = false;
+      search();
+      msg.textContent = '現在地から' + nearOrigin.r + 'km以内のスポット：' + searchResult.length.toLocaleString() + '件';
+      $('h-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, function (err) {
+      $('near-start').disabled = false;
+      msg.textContent = err && err.code === 1 ? '位置情報の利用が許可されませんでした。都道府県やキーワードで探せます（設定で許可すると、周辺検索が使えます）。'
+        : '現在地を取得できませんでした。電波の良い場所でもう一度お試しいただくか、都道府県やキーワードで探してください。';
+    }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+  }
+  function stopNear() {
+    nearOrigin = null;
+    $('near-stop').hidden = true;
+    $('near-msg').textContent = '';
+    search();
+  }
   function renderMore() {
     var out = $('results');
     var old = $('more-results'); if (old) old.remove();
+    var photoCards = [];
     searchResult.slice(shownCount, shownCount + PAGE).forEach(function (s) {
       var c = baseCard(s);
+      if (nearOrigin && s._near != null) c.append(el('p', 'near-dist', '現在地から直線で約' + (s._near < 10 ? s._near.toFixed(1) : Math.round(s._near)) + 'km'));
       c.append(actions(s, 'transit'));
       out.append(c);
+      photoCards.push({ spot: s, el: c });
     });
+    if (window.SpotPhotos && searchTouched) SpotPhotos.attach(photoCards);
     shownCount = Math.min(searchResult.length, shownCount + PAGE);
     if (shownCount < searchResult.length) {
       var b = el('button', 'btn-sub more', 'さらに表示（残り' + (searchResult.length - shownCount) + '件）');
@@ -650,23 +686,31 @@
   function search() {
     var q = $('keyword').value.trim().toLowerCase();
     var pref = $('pref').value, cat = $('category').value, wish = $('search-wish').value;
+    var onlyV = $('only-verified').checked;
+    if (q || pref || cat || wish || onlyV || nearOrigin) searchTouched = true; // 絞り込んだら検索結果にも写真を出す
     searchResult = SPOTS_ALL.filter(function (s) {
       if (s.publication_status !== cfg.publicStatus) return false;
+      if (onlyV && !s.verified) return false;
+      if (nearOrigin) {
+        if (Math.abs(s.lat - nearOrigin.lat) > nearOrigin.r / 100 || Math.abs(s.lon - nearOrigin.lon) > nearOrigin.r / 80) return false;
+        s._near = D.distanceKm(nearOrigin.lat, nearOrigin.lon, s.lat, s.lon);
+        if (s._near > nearOrigin.r) return false;
+      }
       if (pref && s.prefecture !== pref) return false;
       if (cat && s.category !== cat) return false;
       if (wish && s.wishes.indexOf(wish) === -1) return false;
       if (!q) return true;
       var text = s._text || (s._text = [s.name, s.prefecture, s.municipality, s.description, s.wishes.join(' ')].join(' ').toLowerCase());
       return text.indexOf(q) !== -1;
-    }).sort(function (a, b) { return (b.fame || 0) - (a.fame || 0); });
+    }).sort(nearOrigin ? function (a, b) { return a._near - b._near; } : function (a, b) { return ((b.featured ? 1000 : 0) + (b.fame || 0)) - ((a.featured ? 1000 : 0) + (a.fame || 0)); });
     $('count').textContent = '（' + searchResult.length.toLocaleString() + '件）';
     var out = $('results');
     out.replaceChildren();
     shownCount = 0;
     if (!searchResult.length) out.append(el('p', 'notice', '該当するスポットはありません。条件を変えてお試しください。'));
-    else out.append(el('p', 'note list-note', '知名度の高い順に表示しています。地図には条件に合うすべてのスポットを表示します。'));
+    else out.append(el('p', 'note list-note', nearOrigin ? '現在地から近い順に表示しています（直線距離）。' : '公式情報を確認済みのスポット、知名度の高い順に表示しています。地図には条件に合うすべてのスポットを表示します。'));
     renderMore();
-    var filtered = !!(q || pref || cat || wish);
+    var filtered = !!(q || pref || cat || wish || onlyV || nearOrigin);
     var onMap = filtered ? searchResult : searchResult.filter(function (s) { return s.tier !== 2; });
     if (onMap.length > 20000) onMap = onMap.slice(0, 20000);
     $('map-note').textContent = filtered ? (onMap.length < searchResult.length ? '地図には知名度の高い順に' + onMap.length.toLocaleString() + '件を表示しています。' : '')
@@ -693,14 +737,19 @@
       $('share-site').append(Share.box({ text: cfg.shareText }));
       $('share-result').append(Share.box({ heading: '診断が楽しかったら、お友だちにも', text: cfg.shareText }));
     }
+    if (window.SpotDetail) SpotDetail.init({ goMap: goMap, routeUrl: function (x) { return routeUrl(x, 'transit', null); } });
     if (window.Daily) Daily.init({ spots: SPOTS_ALL.slice(), baseCard: baseCard, actions: actions, goMap: goMap });
     $('diagnose-form').addEventListener('submit', function (e) { e.preventDefault(); diagnose(); });
     $('keyword').addEventListener('input', searchLater);
     $('pref').addEventListener('change', search);
     $('category').addEventListener('change', search);
     $('search-wish').addEventListener('change', search);
+    $('only-verified').addEventListener('change', search);
+    $('near-start').addEventListener('click', startNear);
+    $('near-stop').addEventListener('click', stopNear);
+    $('near-radius').addEventListener('change', function () { if (nearOrigin) { nearOrigin.r = Number($('near-radius').value); search(); } });
     $('reset-search').addEventListener('click', function () {
-      $('keyword').value = ''; $('pref').value = ''; $('category').value = ''; $('search-wish').value = ''; search();
+      $('keyword').value = ''; $('pref').value = ''; $('category').value = ''; $('search-wish').value = ''; $('only-verified').checked = false; nearOrigin = null; $('near-stop').hidden = true; $('near-msg').textContent = ''; search();
     });
     search();
     if (mapOk) window.addEventListener('resize', SpotMap.invalidate);

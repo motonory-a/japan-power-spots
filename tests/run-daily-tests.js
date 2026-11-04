@@ -86,7 +86,7 @@ test('1万回引いた割合が設定どおり（±2%）', () => {
 
 console.log('コレクション（行きたい・行った・お気に入り）');
 const a = spots[0], b = spots[1];
-test('最初は何も保存されていない', () => assert.deepStrictEqual(Collection.get(a.id), { want: false, visited: false, fav: false }));
+test('最初は何も保存されていない', () => assert.deepStrictEqual(Collection.get(a.id), { want: false, visited: false, fav: false, weekend: false }));
 test('行きたいを押すと保存', () => { Collection.toggle(a, 'want'); assert.strictEqual(Collection.get(a.id).want, true); });
 test('もう一度押すと外れる', () => { Collection.toggle(a, 'want'); assert.strictEqual(Collection.get(a.id).want, false); });
 test('全部外すと記録自体が消える', () => assert.strictEqual(Collection.list().length, 0));

@@ -95,7 +95,7 @@ const doorText = (p) => p.$eval('#door-content', (e) => e.innerText);
     await page.click('#collection .col-item .btn-text:has-text("ここから外す")');
     check('一つずつ外せる', (await page.textContent('.stamp-count')).trim() === '0 / 47');
     await page.click('#collection-clear');
-    check('すべて消す：1回目は確認だけ', (await page.$$('#collection .col-tab')).length === 3 && /もう一度/.test(await page.textContent('#collection-clear')));
+    check('すべて消す：1回目は確認だけ', (await page.$$('#collection .col-tab')).length === 4 && /もう一度/.test(await page.textContent('#collection-clear')));
     await page.click('#collection-clear');
     await page.waitForTimeout(200);
     check('すべて消す：2回目で消える', /行きたい（0）/.test(await page.textContent('#collection .col-tabs')));

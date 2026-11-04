@@ -28,7 +28,17 @@
   }
 
   // QID の配列 → { QID: 写真情報 or null }
+  // Wikidata・Commons は1回50件までなので、50件ずつに分けて問い合わせる
   function lookup(qids) {
+    var need = qids.filter(function (q, i) { return !(q in cache) && qids.indexOf(q) === i; });
+    if (need.length > 50) {
+      var chunks = [];
+      for (var i = 0; i < need.length; i += 50) chunks.push(need.slice(i, i + 50));
+      return chunks.reduce(function (p, c) { return p.then(function () { return lookupChunk(c); }); }, Promise.resolve()).then(function () { return pick(qids); });
+    }
+    return lookupChunk(need).then(function () { return pick(qids); });
+  }
+  function lookupChunk(qids) {
     var need = qids.filter(function (q) { return !(q in cache); });
     if (!need.length) return Promise.resolve(pick(qids));
     var url = WD_API + '?action=wbgetentities&props=claims&format=json&origin=*&ids=' + encodeURIComponent(need.join('|'));

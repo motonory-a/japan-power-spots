@@ -139,5 +139,35 @@ test('上位だけ詳しく作っても、全件と同じ順位になる', () =>
   assert.strictEqual(b.anyWishHit, a.some((s) => s.hitWishes.length > 0));
 });
 
+console.log('厳選スポットの確認済み情報');
+const { CURATED_INFO } = require('../data/curated-info.js');
+const ids = Object.keys(CURATED_INFO);
+test('どの情報にも公式サイト・確認した資料・最終確認日がある', () => {
+  ids.forEach((q) => {
+    const v = CURATED_INFO[q];
+    assert.ok(/^https:\/\//.test(v.official), q);
+    assert.ok(Array.isArray(v.sources) && v.sources.length && v.sources.every((x) => x[0] && /^https:\/\//.test(x[1])), q);
+    assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(v.checked), q);
+    assert.ok(v.address, q);
+  });
+});
+test('Wikidataの番号で全国データのスポットに結びつく', () => {
+  global.CURATED_INFO = CURATED_INFO;
+  const merged = SpotData.mergeCurated(SPOTS_OSM.map(SpotData.fromRow), global.SPOTS).map(SpotData.applyVerified);
+  ids.forEach((q) => {
+    const s = merged.find((x) => x.wikidata === q);
+    assert.ok(s, q + ' ' + CURATED_INFO[q].name);
+    assert.strictEqual(s.verification_status, 'verified');
+    assert.ok(s.featured);
+  });
+  assert.strictEqual(merged.filter((s) => s.verified).length, ids.length);
+  delete global.CURATED_INFO;
+});
+test('確認できていない項目は書かない（空文字や「不明」を入れない）', () => {
+  ids.forEach((q) => Object.entries(CURATED_INFO[q]).forEach(([k, v]) => {
+    if (typeof v === 'string') assert.ok(v.trim() && !/不明|未確認|TODO/.test(v), q + ' ' + k);
+  }));
+});
+
 console.log('\n結果：' + pass + '件成功 / ' + fail + '件失敗');
 process.exit(fail ? 1 : 0);

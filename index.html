@@ -205,6 +205,20 @@
       <div><label for="category">種類</label><select id="category"><option value="">すべて</option></select></div>
       <div><label for="search-wish">願い・体験</label><select id="search-wish"><option value="">すべて</option></select></div>
     </div>
+    <div class="search-extra">
+      <label class="check"><input type="checkbox" id="only-verified"> 公式情報を確認済みのスポットだけ</label>
+    </div>
+    <div class="near-box">
+      <p class="sub-label">現在地の周辺を探す</p>
+      <div class="near-row">
+        <label for="near-radius" class="sr-only">探す範囲</label>
+        <select id="near-radius"><option value="5">5km以内</option><option value="10" selected>10km以内</option><option value="20">20km以内</option><option value="50">50km以内</option></select>
+        <button type="button" id="near-start" class="btn-sub">現在地の周辺を探す</button>
+        <button type="button" id="near-stop" class="btn-text" hidden>周辺検索をやめる</button>
+      </div>
+      <p id="near-msg" class="near-msg" role="status"></p>
+      <p class="note">ボタンを押したときだけ、この端末の位置情報を使います。位置は外部へ送らず、このページの中で距離の計算にだけ使います。</p>
+    </div>
     <button type="button" id="reset-search" class="btn-sub">条件をクリア</button>
   </section>
 
@@ -269,6 +283,8 @@
   </section>
 </main>
 
+<dialog id="spot-detail" class="spot-detail" aria-labelledby="detail-title"></dialog>
+
 <footer><p class="foot-copy" id="foot-copy"></p><p class="foot-line"><a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener noreferrer">公式LINE：アッキーの『ニギハヤヒと俺日記』公式</a></p><p class="foot-title">日本全国パワースポット巡り　試作版 <span id="version"></span></p><p>スポットデータ：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors（ODbL）・<a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）<br>巨樹：環境省生物多様性センター「自然環境保全基礎調査 巨樹・巨木林調査」（<a href="https://www.biodic.go.jp/" target="_blank" rel="noopener noreferrer">生物多様性センター</a>）を加工して作成</p></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -279,6 +295,7 @@
 <script src="assets/js/kigaku-board.js"></script>
 <script src="data/spots-demo.js"></script>
 <script src="data/spots-osm.js"></script>
+<script src="data/curated-info.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/diagnosis.js"></script>
 <script src="assets/js/map.js"></script>
@@ -289,6 +306,7 @@
 <script src="data/daily-content.js"></script>
 <script src="assets/js/collection.js"></script>
 <script src="assets/js/share.js"></script>
+<script src="assets/js/detail.js"></script>
 <script src="assets/js/daily.js"></script>
 <script src="assets/js/app.js"></script>
 </body>

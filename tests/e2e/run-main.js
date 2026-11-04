@@ -155,7 +155,7 @@ async function route(page, { blockCdn = false } = {}) {
     await page.click('label.chip:has(input[value=car])');
 
     // 地図で見る
-    await page.click('#recommended .card:nth-of-type(1) .btn-sub');
+    await page.click('#recommended .card:nth-of-type(1) .actions button:has-text("この地図で見る")');
     await page.waitForTimeout(1200);
     check('「この地図で見る」でポップアップ', (await page.$$('.leaflet-popup')).length === 1);
 

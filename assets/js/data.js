@@ -97,11 +97,22 @@
     return list;
   }
 
+  // 公式サイトなどで確認した情報（data/curated-info.js）を、Wikidataの番号で結びつける
+  function applyVerified(s) {
+    var table = root.CURATED_INFO || (typeof globalThis !== 'undefined' ? globalThis.CURATED_INFO : null);
+    var info = table && s.wikidata && table[s.wikidata];
+    if (!info) return s;
+    s.verified = info;
+    s.verification_status = 'verified';
+    s.featured = true;
+    return s;
+  }
+
   function build() {
     var rows = root.SPOTS_OSM || [];
     var list = rows.map(function (r) { var s = fromRow(r); s.tier = 1; return s; });
     if (!list.length) return (root.SPOTS || []).slice(); // 全国データがないときはデモデータ
-    return mergeCurated(list, root.SPOTS || []);
+    return mergeCurated(list, root.SPOTS || []).map(applyVerified);
   }
 
   /* ---------- 追加データ（後から読み込む） ---------- */
@@ -115,6 +126,7 @@
       var s = fromRow(r);
       if (seen.has(s.id)) return;
       s.tier = 2;
+      applyVerified(s);
       seen.add(s.id);
       all.push(s);
     });
@@ -142,7 +154,7 @@
     return extraPromise;
   }
 
-  var api = { build: build, fromRow: fromRow, mergeCurated: mergeCurated, wikiUrl: wikiUrl, osmUrl: osmUrl, CAT_LABEL: CAT_LABEL,
+  var api = { build: build, fromRow: fromRow, mergeCurated: mergeCurated, applyVerified: applyVerified, wikiUrl: wikiUrl, osmUrl: osmUrl, CAT_LABEL: CAT_LABEL,
     addRows: addRows, loadExtras: loadExtras, onExtraProgress: onExtraProgress };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else { root.SpotData = api; root.ALL_SPOTS = build(); }
