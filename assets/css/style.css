@@ -629,3 +629,14 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .operator{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0 0 14px;font-size:15px}
 .operator dt{font-weight:bold;color:var(--ink)}
 .operator dd{margin:0}
+
+/* 方位の良い日（v3.13） */
+.good-days{margin:14px auto 0;padding:12px 14px;background:#FBF4E4;border-radius:12px;max-width:560px}
+.good-days-head{margin:0 0 8px;font-weight:bold;color:var(--ink);font-size:15px}
+.good-days-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.good-day{min-height:40px;border:1px solid var(--gold);background:#fff;color:var(--ink);border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer;font-family:inherit}
+.good-day:hover{background:var(--gold);color:#fff}
+.good-day:focus-visible{outline:3px solid var(--indigo);outline-offset:2px}
+.good-day-weekend{font-weight:bold;border-width:2px}
+.good-days .note{margin:8px 0 0}
+#h-diagnose{scroll-margin-top:32px}

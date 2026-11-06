@@ -274,7 +274,41 @@
     return out;
   }
 
+  /*
+   * 方位の良い日をさがす（v3.13）
+   *   starsList：[本人の星, 一緒に行く人の星, ...]（Kyusei.birthStars の結果）
+   *   deg・km：出発地からスポットへの方位角・距離、fromDate：'YYYY-MM-DD'、days：何日先まで見るか
+   *   全員が年盤・月盤で吉（◎か○）で、日盤で凶でない日を返す。dayGood は全員が日盤でも吉の日
+   */
+  function addDays(dateStr, n) {
+    var p = dateStr.split('-').map(Number), d = new Date(Date.UTC(p[0], p[1] - 1, p[2]) + n * 864e5);
+    return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
+  }
+  function goodDays(starsList, deg, km, cfg, fromDate, days) {
+    if (!K || !starsList || !starsList.length || km < 1) return [];
+    var out = [];
+    for (var i = 0; i < days; i++) {
+      var date = addDays(fromDate, i), j;
+      try {
+        var group = starsList.map(function (st, n) { return { label: String(n), boards: K.boardsFor(date, st) }; });
+        j = group.length > 1 ? judgeGroup(group, deg, km, cfg, true) : judgeFortune(group[0].boards, deg, km, cfg, true);
+      } catch (e) { continue; }
+      if (!j || (j.mark !== '◎' && j.mark !== '○')) continue;
+      var each = j.members || [j];
+      out.push({ date: date, mark: j.mark, dayGood: each.every(function (x) { return x.levels && (x.levels.day === 'good' || x.levels.day === 'best'); }) });
+    }
+    return out;
+  }
+  // 表示用に数日だけ選ぶ：日盤でも吉の日を優先し、足りなければほかの吉日で補う（日付順）
+  function pickGoodDays(list, n) {
+    var best = list.filter(function (x) { return x.dayGood; });
+    var pick = best.slice(0, n);
+    if (pick.length < n) pick = pick.concat(list.filter(function (x) { return !x.dayGood; }).slice(0, n - pick.length));
+    return pick.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+  }
+
   var api = {
+    addDays: addDays, goodDays: goodDays, pickGoodDays: pickGoodDays,
     NUMEROLOGY_MEANINGS: NUMEROLOGY_MEANINGS,
     digitSum: digitSum, lifePath: lifePath, validateBirthday: validateBirthday,
     distanceKm: distanceKm, bearingDeg: bearingDeg, rhumbBearingDeg: rhumbBearingDeg, bearingBy: bearingBy, direction8: direction8,

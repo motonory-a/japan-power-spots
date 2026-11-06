@@ -308,6 +308,28 @@ test('同じ点数なら、公式情報を確認済み→知名度の高い順�
   assert.deepStrictEqual(r.map((s) => s.name), ['遠い・確認済み', '遠い・有名', '近い・無名']);
 });
 
+console.log('方位の良い日（v3.13）');
+test('goodDays：60日のうち、全員が年盤・月盤で吉の日だけ返す', () => {
+  const K = require('../assets/js/kyusei.js');
+  const st = K.birthStars('1974-04-15');
+  const list = D.goodDays([st], 200, 80, cfg, '2026-11-06', 60);
+  assert.ok(Array.isArray(list));
+  list.forEach((x) => {
+    const j = D.judgeFortune(K.boardsFor(x.date, st), 200, 80, cfg, true);
+    assert.ok(j.mark === '◎' || j.mark === '○', x.date + ' ' + j.mark);
+  });
+});
+test('goodDays：出発地のすぐ近く（1km未満）は空', () => {
+  const K = require('../assets/js/kyusei.js');
+  assert.deepStrictEqual(D.goodDays([K.birthStars('1974-04-15')], 90, 0.5, cfg, '2026-11-06', 30), []);
+});
+test('pickGoodDays：日盤でも吉の日を優先して日付順に', () => {
+  const r = D.pickGoodDays([{ date: '2026-11-08', dayGood: false }, { date: '2026-11-10', dayGood: true }, { date: '2026-11-12', dayGood: true }], 2);
+  assert.deepStrictEqual(r.map((x) => x.date), ['2026-11-10', '2026-11-12']);
+  assert.strictEqual(D.pickGoodDays([{ date: '2026-11-08', dayGood: false }, { date: '2026-11-07', dayGood: false }], 5)[0].date, '2026-11-07');
+});
+test('addDays：月をまたぐ', () => { assert.strictEqual(D.addDays('2026-11-29', 3), '2026-12-02'); });
+
 console.log('データ');
 test('必須項目がそろっている', () => {
   const req = ['id', 'source_ids', 'name', 'aliases', 'category', 'prefecture_code', 'prefecture', 'municipality', 'lat', 'lon',

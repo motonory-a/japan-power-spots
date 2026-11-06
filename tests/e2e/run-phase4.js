@@ -115,7 +115,18 @@ async function setRowBD(row, v) { const s = await row.$$('.bd-row select'); cons
     await page.click('#diagnose');
     await page.waitForSelector('#recommended .card');
     check('日付なしでも方位を今月の盤で判定', /今月/.test(await page.textContent('#recommended')) && /今月の年盤・月盤/.test(await page.textContent('#summary')));
-    check('日付なしの提案は「次のお休み」', /次のお休み（11月7日（土））/.test(await page.textContent('#outing h3')));
+    check('日付なしの提案は「行けるときに行ってみてね」', /行けるときに行ってみてね/.test(await page.textContent('#outing h3')));
+    check('日付なしなら「方位が良い日」の欄', await page.isVisible('#outing .good-days') && /方位が良い日/.test(await page.textContent('#outing .good-days-head')));
+    const days = await page.$$eval('#outing .good-day', (b) => b.map((x) => x.textContent));
+    check('方位の良い日は最大5日（なければ案内文）', days.length <= 5 && (days.length > 0 || /見つかりませんでした/.test(await page.textContent('#outing .good-days'))), days.join(' / '));
+    check('LINEで誘う：日付なしは「今度、」', decodeURIComponent(await page.getAttribute('#outing .btn-invite', 'href')).includes('今度、「'));
+    if (days.length) {
+      await page.click('#outing .good-day >> nth=0');
+      await page.waitForTimeout(500);
+      const tv = await page.inputValue('#trip-date');
+      check('良い日を押すと、その日で診断し直す', /^\d{4}-\d{2}-\d{2}$/.test(tv) && /ここへ行ってみない？/.test(await page.textContent('#outing h3')) && /出かける日：/.test(await page.textContent('#summary')), tv);
+      await page.fill('#trip-date', '');
+    }
 
     // 保存した人から選ぶ
     await page.click('#companion-add');

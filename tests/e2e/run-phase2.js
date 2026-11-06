@@ -52,7 +52,7 @@ async function route(page) {
     await page.click('.hero-cta');
     await page.waitForTimeout(900);
     const diagTop = await page.$eval('#h-diagnose', (h) => h.getBoundingClientRect().top);
-    check('メインボタンで診断へ移動する', diagTop >= -5 && diagTop < 200, 'top=' + Math.round(diagTop));
+    check('メインボタンで診断へ移動する', diagTop >= -5 && diagTop < 230, 'top=' + Math.round(diagTop));
 
     // 2. コーナーの並び（仕様書03の順）
     const order = await page.$$eval('main > section', (ss) => ss.map((s) => s.id || s.getAttribute('aria-labelledby')));

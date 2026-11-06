@@ -477,18 +477,20 @@
     var box = $('outing');
     box.replaceChildren();
     if (!s) { box.hidden = true; return; }
-    var day = ctx.tripDate || nextHoliday();
+    var day = ctx.tripDate;
     box.append(el('p', 'outing-kicker', 'お出かけの提案'));
-    box.append(el('h3', null, (ctx.tripDate ? dateJ(day) + '、' : '次のお休み（' + dateJ(day) + '）、') + 'ここへ行ってみない？'));
+    box.append(el('h3', null, ctx.tripDate ? dateJ(day) + '、ここへ行ってみない？' : 'ここ、行けるときに行ってみてね'));
     var name = el('p', 'outing-spot', s.name);
     box.append(name, el('p', 'outing-sub', s.prefecture + (s.municipality ? ' ' + s.municipality : '') + '・' + s.category + '・' + ctx.mode.label + 'で' + s.minutesText + '（目安）'));
-    if (!ctx.tripDate) box.append(el('p', 'note', '出かける日を入れて診断すると、その日の方位の吉凶も合わせて選び直します。'));
+    // 方位の良い日（日付未定のとき・決めた日の方位がよくないとき）
+    var fm = s.fortune ? s.fortune.mark : null;
+    if (ctx.stars && (!ctx.tripDate || (fm !== '◎' && fm !== '○'))) box.append(goodDaysBox(s, ctx));
     var row = el('div', 'outing-btns');
     if (window.Collection) row.append(Collection.buttons(s));
     var route = el('a', 'btn-sub', '経路を調べる（Googleマップ）');
     route.href = routeUrl(s, ctx.modeKey, ctx.origin); route.target = '_blank'; route.rel = 'noopener noreferrer';
     var inv = el('a', 'btn-sub btn-invite', 'LINEで誘う');
-    inv.href = 'https://line.me/R/share?text=' + encodeURIComponent(dateJ(day) + '、「' + s.name + '」（' + s.prefecture + '）へ行ってみない？\n' + (cfg.siteUrl || ''));
+    inv.href = 'https://line.me/R/share?text=' + encodeURIComponent((day ? dateJ(day) + '、' : '今度、') + '「' + s.name + '」（' + s.prefecture + '）へ行ってみない？\n' + (cfg.siteUrl || ''));
     inv.target = '_blank'; inv.rel = 'noopener noreferrer';
     row.append(route, inv);
     box.append(row);
@@ -504,6 +506,36 @@
     }
     box.append(el('p', 'note', '参拝時間・入山期間・交通の状況は、出かける前に公式情報でご確認ください。'));
     box.hidden = false;
+  }
+
+  // 方位の良い日（これから60日）。日付を押すと、その日で診断し直す
+  var GOOD_DAYS_RANGE = 60;
+  function goodDaysBox(s, ctx) {
+    var wrap = el('div', 'good-days');
+    var who = ctx.stars.length > 2 ? 'みなさん' : ctx.stars.length === 2 ? 'お二人' : '';
+    var list = D.pickGoodDays(D.goodDays(ctx.stars, s.bearing, s.km, cfg, todayStr(), GOOD_DAYS_RANGE), 5);
+    if (ctx.tripDate) list = list.filter(function (x) { return x.date !== ctx.tripDate; });
+    var head = ctx.tripDate ? 'この日は方位がいまひとつ。' + (who ? who + 'の' : '') + '方位が良い日はこちら' : (who ? who + 'の' : '') + '方位が良い日（これから2か月）';
+    wrap.append(el('p', 'good-days-head', head));
+    if (!list.length) {
+      wrap.append(el('p', 'note', 'これから2か月は、方位の良い日が見つかりませんでした。方位は気にせず、行けるときに楽しんでください。'));
+      return wrap;
+    }
+    var row = el('div', 'good-days-row');
+    list.forEach(function (x) {
+      var p = x.date.split('-').map(Number), wd = new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay();
+      var b = el('button', 'good-day' + (wd === 0 || wd === 6 ? ' good-day-weekend' : ''), dateJ(x.date) + (x.dayGood ? ' ◎' : ''));
+      b.type = 'button';
+      b.title = 'この日で診断し直す';
+      b.addEventListener('click', function () {
+        $('trip-date').value = x.date;
+        runDiagnose();
+      });
+      row.append(b);
+    });
+    wrap.append(row);
+    wrap.append(el('p', 'note', '◎は、その日の日盤でも吉の日です。日付を押すと、その日で診断し直します（スポットが変わることがあります）。'));
+    return wrap;
   }
 
   function runDiagnose() {
@@ -578,7 +610,7 @@
         var g = D.judgeGroup(group, PALACE_DEG[p], 50, cfg, true);
         if (g && (g.mark === '◎' || g.mark === '○')) common.push(p + (g.mark === '◎' ? '（◎）' : ''));
       });
-      ul.append(el('li', 'group-dirs', (tripDate ? 'この日' : '今月') + '、' + who + 'ともに吉方位になる方角：' + (common.length ? common.join('・') : 'ありません（下のおすすめは、避けたい方位を後ろに回して選んでいます）')));
+      ul.append(el('li', 'group-dirs', (tripDate ? 'この日' : '今月') + '、' + who + 'ともに吉方位になる方角：' + (common.length ? common.join('・') : 'ありません。避けたい方位を後ろに回して選んでいます。方位の良い日は「お出かけの提案」に出しています')));
       if (!tripDate) ul.append(el('li', null, '出かける日を入れると、その日の日盤も含めて' + who + '全員の吉凶で選びます。'));
     }
     if (boards) {
@@ -659,7 +691,7 @@
       photoCards.push({ spot: s, el: c });
     });
 
-    renderOuting(shown[0] && shown[0].fortune && shown[0].fortune.tier === 0 ? null : shown[0], { tripDate: tripDate, mode: mode, modeKey: modeKey, origin: origin });
+    renderOuting(shown[0] && shown[0].fortune && shown[0].fortune.tier === 0 ? null : shown[0], { tripDate: tripDate, mode: mode, modeKey: modeKey, origin: origin, stars: [person].concat(members.map(function (m) { return m.stars; })) });
     $('diagnosis').hidden = false;
     if (window.SpotPhotos) SpotPhotos.attach(photoCards);
     SpotMap.showRanking(shown, origin);
