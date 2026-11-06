@@ -250,7 +250,7 @@
     if (root.SpotPhotos) SpotPhotos.attach([{ el: card, spot: s }]);
 
     if (root.Share) {
-      body.append(Share.box({ heading: '今日の聖地を紹介する', text: '今日の運命の聖地は「' + s.name + '」（' + s.prefecture + '）。毎日ちがう聖地に出会える『日本全国パワースポット巡り』' }));
+      body.append(Share.box({ heading: '今日の聖地を紹介する', text: '今日の運命の聖地は「' + s.name + '」（' + s.prefecture + '）。毎日ちがう聖地に出会える『開運パワースポット巡り』' }));
     }
     var w = nextWeekend();
     var box = el('div', 'weekend');

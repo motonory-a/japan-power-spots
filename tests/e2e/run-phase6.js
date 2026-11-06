@@ -31,7 +31,7 @@ const check = (name, ok, info = '') => { results.push(ok); console.log((ok ? '  
     og: ['og:title', 'og:description', 'og:image', 'og:url'].map((p) => (document.querySelector('meta[property="' + p + '"]') || {}).content),
     ld: Array.from(document.querySelectorAll('script[type="application/ld+json"]')).map((s) => s.textContent)
   }));
-  check('タイトルと説明文', meta.title === '日本全国パワースポット巡り' && /どこに行こうか/.test(meta.desc));
+  check('タイトルと説明文', meta.title === '開運パワースポット巡り' && /どこに行こうか/.test(meta.desc));
   check('canonical', meta.canon === 'https://motonory-a.github.io/japan-power-spots/');
   check('OGP（タイトル・説明・画像・URL）', meta.og.every(Boolean) && /^https:\/\//.test(meta.og[2]));
   let ld = null;

@@ -101,9 +101,12 @@ async function route(page, { blockCdn = false } = {}) {
     await page.click('.kg-tab >> nth=1'); await page.waitForTimeout(100);
     check('方位盤：今月に切り替え', (await page.textContent('.kg-caption')).startsWith('今月の盤'));
     const addHref = await page.getAttribute('#report-add', 'href');
-    check('「載っていない場所を教える」のリンク', addHref.includes('/issues/new?template=spot-add.yml'), addHref);
+    check('「LINEで教える」のリンク（LINE公式）', addHref === 'https://lin.ee/wHX3skr3', addHref);
     const fixHref = await page.getAttribute('#recommended .report-link >> nth=0', 'href');
-    check('カードの「情報の誤りを報告」に名前とIDが入る', fixHref.includes('template=spot-fix.yml') && fixHref.includes('&name=') && fixHref.includes('&spot_id='), fixHref.slice(0, 120));
+    check('カードの「情報の誤りを報告」もLINE公式へ', fixHref === 'https://lin.ee/wHX3skr3', fixHref);
+    check('「情報の誤りを報告（LINE）」の表示', (await page.textContent('#recommended .report-link >> nth=0')).includes('LINE'));
+    const copied = await page.evaluate(() => { document.addEventListener('click', (e) => { if (e.target.closest('a.report-link')) e.preventDefault(); }, true); const a = document.querySelector('#recommended .report-link'); a.click(); return a.textContent; });
+    check('押すとスポット名をコピーした案内に変わる', copied.includes('コピーしました'), copied);
     check('数秘ナンバー4を表示', summary.includes('数秘ナンバー：4'), summary.slice(0, 40));
     let names = await page.$$eval('#recommended .card h3', (e) => e.map((x) => x.textContent));
     check('おすすめ5件', names.length === 5, names.join(','));

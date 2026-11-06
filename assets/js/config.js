@@ -3,7 +3,7 @@
  * 重み（点数配分）や交通手段ごとの距離の目安はここだけ変更すれば反映されます。
  */
 var APP_CONFIG = {
-  version: '3.11.1',
+  version: '3.12.0',
 
   // 推薦スコアの配分（合計100点。仕様書v2.0「おすすめ順位の設計」を元に、数秘を残して調整）
   //   入力していない項目（願いを選んでいない、出かける日が未定など）は、架空の点を付けずに
@@ -58,15 +58,15 @@ var APP_CONFIG = {
     maxCandidates: 5
   },
 
-  // 投稿フォーム（GitHub の Issue フォーム。Googleフォームなどに替える場合はURLを書き換える）
+  // 投稿の受付先（v3.12からLINE公式アカウント。GitHubのフォームに戻す場合は issues/new?template=spot-add.yml などに書き換える）
   reportForms: {
-    add: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-add.yml',
-    fix: 'https://github.com/motonory-a/japan-power-spots/issues/new?template=spot-fix.yml'
+    add: 'https://lin.ee/wHX3skr3',
+    fix: 'https://lin.ee/wHX3skr3'
   },
 
   // 公開しているURL（シェアで送るリンク）
   siteUrl: 'https://motonory-a.github.io/japan-power-spots/',
-  shareText: '次のお休み、どこに行こうか？運命の聖地を簡単検索。生年月日とお住まいから、あなたにぴったりの聖地を探せるサイト『日本全国パワースポット巡り』',
+  shareText: '次のお休み、どこに行こうか？運命の聖地を簡単検索。生年月日とお住まいから、あなたにぴったりの聖地を探せるサイト『開運パワースポット巡り』',
 
   // トップの「願いごとから探す」（仕様書v2.0の8分類）。
   // 押すと、診断フォームの「三 願い・体験」で wishes の項目が選ばれた状態になる。

@@ -94,6 +94,15 @@
       fix.href = cfg.reportForms.fix + (cfg.reportForms.fix.indexOf('github.com') !== -1
         ? '&title=' + encodeURIComponent('【訂正】' + s.name) + '&name=' + encodeURIComponent(s.name) + '&spot_id=' + encodeURIComponent(s.id) : '');
       fix.target = '_blank'; fix.rel = 'noopener noreferrer';
+      // LINEで受け付けるときは、押したときにスポット名をコピーしておく（トークに貼り付けてもらう）
+      if (cfg.reportForms.fix.indexOf('lin.ee') !== -1) {
+        fix.textContent = '情報の誤りを報告（LINE）';
+        fix.addEventListener('click', function () {
+          var t = '【情報の誤り】' + s.name + '（' + s.prefecture + (s.municipality ? ' ' + s.municipality : '') + '）\n誤っている内容：';
+          try { if (navigator.clipboard) navigator.clipboard.writeText(t).catch(function () {}); } catch (e) {}
+          fix.textContent = 'スポット名をコピーしました。LINEのトークに貼り付けてください';
+        });
+      }
       card.append(fix);
     }
     if (s.source_urls && s.source_urls.length) {

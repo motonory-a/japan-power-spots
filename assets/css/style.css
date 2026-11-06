@@ -608,7 +608,7 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .course-stop{display:flex;gap:10px;align-items:flex-start}
 .course-num{flex:0 0 28px;height:28px;border-radius:50%;background:var(--grad);color:#fff;font-size:14px;font-weight:bold;display:flex;align-items:center;justify-content:center;margin-top:2px}
 .course-stop-body{display:flex;flex-direction:column;min-width:0}
-.course-stop-name{all:unset;cursor:pointer;font-weight:bold;color:var(--indigo);text-decoration:underline;text-underline-offset:3px;font-size:15px;line-height:1.5}
+.course-stop-name{all:unset;cursor:pointer;font-weight:bold;color:var(--indigo);text-decoration:underline;text-underline-offset:3px;font-size:15px;line-height:1.5;min-height:36px;display:flex;align-items:center}
 .course-stop-name:focus-visible{outline:3px solid var(--indigo);outline-offset:2px;border-radius:4px}
 .course-hours{font-size:12px;color:var(--muted);line-height:1.5}
 .course-leg{font-size:12px;color:var(--muted);margin:2px 0 2px 13px;padding:2px 0 2px 22px;border-left:2px dotted var(--gold)}
@@ -620,3 +620,7 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .outing-course-text{margin:0;font-size:14px}
 .detail-courses{margin-top:16px}
 .detail-courses .btn-sub{margin:6px 8px 0 0}
+
+/* LINEで教える（v3.12） */
+.btn-line-report{background:#06C755;border-color:#06C755;color:#fff}
+.btn-line-report:hover{background:#05B34C;color:#fff}
