@@ -624,3 +624,8 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 /* LINEで教える（v3.12） */
 .btn-line-report{background:#06C755;border-color:#06C755;color:#fff}
 .btn-line-report:hover{background:#05B34C;color:#fff}
+
+/* 運営者情報（v3.12.2） */
+.operator{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0 0 14px;font-size:15px}
+.operator dt{font-weight:bold;color:var(--ink)}
+.operator dd{margin:0}

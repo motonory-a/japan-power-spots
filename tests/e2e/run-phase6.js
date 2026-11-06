@@ -31,6 +31,7 @@ const check = (name, ok, info = '') => { results.push(ok); console.log((ok ? '  
     og: ['og:title', 'og:description', 'og:image', 'og:url'].map((p) => (document.querySelector('meta[property="' + p + '"]') || {}).content),
     ld: Array.from(document.querySelectorAll('script[type="application/ld+json"]')).map((s) => s.textContent)
   }));
+  check('運営者「アッキー」を表示', (await page.textContent('.operator')).includes('アッキー') && (await page.textContent('footer')).includes('運営：アッキー'));
   check('タイトルと説明文', meta.title === '開運パワースポット巡り' && /どこに行こうか/.test(meta.desc));
   check('canonical', meta.canon === 'https://motonory-a.github.io/japan-power-spots/');
   check('OGP（タイトル・説明・画像・URL）', meta.og.every(Boolean) && /^https:\/\//.test(meta.og[2]));
@@ -43,7 +44,7 @@ const check = (name, ok, info = '') => { results.push(ok); console.log((ok ? '  
   check('どちらも「広告」と表示', cards.every((c) => /広告/.test(c.label)));
   check('販売サイトへのリンクは sponsored', cards.filter((c) => /kojigen/.test(c.href)).every((c) => /sponsored/.test(c.rel)));
   check('外部リンクはすべて新しいタブ・noopener', await page.$$eval('a[target=_blank]', (as) => as.every((a) => /noopener/.test(a.rel))));
-  check('個人情報とデータの扱いの説明', /サーバーへは送りません/.test(await page.textContent('#h-privacy + details')));
+  check('個人情報とデータの扱いの説明', /サーバーへは送りません/.test(await page.textContent('#h-privacy ~ details')));
   await browser.close();
   const ng = results.filter((r) => !r).length;
   console.log('\n結果：' + (results.length - ng) + '件成功 / ' + ng + '件失敗');
