@@ -101,8 +101,9 @@ async function route(page, { blockCdn = false } = {}) {
     await page.click('.kg-tab >> nth=1'); await page.waitForTimeout(100);
     check('方位盤：今月に切り替え', (await page.textContent('.kg-caption')).startsWith('今月の盤'));
     const addHref = await page.getAttribute('#report-add', 'href');
-    check('「LINEで教える」のリンク（LINE公式）', addHref === 'https://lin.ee/wHX3skr3', addHref);
+    check('「LINEでアッキーに相談する」のリンク（LINE公式）', addHref === 'https://lin.ee/wHX3skr3', addHref);
     const fixHref = await page.getAttribute('#recommended .report-link >> nth=0', 'href');
+    check('見出しは「アッキーに相談する」', (await page.textContent('#h-report')).trim() === 'アッキーに相談する' && (await page.textContent('#report-add')).trim() === 'LINEでアッキーに相談する');
     check('カードの「情報の誤りを報告」もLINE公式へ', fixHref === 'https://lin.ee/wHX3skr3', fixHref);
     check('「情報の誤りを報告（LINE）」の表示', (await page.textContent('#recommended .report-link >> nth=0')).includes('LINE'));
     const copied = await page.evaluate(() => { document.addEventListener('click', (e) => { if (e.target.closest('a.report-link')) e.preventDefault(); }, true); const a = document.querySelector('#recommended .report-link'); a.click(); return a.textContent; });
