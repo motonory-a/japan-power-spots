@@ -16,7 +16,9 @@
 <meta property="og:title" content="Japan Power Spot Journey | Find your sacred place in Japan">
 <meta property="og:description" content="Shrines, temples, sacred trees and waterfalls matched to your wish and birthday. Free, no sign-up.">
 <meta property="og:url" content="https://motonory-a.github.io/japan-power-spots/en/">
-<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/hero-1200.jpg">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/en/img/hero-spring-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
@@ -46,6 +48,22 @@
     <span class="en-brand">Japan Power Spot Journey</span>
     <a class="en-lang" href="../" hreflang="ja" lang="ja">日本語</a>
   </nav>
+  <div class="en-hero-pic" id="hero-pic">
+    <script>
+      // Season by the month in Japan: Mar–May spring, Jun–Aug summer, Sep–Nov autumn, Dec–Feb winter
+      // 日本時間の月で季節の画像を選ぶ（3〜5月 春／6〜8月 夏／9〜11月 秋／12〜2月 冬）
+      (function () {
+        var m = new Date(Date.now() + 9 * 3600e3).getUTCMonth() + 1;
+        var s = m >= 3 && m <= 5 ? 'spring' : m >= 6 && m <= 8 ? 'summer' : m >= 9 && m <= 11 ? 'autumn' : 'winter';
+        var alt = { spring: 'cherry blossoms', summer: 'early summer', autumn: 'autumn leaves', winter: 'snow' }[s];
+        var set = function (ext) { return [800, 1200, 1672].map(function (w) { return 'img/hero-' + s + '-' + w + '.' + ext + ' ' + w + 'w'; }).join(', '); };
+        document.write('<picture><source type="image/webp" srcset="' + set('webp') + '" sizes="(max-width: 1240px) 100vw, 1240px">' +
+          '<img class="en-hero-img" src="img/hero-' + s + '-1200.jpg" srcset="' + set('jpg') + '" sizes="(max-width: 1240px) 100vw, 1240px" width="1672" height="941" fetchpriority="high" decoding="async" ' +
+          'alt="A traveler opens her arms under a red torii gate, with Mt. Fuji and a five-story pagoda among ' + alt + '"></picture>');
+      })();
+    </script>
+    <noscript><img class="en-hero-img" src="img/hero-spring-1200.jpg" width="1672" height="941" alt="A traveler under a red torii gate with Mt. Fuji and a five-story pagoda"></noscript>
+  </div>
   <div class="en-hero-copy">
     <p class="en-kicker">開運パワースポット巡り</p>
     <h1 class="en-title">Find the sacred place in Japan<br class="pc-br"> that is waiting for you</h1>
