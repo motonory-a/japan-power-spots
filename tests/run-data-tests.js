@@ -169,5 +169,37 @@ test('確認できていない項目は書かない（空文字や「不明」�
   }));
 });
 
+console.log('有名スポットのご利益（手入力）');
+const { KNOWN_BENEFITS } = require('../data/known-benefits.js');
+const benefitKeys = new Set(WISH_OPTIONS.filter((o) => o.group === 'ご利益').map((o) => o.key));
+test('ご利益の名前は選択肢と同じ書き方', () => {
+  Object.entries(KNOWN_BENEFITS).forEach(([q, ws]) => {
+    assert.ok(/^Q\d+$/.test(q), q);
+    assert.ok(ws.length && ws.every((w) => benefitKeys.has(w)), q + ' ' + ws.join(','));
+  });
+});
+test('Wikidataの番号で全国データのスポットに結びつき、ご利益が足される', () => {
+  global.KNOWN_BENEFITS = KNOWN_BENEFITS;
+  const rows = SPOTS_OSM.slice();
+  const fsx = require('fs'), vmx = require('vm');
+  fsx.readdirSync(__dirname + '/../data/extra').forEach((f) => {
+    const sd = { addRows: (a) => a.forEach((r) => rows.push(r)) };
+    const sb = { SpotData: sd, window: { SpotData: sd } };
+    vmx.runInNewContext(fsx.readFileSync(__dirname + '/../data/extra/' + f, 'utf8'), sb);
+  });
+  const byQ = {};
+  rows.forEach((r) => { if (r[11] && !byQ[r[11]]) byQ[r[11]] = r; });
+  Object.keys(KNOWN_BENEFITS).forEach((q) => {
+    assert.ok(byQ[q], q + ' が全国データにない');
+    const s = SpotData.applyVerified(SpotData.fromRow(byQ[q]));
+    KNOWN_BENEFITS[q].forEach((w) => {
+      assert.ok(s.wishes.includes(w) && s.wishesInferred.includes(w), q + ' ' + w);
+    });
+  });
+  const kifune = SpotData.applyVerified(SpotData.fromRow(byQ.Q276779));
+  assert.ok(kifune.wishes.includes('恋愛・縁結び'), '貴船神社に縁結び');
+  delete global.KNOWN_BENEFITS;
+});
+
 console.log('\n結果：' + pass + '件成功 / ' + fail + '件失敗');
 process.exit(fail ? 1 : 0);

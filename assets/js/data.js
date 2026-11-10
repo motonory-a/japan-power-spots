@@ -98,7 +98,26 @@
   }
 
   // 公式サイトなどで確認した情報（data/curated-info.js）を、Wikidataの番号で結びつける
+  // 有名スポットの一般に知られるご利益（data/known-benefits.js）を足す（v3.15）
+  //   推定のご利益として扱い、数秘ナンバーもご利益に合わせて足す（scripts/build_spots.py の TAG_NUMBERS と同じ対応）
+  var BENEFIT_NUMBERS = { '商売繁盛': [8], '金運': [8], '学業・合格': [7, 3], '勝負運': [1, 8], '厄除け': [4], '交通安全': [5],
+    '恋愛・縁結び': [2, 6], '安産・子宝': [6], '芸事上達': [3], '健康祈願': [4], '美容': [3, 6] };
+  function applyKnownBenefits(s) {
+    var table = root.KNOWN_BENEFITS || (typeof globalThis !== 'undefined' ? globalThis.KNOWN_BENEFITS : null);
+    var add = table && s.wikidata && table[s.wikidata];
+    if (!add || s.knownBenefits) return s;
+    s.knownBenefits = add.slice();
+    add.forEach(function (w) {
+      if (s.wishes.indexOf(w) === -1) s.wishes.push(w);
+      if (s.wishesInferred.indexOf(w) === -1) s.wishesInferred.push(w);
+      if (s.themes.length < 4 && s.themes.indexOf(w) === -1) s.themes.push(w);
+      (BENEFIT_NUMBERS[w] || []).forEach(function (n) { if (s.numbers.indexOf(n) === -1 && s.numbers.length < 4) s.numbers.push(n); });
+    });
+    return s;
+  }
+
   function applyVerified(s) {
+    applyKnownBenefits(s);
     var table = root.CURATED_INFO || (typeof globalThis !== 'undefined' ? globalThis.CURATED_INFO : null);
     var info = table && s.wikidata && table[s.wikidata];
     if (!info) return s;
@@ -154,7 +173,7 @@
     return extraPromise;
   }
 
-  var api = { build: build, fromRow: fromRow, mergeCurated: mergeCurated, applyVerified: applyVerified, wikiUrl: wikiUrl, osmUrl: osmUrl, CAT_LABEL: CAT_LABEL,
+  var api = { build: build, fromRow: fromRow, mergeCurated: mergeCurated, applyVerified: applyVerified, applyKnownBenefits: applyKnownBenefits, wikiUrl: wikiUrl, osmUrl: osmUrl, CAT_LABEL: CAT_LABEL,
     addRows: addRows, loadExtras: loadExtras, onExtraProgress: onExtraProgress };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else { root.SpotData = api; root.ALL_SPOTS = build(); }
