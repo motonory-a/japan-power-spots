@@ -19,16 +19,9 @@
     spreadKm: 3
   });
 
-  // Spots for visitors: officially checked ones, or well-known ones (Wikipedia in 3+ languages; nature spots 2+). About 2,000
-  var NATURE = ['滝', '山', '湧水', '温泉', '巨木', '岩・磐座', '洞窟', '絶景', '湖'];
-  var POOL = (window.ALL_SPOTS || []).filter(function (s) {
-    if (!s.wikidata || s.category === '祠') return false;
-    var sl = s.sitelinks || 0;
-    return !!s.verified || sl >= 3 || (sl >= 2 && NATURE.indexOf(s.category) !== -1);
-  }).map(function (s) {
-    // International fame: number of Wikipedia language editions, plus a bonus for officially checked places
-    return Object.assign({}, s, { fame: Math.min(250, (s.sitelinks || 0) * 8 + (s.verified ? 30 : 0)) });
-  });
+  // Spots for visitors (en/pool-en.js): officially checked ones or well-known ones, about 1,400
+  var POOL = EnPool.build(window.ALL_SPOTS || []);
+  var LBL = window.EN_LABELS || {};   // English name, page slug, enwiki title (data/en-labels.js)
 
   // The Japanese site always puts "directions to avoid" last. Visitors have only a few days,
   // so here the direction is part of the score (0 points when it should be avoided) and is shown on each card.
@@ -72,7 +65,7 @@
   function saveLabels() { try { localStorage.setItem(LABEL_KEY, JSON.stringify(labels)); } catch (e) { /* storage full or blocked */ } }
 
   function fetchLabels(qids) {
-    var need = qids.filter(function (q, i) { return q && !(q in labels) && qids.indexOf(q) === i; });
+    var need = qids.filter(function (q, i) { return q && !(q in labels) && !(LBL[q] && LBL[q][0]) && !(EN.names && EN.names[q]) && qids.indexOf(q) === i; });
     if (!need.length) return Promise.resolve();
     var chunks = [];
     for (var i = 0; i < need.length; i += 50) chunks.push(need.slice(i, i + 50));
@@ -94,16 +87,27 @@
   function enName(s) {
     var q = s.wikidata || s.q;
     if (EN.names && EN.names[q]) return EN.names[q];
+    if (LBL[q] && LBL[q][0]) return LBL[q][0];
     var l = labels[q];
-    if (l && l.n && !/[぀-ヿ一-鿿]/.test(l.n)) return l.n;
+    if (l && l.n && !/[\u3040-\u30ff\u4e00-\u9fff]/.test(l.n)) return l.n;
     return '';
   }
-  function enWiki(q) { var l = labels[q]; return l && l.w ? 'https://en.wikipedia.org/wiki/' + encodeURIComponent(l.w.replace(/ /g, '_')) : ''; }
+  function enWiki(q) {
+    var t = (LBL[q] && LBL[q][2]) || (labels[q] && labels[q].w);
+    return t ? 'https://en.wikipedia.org/wiki/' + encodeURIComponent(t.replace(/ /g, '_')) : '';
+  }
+  function pageUrl(q) { return LBL[q] && LBL[q][1] ? 'spots/' + LBL[q][1] + '.html' : ''; }
+  function listItem(s) {
+    var q = s.wikidata || s.q;
+    return { q: q, n: enName(s), j: s.name, lat: s.lat, lon: s.lon, s: LBL[q] ? LBL[q][1] : '', c: s.category, p: s.prefecture_code };
+  }
 
   function nameBlock(s, tag) {
     var box = el('div', 'en-namebox');
     var en = enName(s);
-    var h = el(tag || 'h3', 'en-name', en || s.name);
+    var h = el(tag || 'h3', 'en-name');
+    var pu = pageUrl(s.wikidata || s.q);
+    if (pu) { var a = el('a', null, en || s.name); a.href = pu; h.append(a); } else h.textContent = en || s.name;
     if (!en) h.lang = 'ja';
     box.append(h);
     if (en) { var jp = el('span', 'en-jp', s.name); jp.lang = 'ja'; box.append(jp); }
@@ -324,6 +328,7 @@
     var w = enWiki(s.wikidata);
     if (w) btns.append(link(w, 'Wikipedia', 'btn-sub en-btn'));
     if (s.verified && s.verified.official) btns.append(link(s.verified.official, 'Official site', 'btn-sub en-btn'));
+    btns.append(MyList.button(listItem(s), 'en-btn'));
     body.append(btns);
     art.append(body);
     return art;
@@ -440,7 +445,9 @@
       c.stops.forEach(function (st) {
         var li = el('li');
         var en = enName({ q: st.q });
-        var nm = el('span', 'en-stop-name', en || st.name);
+        var pu = pageUrl(st.q);
+        var nm = el(pu ? 'a' : 'span', 'en-stop-name', en || st.name);
+        if (pu) nm.href = pu;
         if (!en) nm.lang = 'ja';
         li.append(nm);
         if (en) { var jp = el('span', 'en-jp', st.name); jp.lang = 'ja'; li.append(jp); }
@@ -453,10 +460,194 @@
     });
   }
 
+
+  /* ---------- trip planner (旅行プランナー) ---------- */
+  var MAX_DAYS = 21;
+  function addDays(str, n) { return D.addDays(str, n); }
+  function legRow(leg) {
+    var row = el('div', 'en-leg');
+    var city = el('select', 'en-leg-city'); city.setAttribute('aria-label', 'City');
+    EN.cities.forEach(function (c) { var o = el('option', null, c.label); o.value = c.key; city.append(o); });
+    var from = el('input', 'en-leg-from'); from.type = 'date'; from.min = today(); from.setAttribute('aria-label', 'Arrival date');
+    var nights = el('select', 'en-leg-days'); nights.setAttribute('aria-label', 'Days');
+    for (var i = 1; i <= 10; i++) { var o = el('option', null, i + (i === 1 ? ' day' : ' days')); o.value = i; nights.append(o); }
+    var del = el('button', 'en-leg-del', '✕'); del.type = 'button'; del.title = 'Remove this city';
+    del.addEventListener('click', function () { if ($('legs').children.length > 1) row.remove(); });
+    city.value = leg.city; from.value = leg.from || ''; nights.value = leg.days || 2;
+    var l1 = el('label', null, 'City'), l2 = el('label', null, 'From'), l3 = el('label', null, 'For');
+    l1.append(city); l2.append(from); l3.append(nights);
+    row.append(l1, l2, l3, del);
+    return row;
+  }
+  function readLegs() {
+    return Array.from(document.querySelectorAll('.en-leg')).map(function (r) {
+      return { city: r.querySelector('.en-leg-city').value, from: r.querySelector('.en-leg-from').value, days: Number(r.querySelector('.en-leg-days').value) };
+    });
+  }
+  function initPlanner() {
+    var tiles = $('plan-wish');
+    var any = el('option', null, 'Anything — surprise me'); any.value = ''; tiles.append(any);
+    EN.wishTiles.forEach(function (t, i) { var o = el('option', null, t.icon + ' ' + t.label); o.value = String(i); tiles.append(o); });
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem('jps-en-plan') || 'null'); } catch (e) { saved = null; }
+    var legs = saved && saved.legs && saved.legs.length ? saved.legs : [{ city: 'tokyo', from: '', days: 3 }, { city: 'kyoto', from: '', days: 2 }];
+    legs.forEach(function (l) { $('legs').append(legRow(l)); });
+    if (saved && saved.wish != null) tiles.value = saved.wish;
+    try { var b = localStorage.getItem('jps-en-bday'); if (b) $('plan-bday').value = b; } catch (e) { /* ignore */ }
+    $('plan-bday').max = today();
+    $('add-leg').addEventListener('click', function () {
+      var ls = readLegs(), last = ls[ls.length - 1];
+      var next = last && last.from ? addDays(last.from, last.days) : '';
+      $('legs').append(legRow({ city: 'osaka', from: next, days: 2 }));
+    });
+    // when a date changes, fill the next city's date automatically
+    $('legs').addEventListener('change', function () {
+      var rows = document.querySelectorAll('.en-leg');
+      for (var i = 1; i < rows.length; i++) {
+        var prev = rows[i - 1], f = prev.querySelector('.en-leg-from').value, cur = rows[i].querySelector('.en-leg-from');
+        if (f && !cur.dataset.touched) cur.value = addDays(f, Number(prev.querySelector('.en-leg-days').value));
+      }
+    });
+    $('legs').addEventListener('input', function (e) { if (e.target.classList.contains('en-leg-from')) e.target.dataset.touched = '1'; });
+    $('plan-form').addEventListener('submit', function (e) { e.preventDefault(); runPlan(); });
+  }
+
+  function runPlan() {
+    var bday = $('plan-bday').value, legs = readLegs(), errs = [];
+    var be = checkBirthday(bday); if (be) errs.push(be);
+    legs.forEach(function (l, i) { if (!l.from) errs.push('Please choose the arrival date for city ' + (i + 1) + '.'); else if (l.from < today()) errs.push('City ' + (i + 1) + ': please choose a date from today onward.'); });
+    var box = $('plan-error'); box.replaceChildren();
+    if (errs.length) { var ul = el('ul'); errs.forEach(function (m) { ul.append(el('li', null, m)); }); box.append(ul); box.hidden = false; return; }
+    box.hidden = true;
+    var wishIdx = $('plan-wish').value;
+    var wishes = wishIdx === '' ? [] : EN.wishTiles[Number(wishIdx)].wishes;
+    try { localStorage.setItem('jps-en-bday', bday); localStorage.setItem('jps-en-plan', JSON.stringify({ legs: legs, wish: wishIdx })); } catch (e) { /* ignore */ }
+    var n = D.lifePath(bday), stars = K.birthStars(bday);
+    var days = [];
+    legs.forEach(function (l) { for (var i = 0; i < l.days; i++) days.push({ date: addDays(l.from, i), city: EN.cities.filter(function (c) { return c.key === l.city; })[0] }); });
+    days.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    days = days.slice(0, MAX_DAYS);
+    var used = {}, all = [];
+    var plan = days.map(function (d) {
+      var origin = { lat: d.city.lat, lon: d.city.lon, label: d.city.label };
+      var ranked = rankForVisitors({ number: n, numbers: [n], origin: origin, wishes: wishes, mode: 'transit', limitMinutes: 90, boards: K.boardsFor(d.date, stars) });
+      var pick = [];
+      for (var i = 0; i < ranked.length && pick.length < 2; i++) {
+        var s = ranked[i];
+        if (!s.withinLimit || used[s.wikidata] || (s.fortune && (s.fortune.mark === '×' || s.fortune.mark === '△'))) continue;
+        if (pick.some(function (p) { return D.distanceKm(p.lat, p.lon, s.lat, s.lon) < 2; })) continue;
+        used[s.wikidata] = true; pick.push(s);
+      }
+      // if no lucky direction is available, fall back to the best places anyway
+      for (var j = 0; j < ranked.length && pick.length < 2; j++) {
+        var t = ranked[j];
+        if (!t.withinLimit || used[t.wikidata]) continue;
+        used[t.wikidata] = true; pick.push(t);
+      }
+      all = all.concat(pick);
+      return { d: d, origin: origin, pick: pick };
+    });
+    var out = $('plan-out');
+    out.replaceChildren(el('p', 'small', 'Planning your trip…'));
+    withTimeout(fetchLabels(all.map(function (s) { return s.wikidata; })), 4000).then(function () {
+      out.replaceChildren();
+      out.append(el('p', 'note', 'Your Nine Star Ki: ' + EN.stars[stars.honmei] + '. For each day we picked places in a lucky direction from where you stay that night, when possible.'));
+      plan.forEach(function (x, i) {
+        var day = el('section', 'en-day');
+        day.append(el('h3', 'en-day-title', 'Day ' + (i + 1) + ' · ' + fmtDate(x.d.date) + ' · ' + x.d.city.label));
+        var list = el('div', 'en-day-list');
+        x.pick.forEach(function (s) {
+          var it = el('div', 'en-day-item');
+          it.append(nameBlock(s, 'h4'));
+          it.append(el('p', 'en-meta', (EN.categories[s.category] || s.category) + ' · ' + fmtMin(s.minutes) + ' by train & bus (' + fmtKm(s.km) + ')'));
+          if (s.fortune) {
+            var f = EN.fortune[s.fortune.mark] || EN.fortune['―'];
+            it.append(el('p', 'en-fortune en-' + (s.km < 1 ? 'neutral' : f.cls), s.km < 1 ? 'Close to your hotel' : s.fortune.mark + ' ' + (s.fortune.mark === '×' ? 'Not a lucky direction that day, but one of the best places nearby' : f.text + ' that day')));
+          }
+          if (s.hitWishes.length) it.append(el('p', 'small', 'Matches your wish: ' + s.hitWishes.map(wishText).join(', ')));
+          var bt = el('div', 'en-btns');
+          bt.append(link(gmapsDir(x.origin, s, 'transit'), 'Directions', 'btn-sub en-btn'), MyList.button(listItem(s), 'en-btn'));
+          it.append(bt);
+          list.append(it);
+        });
+        if (!x.pick.length) list.append(el('p', 'small', 'A free day. Explore the neighborhood!'));
+        day.append(list);
+        out.append(day);
+      });
+      var saveAll = el('button', 'btn-sub en-btn', '♡ Save all to my list');
+      saveAll.type = 'button';
+      saveAll.addEventListener('click', function () { all.forEach(function (s) { MyList.add(listItem(s)); }); saveAll.textContent = '♥ Saved to my list'; });
+      out.append(saveAll);
+      out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  /* ---------- my list (行きたい場所リスト) ---------- */
+  function renderList() {
+    var items = MyList.read();
+    document.querySelectorAll('[data-mylist-count]').forEach(function (e) { e.textContent = items.length ? '(' + items.length + ')' : ''; });
+    var box = $('mylist-items'); box.replaceChildren();
+    $('mylist-actions').hidden = !items.length;
+    if (!items.length) { box.append(el('p', 'small', 'Nothing saved yet. Tap ♡ Save on any place to add it here. Your list stays on this device.')); return; }
+    var ol = el('ol', 'en-list');
+    items.forEach(function (x) {
+      var li = el('li');
+      var name = x.s ? el('a', null, x.n || x.j) : el('span', null, x.n || x.j);
+      if (x.s) name.href = 'spots/' + x.s + '.html';
+      if (!x.n) name.lang = 'ja';
+      li.append(name);
+      if (x.n) { var jp = el('span', 'en-jp-inline', ' ' + x.j); jp.lang = 'ja'; li.append(jp); }
+      li.append(el('span', 'small', ' · ' + (EN.categories[x.c] || '') + (x.p ? ', ' + EN.prefectures[x.p] : '')));
+      var rm = el('button', 'en-leg-del', '✕'); rm.type = 'button'; rm.title = 'Remove';
+      rm.addEventListener('click', function () { MyList.remove(x.q); });
+      li.append(rm);
+      ol.append(li);
+    });
+    box.append(ol);
+    $('list-route').href = MyList.routeUrl(items);
+    $('list-route').textContent = items.length > 10 ? 'Open the first 10 in Google Maps' : 'Open as a route in Google Maps';
+  }
+  function initList() {
+    MyList.onChange(renderList);
+    renderList();
+    $('list-csv').addEventListener('click', function () {
+      var blob = new Blob([MyList.csv(MyList.read(), APP_CONFIG.siteUrl + 'en/spots/')], { type: 'text/csv;charset=utf-8' });
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'my-japan-power-spots.csv';
+      document.body.append(a); a.click(); a.remove();
+    });
+    $('list-share').addEventListener('click', function () {
+      var url = APP_CONFIG.siteUrl + 'en/' + MyList.shareHash(MyList.read());
+      var done = function () { $('list-msg').textContent = 'Link copied. Send it to your travel friends!'; };
+      if (navigator.share) navigator.share({ title: 'My Japan power spots', url: url }).catch(function () {});
+      else if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { $('list-msg').textContent = url; });
+      else $('list-msg').textContent = url;
+    });
+    // a shared list in the URL: #list=Q1,Q2
+    var m = /#list=([Q0-9,]+)/.exec(location.hash);
+    if (m) {
+      var qs = m[1].split(',');
+      var found = qs.map(function (q) { return POOL.filter(function (s) { return s.wikidata === q; })[0]; }).filter(Boolean);
+      if (found.length) {
+        fetchLabels(qs).then(function () {
+          var box = $('shared-list'); box.hidden = false; box.replaceChildren();
+          box.append(el('p', null, 'A friend shared ' + found.length + ' places with you:'));
+          var ul = el('ul', 'en-list');
+          found.forEach(function (s) { var li = el('li'); li.append(nameBlock(s, 'span')); ul.append(li); });
+          var add = el('button', 'btn-sub en-btn', '♡ Add all to my list'); add.type = 'button';
+          add.addEventListener('click', function () { found.forEach(function (s) { MyList.add(listItem(s)); }); box.hidden = true; });
+          box.append(ul, add);
+          $('mylist').scrollIntoView({ block: 'start' });
+        });
+      }
+    }
+  }
+
   /* ---------- start ---------- */
   buildForm();
   initOrigin();
   renderCourses();
+  initPlanner();
+  initList();
   $('finder-form').addEventListener('submit', function (e) { e.preventDefault(); run(); });
   var qs = [];
   (window.MODEL_COURSES || []).forEach(function (c) { c.stops.forEach(function (s) { qs.push(s.q); }); });

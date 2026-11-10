@@ -46,7 +46,12 @@
 <header class="en-hero">
   <nav class="en-nav">
     <span class="en-brand">Japan Power Spot Journey</span>
-    <a class="en-lang" href="../" hreflang="ja" lang="ja">日本語</a>
+    <span class="en-nav-links">
+      <a href="#planner">Plan my trip</a>
+      <a href="spots/">All spots</a>
+      <a href="#mylist">My list <span class="en-count" data-mylist-count></span></a>
+      <a class="en-lang" href="../" hreflang="ja" lang="ja">日本語</a>
+    </span>
   </nav>
   <div class="en-hero-pic" id="hero-pic">
     <script>
@@ -68,7 +73,10 @@
     <p class="en-kicker">開運パワースポット巡り</p>
     <h1 class="en-title">Find the sacred place in Japan<br class="pc-br"> that is waiting for you</h1>
     <p class="en-sub">Shrines, temples, ancient trees, waterfalls and holy mountains,<br class="pc-br"> chosen by your wish, your birthday and where you are staying.</p>
-    <a class="hero-cta" href="#finder">Find my power spot</a>
+    <div class="en-ctas">
+      <a class="hero-cta" href="#finder">Find my power spot</a>
+      <a class="en-cta2" href="#planner">Planning a trip? Make a day-by-day plan</a>
+    </div>
     <p class="en-hero-note">Free · No sign-up · About 1 minute</p>
   </div>
 </header>
@@ -135,6 +143,36 @@
     <p class="note">Travel times are rough estimates from straight-line distance. Please check routes, opening hours and access on Google Maps or the official site before you go. Blessings are the traditional ones associated with each place's deities or name.</p>
   </section>
 
+  <section class="panel" id="planner" aria-labelledby="h-planner">
+    <h2 id="h-planner">Plan your trip, day by day</h2>
+    <p class="lead-small">Coming to Japan soon? Enter the cities and dates of your trip. For each day, we suggest power spots in a lucky direction from where you stay that night.</p>
+    <form id="plan-form" novalidate>
+      <div class="en-plan-top">
+        <label>Your birthday <input type="date" id="plan-bday" min="1900-01-01"></label>
+        <label>Your wish <select id="plan-wish"></select></label>
+      </div>
+      <p class="en-sub-label">Where will you stay?</p>
+      <div id="legs"></div>
+      <button type="button" class="btn-sub" id="add-leg">+ Add another city</button>
+      <div class="form-error" id="plan-error" role="alert" hidden></div>
+      <button type="submit" class="btn-main en-submit">Make my trip plan</button>
+    </form>
+    <div id="plan-out" class="en-plan-out"></div>
+  </section>
+
+  <section class="panel" id="mylist" aria-labelledby="h-mylist">
+    <h2 id="h-mylist">My list <span class="en-count" data-mylist-count></span></h2>
+    <div id="shared-list" class="en-shared" hidden></div>
+    <div id="mylist-items"></div>
+    <div class="en-btns" id="mylist-actions" hidden>
+      <a class="btn-main en-btn" id="list-route" href="#" target="_blank" rel="noopener">Open as a route in Google Maps</a>
+      <button type="button" class="btn-sub en-btn" id="list-csv">Download for Google My Maps (CSV)</button>
+      <button type="button" class="btn-sub en-btn" id="list-share">Share my list</button>
+    </div>
+    <p class="small" id="list-msg" role="status" aria-live="polite"></p>
+    <p class="note">Tip: in <a href="https://www.google.com/maps/d/" target="_blank" rel="noopener">Google My Maps</a>, choose “Import” and select the CSV file to see all your places on one map on your phone.</p>
+  </section>
+
   <section class="panel" id="courses" aria-labelledby="h-courses">
     <h2 id="h-courses">Model routes by region</h2>
     <p class="lead-small">Half-day and day routes around famous shrines and temples. Every stop has been checked on its official website.</p>
@@ -175,6 +213,7 @@
 
   <section class="panel" id="about" aria-labelledby="h-about">
     <h2 id="h-about">About this site</h2>
+    <p><a href="spots/">Browse all power spots by region →</a></p>
     <p>Japan Power Spot Journey is the English edition of <a href="../" lang="ja">開運パワースポット巡り</a>, a free site that lists about 96,000 shrines, temples, sacred trees, waterfalls and mountains across Japan. For visitors, we focus on around 5,000 well-known places.</p>
     <p><b>How we choose:</b> your wishes, your Nine Star Ki lucky directions from your hotel, your life path number, travel time, and how well known each place is. Nine Star Ki (九星気学) is a traditional Japanese practice that many people use when choosing where and when to travel. Please enjoy it as a cultural guide, not as a promise.</p>
     <p><b>Your data:</b> your birthday and location are used only inside your browser. Place names and photos are loaded from Wikidata and Wikimedia Commons.</p>
@@ -196,11 +235,14 @@
 <script src="../data/spots-osm.js"></script>
 <script src="../data/curated-info.js"></script>
 <script src="../data/known-benefits.js"></script>
+<script src="../data/en-labels.js"></script>
 <script src="../assets/js/data.js"></script>
 <script src="../assets/js/diagnosis.js"></script>
 <script src="../assets/js/photos.js"></script>
 <script src="../data/model-courses.js"></script>
 <script src="i18n-en.js"></script>
+<script src="pool-en.js"></script>
+<script src="mylist.js"></script>
 <script src="app-en.js"></script>
 </body>
 </html>
