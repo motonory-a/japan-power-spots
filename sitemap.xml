@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://motonory-a.github.io/japan-power-spots/</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://motonory-a.github.io/japan-power-spots/en/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
   </url>
 </urlset>

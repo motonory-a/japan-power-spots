@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Japan Power Spot Journey | Find shrines, temples &amp; sacred nature that match you</title>
+<meta name="theme-color" content="#4B2D7E">
+<meta name="description" content="Visiting Japan? Tell us your wish, your birthday and where you are staying. We suggest shrines, temples, sacred trees and waterfalls that suit you, using Japanese Nine Star Ki and numerology.">
+<link rel="canonical" href="https://motonory-a.github.io/japan-power-spots/en/">
+<link rel="alternate" hreflang="ja" href="https://motonory-a.github.io/japan-power-spots/">
+<link rel="alternate" hreflang="en" href="https://motonory-a.github.io/japan-power-spots/en/">
+<link rel="alternate" hreflang="x-default" href="https://motonory-a.github.io/japan-power-spots/en/">
+<meta name="author" content="Akki">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Japan Power Spot Journey">
+<meta property="og:title" content="Japan Power Spot Journey | Find your sacred place in Japan">
+<meta property="og:description" content="Shrines, temples, sacred trees and waterfalls matched to your wish and birthday. Free, no sign-up.">
+<meta property="og:url" content="https://motonory-a.github.io/japan-power-spots/en/">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/hero-1200.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Japan Power Spot Journey",
+  "url": "https://motonory-a.github.io/japan-power-spots/en/",
+  "description": "Find shrines, temples and sacred nature in Japan that match your wish and birthday.",
+  "inLanguage": "en",
+  "publisher": { "@type": "Person", "name": "Akki" }
+}
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Shippori+Mincho:wght@700&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="en.css">
+</head>
+<body class="en">
+<header class="en-hero">
+  <nav class="en-nav">
+    <span class="en-brand">Japan Power Spot Journey</span>
+    <a class="en-lang" href="../" hreflang="ja" lang="ja">日本語</a>
+  </nav>
+  <div class="en-hero-copy">
+    <p class="en-kicker">開運パワースポット巡り</p>
+    <h1 class="en-title">Find the sacred place in Japan<br class="pc-br"> that is waiting for you</h1>
+    <p class="en-sub">Shrines, temples, ancient trees, waterfalls and holy mountains,<br class="pc-br"> chosen by your wish, your birthday and where you are staying.</p>
+    <a class="hero-cta" href="#finder">Find my power spot</a>
+    <p class="en-hero-note">Free · No sign-up · About 1 minute</p>
+  </div>
+</header>
+
+<main>
+  <section class="panel panel-wish" aria-labelledby="h-wish">
+    <h2 id="h-wish">What do you wish for?</h2>
+    <p class="lead-small">Pick the wish closest to your heart. It will be set in the finder below.</p>
+    <div class="wish-tiles" id="wish-tiles"></div>
+  </section>
+
+  <section class="panel" id="finder" aria-labelledby="h-finder">
+    <h2 id="h-finder">Power spot finder</h2>
+    <form id="finder-form" novalidate>
+      <div class="en-step">
+        <h3><span class="step-no">1</span>Your wishes <span class="opt">optional · choose any</span></h3>
+        <div class="chip-row" id="wish-chips"></div>
+        <p class="en-sub-label">Places you would love to experience</p>
+        <div class="chip-row" id="exp-chips"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">2</span>Your birthday <span class="req">required</span></h3>
+        <input type="date" id="birthday" min="1900-01-01" autocomplete="bday" aria-describedby="bday-note">
+        <p class="note" id="bday-note">Used for your Nine Star Ki (a traditional Japanese system of lucky directions) and your life path number. It stays on your device and is never sent anywhere.</p>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">3</span>Where are you staying? <span class="req">required</span></h3>
+        <select id="city" aria-label="City you are staying in"></select>
+        <div class="en-origin-actions">
+          <button type="button" class="btn-sub" id="use-location">Use my current location</button>
+          <span class="small">or tap the map below to set your hotel</span>
+        </div>
+        <p class="origin-status" id="origin-status" role="status" aria-live="polite"></p>
+        <div id="origin-map" class="en-origin-map" aria-label="Map to choose your starting point"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">4</span>How will you travel?</h3>
+        <div class="chip-row" id="mode-chips"></div>
+        <label class="en-inline">Up to
+          <select id="time-limit"></select> one way
+        </label>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">5</span>When will you go? <span class="opt">optional</span></h3>
+        <input type="date" id="trip-date">
+        <p class="note">If you pick a date, the direction from your hotel is checked for that exact day. If not, we show this month's lucky directions and suggest good days.</p>
+      </div>
+
+      <div class="form-error" id="form-error" role="alert" tabindex="-1" hidden></div>
+      <button type="submit" class="btn-main en-submit">Show my power spots</button>
+    </form>
+  </section>
+
+  <section class="panel" id="results" aria-labelledby="h-results" hidden>
+    <h2 id="h-results">Your power spots</h2>
+    <div id="you-box" class="en-you"></div>
+    <div id="result-cards" class="cards"></div>
+    <div id="more-box"></div>
+    <div id="result-map" class="en-result-map" aria-label="Map of your power spots"></div>
+    <p class="note">Travel times are rough estimates from straight-line distance. Please check routes, opening hours and access on Google Maps or the official site before you go. Blessings are the traditional ones associated with each place's deities or name.</p>
+  </section>
+
+  <section class="panel" id="courses" aria-labelledby="h-courses">
+    <h2 id="h-courses">Model routes by region</h2>
+    <p class="lead-small">Half-day and day routes around famous shrines and temples. Every stop has been checked on its official website.</p>
+    <div class="course-regions" id="course-regions"></div>
+    <div class="course-list" id="course-list"></div>
+  </section>
+
+  <section class="panel" id="manners" aria-labelledby="h-manners">
+    <h2 id="h-manners">How to visit a shrine or temple</h2>
+    <div class="en-manners">
+      <div class="en-manner">
+        <h3>⛩ Shinto shrine (jinja)</h3>
+        <ol>
+          <li><b>Bow once at the torii gate</b> before you walk in. Walk at the side of the path, as the center is said to be for the gods.</li>
+          <li><b>Purify at the water basin (temizuya).</b> Rinse your left hand, then your right, pour a little water into your left hand to rinse your mouth, then rinse the handle. Don't drink from the ladle.</li>
+          <li><b>Pray: bow twice, clap twice, bow once.</b> Drop a coin in the offering box first. Many people say their name and address in their heart before making a wish.</li>
+        </ol>
+      </div>
+      <div class="en-manner">
+        <h3>🪷 Buddhist temple (tera)</h3>
+        <ol>
+          <li><b>Bow at the main gate</b> and step over the threshold, not on it.</li>
+          <li><b>Purify at the water basin</b> the same way as at a shrine. If there is an incense burner, waft a little smoke toward yourself.</li>
+          <li><b>Pray with your palms together.</b> Make an offering and bow quietly. <b>Do not clap</b> at temples.</li>
+        </ol>
+      </div>
+      <div class="en-manner">
+        <h3>📜 Good to know</h3>
+        <ul>
+          <li><b>Goshuin</b> are hand-written seals you can collect in a special book, usually for 300–1,000 yen. Ask at the office (juyosho).</li>
+          <li><b>Omamori</b> (charms) and <b>omikuji</b> (fortune slips) are sold at most shrines and temples. If you draw a bad fortune, tie it to the rack and leave it behind.</li>
+          <li>Many halls do not allow photos inside. Look for signs, keep your voice low, and dress modestly.</li>
+          <li>Sacred trees, rocks and waterfalls are places of worship too. Please don't climb or touch where it is roped off.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="about" aria-labelledby="h-about">
+    <h2 id="h-about">About this site</h2>
+    <p>Japan Power Spot Journey is the English edition of <a href="../" lang="ja">開運パワースポット巡り</a>, a free site that lists about 96,000 shrines, temples, sacred trees, waterfalls and mountains across Japan. For visitors, we focus on around 5,000 well-known places.</p>
+    <p><b>How we choose:</b> your wishes, your Nine Star Ki lucky directions from your hotel, your life path number, travel time, and how well known each place is. Nine Star Ki (九星気学) is a traditional Japanese practice that many people use when choosing where and when to travel. Please enjoy it as a cultural guide, not as a promise.</p>
+    <p><b>Your data:</b> your birthday and location are used only inside your browser. Place names and photos are loaded from Wikidata and Wikimedia Commons.</p>
+    <p class="operator">Run by <b>Akki</b> (高次元ネゴシエイター アッキー), Tokyo. Questions or a place to suggest? Message on <a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">Instagram</a>, <a href="https://x.com/nigihayahi03" target="_blank" rel="noopener">X</a> or <a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener">LINE</a>. Videos on <a href="https://www.youtube.com/@nigihayahi03/videos" target="_blank" rel="noopener">YouTube</a>.</p>
+  </section>
+</main>
+
+<footer class="en-foot">
+  <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata, Ministry of the Environment Japan · Photos: Wikimedia Commons</p>
+  <p>© Japan Power Spot Journey / 開運パワースポット巡り · <a href="../" lang="ja">日本語版</a></p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/jst-date.js"></script>
+<script src="../data/solar-terms.js"></script>
+<script src="../assets/js/kyusei.js"></script>
+<script src="../data/spots-demo.js"></script>
+<script src="../data/spots-osm.js"></script>
+<script src="../data/curated-info.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/diagnosis.js"></script>
+<script src="../assets/js/photos.js"></script>
+<script src="../data/model-courses.js"></script>
+<script src="i18n-en.js"></script>
+<script src="app-en.js"></script>
+</body>
+</html>

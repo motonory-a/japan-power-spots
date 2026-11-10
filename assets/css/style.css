@@ -640,3 +640,6 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .good-day-weekend{font-weight:bold;border-width:2px}
 .good-days .note{margin:8px 0 0}
 #h-diagnose{scroll-margin-top:32px}
+
+/* 英語版へのリンク（v3.14） */
+.lang-link{order:2;margin-left:auto;font-size:13px;border:1px solid var(--indigo);border-radius:999px;padding:3px 12px;text-decoration:none;background:#fff}
