@@ -130,7 +130,7 @@ ${extra || ''}</head>
 }
 const FOOT = `<footer class="en-foot">
   <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata · Descriptions: Wikipedia (CC BY-SA 4.0) · Photos: Wikimedia Commons</p>
-  <p>Japan Power Spot Journey / <a href="../../" lang="ja">開運パワースポット巡り</a> · Run by Akki, Tokyo · <a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">Instagram</a></p>
+  <p>Japan Power Spot Journey / <a href="../../" lang="ja">開運パワースポット巡り</a> · Run by Akki, the Higher-Dimensional Negotiator, Tokyo · <a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">Instagram</a></p>
 </footer>
 `;
 
