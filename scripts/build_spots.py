@@ -109,9 +109,16 @@ EXCLUDE_NAME = re.compile(r'(参集殿|社務所|手水舎|授与所|神楽殿|�
 GENERIC_NAMES = {'祠', 'ほこら', '地蔵', 'お地蔵様', 'お地蔵さん', '石仏', '社', '神社', '寺', '小祠', 'shrine', 'temple'}
 
 
+# 日本語名の前後に付いた外国語（例：「Кошкин храм 今戸神社」）を外す（v3.15.1）
+FOREIGN_EDGE = re.compile(r'^[^\u3040-\u30ff\u3400-\u9fffA-Za-z0-9]+\s+|\s+[^\u3040-\u30ff\u3400-\u9fffA-Za-z0-9（）()]+$')
+
+
 def norm_name(t):
     n = (t.get('name:ja') or t.get('name') or '').strip()
-    return re.sub(r'\s+', ' ', n)
+    n = re.sub(r'\s+', ' ', n)
+    if JP_CHARS.search(n):
+        n = FOREIGN_EDGE.sub('', n).strip()
+    return n
 
 
 def classify(t, area):
