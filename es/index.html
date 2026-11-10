@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Viaje a los lugares sagrados de Japón | Santuarios, templos y naturaleza sagrada para ti</title>
+<meta name="theme-color" content="#4B2D7E">
+<meta name="description" content="¿Viajas a Japón? Cuéntanos tu deseo, tu fecha de nacimiento y dónde te alojas. Te sugerimos santuarios, templos, árboles sagrados y cascadas que van contigo, según el Ki de las Nueve Estrellas japonés y la numerología.">
+<link rel="canonical" href="https://motonory-a.github.io/japan-power-spots/es/">
+<link rel="alternate" hreflang="ja" href="https://motonory-a.github.io/japan-power-spots/">
+<link rel="alternate" hreflang="en" href="https://motonory-a.github.io/japan-power-spots/en/">
+<link rel="alternate" hreflang="zh-Hant" href="https://motonory-a.github.io/japan-power-spots/zh/">
+<link rel="alternate" hreflang="ko" href="https://motonory-a.github.io/japan-power-spots/ko/">
+<link rel="alternate" hreflang="fr" href="https://motonory-a.github.io/japan-power-spots/fr/">
+<link rel="alternate" hreflang="es" href="https://motonory-a.github.io/japan-power-spots/es/">
+<link rel="alternate" hreflang="x-default" href="https://motonory-a.github.io/japan-power-spots/en/">
+<meta name="author" content="Akki, the Higher-Dimensional Negotiator">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Japan Power Spot Journey">
+<meta property="og:title" content="Viaje a los lugares sagrados de Japón | Encuentra tu lugar sagrado">
+<meta property="og:description" content="Santuarios, templos, árboles sagrados y cascadas elegidos según tu deseo y tu fecha de nacimiento. Gratis y sin registro.">
+<meta property="og:url" content="https://motonory-a.github.io/japan-power-spots/es/">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/en/img/hero-spring-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Japan Power Spot Journey",
+  "url": "https://motonory-a.github.io/japan-power-spots/es/",
+  "description": "Encuentra en Japón santuarios, templos y lugares de naturaleza sagrada que encajan con tu deseo y tu fecha de nacimiento.",
+  "inLanguage": "es",
+  "publisher": { "@type": "Person", "name": "Akki, the Higher-Dimensional Negotiator", "alternateName": "高次元ネゴシエイター アッキー" }
+}
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Shippori+Mincho:wght@700&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../en/en.css">
+</head>
+<body class="en lang-es">
+<header class="en-hero">
+  <nav class="en-nav">
+    <span class="en-brand">Japan Power Spot Journey</span>
+    <span class="en-nav-links">
+      <a href="#planner">Planear mi viaje</a>
+      <a href="../en/spots/">Todos los lugares</a>
+      <a href="#mylist">Mi lista <span class="en-count" data-mylist-count></span></a>
+    </span>
+  </nav>
+  <nav class="en-langs" aria-label="Language">
+    <a href="../" hreflang="ja" lang="ja">日本語</a>
+    <a href="../en/" hreflang="en" lang="en">English</a>
+    <a href="../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a>
+    <a href="../ko/" hreflang="ko" lang="ko">한국어</a>
+    <a href="../fr/" hreflang="fr" lang="fr">Français</a>
+    <a href="../es/" hreflang="es" lang="es" aria-current="page">Español</a>
+  </nav>
+  <div class="en-hero-pic" id="hero-pic">
+    <script>
+      // Season by the month in Japan: Mar–May spring, Jun–Aug summer, Sep–Nov autumn, Dec–Feb winter
+      // 日本時間の月で季節の画像を選ぶ（3〜5月 春／6〜8月 夏／9〜11月 秋／12〜2月 冬）
+      (function () {
+        var m = new Date(Date.now() + 9 * 3600e3).getUTCMonth() + 1;
+        var s = m >= 3 && m <= 5 ? 'spring' : m >= 6 && m <= 8 ? 'summer' : m >= 9 && m <= 11 ? 'autumn' : 'winter';
+        var alt = { spring: 'cerezos en flor', summer: 'el verde de principios de verano', autumn: 'hojas de otoño', winter: 'nieve' }[s];
+        var set = function (ext) { return [800, 1200, 1672].map(function (w) { return '../en/img/hero-' + s + '-' + w + '.' + ext + ' ' + w + 'w'; }).join(', '); };
+        document.write('<picture><source type="image/webp" srcset="' + set('webp') + '" sizes="(max-width: 1240px) 100vw, 1240px">' +
+          '<img class="en-hero-img" src="../en/img/hero-' + s + '-1200.jpg" srcset="' + set('jpg') + '" sizes="(max-width: 1240px) 100vw, 1240px" width="1672" height="941" fetchpriority="high" decoding="async" ' +
+          'alt="Una viajera abre los brazos bajo un torii rojo, frente al monte Fuji y una pagoda de cinco pisos, entre ' + alt + '"></picture>');
+      })();
+    </script>
+    <noscript><img class="en-hero-img" src="../en/img/hero-spring-1200.jpg" width="1672" height="941" alt="Una viajera bajo un torii rojo, frente al monte Fuji y una pagoda de cinco pisos"></noscript>
+  </div>
+  <div class="en-hero-copy">
+    <p class="en-kicker">開運パワースポット巡り</p>
+    <h1 class="en-title">El lugar sagrado de Japón<br class="pc-br"> que te está esperando</h1>
+    <p class="en-sub">Santuarios, templos, árboles milenarios, cascadas y montañas sagradas,<br class="pc-br"> elegidos según tu deseo, tu fecha de nacimiento y dónde te alojas.</p>
+    <div class="en-ctas">
+      <a class="hero-cta" href="#finder">Encontrar mi lugar sagrado</a>
+      <a class="en-cta2" href="#planner">¿Preparas un viaje? Crea un plan día a día</a>
+    </div>
+    <p class="en-hero-note">Gratis · Sin registro · Aprox. 1 minuto</p>
+  </div>
+</header>
+
+<main>
+  <section class="panel panel-wish" aria-labelledby="h-wish">
+    <h2 id="h-wish">¿Qué deseas?</h2>
+    <p class="lead-small">Elige el deseo más cercano a tu corazón. Se marcará en el buscador de abajo.</p>
+    <div class="wish-tiles" id="wish-tiles"></div>
+  </section>
+
+  <section class="panel" id="finder" aria-labelledby="h-finder">
+    <h2 id="h-finder">Buscador de lugares sagrados</h2>
+    <form id="finder-form" novalidate>
+      <div class="en-step">
+        <h3><span class="step-no">1</span>Tus deseos <span class="opt">opcional · puedes elegir varios</span></h3>
+        <div class="chip-row" id="wish-chips"></div>
+        <p class="en-sub-label">Lugares que te gustaría vivir</p>
+        <div class="chip-row" id="exp-chips"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">2</span>Tu fecha de nacimiento <span class="req">obligatorio</span></h3>
+        <input type="date" id="birthday" min="1900-01-01" autocomplete="bday" aria-describedby="bday-note">
+        <p class="note" id="bday-note">Sirve para calcular tu estrella del Ki de las Nueve Estrellas (un sistema tradicional japonés de direcciones favorables) y tu número del camino de vida. Se queda en tu dispositivo y no se envía a ningún sitio.</p>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">3</span>¿Dónde te alojas? <span class="req">obligatorio</span></h3>
+        <select id="city" aria-label="Ciudad donde te alojas"></select>
+        <div class="en-origin-actions">
+          <button type="button" class="btn-sub" id="use-location">Usar mi ubicación actual</button>
+          <span class="small">o toca el mapa de abajo para marcar tu hotel</span>
+        </div>
+        <p class="origin-status" id="origin-status" role="status" aria-live="polite"></p>
+        <div id="origin-map" class="en-origin-map" aria-label="Mapa para elegir tu punto de partida"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">4</span>¿Cómo te vas a mover?</h3>
+        <div class="chip-row" id="mode-chips"></div>
+        <label class="en-inline">Hasta
+          <select id="time-limit"></select> de ida
+        </label>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">5</span>¿Cuándo vas a ir? <span class="opt">opcional</span></h3>
+        <input type="date" id="trip-date">
+        <p class="note">Si eliges una fecha, revisamos la dirección desde tu hotel para ese día exacto. Si no, usamos las direcciones favorables de este mes y te sugerimos buenos días.</p>
+      </div>
+
+      <div class="form-error" id="form-error" role="alert" tabindex="-1" hidden></div>
+      <button type="submit" class="btn-main en-submit">Ver mis lugares sagrados</button>
+    </form>
+  </section>
+
+  <section class="panel" id="results" aria-labelledby="h-results" hidden>
+    <h2 id="h-results">Tus lugares sagrados</h2>
+    <div id="you-box" class="en-you"></div>
+    <div id="result-cards" class="cards"></div>
+    <div id="more-box"></div>
+    <div id="result-map" class="en-result-map" aria-label="Mapa de tus lugares sagrados"></div>
+    <p class="note">Los tiempos de viaje son estimaciones a partir de la distancia en línea recta. Antes de ir, revisa la ruta, el horario y el acceso en Google Maps o en la web oficial. Las bendiciones son las asociadas tradicionalmente a las deidades o al nombre de cada lugar.</p>
+  </section>
+
+  <section class="panel" id="planner" aria-labelledby="h-planner">
+    <h2 id="h-planner">Planea tu viaje, día a día</h2>
+    <p class="lead-small">¿Vienes pronto a Japón? Escribe las ciudades y fechas de tu viaje. Para cada día te sugerimos lugares sagrados en una dirección favorable desde donde duermes esa noche.</p>
+    <form id="plan-form" novalidate>
+      <div class="en-plan-top">
+        <label>Tu fecha de nacimiento <input type="date" id="plan-bday" min="1900-01-01"></label>
+        <label>Tu deseo <select id="plan-wish"></select></label>
+      </div>
+      <p class="en-sub-label">¿Dónde te vas a alojar?</p>
+      <div id="legs"></div>
+      <button type="button" class="btn-sub" id="add-leg">+ Añadir otra ciudad</button>
+      <div class="form-error" id="plan-error" role="alert" hidden></div>
+      <button type="submit" class="btn-main en-submit">Crear mi plan de viaje</button>
+    </form>
+    <div id="plan-out" class="en-plan-out"></div>
+  </section>
+
+  <section class="panel" id="mylist" aria-labelledby="h-mylist">
+    <h2 id="h-mylist">Mi lista <span class="en-count" data-mylist-count></span></h2>
+    <div id="shared-list" class="en-shared" hidden></div>
+    <div id="mylist-items"></div>
+    <div class="en-btns" id="mylist-actions" hidden>
+      <a class="btn-main en-btn" id="list-route" href="#" target="_blank" rel="noopener">Abrir como ruta en Google Maps</a>
+      <button type="button" class="btn-sub en-btn" id="list-csv">Descargar para Google My Maps (CSV)</button>
+      <button type="button" class="btn-sub en-btn" id="list-share">Compartir mi lista</button>
+    </div>
+    <p class="small" id="list-msg" role="status" aria-live="polite"></p>
+    <p class="note">Consejo: en <a href="https://www.google.com/maps/d/" target="_blank" rel="noopener">Google My Maps</a>, elige «Importar» y selecciona el archivo CSV para ver todos tus lugares en un solo mapa en tu móvil.</p>
+  </section>
+
+  <section class="panel" id="courses" aria-labelledby="h-courses">
+    <h2 id="h-courses">Rutas por región</h2>
+    <p class="lead-small">Rutas de medio día y de un día por santuarios y templos famosos. Cada parada se ha comprobado en su web oficial.</p>
+    <div class="course-regions" id="course-regions"></div>
+    <div class="course-list" id="course-list"></div>
+  </section>
+
+  <section class="panel" id="manners" aria-labelledby="h-manners">
+    <h2 id="h-manners">Cómo visitar un santuario o un templo</h2>
+    <div class="en-manners">
+      <div class="en-manner">
+        <h3>⛩ Santuario sintoísta (jinja)</h3>
+        <ol>
+          <li><b>Haz una reverencia ante el torii</b> antes de entrar. Camina por un lado del sendero: se dice que el centro es para los dioses.</li>
+          <li><b>Purifícate en la fuente (temizuya).</b> Enjuágate la mano izquierda y luego la derecha, vierte un poco de agua en la mano izquierda para enjuagarte la boca y, al final, limpia el mango. No bebas directamente del cazo.</li>
+          <li><b>Reza: dos reverencias, dos palmadas y una reverencia.</b> Primero echa una moneda en la caja de ofrendas. Mucha gente dice en silencio su nombre y su dirección antes de pedir un deseo.</li>
+        </ol>
+      </div>
+      <div class="en-manner">
+        <h3>🪷 Templo budista (tera)</h3>
+        <ol>
+          <li><b>Haz una reverencia en la puerta principal</b> y pasa por encima del umbral, sin pisarlo.</li>
+          <li><b>Purifícate en la fuente</b> igual que en un santuario. Si hay un incensario, atrae un poco de humo hacia ti.</li>
+          <li><b>Reza con las palmas juntas.</b> Deja una ofrenda y haz una reverencia en silencio. <b>En los templos no se dan palmadas.</b></li>
+        </ol>
+      </div>
+      <div class="en-manner">
+        <h3>📜 Bueno saberlo</h3>
+        <ul>
+          <li>Los <b>goshuin</b> son sellos caligrafiados a mano que se coleccionan en un cuaderno especial, normalmente por 300–1.000 yenes. Pídelos en la oficina (juyosho).</li>
+          <li>Los <b>omamori</b> (amuletos) y los <b>omikuji</b> (papeles de la fortuna) se venden en casi todos los santuarios y templos. Si te sale una mala fortuna, átala en el soporte y déjala allí.</li>
+          <li>En muchos edificios no se pueden hacer fotos. Fíjate en los carteles, habla en voz baja y viste con respeto.</li>
+          <li>Los árboles, rocas y cascadas sagrados también son lugares de culto. No trepes ni toques donde haya una cuerda.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="about" aria-labelledby="h-about">
+    <h2 id="h-about">Sobre este sitio</h2>
+    <p><a href="../en/spots/">Ver todos los lugares sagrados por región (en inglés) →</a></p>
+    <p>Viaje a los lugares sagrados de Japón es la versión en español de <a href="../" lang="ja">開運パワースポット巡り</a>, un sitio gratuito con unos 96.000 santuarios, templos, árboles sagrados, cascadas y montañas de todo Japón. Para los viajeros, nos centramos en unos 1.400 lugares conocidos.</p>
+    <p><b>Cómo elegimos:</b> tus deseos, tus direcciones favorables desde el hotel según el Ki de las Nueve Estrellas, tu número del camino de vida, el tiempo de viaje y lo conocido que es cada lugar. El Ki de las Nueve Estrellas (九星気学, kyūsei kigaku) es una práctica tradicional japonesa que mucha gente usa para decidir adónde y cuándo viajar. Disfrútalo como una guía cultural, no como una promesa.</p>
+    <p><b>Tus datos:</b> tu fecha de nacimiento y tu ubicación solo se usan dentro de tu navegador. Los nombres de los lugares y las fotos se cargan desde Wikidata y Wikimedia Commons.</p>
+    <p class="operator">Un sitio de <b>Akki, the Higher-Dimensional Negotiator</b> (<span lang="ja">高次元ネゴシエイター アッキー</span>), guía espiritual de Tokio que acerca los lugares sagrados de Japón. Sigue a <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">@japan_psj en Instagram</a> para descubrir lugares sagrados y días favorables. ¿Dudas o algún lugar que sugerir? Escríbenos allí, o en el <a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">Instagram personal</a> de Akki, en <a href="https://x.com/nigihayahi03" target="_blank" rel="noopener">X</a> o en <a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener">LINE</a>. Vídeos en <a href="https://www.youtube.com/@nigihayahi03/videos" target="_blank" rel="noopener">YouTube</a>.</p>
+  </section>
+</main>
+
+<footer class="en-foot">
+  <p>Datos del mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">colaboradores de OpenStreetMap</a> · Datos de lugares: OpenStreetMap, Wikidata, Ministerio de Medio Ambiente de Japón · Fotos: Wikimedia Commons</p>
+  <p>© Japan Power Spot Journey / 開運パワースポット巡り · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a> · <a href="../" lang="ja">Versión en japonés</a></p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/jst-date.js"></script>
+<script src="../data/solar-terms.js"></script>
+<script src="../assets/js/kyusei.js"></script>
+<script src="../data/spots-demo.js"></script>
+<script src="../data/spots-osm.js"></script>
+<script src="../data/curated-info.js"></script>
+<script src="../data/known-benefits.js"></script>
+<script src="../data/en-labels.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/diagnosis.js"></script>
+<script src="../assets/js/photos.js"></script>
+<script src="../data/model-courses.js"></script>
+<script src="../en/i18n-en.js"></script>
+<script src="i18n.js"></script>
+<script src="../en/pool-en.js"></script>
+<script src="../en/mylist.js"></script>
+<script src="../en/app-en.js"></script>
+</body>
+</html>

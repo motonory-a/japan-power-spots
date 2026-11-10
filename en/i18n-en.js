@@ -222,3 +222,44 @@ EN.names = {
   Q704219: 'Terukuni Shrine', Q11408100: 'Nanshu Shrine', Q11618808: 'Arata Hachimangu Shrine', Q704636: 'Naminoue-gu Shrine',
   Q3109955: 'Gokokuji Temple (Naha)', Q11519653: 'Sueyoshi-gu Shrine', Q11632260: 'Shikina-gu Shrine'
 };
+
+// Language settings and screen text (言語の設定と画面の文言)。ほかの言語は <言語>/i18n.js で上書きする
+EN.lang = 'en';
+EN.locale = 'en-US';
+EN.wdLangs = ['en'];
+EN.spotBase = 'spots/';
+EN.ui = {
+  listSep: ', ',
+  aboutMin: 'about {m} min', aboutH: 'about {h} h', aboutHM: 'about {h} h {m} min',
+  minOpt: '{m} min', hourOpt: '{h} hour', hoursOpt: '{h} hours', noLimit: 'no limit',
+  chooseCity: 'Choose a city…', myPinOpt: 'My pin on the map', startingFrom: 'Starting from: {p}',
+  yourPin: 'your pin on the map', yourLocation: 'your current location',
+  noGeo: 'Your browser cannot share its location. Please choose a city.', findingLoc: 'Finding your location…',
+  geoFail: 'Could not get your location. Please choose a city or tap the map.',
+  errBday: 'Please enter your birthday.', errBday1900: 'Please enter a birthday from 1900 or later.', errBdayFuture: 'Your birthday cannot be in the future.',
+  errOrigin: 'Please choose where you are staying (a city, your location, or a pin on the map).', errTripDate: 'Please choose a travel date from today onward.',
+  start: 'Start', yourStar: 'Your Nine Star Ki', yourLifePath: 'Your life path number', theme: 'Theme: {t}.',
+  luckyDirsYear: 'Lucky directions this year', noneThisYear: 'None this year', avoidLong: 'Better avoided for long trips: {d}.',
+  bornOnTerm: 'You were born on a seasonal turning day of the Japanese calendar, so your stars may differ depending on your birth time.',
+  dirsForDate: 'Directions are checked from your starting point for {d}.',
+  dirsThisMonth: 'No date chosen, so directions are checked for this month. Each spot also shows good days to go.',
+  byMode: '{t} by {m}', tooClose: 'Very close to your starting point, so direction does not apply',
+  notLuckyDay: 'Not a lucky direction for you on that day', notLuckyMonth: 'Not a lucky direction for you this month', luckyAgain: '. Lucky again from {d}',
+  onThatDay: ' on that day', forYouThisMonth: ' for you this month',
+  matchesWish: 'Matches your wish: {w}', resonates: 'Resonates with your life path number {n} ({t})', tradFor: 'Traditionally visited for: {w}',
+  checkedOfficial: 'Details checked on the official website', goodDays: 'Good days to go:', checkThisDay: 'Check spots for this day',
+  directionsGM: 'Directions (Google Maps)', directions: 'Directions', officialSite: 'Official site',
+  photoOf: 'Photo of {n}', photoCredit: 'Photo: {a} / {l} (Wikimedia Commons)',
+  finding: 'Finding your power spots…', noneWithin: 'Nothing was found within your time limit, so here are the closest good matches. Try a longer time or another way of travel.',
+  noWishMatch: 'No place matched your wishes exactly, so we picked the best overall matches.', moreNearby: 'More places nearby ({n})',
+  bestByCar: 'Best by car or taxi.', easyByTrain: 'Easy by train, bus and on foot.', openRoute: 'Open route in Google Maps',
+  city: 'City', from: 'From', for: 'For', arrival: 'Arrival date', daysLabel: 'Days', oneDay: '1 day', nDays: '{n} days', removeCity: 'Remove this city',
+  anything: 'Anything — surprise me', errLegDate: 'Please choose the arrival date for city {n}.', errLegPast: 'City {n}: please choose a date from today onward.',
+  planning: 'Planning your trip…', planIntro: 'Your Nine Star Ki: {s}. For each day we picked places in a lucky direction from where you stay that night, when possible.',
+  dayN: 'Day {n}', closeHotel: 'Close to your hotel', notLuckyButBest: 'Not a lucky direction that day, but one of the best places nearby',
+  freeDay: 'A free day. Explore the neighborhood!', saveAll: '♡ Save all to my list', savedAll: '♥ Saved to my list',
+  listEmpty: 'Nothing saved yet. Tap ♡ Save on any place to add it here. Your list stays on this device.', remove: 'Remove',
+  openFirst10: 'Open the first 10 in Google Maps', openAsRoute: 'Open as a route in Google Maps', linkCopied: 'Link copied. Send it to your travel friends!',
+  shareTitle: 'My Japan power spots', friendShared: 'A friend shared {n} places with you:', addAll: '♡ Add all to my list',
+  save: '♡ Save', saved: '♥ Saved'
+};

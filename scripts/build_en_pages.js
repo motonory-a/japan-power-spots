@@ -269,7 +269,7 @@ fs.writeFileSync(r('data/en-labels.js'), '/* 英語版：英語名・スポッ�
 
 // sitemap
 const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
-const urls = [[SITE, 'daily'], [SITE + 'en/', 'weekly'], [SITE + 'en/spots/', 'weekly']].concat(pages.map((p) => [SITE + 'en/spots/' + p.slug + '.html', 'monthly']));
+const urls = [[SITE, 'daily'], [SITE + 'en/', 'weekly'], [SITE + 'zh/', 'weekly'], [SITE + 'ko/', 'weekly'], [SITE + 'fr/', 'weekly'], [SITE + 'es/', 'weekly'], [SITE + 'en/spots/', 'weekly']].concat(pages.map((p) => [SITE + 'en/spots/' + p.slug + '.html', 'monthly']));
 fs.writeFileSync(r('sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   urls.map(([u, f]) => `  <url>\n    <loc>${u}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${f}</changefreq>\n  </url>`).join('\n') + '\n</urlset>\n');
 

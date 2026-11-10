@@ -19,6 +19,9 @@ on:
       - 'en/pool-en.js'
       - 'scripts/build_en_pages.js'
       - 'scripts/fetch_en_wiki.py'
+      - 'scripts/build_lang_pages.js'
+      - 'scripts/i18n/**'
+      - 'en/index.html'
 
 permissions:
   contents: write
@@ -47,11 +50,14 @@ jobs:
       - name: 英語のスポットページを作る
         run: node scripts/build_en_pages.js
 
+      - name: 多言語版（中国語・韓国語・フランス語・スペイン語）のトップページを作る
+        run: node scripts/build_lang_pages.js
+
       - name: main に反映
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/en-pool.json data/en-wiki.json data/en-labels.js en/spots sitemap.xml
+          git add data/en-pool.json data/en-wiki.json data/en-labels.js en/spots sitemap.xml zh ko fr es
           if git diff --cached --quiet; then echo "変更なし"; exit 0; fi
           git commit -qm "英語版のスポットページを更新（自動）"
           for i in 1 2 3; do

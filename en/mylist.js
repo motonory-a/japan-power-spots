@@ -21,7 +21,8 @@
     b.className = 'en-save ' + (cls || '');
     function paint() {
       var on = has(item.q);
-      b.textContent = on ? '♥ Saved' : '♡ Save';
+      var ui = (root.EN && root.EN.ui) || {};
+      b.textContent = on ? (ui.saved || '♥ Saved') : (ui.save || '♡ Save');
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
       b.classList.toggle('is-on', on);
     }

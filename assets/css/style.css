@@ -642,4 +642,5 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 #h-diagnose{scroll-margin-top:32px}
 
 /* 英語版へのリンク（v3.14） */
-.lang-link{order:2;margin-left:auto;font-size:13px;border:1px solid var(--indigo);border-radius:999px;padding:3px 12px;text-decoration:none;background:#fff}
+.lang-links{order:2;margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.lang-link{font-size:13px;border:1px solid var(--indigo);border-radius:999px;padding:3px 12px;text-decoration:none;background:#fff}

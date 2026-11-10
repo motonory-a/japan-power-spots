@@ -156,3 +156,10 @@ body.en input[type=date],body.en select{font:inherit;font-size:16px;padding:10px
 .en-jump{font-size:15px}
 footer.en-foot{color:#E2D8F0;padding:108px 20px 36px;margin-top:20px}
 footer.en-foot a{color:#EAD7AE}
+/* language switcher (言語の切り替え) */
+.en-langs{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;max-width:1000px;margin:-4px auto 10px;padding:0 18px;font-size:13px}
+.en-langs a{color:rgba(255,255,255,.85);text-decoration:none;border-bottom:1px solid transparent}
+.en-langs a:hover{color:#fff;border-bottom-color:rgba(255,255,255,.6)}
+.en-langs a[aria-current=page]{color:#fff;font-weight:700;border-bottom-color:var(--gold)}
+body.lang-zh,body.lang-ko{font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Noto Sans KR","Microsoft JhengHei","Malgun Gothic",sans-serif}
+body.lang-zh h2,body.lang-zh h3,body.lang-ko h2,body.lang-ko h3,body.lang-zh .en-title,body.lang-ko .en-title{font-family:"Noto Serif TC","Noto Serif KR",var(--serif-en)}

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>일본 파워스폿 여행 | 나와 맞는 신사·절·성지 찾기</title>
+<meta name="theme-color" content="#4B2D7E">
+<meta name="description" content="일본 여행을 계획 중인가요? 소원, 생일, 숙소 위치를 알려 주시면 일본 전통의 구성기학과 수비학으로 나에게 맞는 신사, 절, 신목, 폭포를 추천해 드립니다.">
+<link rel="canonical" href="https://motonory-a.github.io/japan-power-spots/ko/">
+<link rel="alternate" hreflang="ja" href="https://motonory-a.github.io/japan-power-spots/">
+<link rel="alternate" hreflang="en" href="https://motonory-a.github.io/japan-power-spots/en/">
+<link rel="alternate" hreflang="zh-Hant" href="https://motonory-a.github.io/japan-power-spots/zh/">
+<link rel="alternate" hreflang="ko" href="https://motonory-a.github.io/japan-power-spots/ko/">
+<link rel="alternate" hreflang="fr" href="https://motonory-a.github.io/japan-power-spots/fr/">
+<link rel="alternate" hreflang="es" href="https://motonory-a.github.io/japan-power-spots/es/">
+<link rel="alternate" hreflang="x-default" href="https://motonory-a.github.io/japan-power-spots/en/">
+<meta name="author" content="Akki, the Higher-Dimensional Negotiator">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Japan Power Spot Journey">
+<meta property="og:title" content="일본 파워스폿 여행 | 나만의 일본 성지 찾기">
+<meta property="og:description" content="소원과 생일로 찾는 신사·절·신목·폭포. 무료, 회원가입 없음.">
+<meta property="og:url" content="https://motonory-a.github.io/japan-power-spots/ko/">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/en/img/hero-spring-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Japan Power Spot Journey",
+  "url": "https://motonory-a.github.io/japan-power-spots/ko/",
+  "description": "소원과 생일에 맞는 일본의 신사, 절, 성지를 찾아 드립니다.",
+  "inLanguage": "ko",
+  "publisher": { "@type": "Person", "name": "Akki, the Higher-Dimensional Negotiator", "alternateName": "高次元ネゴシエイター アッキー" }
+}
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Shippori+Mincho:wght@700&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../en/en.css">
+</head>
+<body class="en lang-ko">
+<header class="en-hero">
+  <nav class="en-nav">
+    <span class="en-brand">Japan Power Spot Journey</span>
+    <span class="en-nav-links">
+      <a href="#planner">여행 일정 짜기</a>
+      <a href="../en/spots/">모든 스폿</a>
+      <a href="#mylist">내 리스트 <span class="en-count" data-mylist-count></span></a>
+    </span>
+  </nav>
+  <nav class="en-langs" aria-label="Language">
+    <a href="../" hreflang="ja" lang="ja">日本語</a>
+    <a href="../en/" hreflang="en" lang="en">English</a>
+    <a href="../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a>
+    <a href="../ko/" hreflang="ko" lang="ko" aria-current="page">한국어</a>
+    <a href="../fr/" hreflang="fr" lang="fr">Français</a>
+    <a href="../es/" hreflang="es" lang="es">Español</a>
+  </nav>
+  <div class="en-hero-pic" id="hero-pic">
+    <script>
+      // Season by the month in Japan: Mar–May spring, Jun–Aug summer, Sep–Nov autumn, Dec–Feb winter
+      // 日本時間の月で季節の画像を選ぶ（3〜5月 春／6〜8月 夏／9〜11月 秋／12〜2月 冬）
+      (function () {
+        var m = new Date(Date.now() + 9 * 3600e3).getUTCMonth() + 1;
+        var s = m >= 3 && m <= 5 ? 'spring' : m >= 6 && m <= 8 ? 'summer' : m >= 9 && m <= 11 ? 'autumn' : 'winter';
+        var alt = { spring: '벚꽃', summer: '초여름의 신록', autumn: '단풍', winter: '눈' }[s];
+        var set = function (ext) { return [800, 1200, 1672].map(function (w) { return '../en/img/hero-' + s + '-' + w + '.' + ext + ' ' + w + 'w'; }).join(', '); };
+        document.write('<picture><source type="image/webp" srcset="' + set('webp') + '" sizes="(max-width: 1240px) 100vw, 1240px">' +
+          '<img class="en-hero-img" src="../en/img/hero-' + s + '-1200.jpg" srcset="' + set('jpg') + '" sizes="(max-width: 1240px) 100vw, 1240px" width="1672" height="941" fetchpriority="high" decoding="async" ' +
+          'alt="붉은 도리이 아래에서 두 팔을 벌린 여행자. 멀리 후지산과 오층탑, 주변은 ' + alt + '"></picture>');
+      })();
+    </script>
+    <noscript><img class="en-hero-img" src="../en/img/hero-spring-1200.jpg" width="1672" height="941" alt="붉은 도리이 아래의 여행자와 멀리 보이는 후지산, 오층탑"></noscript>
+  </div>
+  <div class="en-hero-copy">
+    <p class="en-kicker">開運パワースポット巡り</p>
+    <h1 class="en-title">일본 어딘가에서<br class="pc-br"> 당신을 기다리는 성지</h1>
+    <p class="en-sub">신사, 절, 오래된 신목, 폭포와 영산을<br class="pc-br"> 소원과 생일, 숙소 위치에 맞춰 골라 드립니다.</p>
+    <div class="en-ctas">
+      <a class="hero-cta" href="#finder">나의 파워스폿 찾기</a>
+      <a class="en-cta2" href="#planner">여행을 계획 중이라면? 하루하루 일정 만들기</a>
+    </div>
+    <p class="en-hero-note">무료 · 회원가입 없음 · 약 1분</p>
+  </div>
+</header>
+
+<main>
+  <section class="panel panel-wish" aria-labelledby="h-wish">
+    <h2 id="h-wish">당신의 소원은 무엇인가요?</h2>
+    <p class="lead-small">가장 이루고 싶은 소원을 고르면 아래 검색에 자동으로 들어갑니다.</p>
+    <div class="wish-tiles" id="wish-tiles"></div>
+  </section>
+
+  <section class="panel" id="finder" aria-labelledby="h-finder">
+    <h2 id="h-finder">파워스폿 찾기</h2>
+    <form id="finder-form" novalidate>
+      <div class="en-step">
+        <h3><span class="step-no">1</span>소원 <span class="opt">선택 사항 · 여러 개 선택 가능</span></h3>
+        <div class="chip-row" id="wish-chips"></div>
+        <p class="en-sub-label">경험해 보고 싶은 곳</p>
+        <div class="chip-row" id="exp-chips"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">2</span>생일 <span class="req">필수</span></h3>
+        <input type="date" id="birthday" min="1900-01-01" autocomplete="bday" aria-describedby="bday-note">
+        <p class="note" id="bday-note">구성기학(일본 전통의 길한 방위)과 수비학 계산에 쓰입니다. 정보는 기기 안에만 저장되며 어디에도 보내지지 않습니다.</p>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">3</span>어디에 묵으시나요? <span class="req">필수</span></h3>
+        <select id="city" aria-label="숙소가 있는 도시"></select>
+        <div class="en-origin-actions">
+          <button type="button" class="btn-sub" id="use-location">현재 위치 사용</button>
+          <span class="small">또는 아래 지도를 눌러 호텔 위치를 정하세요</span>
+        </div>
+        <p class="origin-status" id="origin-status" role="status" aria-live="polite"></p>
+        <div id="origin-map" class="en-origin-map" aria-label="출발지를 고르는 지도"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">4</span>어떻게 이동하시나요?</h3>
+        <div class="chip-row" id="mode-chips"></div>
+        <label class="en-inline">편도
+          <select id="time-limit"></select> 이내
+        </label>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">5</span>언제 가시나요? <span class="opt">선택 사항</span></h3>
+        <input type="date" id="trip-date">
+        <p class="note">날짜를 고르면 그날 호텔에서 출발하는 방위의 길흉을 확인합니다. 고르지 않으면 이번 달의 길한 방위를 쓰고, 가기 좋은 날도 알려 드립니다.</p>
+      </div>
+
+      <div class="form-error" id="form-error" role="alert" tabindex="-1" hidden></div>
+      <button type="submit" class="btn-main en-submit">나의 파워스폿 보기</button>
+    </form>
+  </section>
+
+  <section class="panel" id="results" aria-labelledby="h-results" hidden>
+    <h2 id="h-results">당신의 파워스폿</h2>
+    <div id="you-box" class="en-you"></div>
+    <div id="result-cards" class="cards"></div>
+    <div id="more-box"></div>
+    <div id="result-map" class="en-result-map" aria-label="파워스폿 지도"></div>
+    <p class="note">이동 시간은 직선거리로 계산한 대략적인 값입니다. 출발 전에 Google 지도나 공식 사이트에서 경로, 운영 시간, 교통편을 꼭 확인하세요. 기원 내용은 각 장소의 신이나 이름에 얽혀 예로부터 전해지는 것입니다.</p>
+  </section>
+
+  <section class="panel" id="planner" aria-labelledby="h-planner">
+    <h2 id="h-planner">하루하루 여행 일정 만들기</h2>
+    <p class="lead-small">곧 일본에 오시나요? 여행할 도시와 날짜를 입력하면, 그날 밤 묵는 곳에서 길한 방위에 있는 파워스폿을 날마다 추천해 드립니다.</p>
+    <form id="plan-form" novalidate>
+      <div class="en-plan-top">
+        <label>생일 <input type="date" id="plan-bday" min="1900-01-01"></label>
+        <label>소원 <select id="plan-wish"></select></label>
+      </div>
+      <p class="en-sub-label">어디에 묵으시나요?</p>
+      <div id="legs"></div>
+      <button type="button" class="btn-sub" id="add-leg">+ 도시 추가</button>
+      <div class="form-error" id="plan-error" role="alert" hidden></div>
+      <button type="submit" class="btn-main en-submit">내 여행 일정 만들기</button>
+    </form>
+    <div id="plan-out" class="en-plan-out"></div>
+  </section>
+
+  <section class="panel" id="mylist" aria-labelledby="h-mylist">
+    <h2 id="h-mylist">내 리스트 <span class="en-count" data-mylist-count></span></h2>
+    <div id="shared-list" class="en-shared" hidden></div>
+    <div id="mylist-items"></div>
+    <div class="en-btns" id="mylist-actions" hidden>
+      <a class="btn-main en-btn" id="list-route" href="#" target="_blank" rel="noopener">Google 지도에서 경로로 열기</a>
+      <button type="button" class="btn-sub en-btn" id="list-csv">Google 내 지도용 파일 다운로드(CSV)</button>
+      <button type="button" class="btn-sub en-btn" id="list-share">내 리스트 공유</button>
+    </div>
+    <p class="small" id="list-msg" role="status" aria-live="polite"></p>
+    <p class="note">팁: <a href="https://www.google.com/maps/d/" target="_blank" rel="noopener">Google 내 지도</a>에서 "가져오기"를 누르고 CSV 파일을 고르면, 휴대폰에서 모든 장소를 한 지도에 볼 수 있습니다.</p>
+  </section>
+
+  <section class="panel" id="courses" aria-labelledby="h-courses">
+    <h2 id="h-courses">지역별 추천 코스</h2>
+    <p class="lead-small">유명한 신사와 절을 도는 반나절·하루 코스입니다. 모든 장소는 공식 사이트에서 확인했습니다.</p>
+    <div class="course-regions" id="course-regions"></div>
+    <div class="course-list" id="course-list"></div>
+  </section>
+
+  <section class="panel" id="manners" aria-labelledby="h-manners">
+    <h2 id="h-manners">신사와 절 참배하는 법</h2>
+    <div class="en-manners">
+      <div class="en-manner">
+        <h3>⛩ 신사(진자)</h3>
+        <ol>
+          <li><b>도리이 앞에서 한 번 인사하고</b> 들어갑니다. 참배길 한가운데는 신이 다니는 길이라고 하니 가장자리로 걸으세요.</li>
+          <li><b>데미즈야(손 씻는 곳)에서 몸을 정화합니다.</b> 왼손, 오른손 순서로 씻고, 왼손에 물을 조금 받아 입을 헹군 뒤 국자 손잡이를 씻어 둡니다. 국자에 직접 입을 대지 마세요.</li>
+          <li><b>참배: 두 번 절하고, 두 번 손뼉 치고, 한 번 절합니다.</b> 먼저 새전함에 동전을 넣으세요. 많은 사람이 소원을 빌기 전에 마음속으로 자기 이름과 주소를 말합니다.</li>
+        </ol>
+      </div>
+      <div class="en-manner">
+        <h3>🪷 불교 사찰(테라)</h3>
+        <ol>
+          <li><b>산문 앞에서 인사하고</b> 문지방은 밟지 말고 넘어가세요.</li>
+          <li><b>신사와 같은 방법으로 손을 씻습니다.</b> 향로가 있으면 연기를 조금 자기 쪽으로 끌어당기세요.</li>
+          <li><b>두 손을 모아 기도합니다.</b> 새전을 넣고 조용히 인사하세요. <b>절에서는 손뼉을 치지 않습니다.</b></li>
+        </ol>
+      </div>
+      <div class="en-manner">
+        <h3>📜 알아 두면 좋은 것</h3>
+        <ul>
+          <li><b>고슈인</b>은 전용 수첩에 받을 수 있는 손글씨 도장으로, 보통 300~1,000엔입니다. 수여소에 문의하세요.</li>
+          <li>대부분의 신사와 절에서 <b>오마모리</b>(부적)와 <b>오미쿠지</b>(운세 뽑기)를 팝니다. 흉이 나오면 정해진 곳에 묶어 두고 가세요.</li>
+          <li>많은 건물 안은 촬영이 금지되어 있습니다. 안내문을 확인하고, 조용히, 단정한 옷차림으로 방문하세요.</li>
+          <li>신목, 바위, 폭포도 신앙의 대상입니다. 줄로 둘러친 곳은 오르거나 만지지 마세요.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="about" aria-labelledby="h-about">
+    <h2 id="h-about">이 사이트에 대해</h2>
+    <p><a href="../en/spots/">지역별로 모든 파워스폿 보기(영어) →</a></p>
+    <p>일본 파워스폿 여행은 <a href="../" lang="ja">開運パワースポット巡り</a>의 한국어판입니다. 일본 전국의 신사, 절, 신목, 폭포, 산 약 96,000곳을 소개하는 무료 사이트이며, 한국어판에서는 그중 잘 알려진 약 1,400곳을 중심으로 소개합니다.</p>
+    <p><b>추천 방식:</b> 소원, 호텔에서 본 구성기학의 길한 방위, 수비학, 이동 시간, 그리고 장소의 인지도를 함께 봅니다. 구성기학(九星気学)은 여행할 방향과 날을 고를 때 많은 일본인이 참고하는 전통입니다. 약속이 아닌, 일본 문화를 즐기는 안내서로 봐 주세요.</p>
+    <p><b>개인 정보:</b> 생일과 위치는 브라우저 안에서만 쓰입니다. 장소 이름과 사진은 Wikidata와 Wikimedia Commons에서 불러옵니다.</p>
+    <p class="operator">운영: <b>Akki, the Higher-Dimensional Negotiator</b>(<span lang="ja">高次元ネゴシエイター アッキー</span>), 도쿄에서 일본의 성지를 안내하는 스피리추얼 가이드. 성지와 길일 소식은 <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a>에서 확인하세요. 질문이나 추천하고 싶은 장소가 있으면 그곳이나 Akki의 <a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">개인 Instagram</a>, <a href="https://x.com/nigihayahi03" target="_blank" rel="noopener">X</a>, <a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener">LINE</a>으로 연락 주세요. 영상은 <a href="https://www.youtube.com/@nigihayahi03/videos" target="_blank" rel="noopener">YouTube</a>에 있습니다.</p>
+  </section>
+</main>
+
+<footer class="en-foot">
+  <p>지도 데이터 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · 장소 데이터: OpenStreetMap, Wikidata, 일본 환경성 · 사진: Wikimedia Commons</p>
+  <p>© Japan Power Spot Journey / 開運パワースポット巡り · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a> · <a href="../" lang="ja">일본어판</a></p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/jst-date.js"></script>
+<script src="../data/solar-terms.js"></script>
+<script src="../assets/js/kyusei.js"></script>
+<script src="../data/spots-demo.js"></script>
+<script src="../data/spots-osm.js"></script>
+<script src="../data/curated-info.js"></script>
+<script src="../data/known-benefits.js"></script>
+<script src="../data/en-labels.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/diagnosis.js"></script>
+<script src="../assets/js/photos.js"></script>
+<script src="../data/model-courses.js"></script>
+<script src="../en/i18n-en.js"></script>
+<script src="i18n.js"></script>
+<script src="../en/pool-en.js"></script>
+<script src="../en/mylist.js"></script>
+<script src="../en/app-en.js"></script>
+</body>
+</html>
