@@ -11,3 +11,6 @@ cm-tue-yakiimo | commons:yakiimo roasted sweet potato
 cm-wed-ginkgo | commons:Jingu Gaien ginkgo avenue
 cm-thu-temizuya | commons:temizuya chozuya shrine
 cm-fri-kamakura | commons:Kamakura Daibutsu
+cm-sat-fuji3 | commons:Mount Fuji Kawaguchiko autumn
+cm-sat-fuji4 | commons:Fuji Kawaguchi lake red leaves
+cm-sat-fuji5 | commons:Mount Fuji autumn foliage
