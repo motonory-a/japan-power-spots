@@ -1,0 +1,74 @@
+[
+ {
+  "file": "beige-hematite.jpg",
+  "stones": null,
+  "note": "ベージュの石・ヘマタイト・水晶(白背景)。石の名前は未確認",
+  "used": false
+ },
+ {
+  "file": "incarose-iris.jpg",
+  "stones": "インカローズ、アイリスクォーツ",
+  "note": "w1 日曜で使用",
+  "used": true
+ },
+ {
+  "file": "apatite-wood.jpg",
+  "stones": "ブルーアパタイト、ヒマラヤ水晶",
+  "note": "w1 水曜で使用",
+  "used": true
+ },
+ {
+  "file": "onyx-gold.jpg",
+  "stones": "オニキス、ヒマラヤ水晶(金彫りの玉入り)",
+  "note": "w1 土曜で使用",
+  "used": true
+ },
+ {
+  "file": "apatite-blue.jpg",
+  "stones": null,
+  "note": "青い石・水色の石・水晶(白背景)。石の名前は未確認",
+  "used": false
+ },
+ {
+  "file": "amethyst.jpg",
+  "stones": "ヒマラヤアイリスクォーツ、アメジスト、着色サンゴ",
+  "note": "w1 火曜で使用",
+  "used": true
+ },
+ {
+  "file": "amazonite-black.jpg",
+  "stones": null,
+  "note": "水色の縞の石と黒い石(木の台)。石の名前は未確認",
+  "used": false
+ },
+ {
+  "file": "crystal-wrist.jpg",
+  "stones": "ガネーシャヒマラヤ水晶、ギベオン隕石",
+  "note": "w1 木曜で使用(手首・海)",
+  "used": true
+ },
+ {
+  "file": "crystal-gibeon.jpg",
+  "stones": "ガネーシャヒマラヤ水晶、ギベオン隕石",
+  "note": "w1 月曜で使用",
+  "used": true
+ },
+ {
+  "file": "hokuto-jade.jpg",
+  "stones": "北投石、国産翡翠",
+  "note": "w1 金曜で使用",
+  "used": true
+ },
+ {
+  "file": "beige-carved.jpg",
+  "stones": null,
+  "note": "ベージュの石と金彫りの色玉(青・赤・黒)。石の名前は未確認",
+  "used": false
+ },
+ {
+  "file": "black-gold.jpg",
+  "stones": null,
+  "note": "黒い石と金彫りの玉。石の名前は未確認",
+  "used": false
+ }
+]
