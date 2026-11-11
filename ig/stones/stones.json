@@ -70,5 +70,77 @@
   "stones": null,
   "note": "黒い石と金彫りの玉。石の名前は未確認",
   "used": false
+ },
+ {
+  "file": "crystal-rosegold.jpg",
+  "stones": "水晶(ローズゴールドの玉入り)",
+  "note": "黒背景。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "1cHp5IC-7KWgn83NFS55do_wL_au-D0B0",
+  "drive_name": "IMG_5769.jpeg",
+  "used": false
+ },
+ {
+  "file": "crystal-sea.jpg",
+  "stones": "水晶(ローズゴールドの玉入り)",
+  "note": "手首につけて海を背景に。景色がきれい。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "11DYSIkoh4B2xpDhqvRuODknUGAy7OXN0",
+  "drive_name": "IMG_6311.jpeg",
+  "used": false
+ },
+ {
+  "file": "lapis.jpg",
+  "stones": "ラピスラズリ",
+  "note": "白背景。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "1qZzMuyHOW9zYFjYHgLQmMFnAmI913fst",
+  "drive_name": "IMG_6753.jpeg",
+  "used": false
+ },
+ {
+  "file": "rutile-crystal.jpg",
+  "stones": "ルチルクォーツ、水晶(ローズゴールドの玉入り)",
+  "note": "黒背景。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "1q7Jg1Hdvq0SkvOekq4RMZFyp8Hj2g8zs",
+  "drive_name": "IMG_7177.jpeg",
+  "used": false
+ },
+ {
+  "file": "crystal-tray.jpg",
+  "stones": "水晶",
+  "note": "20cmのトレー。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "1_azZdWmqt3co7CQbEFHw5zSJxWIHtATb",
+  "drive_name": "IMG_8546.jpeg",
+  "used": false
+ },
+ {
+  "file": "crystal-sky.jpg",
+  "stones": "水晶",
+  "note": "連を空にかざして、背景に東京のビル群。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "1iZdQdF8YgENYq27k4rMEOAxtF5hY2ONZ",
+  "drive_name": "IMG_8617.jpeg",
+  "used": false
+ },
+ {
+  "file": "rutile.jpg",
+  "stones": "ルチルクォーツ",
+  "note": "木の台、2本。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "11jQ59SSH92ExCES33KROksa3Lgqcue1W",
+  "drive_name": "IMG_9824.jpeg",
+  "used": false
+ },
+ {
+  "file": "black-rutile.jpg",
+  "stones": "ブラックルチル(水晶の中に黒い針)",
+  "note": "木の台、値札あり。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "1gojT06a0XJ52aeGM1_s7st6J8yElTowi",
+  "drive_name": "IMG_9852.jpeg",
+  "used": false
+ },
+ {
+  "file": "tigereye.jpg",
+  "stones": "タイガーアイ",
+  "note": "木の台、値札に「タイガーアイ」。名前はClaudeが見た目で判断(本人未確認)",
+  "drive_id": "19fL1kNvNPKzfCoRNbfDmD9ZLWXQ1vi_a",
+  "drive_name": "IMG_9875.jpeg",
+  "used": false
  }
 ]
