@@ -1,0 +1,13 @@
+# name | url:<direct url>  or  name | commons:<search words>
+canva-mon | url:https://export-download.canva.com/YG3zE/DAHalEYG3zE/-1/0/0001-5341790963016535249.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH4R7NKVBA%2F20261110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261110T184131Z&X-Amz-Expires=40258&X-Amz-Signature=d8a8c6ab7e51a92070bbfffd978f6a1d15759796ac5bb5b5c4353212eedfab6d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2011%20Nov%202026%2005%3A52%3A29%20GMT
+canva-tue | url:https://export-download.canva.com/cxHOk/DAHalDcxHOk/-1/0/0001-3897261384999883035.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH4R7NKVBA%2F20261110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261110T191559Z&X-Amz-Expires=38777&X-Amz-Signature=7fff9cb038181dd5e4175d398d99d01ee5f4ccbd3462914bfba898f2a12680ee&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2011%20Nov%202026%2006%3A02%3A16%20GMT
+canva-wed | url:https://export-download.canva.com/iuVok/DAHalBiuVok/-1/0/0001-7862680856146883876.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH4R7NKVBA%2F20261110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261110T180927Z&X-Amz-Expires=43369&X-Amz-Signature=9727c433b5e5cbf3a33b1709854d8494682ce80971b001aba5717177c0a5d19e&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2011%20Nov%202026%2006%3A12%3A16%20GMT
+canva-thu | url:https://export-download.canva.com/XxpIw/DAHalHXxpIw/-1/0/0001-5734730030572630018.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH4R7NKVBA%2F20261110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261110T093129Z&X-Amz-Expires=72066&X-Amz-Signature=dea8792708db84303d3ece3f20176cf8e5f27a96afd4899be5bb9928a63a3740&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2011%20Nov%202026%2005%3A32%3A35%20GMT
+canva-fri | url:https://export-download.canva.com/OU3LE/DAHalGOU3LE/-1/0/0001-1495716884558188730.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH4R7NKVBA%2F20261110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261110T093525Z&X-Amz-Expires=72614&X-Amz-Signature=92a175bf19d36f3e2e88ae10930dd24f1acd59b198499c11cd6c074e8172acb4&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2011%20Nov%202026%2005%3A45%3A39%20GMT
+cm-sat-fuji | commons:Mount Fuji Lake Kawaguchi autumn leaves momiji
+cm-sat-fuji2 | commons:Kawaguchiko maple corridor Fuji
+cm-mon-tofukuji | commons:Tofukuji Tsutenkyo autumn
+cm-tue-yakiimo | commons:yakiimo roasted sweet potato
+cm-wed-ginkgo | commons:Jingu Gaien ginkgo avenue
+cm-thu-temizuya | commons:temizuya chozuya shrine
+cm-fri-kamakura | commons:Kamakura Daibutsu
