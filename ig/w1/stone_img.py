@@ -10,7 +10,7 @@ def make(src,out,label,title,sub,fx=0.5,fy=0.5):
     # bottom gradient
     g=Image.new('L',(1,H))
     for i in range(H):
-        t=(i-H*0.58)/(H*0.42); g.putpixel((0,i),int(235*max(0,min(1,t))**1.3))
+        t=(i-H*0.50)/(H*0.26); g.putpixel((0,i),int(242*max(0,min(1,t))**1.1))
     g=g.resize((W,H)); plum=Image.new('RGB',(W,H),(46,24,44)); im=Image.composite(plum,im,g)
     d=ImageDraw.Draw(im)
     gold=(226,190,150); white=(255,250,246)
