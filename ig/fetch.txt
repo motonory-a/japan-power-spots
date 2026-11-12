@@ -14,3 +14,9 @@ cm-fri-kamakura | commons:Kamakura Daibutsu
 cm-sat-fuji3 | commons:Mount Fuji Kawaguchiko autumn
 cm-sat-fuji4 | commons:Fuji Kawaguchi lake red leaves
 cm-sat-fuji5 | commons:Mount Fuji autumn foliage
+cm-w0-nara | commons:Nara Park deer autumn leaves
+cm-w0-nara2 | commons:Todaiji autumn
+cm-w0-arashiyama | commons:Arashiyama Togetsukyo autumn
+cm-w0-arashiyama2 | commons:Arashiyama autumn leaves Kyoto
+cm-w0-chitose | commons:chitose ame shichi-go-san
+cm-w0-shichigosan | commons:shichigosan shrine
