@@ -53,7 +53,7 @@
 1. Canvaの `create-design`(Instagram Post Portrait)。紫と金、セリフ体、写真大きめ。生成回数の上限(quota_exceeded)が出たら2へ。
 2. Canvaの書き出しURLはこの環境から直接ダウンロードできない。`ig/fetch.txt` に `名前 | url:<URL>` を追記してpush → GitHub Actions「Fetch Instagram images」が `ig/src/` に保存する。ウィキメディア・コモンズの写真は `名前 | commons:<検索語>` で取れる(ライセンスは `ig/src/名前.json`)。
 3. 取ってきた写真に `ig/w1/ps_img.py` で文字を入れる(Canvaと同じ雰囲気)。CC BY/BY-SAの写真は、キャプションの末尾に「📷 作者名 / CC BY-SA 4.0 (Wikimedia Commons)」を入れる。
-4. 完成画像は `ig/wN/`(Nは週番号)に置いてpush。公開URLは `https://motonory-a.github.io/japan-power-spots/ig/wN/ファイル名`。
+4. 完成画像は `ig/wN/`(Nは週番号)に置いてpush。Metricoolに渡すURLは `https://raw.githubusercontent.com/motonory-a/japan-power-spots/main/ig/wN/ファイル名` を使う(GitHub Pagesは反映に時間がかかり、直後だと「見つからない」エラーになるため)。
 
 ## 予約
 - Metricool `createScheduledPost`。providers は instagram、instagramData.type=POST。
