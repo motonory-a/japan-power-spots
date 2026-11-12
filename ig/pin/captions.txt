@@ -1,8 +1,9 @@
 === pin jp
 はじめまして。開運パワースポット巡りです⛩
 
-「どこかにお参りしたいけれど、どこへ行けばいいのかわからない」
-そんな方のために、相性のいい神社やお寺を見つけられるサイトをつくりました。
+「パワースポットに行ってみたいけれど、自分にはどこが合うのかわからない」
+そんな方のために、相性のいいパワースポットを見つけられるサイトをつくりました。
+神社やお寺だけでなく、ご神木や滝、山まで、全国の聖地から探せます。
 
 使い方は三つだけ。
 ① 恋愛・金運・健康・仕事など、願いごとを選ぶ
@@ -23,7 +24,7 @@
 === pin en
 Welcome to Japan Power Spot Journey ⛩
 
-Planning a trip to Japan and not sure which shrine or temple to visit? We built a free site that finds sacred places that match you.
+Curious about Japan's power spots but not sure which one is right for you? We built a free site that finds the power spots that match you: shrines and temples, and also sacred trees, waterfalls and mountains.
 
 How it works:
 1. Pick your wish: love, money, health or work
@@ -44,7 +45,7 @@ Your guide: Akki, the Higher-Dimensional Negotiator
 === pin zh
 歡迎來到「日本能量景點之旅」⛩
 
-想去日本參拜，卻不知道該去哪間神社或寺院嗎？我們做了一個免費網站，幫你找到與你相合的聖地。
+想去日本的能量景點，卻不知道哪裡最適合自己嗎？我們做了一個免費網站，幫你找到與你相合的能量景點。不只神社和寺院，還有神木、瀑布與靈山。
 
 使用方法只有三步：
 ① 選擇心願：戀愛、財運、健康、工作
@@ -65,7 +66,7 @@ Your guide: Akki, the Higher-Dimensional Negotiator
 === pin ko
 일본 파워스폿 여행에 오신 걸 환영합니다 ⛩
 
-일본에 가면 어느 신사나 절에 가야 할지 고민되시나요? 나와 잘 맞는 성지를 찾아 주는 무료 사이트를 만들었습니다.
+일본의 파워스폿, 어디가 나와 맞을지 고민되시나요? 나와 잘 맞는 파워스폿을 찾아 주는 무료 사이트를 만들었습니다. 신사와 절뿐 아니라 신목, 폭포, 산까지 찾을 수 있어요.
 
 사용법은 세 단계예요.
 ① 소원 고르기: 연애, 재물운, 건강, 일
@@ -86,7 +87,7 @@ Your guide: Akki, the Higher-Dimensional Negotiator
 === pin fr
 Bienvenue sur Voyage aux lieux sacrés du Japon ⛩
 
-Vous préparez un voyage au Japon sans savoir quel sanctuaire ou quel temple visiter ? Nous avons créé un site gratuit qui trouve les lieux sacrés faits pour vous.
+Vous rêvez des lieux d’énergie du Japon sans savoir lequel est fait pour vous ? Nous avons créé un site gratuit qui les trouve pour vous : sanctuaires et temples, mais aussi arbres sacrés, cascades et montagnes.
 
 Comment ça marche :
 1. Choisissez un vœu : amour, argent, santé ou travail
@@ -107,7 +108,7 @@ Votre guide : Akki, négociateur des dimensions supérieures
 === pin es
 Bienvenido a Viaje a los lugares sagrados de Japón ⛩
 
-¿Vas a viajar a Japón y no sabes qué santuario o templo visitar? Creamos una web gratuita que encuentra los lugares sagrados que van contigo.
+¿Te atraen los lugares de energía de Japón pero no sabes cuál es para ti? Creamos una web gratuita que los encuentra por ti: santuarios y templos, pero también árboles sagrados, cascadas y montañas.
 
 Cómo funciona:
 1. Elige tu deseo: amor, dinero, salud o trabajo
