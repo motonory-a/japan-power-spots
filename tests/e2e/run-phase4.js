@@ -24,7 +24,7 @@ async function route(page) {
     return r.abort();
   });
 }
-async function setBD(page, v) { const [y, m, d] = v.split('-').map(Number); await page.selectOption('#bd-y', String(y)); await page.selectOption('#bd-m', String(m)); await page.selectOption('#bd-d', String(d)); }
+async function setBD(page, v) { const [y, m, d] = v.split('-').map(Number); await page.fill('#bd-y', String(y)); await page.selectOption('#bd-m', String(m)); await page.selectOption('#bd-d', String(d)); }
 async function setRowBD(row, v) { const s = await row.$$('.bd-row select'); const [y, m, d] = v.split('-').map(Number); await s[0].selectOption(String(y)); await s[1].selectOption(String(m)); await s[2].selectOption(String(d)); }
 
 (async () => {

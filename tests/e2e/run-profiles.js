@@ -2,7 +2,7 @@
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
-async function setBD(pg, v) { if (!v) { await pg.selectOption('#bd-y', ''); await pg.selectOption('#bd-m', ''); await pg.selectOption('#bd-d', ''); return; } const [y, m, d] = v.split('-').map(Number); await pg.selectOption('#bd-y', String(y)); await pg.selectOption('#bd-m', String(m)); await pg.selectOption('#bd-d', String(d)); }
+async function setBD(pg, v) { if (!v) { await pg.fill('#bd-y', ''); await pg.selectOption('#bd-m', ''); await pg.selectOption('#bd-d', ''); return; } const [y, m, d] = v.split('-').map(Number); await pg.fill('#bd-y', String(y)); await pg.selectOption('#bd-m', String(m)); await pg.selectOption('#bd-d', String(d)); }
 const target = path.resolve(process.argv[2] || path.join(__dirname, '../../index.html'));
 const results = [];
 const check = (name, ok, info = '') => { results.push(ok); console.log((ok ? '  OK  ' : '  NG  ') + name + (info ? '  ' + info : '')); };

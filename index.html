@@ -114,10 +114,11 @@
           <div class="bd-field">
             <label for="bd-y">生年月日 <span class="req">必須</span></label>
             <div class="bd-row" role="group" aria-label="生年月日">
-              <select id="bd-y" aria-label="生まれた年"><option value="">年</option></select>
+              <input type="text" id="bd-y" class="bd-year" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="1980" autocomplete="bday-year" aria-label="生まれた年（西暦4けた）" aria-describedby="bd-hint">
               <select id="bd-m" aria-label="生まれた月"><option value="">月</option></select>
               <select id="bd-d" aria-label="生まれた日"><option value="">日</option></select>
             </div>
+            <p class="bd-hint" id="bd-hint">年は西暦4けたで入力してください（例：1980）</p>
             <input type="hidden" id="birthday">
           </div>
         </div>

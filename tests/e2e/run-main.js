@@ -2,7 +2,7 @@
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
-async function setBD(pg, v) { if (!v) { await pg.selectOption('#bd-y', ''); await pg.selectOption('#bd-m', ''); await pg.selectOption('#bd-d', ''); return; } const [y, m, d] = v.split('-').map(Number); await pg.selectOption('#bd-y', String(y)); await pg.selectOption('#bd-m', String(m)); await pg.selectOption('#bd-d', String(d)); }
+async function setBD(pg, v) { if (!v) { await pg.fill('#bd-y', ''); await pg.selectOption('#bd-m', ''); await pg.selectOption('#bd-d', ''); return; } const [y, m, d] = v.split('-').map(Number); await pg.fill('#bd-y', String(y)); await pg.selectOption('#bd-m', String(m)); await pg.selectOption('#bd-d', String(d)); }
 const target = path.resolve(process.argv[2] || path.join(__dirname, '../../index.html'));
 const LDIR = path.join(__dirname, 'node_modules/leaflet/dist');
 const results = [];
@@ -66,11 +66,13 @@ async function route(page, { blockCdn = false } = {}) {
     check('バナーに件数、フッターに出典', /全国[0-9,]+件/.test(await page.textContent('.trial-banner')) && (await page.textContent('footer')).includes('OpenStreetMap'));
     check('フッターにODbL', (await page.textContent('footer')).includes('ODbL'));
 
-    const yopts = await page.$$eval('#bd-y option', (o) => o.map((x) => x.textContent));
-    check('生年月日：年に和暦の表示', yopts.includes('1974年（昭和49年）') && yopts.includes('1989年（昭和64・平成元年）') && yopts.includes('2019年（平成31・令和元年）'));
-    await page.selectOption('#bd-y', '2023'); await page.selectOption('#bd-m', '2');
+    await page.fill('#bd-y', '1974');
+    check('生年月日：年を入れると和暦の表示', (await page.textContent('#bd-hint')).includes('昭和49年'));
+    await page.fill('#bd-y', '1989');
+    check('生年月日：改元の年は両方', (await page.textContent('#bd-hint')).includes('昭和64・平成元年'));
+    await page.fill('#bd-y', '2023'); await page.selectOption('#bd-m', '2');
     check('生年月日：2023年2月は28日まで', (await page.$$('#bd-d option')).length === 29);
-    await page.selectOption('#bd-y', '2024');
+    await page.fill('#bd-y', '2024');
     check('生年月日：2024年2月は29日まで（うるう年）', (await page.$$('#bd-d option')).length === 30);
     await page.selectOption('#bd-d', '15');
     check('生年月日：選ぶと内部の値が入る', (await page.inputValue('#birthday')) === '2024-02-15');

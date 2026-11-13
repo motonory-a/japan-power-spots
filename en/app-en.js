@@ -200,6 +200,66 @@
     $('birthday').max = t;
   }
 
+  /* ---------- birthday: year typed as 4 digits + month + day (same as the Soul Lineage reading) ---------- */
+  var BD_TXT = {
+    en: { y: 'Year', m: 'Month', d: 'Day', hint: 'Type your birth year in 4 digits (e.g. 1980)', bad: 'Enter a year between 1900 and {y}', order: 'mdy' },
+    zh: { y: '年', m: '月', d: '日', hint: '請輸入西元出生年4位數（例：1980）', bad: '請輸入1900～{y}之間的年份', order: 'ymd' },
+    ko: { y: '년', m: '월', d: '일', hint: '출생 연도를 4자리로 입력하세요 (예: 1980)', bad: '1900~{y} 사이의 연도를 입력하세요', order: 'ymd' },
+    fr: { y: 'Année', m: 'Mois', d: 'Jour', hint: 'Saisissez votre année de naissance en 4 chiffres (ex. 1980)', bad: 'Saisissez une année entre 1900 et {y}', order: 'dmy' },
+    es: { y: 'Año', m: 'Mes', d: 'Día', hint: 'Escribe tu año de nacimiento con 4 cifras (ej. 1980)', bad: 'Escribe un año entre 1900 y {y}', order: 'dmy' }
+  };
+  function bdWidget(id) {
+    var hid = $(id); if (!hid) return null;
+    var T = BD_TXT[EN.lang] || BD_TXT.en, maxY = Number(today().slice(0, 4));
+    var monthName = function (m) {
+      try { return new Intl.DateTimeFormat(EN.locale || 'en-US', { month: 'long' }).format(new Date(2000, m - 1, 15)); } catch (e) { return String(m); }
+    };
+    var row = el('div', 'bd-row bd-' + T.order);
+    var yi = el('input', 'bd-year'); yi.type = 'text'; yi.inputMode = 'numeric'; yi.pattern = '[0-9]*'; yi.maxLength = 4; yi.placeholder = '1980';
+    yi.autocomplete = id === 'birthday' ? 'bday-year' : 'off'; yi.setAttribute('aria-label', T.y);
+    var ms = el('select'); ms.setAttribute('aria-label', T.m);
+    var ds = el('select'); ds.setAttribute('aria-label', T.d);
+    var m0 = el('option', null, T.m); m0.value = ''; ms.append(m0);
+    for (var m = 1; m <= 12; m++) { var om = el('option', null, monthName(m)); om.value = String(m); ms.append(om); }
+    var hint = el('p', 'bd-hint', T.hint);
+    function yearOf() { var y = Number(yi.value); return (yi.value.length === 4 && y >= 1900 && y <= maxY) ? y : 0; }
+    function fillDays() {
+      var cur = ds.value, y = yearOf() || 2000, n = ms.value ? new Date(y, Number(ms.value), 0).getDate() : 31;
+      ds.replaceChildren(); var d0 = el('option', null, T.d); d0.value = ''; ds.append(d0);
+      for (var d = 1; d <= n; d++) { var od = el('option', null, String(d)); od.value = String(d); ds.append(od); }
+      if (cur && Number(cur) <= n) ds.value = cur;
+    }
+    function update() {
+      fillDays();
+      var y = yearOf(), mm = ms.value, dd = ds.value;
+      var v = (y && mm && dd) ? y + '-' + String(mm).padStart(2, '0') + '-' + String(dd).padStart(2, '0') : '';
+      if (hid.value !== v) { hid.value = v; hid.dispatchEvent(new Event('change', { bubbles: true })); }
+      var bad = yi.value.length === 4 && !y;
+      hint.textContent = bad ? T.bad.replace('{y}', maxY) : T.hint;
+      hint.classList.toggle('bad', bad);
+      yi.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    }
+    yi.addEventListener('input', function () {
+      var v = yi.value.replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }).replace(/[^0-9]/g, '').slice(0, 4);
+      if (v !== yi.value) yi.value = v;
+      update();
+    });
+    ms.addEventListener('change', update); ds.addEventListener('change', update);
+    var parts = { y: yi, m: ms, d: ds };
+    T.order.split('').forEach(function (k) { row.append(parts[k]); });
+    hid.type = 'hidden';
+    hid.parentNode.insertBefore(row, hid);
+    hid.parentNode.insertBefore(hint, hid);
+    fillDays();
+    return {
+      sync: function () {
+        var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(hid.value || '');
+        yi.value = p ? p[1] : ''; ms.value = p ? String(Number(p[2])) : ''; fillDays(); ds.value = p ? String(Number(p[3])) : '';
+      }
+    };
+  }
+  var BDW = { birthday: bdWidget('birthday'), plan: bdWidget('plan-bday') };
+
   /* ---------- starting point ---------- */
   var origin = null, originMap = null, originMarker = null;
   function setOrigin(o, fromMap) {
@@ -240,6 +300,7 @@
       if (saved && saved.lat) { $('city').value = saved.key || 'pin'; setOrigin(saved); }
     } catch (e) { /* ignore */ }
     try { var b = localStorage.getItem('jps-en-bday'); if (b) $('birthday').value = b; } catch (e) { /* ignore */ }
+    if (BDW.birthday) BDW.birthday.sync();
   }
 
   /* ---------- validation ---------- */
@@ -518,6 +579,7 @@
     legs.forEach(function (l) { $('legs').append(legRow(l)); });
     if (saved && saved.wish != null) tiles.value = saved.wish;
     try { var b = localStorage.getItem('jps-en-bday'); if (b) $('plan-bday').value = b; } catch (e) { /* ignore */ }
+    if (BDW.plan) BDW.plan.sync();
     $('plan-bday').max = today();
     $('add-leg').addEventListener('click', function () {
       var ls = readLegs(), last = ls[ls.length - 1];

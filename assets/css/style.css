@@ -71,7 +71,10 @@ input:focus,select:focus{border-color:var(--indigo);outline:none;box-shadow:0 0 
 input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--kyo);background-color:#FCF3F1}
 .req{display:inline-block;font-size:11px;font-weight:bold;color:var(--req);border:1px solid var(--req);border-radius:3px;padding:0 5px;margin-left:6px;vertical-align:1px;line-height:1.6}
 .opt{font-size:12px;font-weight:normal;color:var(--muted);margin-left:6px}
-.bd-row{display:grid;grid-template-columns:1.9fr 1fr 1fr;gap:8px}
+.bd-row{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+.bd-row .bd-year{text-align:center;letter-spacing:.08em}
+.bd-hint{margin:6px 2px 0;font-size:13px;color:var(--muted)}
+.bd-hint.bad{color:var(--kyo)}
 
 /* 段階（一〜四） */
 fieldset{border:0;margin:0;padding:0;min-width:0}
@@ -260,7 +263,7 @@ footer a{color:#EAD7AE}
   .panel{padding:22px 16px 20px;border-radius:5px}
   h2{font-size:21px}
   .fields-me{grid-template-columns:1fr}
-  .bd-row{grid-template-columns:1.7fr 1fr 1fr;gap:6px}
+  .bd-row{grid-template-columns:1.2fr 1fr 1fr;gap:6px}
   .bd-row select{padding-left:10px;padding-right:26px;background-position:calc(100% - 14px) 52%,calc(100% - 9px) 52%}
   .chip-group{width:100%}
   .addr-row{flex-direction:column}

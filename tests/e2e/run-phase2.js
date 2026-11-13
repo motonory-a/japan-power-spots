@@ -89,7 +89,7 @@ async function route(page) {
     check('診断ボタンの文言', (await page.textContent('#diagnose')).replace(/✦/g, '').trim() === 'おすすめスポットを診断する');
 
     // 4. 診断が今まで通り動く（TOP5）
-    await page.selectOption('#bd-y', '1974'); await page.selectOption('#bd-m', '4'); await page.selectOption('#bd-d', '15');
+    await page.fill('#bd-y', '1974'); await page.selectOption('#bd-m', '4'); await page.selectOption('#bd-d', '15');
     await page.selectOption('#home', '東京都');
     await page.click('#diagnose');
     await page.waitForSelector('#recommended .card', { timeout: 30000 });
@@ -118,8 +118,9 @@ async function route(page) {
   await page.waitForSelector('.wish-tile');
   check('今日は日本の日付（2027-01-01）', await page.evaluate(() => JSTDate.today()) === '2027-01-01');
   check('端末の日付は2026-12-31（前提の確認）', await page.evaluate(() => new Date().getDate()) === 31);
-  check('生年の選択肢は日本の今年（2027年）から', await page.$eval('#bd-y option:nth-child(2)', (o) => o.value) === '2027');
-  await page.selectOption('#bd-y', '1974'); await page.selectOption('#bd-m', '4'); await page.selectOption('#bd-d', '15');
+  await page.fill('#bd-y', '2027');
+  check('生年は日本の今年（2027年）まで入力できる', !(await page.getAttribute('#bd-hint', 'class')).includes('bad'));
+  await page.fill('#bd-y', '1974'); await page.selectOption('#bd-m', '4'); await page.selectOption('#bd-d', '15');
   await page.selectOption('#home', '東京都');
   await page.click('#diagnose');
   await page.waitForSelector('#recommended .card', { timeout: 30000 });

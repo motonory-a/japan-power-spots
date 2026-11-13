@@ -13,6 +13,7 @@
   var rows = [], seq = 0, eraLabel = function () { return ''; }, profilesFn = function () { return []; };
 
   function daysIn(y, m) { return new Date(y || 2000, m, 0).getDate(); }
+  function yOf(inp) { return root.BirthYear ? root.BirthYear.yearOf(inp) : (/^\d{4}$/.test(inp.value) ? Number(inp.value) : 0); }
   function thisYear() { return root.JSTDate ? JSTDate.parts().y : new Date().getFullYear(); }
 
   function addRow(data) {
@@ -40,26 +41,26 @@
     var bd = el('div', 'bd-row');
     bd.setAttribute('role', 'group');
     bd.setAttribute('aria-label', '一緒に行く人の生年月日');
-    var ys = el('select'), ms = el('select'), ds = el('select');
-    ys.setAttribute('aria-label', '生まれた年'); ms.setAttribute('aria-label', '生まれた月'); ds.setAttribute('aria-label', '生まれた日');
-    var y0 = el('option', null, '年'); y0.value = ''; ys.append(y0);
-    for (var y = thisYear(); y >= 1920; y--) { var oy = el('option', null, y + '年（' + eraLabel(y) + '）'); oy.value = String(y); ys.append(oy); }
+    var ys = el('input', 'bd-year'), ms = el('select'), ds = el('select');
+    ys.type = 'text'; ys.inputMode = 'numeric'; ys.pattern = '[0-9]*'; ys.maxLength = 4; ys.placeholder = '1980'; ys.autocomplete = 'off';
+    ys.setAttribute('aria-label', '生まれた年（西暦4けた）'); ms.setAttribute('aria-label', '生まれた月'); ds.setAttribute('aria-label', '生まれた日');
     var m0 = el('option', null, '月'); m0.value = ''; ms.append(m0);
     for (var m = 1; m <= 12; m++) { var om = el('option', null, m + '月'); om.value = String(m); ms.append(om); }
     function fillDays() {
-      var cur = ds.value, n = ms.value ? daysIn(Number(ys.value), Number(ms.value)) : 31;
+      var cur = ds.value, n = ms.value ? daysIn(yOf(ys), Number(ms.value)) : 31;
       ds.replaceChildren(); var d0 = el('option', null, '日'); d0.value = ''; ds.append(d0);
       for (var d = 1; d <= n; d++) { var od = el('option', null, d + '日'); od.value = String(d); ds.append(od); }
       if (cur && Number(cur) <= n) ds.value = cur;
     }
     fillDays();
-    ys.addEventListener('change', fillDays); ms.addEventListener('change', fillDays);
+    if (root.BirthYear) root.BirthYear.wire(ys, fillDays); else ys.addEventListener('input', fillDays);
+    ms.addEventListener('change', fillDays);
     bd.append(ys, ms, ds);
 
     var r = { id: id, el: row, rel: relSel, y: ys, m: ms, d: ds, nick: '' };
     function setBirthday(v) {
       var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || '');
-      ys.value = p ? String(Number(p[1])) : ''; ms.value = p ? String(Number(p[2])) : ''; fillDays(); ds.value = p ? String(Number(p[3])) : '';
+      ys.value = p ? p[1] : ''; ms.value = p ? String(Number(p[2])) : ''; fillDays(); ds.value = p ? String(Number(p[3])) : '';
     }
     r.setBirthday = setBirthday;
     if (pick) {
@@ -72,6 +73,7 @@
     }
     // 自分で生年月日を変えたら、保存した人の名前は外す
     [ys, ms, ds].forEach(function (s) { s.addEventListener('change', function () { r.nick = ''; }); });
+    ys.addEventListener('input', function () { r.nick = ''; });
 
     row.append(head);
     if (pick) row.append(pick);
@@ -96,7 +98,7 @@
   }
 
   function birthdayOf(r) {
-    var y = r.y.value, m = r.m.value, d = r.d.value;
+    var y = yOf(r.y), m = r.m.value, d = r.d.value;
     return (y && m && d) ? y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0') : '';
   }
 

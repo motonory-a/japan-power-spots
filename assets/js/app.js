@@ -137,20 +137,41 @@
     return out.join('・') + '年';
   }
   function daysIn(y, m) { return new Date(y || 2000, m, 0).getDate(); }
+  // 生まれた年：西暦4けたを数字キーで入力（魂の系統鑑定と同じ方式）
+  function thisYearJST() { return window.JSTDate ? JSTDate.parts().y : new Date().getFullYear(); }
+  function yearOf(inp) {
+    var v = String(inp.value || '').replace(/[^0-9]/g, '');
+    var y = Number(v);
+    return (v.length === 4 && y >= 1900 && y <= thisYearJST()) ? y : 0;
+  }
+  function wireYear(inp, onChange) {
+    inp.addEventListener('input', function () {
+      // 全角数字も半角に
+      var v = inp.value.replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }).replace(/[^0-9]/g, '').slice(0, 4);
+      if (v !== inp.value) inp.value = v;
+      onChange();
+    });
+    inp.addEventListener('change', onChange);
+  }
+  window.BirthYear = { yearOf: yearOf, wire: wireYear, eraLabel: eraLabel };
   var Birthday = {
     init: function () {
-      var thisYear = window.JSTDate ? JSTDate.parts().y : new Date().getFullYear();
-      for (var y = thisYear; y >= 1920; y--) {
-        var o = el('option', null, y + '年（' + eraLabel(y) + '）'); o.value = String(y); $('bd-y').append(o);
-      }
       for (var m = 1; m <= 12; m++) { var om = el('option', null, m + '月'); om.value = String(m); $('bd-m').append(om); }
       Birthday.fillDays();
-      ['bd-y', 'bd-m', 'bd-d'].forEach(function (id) {
+      wireYear($('bd-y'), function () { Birthday.fillDays(); Birthday.toHidden(); Birthday.hint(); });
+      ['bd-m', 'bd-d'].forEach(function (id) {
         $(id).addEventListener('change', function () { if (id !== 'bd-d') Birthday.fillDays(); Birthday.toHidden(); });
       });
     },
+    hint: function () {
+      var h = $('bd-hint'); if (!h) return;
+      var raw = $('bd-y').value, y = yearOf($('bd-y'));
+      if (y) { h.textContent = y + '年は' + eraLabel(y) + 'です'; h.classList.remove('bad'); }
+      else if (raw.length === 4) { h.textContent = '1900〜' + thisYearJST() + 'の年を入力してください'; h.classList.add('bad'); }
+      else { h.textContent = '年は西暦4けたで入力してください（例：1980）'; h.classList.remove('bad'); }
+    },
     fillDays: function () {
-      var y = Number($('bd-y').value), m = Number($('bd-m').value), cur = $('bd-d').value;
+      var y = yearOf($('bd-y')), m = Number($('bd-m').value), cur = $('bd-d').value;
       var n = m ? daysIn(y, m) : 31;
       $('bd-d').replaceChildren(el('option', null, '日'));
       $('bd-d').firstChild.value = '';
@@ -158,15 +179,15 @@
       if (cur && Number(cur) <= n) $('bd-d').value = cur;
     },
     toHidden: function () {
-      var y = $('bd-y').value, m = $('bd-m').value, d = $('bd-d').value;
+      var y = yearOf($('bd-y')), m = $('bd-m').value, d = $('bd-d').value;
       $('birthday').value = (y && m && d) ? y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0') : '';
     },
-    // 隠し項目（保存した内容の読み込みなど）から選択欄へ
+    // 隠し項目（保存した内容の読み込みなど）から入力欄へ
     sync: function () {
       var v = $('birthday').value, p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || '');
-      if (!p) { $('bd-y').value = ''; $('bd-m').value = ''; Birthday.fillDays(); $('bd-d').value = ''; return; }
-      $('bd-y').value = String(Number(p[1])); $('bd-m').value = String(Number(p[2]));
-      Birthday.fillDays(); $('bd-d').value = String(Number(p[3]));
+      if (!p) { $('bd-y').value = ''; $('bd-m').value = ''; Birthday.fillDays(); $('bd-d').value = ''; Birthday.hint(); return; }
+      $('bd-y').value = p[1]; $('bd-m').value = String(Number(p[2]));
+      Birthday.fillDays(); $('bd-d').value = String(Number(p[3])); Birthday.hint();
     },
     setInvalid: function (bad) { ['bd-y', 'bd-m', 'bd-d'].forEach(function (id) { $(id).setAttribute('aria-invalid', bad ? 'true' : 'false'); }); }
   };

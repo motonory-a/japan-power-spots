@@ -163,3 +163,14 @@ footer.en-foot a{color:#EAD7AE}
 .en-langs a[aria-current=page]{color:#fff;font-weight:700;border-bottom-color:var(--gold)}
 body.lang-zh,body.lang-ko{font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Noto Sans KR","Microsoft JhengHei","Malgun Gothic",sans-serif}
 body.lang-zh h2,body.lang-zh h3,body.lang-ko h2,body.lang-ko h3,body.lang-zh .en-title,body.lang-ko .en-title{font-family:"Noto Serif TC","Noto Serif KR",var(--serif-en)}
+/* birthday: year typed + month + day */
+body.en .bd-row{display:grid;grid-template-columns:1.2fr 1.4fr 1fr;gap:8px;max-width:440px}
+body.en .bd-row.bd-mdy{grid-template-columns:1.4fr 1fr 1.2fr}
+body.en .bd-row.bd-dmy{grid-template-columns:1fr 1.4fr 1.2fr}
+body.en .bd-row input.bd-year{font:inherit;font-size:16px;padding:10px 12px;border:1px solid #D7C9E4;border-radius:10px;background:#fff;color:var(--ink);min-height:46px;width:100%;box-sizing:border-box;text-align:center;letter-spacing:.06em}
+body.en .bd-row select{width:100%}
+body.en .bd-row input.bd-year[aria-invalid=true]{border-color:#C0563F;background:#FCF3F1}
+body.en .bd-hint{margin:6px 2px 0;font-size:13px;color:#7a6f86}
+body.en .bd-hint.bad{color:#C0563F}
+body.en .en-plan-top label .bd-row{margin-top:6px}
+body.en .bd-row select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#8a7f96 50%),linear-gradient(135deg,#8a7f96 50%,transparent 50%);background-position:calc(100% - 16px) 52%,calc(100% - 11px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:30px}

@@ -123,7 +123,7 @@ const doorText = (p) => p.$eval('#door-content', (e) => e.innerText);
     check('紹介文に生年月日や住所を入れない', await page.$$eval('.share-box a', (as) => as.every((a) => !/1974|新宿|生年月日：/.test(decodeURIComponent(a.href)))));
 
     // 診断結果のカードにも保存ボタン
-    await page.selectOption('#bd-y', '1974'); await page.selectOption('#bd-m', '4'); await page.selectOption('#bd-d', '15');
+    await page.fill('#bd-y', '1974'); await page.selectOption('#bd-m', '4'); await page.selectOption('#bd-d', '15');
     await page.selectOption('#home', '東京都');
     await page.click('#diagnose');
     await page.waitForSelector('#recommended .card');
@@ -158,7 +158,7 @@ const doorText = (p) => p.$eval('#door-content', (e) => e.innerText);
   const p2 = await c2.newPage();
   await route(p2);
   await p2.goto('file://' + target);
-  await p2.selectOption('#bd-y', '1974'); await p2.selectOption('#bd-m', '4'); await p2.selectOption('#bd-d', '15');
+  await p2.fill('#bd-y', '1974'); await p2.selectOption('#bd-m', '4'); await p2.selectOption('#bd-d', '15');
   await p2.click('#door-open');
   await p2.waitForSelector('#door-content');
   check('数秘ナンバー4のあなたへ', /数秘ナンバー4（安定・内省）のあなたへ/.test(await p2.textContent('#door-content')));
