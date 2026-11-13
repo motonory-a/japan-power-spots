@@ -503,7 +503,15 @@
   function renderOuting(s, ctx) {
     var box = $('outing');
     box.replaceChildren();
-    if (!s) { box.hidden = true; return; }
+    if (!s) {
+      // 方位の都合でお出かけの提案を出さない日も、1位のスポットのまわりの食べ物だけは出す
+      if (ctx.foodSpot && window.Food) {
+        box.append(el('p', 'outing-kicker', '第1位「' + ctx.foodSpot.name + '」のまわり'));
+        box.append(foodBox(ctx.foodSpot, ctx.tripDate));
+        box.hidden = !box.querySelector('.outing-food');
+      } else box.hidden = true;
+      return;
+    }
     var day = ctx.tripDate;
     box.append(el('p', 'outing-kicker', 'お出かけの提案'));
     box.append(el('h3', null, ctx.tripDate ? dateJ(day) + '、ここへ行ってみない？' : 'ここ、行けるときに行ってみてね'));
@@ -751,7 +759,7 @@
       photoCards.push({ spot: s, el: c });
     });
 
-    renderOuting(shown[0] && shown[0].fortune && shown[0].fortune.tier === 0 ? null : shown[0], { tripDate: tripDate, mode: mode, modeKey: modeKey, origin: origin, stars: [person].concat(members.map(function (m) { return m.stars; })) });
+    renderOuting(shown[0] && shown[0].fortune && shown[0].fortune.tier === 0 ? null : shown[0], { foodSpot: shown[0], tripDate: tripDate, mode: mode, modeKey: modeKey, origin: origin, stars: [person].concat(members.map(function (m) { return m.stars; })) });
     $('diagnosis').hidden = false;
     if (window.SpotPhotos) SpotPhotos.attach(photoCards);
     SpotMap.showRanking(shown, origin);
