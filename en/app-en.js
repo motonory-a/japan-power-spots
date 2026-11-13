@@ -470,6 +470,21 @@
       }
     }
 
+    if (LANG === 'en' && window.Food) {
+      var fe = Food.meibutsu(s.prefecture, 'en'), fj = Food.meibutsu(s.prefecture);
+      var se = Food.seasonal(s.prefecture, parseInt(String(ctx.tripDate || today()).slice(5, 7), 10), 'en');
+      if (fe.length) {
+        var fb = el('div', 'en-food');
+        fb.append(el('p', 'en-food-head', 'Make it a food trip too'));
+        fb.append(el('p', null, 'Local specialties' + (EN.prefectures[s.prefecture_code] ? ' of ' + EN.prefectures[s.prefecture_code] : '') + ': ' + fe.join(SEP)));
+        if (se) fb.append(el('p', null, 'In season (' + se.season + ', ' + se.region + '): ' + se.items.join(SEP)));
+        var fl = link('https://www.google.com/maps/search/' + encodeURIComponent((s.municipality || s.prefecture) + ' ' + fj[0]), 'Find well-rated places nearby (Google Maps)', 'en-food-link');
+        fl.setAttribute('data-track', 'food_search');
+        fb.append(fl);
+        body.append(fb);
+      }
+    }
+
     var btns = el('div', 'en-btns');
     btns.append(link(gmapsDir(ctx.origin, s, ctx.mode), U('directionsGM'), 'btn-main en-btn'));
     var w = enWiki(s.wikidata);
@@ -545,8 +560,13 @@
     if (LIGHT && STYLE_KEY === 'nature') {
       // sacred nature: places that match a nature tag come first
       var NAT = ['山', '滝', '湖', '岩・磐座', '絶景', '洞窟', '湧水', '巨木'];
-      var isNat = function (x) { return NAT.indexOf(x.category) !== -1 || ((x.hitWishes || []).length > 0 && x.category !== '神社' && x.category !== '寺院'); };
-      all.sort(function (a, b) { return (b.withinLimit - a.withinLimit) || (isNat(b) - isNat(a)) || ((b.score + (b.fame || 0) * 0.6) - (a.score + (a.fame || 0) * 0.6)) || (a.km - b.km); });
+      var NS = (window.EnPool && EnPool.NATURE_SACRED) || {};
+      var isNat = function (x) { return NAT.indexOf(x.category) !== -1 || NS[x.wikidata] === 1 || ((x.hitWishes || []).length > 0 && x.category !== '神社' && x.category !== '寺院'); };
+      // well-known sacred mountains / forests / waterfalls first, then small local nature spots
+      // sacred mountains are day trips: let them stretch the time limit a little (the card still shows the real estimate)
+      if (limit) all.forEach(function (x) { if (NS[x.wikidata] === 1 && x.minutes <= limit * 1.5) x.withinLimit = true; });
+      var natKey = function (x) { return x.score + (x.fame || 0) * 0.25 + (NS[x.wikidata] === 1 ? 45 : 0) - (limit && x.minutes > limit ? 30 : 0); };
+      all.sort(function (a, b) { return (b.withinLimit - a.withinLimit) || (isNat(b) - isNat(a)) || (natKey(b) - natKey(a)) || (a.km - b.km); });
     }
     if (LIGHT && STYLE_KEY !== 'nature') {
       // famous must-sees: lean on how well-known a place is; hidden gems: skip the very famous ones

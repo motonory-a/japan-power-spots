@@ -659,3 +659,12 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .why-box>summary::before{content:'＋ ';}
 .why-box[open]>summary::before{content:'－ ';}
 .why-box[open]{padding-bottom:14px}
+
+/* 季節の味・名物（2026-11） */
+.food-line{color:#7a4b1e}
+.outing-food{margin:16px auto 0;max-width:520px;padding:14px 16px;border-radius:14px;background:#FFF8EC;border:1px solid #F0D9B0;text-align:left}
+.outing-food-head{margin:0 0 6px;font-weight:700;font-size:15px;text-align:center}
+.outing-food dl{margin:0;font-size:15px}
+.outing-food dt{color:var(--muted);font-size:12.5px;margin-top:6px}
+.outing-food dd{margin:0;font-weight:600}
+.outing-food .btn-link{display:block;margin-top:10px;text-align:center;font-size:14px}

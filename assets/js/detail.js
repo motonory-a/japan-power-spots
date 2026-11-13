@@ -85,6 +85,14 @@
     var objTags = (s.wishes || []).filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) body.append(el('p', 'small', '特徴：' + objTags.join('・')));
     if (s.wishesInferred && s.wishesInferred.length) body.append(el('p', 'small', 'ご利益（祭神・名称からの一般的な推定）：' + s.wishesInferred.join('・')));
+    if (root.Food) {
+      var meib = Food.meibutsu(s.prefecture);
+      if (meib.length) {
+        var fp = el('p', 'small food-line', 'せっかくなら味わいたい' + s.prefecture.replace(/[都府県]$/, '') + 'の名物：' + meib.join('・') + '　');
+        fp.append(link('近くのお店を探す', 'https://www.google.com/maps/search/' + encodeURIComponent((s.municipality || s.prefecture) + ' ' + meib[0])));
+        body.append(fp);
+      }
+    }
 
     // 行動のボタン
     var act = el('div', 'detail-actions');

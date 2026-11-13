@@ -34,6 +34,7 @@
     if (t.dataset && t.dataset.track) return root.track(t.dataset.track);
     var cls = t.className || '';
     if (/btn-detail/.test(cls)) return root.track('spot_detail');
+    if (t.tagName === 'A' && /google\.[a-z.]+\/maps\/search\//.test(t.href)) return root.track('food_search');
     if (t.tagName === 'A' && /google\.[a-z.]+\/maps|maps\.google/.test(t.href)) return root.track('route_click');
     if (t.id === 'more-results') return root.track('more_results');
     if (/btn-line|share/.test(cls) || (t.closest && t.closest('.share-slot,.share-panel,#share-panel'))) return root.track('share_click');

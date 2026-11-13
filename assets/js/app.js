@@ -88,6 +88,8 @@
     var objTags = s.wishes.filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) card.append(el('p', 'small', '特徴：' + objTags.join('・')));
     if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益：' + s.wishesInferred.join('・')));
+    var meib = window.Food ? Food.meibutsu(s.prefecture) : [];
+    if (meib.length) card.append(el('p', 'small food-line', 'せっかくなら味わいたい' + s.prefecture.replace(/[都府県]$/, '') + 'の名物：' + meib.join('・')));
     if (window.Collection) card.append(Collection.buttons(s));
     if (cfg.reportForms && cfg.reportForms.fix) {
       var fix = el('a', 'report-link', '情報の誤りを報告');
@@ -519,6 +521,7 @@
     inv.target = '_blank'; inv.rel = 'noopener noreferrer';
     row.append(route, inv);
     box.append(row);
+    box.append(foodBox(s, day));
     // 近くのモデルコース（20km以内）
     if (window.Courses) {
       var nc = Courses.near(s, 20)[0];
@@ -531,6 +534,27 @@
     }
     box.append(el('p', 'note', '参拝時間・入山期間・交通の状況は、出かける前に公式情報でご確認ください。'));
     box.hidden = false;
+  }
+
+  // 季節の味と土地の名物（行く日の月、未定なら今月）
+  function foodBox(s, day) {
+    var wrap = document.createDocumentFragment();
+    if (!window.Food) return wrap;
+    var month = parseInt(String(day || todayStr()).slice(5, 7), 10);
+    var se = Food.seasonal(s.prefecture, month), meib = Food.meibutsu(s.prefecture);
+    if (!se && !meib.length) return wrap;
+    var box = el('div', 'outing-food');
+    box.append(el('p', 'outing-food-head', 'お参りのあとは、おいしいものも'));
+    var dl = el('dl');
+    if (se) dl.append(el('dt', null, (day ? 'その時期' : 'いま') + '（' + se.season + '）の' + se.region + 'の旬'), el('dd', null, se.items.join('・')));
+    if (meib.length) dl.append(el('dt', null, s.prefecture + 'の名物'), el('dd', null, meib.join('・')));
+    box.append(dl);
+    var q = el('a', 'btn-link', '近くで評判のお店を探す（Googleマップ）');
+    q.href = 'https://www.google.com/maps/search/' + encodeURIComponent((s.municipality || s.prefecture) + ' ' + (meib[0] || 'グルメ'));
+    q.target = '_blank'; q.rel = 'noopener noreferrer'; q.setAttribute('data-track', 'food_search');
+    box.append(q);
+    wrap.append(box);
+    return wrap;
   }
 
   // 方位の良い日（これから60日）。日付を押すと、その日で診断し直す

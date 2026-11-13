@@ -21,7 +21,13 @@
       return true;
     }).map(function (s) { return Object.assign({}, s, { fame: fame(s) }); });
   }
-  var api = { include: include, fame: fame, build: build, NATURE: NATURE };
+  // Shrines and temples whose setting is the point: sacred mountains, forests, waterfalls, sea and lakes
+  var NATURE_SACRED = {};
+  ['Q8194732', 'Q6587276', 'Q11434713', 'Q11355207', 'Q3128007', 'Q11602876', 'Q705310', 'Q710359', 'Q276779', 'Q608668',
+   'Q218828', 'Q653180', 'Q11516052', 'Q704622', 'Q2857985', 'Q5367406', 'Q64969614', 'Q11259219', 'Q705542', 'Q191763',
+   'Q4333366', 'Q11616915', 'Q871375', 'Q11173679', 'Q703904', 'Q917195', 'Q1741668', 'Q3012163', 'Q1760419', 'Q715639'
+  ].forEach(function (q) { NATURE_SACRED[q] = 1; });
+  var api = { include: include, fame: fame, build: build, NATURE: NATURE, NATURE_SACRED: NATURE_SACRED };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.EnPool = api;
 })(this);

@@ -190,3 +190,9 @@ body.en-light .en-more-opts>summary{cursor:pointer;padding:14px 2px;font-weight:
 body.en-light .en-more-opts[open]{padding-bottom:6px}
 body.en-light .en-more-opts .en-step{border-top:1px solid #EEE6F3}
 body.en-light .en-map-toggle{background:none;border:0;padding:6px 2px;color:#5a3a86;text-decoration:underline;font:inherit;font-size:14px;cursor:pointer}
+
+/* food (2026-11) */
+.en-food{margin:12px 0 4px;padding:10px 12px;border-radius:12px;background:#FFF8EC;border:1px solid #F0D9B0;font-size:14px}
+.en-food p{margin:2px 0}
+.en-food-head{font-weight:700}
+.en-food-link{display:inline-block;margin-top:4px}
