@@ -25,7 +25,7 @@ async function route(page) {
   });
 }
 async function setBD(page, v) { const [y, m, d] = v.split('-').map(Number); await page.fill('#bd-y', String(y)); await page.selectOption('#bd-m', String(m)); await page.selectOption('#bd-d', String(d)); }
-async function setRowBD(row, v) { const s = await row.$$('.bd-row select'); const [y, m, d] = v.split('-').map(Number); await s[0].selectOption(String(y)); await s[1].selectOption(String(m)); await s[2].selectOption(String(d)); }
+async function setRowBD(row, v) { const s = await row.$$('.bd-row select'); const [y, m, d] = v.split('-').map(Number); await (await row.$('.bd-year')).fill(String(y)); await s[0].selectOption(String(m)); await s[1].selectOption(String(d)); }
 
 (async () => {
   const browser = await chromium.launch();
@@ -66,7 +66,7 @@ async function setRowBD(row, v) { const s = await row.$$('.bd-row select'); cons
     await page.click('#companion-add');
     check('「＋」で一人追加', (await page.$$('.companion')).length === 1);
     const row = await page.$('.companion');
-    await (await row.$$('.bd-row select'))[0].selectOption('1980');
+    await (await row.$('.bd-year')).fill('1980');
     await page.click('#diagnose');
     check('生年月日が途中ならエラー', /一緒に行く人の生年月日/.test(await page.textContent('#form-error')));
     await setRowBD(row, '1980-08-20');
@@ -96,13 +96,14 @@ async function setRowBD(row, v) { const s = await row.$$('.bd-row select'); cons
     // 専門的な表は開いたときだけ
     check('6か月の表は最初は閉じている', !(await page.$eval('#kigaku-panel .pro-details', (d) => d.open)));
     check('この日の早見表も最初は閉じている', !(await page.$eval('#fortune-table .pro-details', (d) => d.open)));
+    await page.$eval('#why-box', (d) => { d.open = true; });
     await page.click('#fortune-table .pro-details summary');
     check('開くと表が見える', await page.isVisible('#fortune-table table'));
 
     // 保存と読み込み（一緒に行く人も）
     await page.reload();
     await page.waitForSelector('.companion');
-    const back = await page.$$eval('.companion .bd-row select', (s) => s.map((x) => x.value));
+    const back = await page.$$eval('.companion .bd-row select, .companion .bd-row .bd-year', (s) => s.map((x) => x.value));
     check('一緒に行く人も保存され、次回入る', back.join('-') === '1980-8-20', back.join('-'));
     await page.click('.companion-del');
     check('「この人を外す」で外せる', (await page.$$('.companion')).length === 0);

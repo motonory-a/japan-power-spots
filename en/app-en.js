@@ -379,7 +379,7 @@
     var out = [];
     for (var i = 0; i < list.length && out.length < n; i++) {
       var s = list[i];
-      if (out.every(function (o) { return D.distanceKm(o.lat, o.lon, s.lat, s.lon) >= km; })) out.push(s);
+      if (out.every(function (o) { return o.name !== s.name && D.distanceKm(o.lat, o.lon, s.lat, s.lon) >= km; })) out.push(s);
     }
     return out;
   }
@@ -434,7 +434,7 @@
     body.append(nameBlock(s));
     var meta = el('p', 'en-meta');
     meta.textContent = (EN.categories[s.category] || s.category) + ' · ' + (EN.prefectures[s.prefecture_code] || '') +
-      ' · ' + U('byMode', { t: fmtMin(s.minutes), m: EN.modes[ctx.mode].lower || EN.modes[ctx.mode].label.toLowerCase() }) + ' (' + fmtKm(s.km) +
+      ' · ' + U('byMode', { t: fmtMin(s.minutes), m: EN.modes[ctx.mode].lower || EN.modes[ctx.mode].label.toLowerCase() }) + (s.island ? ' (' + U('islandNote') + ')' : '') + ' (' + fmtKm(s.km) +
       (s.direction && s.direction !== '—' ? SEP + (EN.palaces[s.direction] || s.direction) : '') + ')';
     body.append(meta);
 
@@ -471,14 +471,14 @@
     }
 
     if (LANG === 'en' && window.Food) {
-      var fe = Food.meibutsu(s.prefecture, 'en'), fj = Food.meibutsu(s.prefecture);
+      var fe = Food.meibutsu(s.prefecture, 'en');
       var se = Food.seasonal(s.prefecture, parseInt(String(ctx.tripDate || today()).slice(5, 7), 10), 'en');
       if (fe.length) {
         var fb = el('div', 'en-food');
         fb.append(el('p', 'en-food-head', 'Make it a food trip too'));
         fb.append(el('p', null, 'Local specialties' + (EN.prefectures[s.prefecture_code] ? ' of ' + EN.prefectures[s.prefecture_code] : '') + ': ' + fe.join(SEP)));
         if (se) fb.append(el('p', null, 'In season (' + se.season + ', ' + se.region + '): ' + se.items.join(SEP)));
-        var fl = link('https://www.google.com/maps/search/' + encodeURIComponent((s.municipality || s.prefecture) + ' ' + fj[0]), 'Find well-rated places nearby (Google Maps)', 'en-food-link');
+        var fl = link('https://www.google.com/maps/search/restaurants/@' + s.lat + ',' + s.lon + ',15z', 'Find well-rated places nearby (Google Maps)', 'en-food-link');
         fl.setAttribute('data-track', 'food_search');
         fb.append(fl);
         body.append(fb);

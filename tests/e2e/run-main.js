@@ -58,10 +58,10 @@ async function route(page, { blockCdn = false } = {}) {
     check('地図は知名度の高い分だけ表示の案内', (await page.textContent('#map-note')).includes('知名度の高い'));
     check('初期表示：検索結果9,900件以上', Number((await page.textContent('#count')).replace(/[^0-9]/g, '')) >= 9900, await page.textContent('#count'));
     check('初期表示：地図はCanvasで描画', (await page.$$('#map canvas')).length >= 1);
-    check('検索結果は60件ずつ表示', (await page.$$('#results .card')).length === 60);
+    check('検索結果は20件ずつ表示', (await page.$$('#results .card')).length === 20);
     check('さらに表示ボタン', !!(await page.$('#more-results')));
     await page.click('#more-results'); await page.waitForTimeout(200);
-    check('さらに表示で120件', (await page.$$('#results .card')).length === 120);
+    check('さらに表示で40件', (await page.$$('#results .card')).length === 40);
     check('OSM出典表示あり', (await page.textContent('.leaflet-control-attribution')).includes('OpenStreetMap'));
     check('バナーに件数、フッターに出典', /全国[0-9,]+件/.test(await page.textContent('.trial-banner')) && (await page.textContent('footer')).includes('OpenStreetMap'));
     check('フッターにODbL', (await page.textContent('footer')).includes('ODbL'));
@@ -80,20 +80,21 @@ async function route(page, { blockCdn = false } = {}) {
     check('生年月日：未選択に戻すと値も空', (await page.inputValue('#birthday')) === '');
     await page.click('#diagnose');
     await page.waitForTimeout(200);
-    const err1 = await page.textContent('#form-error');
-    check('未入力でエラー表示（2件）', err1.includes('生年月日') && err1.includes('都道府県'), JSON.stringify(err1));
+    const err1 = (await page.textContent('#err-birthday')) + (await page.textContent('#err-home'));
+    check('未入力でエラー表示（生年月日・都道府県の欄の下）', err1.includes('生年月日') && err1.includes('都道府県'), JSON.stringify(err1));
     check('結果欄は非表示のまま', await page.$eval('#diagnosis', (e) => e.hidden));
 
     await setBD(page, '2026-12-31');
     await page.selectOption('#home', '東京都');
     await page.click('#diagnose');
     await page.waitForTimeout(200);
-    check('未来日付でエラー', (await page.textContent('#form-error')).includes('未来'));
+    check('未来日付でエラー（生年月日の欄の下）', (await page.textContent('#err-birthday')).includes('未来'));
 
     await setBD(page, '1974-04-15');
     await page.click('#diagnose');
     await page.waitForTimeout(900);
     check('エラーが消える', await page.$eval('#form-error', (e) => e.hidden));
+    await page.$eval('#why-box', (d) => { d.open = true; }); // 2026-11: 気学の表は「なぜこの聖地？」の中に移動
     const summary = await page.textContent('#summary');
     const kg = await page.textContent('#kigaku-panel');
     check('あなたの気学：本命星・今年の状態・6か月の表', kg.includes('本命星　八白土星') && kg.includes('震宮') && (await page.$$('#kigaku-panel tr')).length === 7);
@@ -113,7 +114,7 @@ async function route(page, { blockCdn = false } = {}) {
     check('数秘ナンバー4を表示', summary.includes('数秘ナンバー：4'), summary.slice(0, 40));
     let names = await page.$$eval('#recommended .card h3', (e) => e.map((x) => x.textContent));
     check('おすすめ5件', names.length === 5, names.join(','));
-    check('全カードにデータの状態表示', (await page.$$('#recommended .badge')).length === 5);
+    check('確認済みのカードには「公式情報あり」の表示', (await page.$$('#recommended .badge')).length >= 1);
     check('カードに情報元リンク', (await page.$$('#recommended .src a')).length >= 5);
     check('方角・距離を表示', (await page.textContent('#recommended .card:nth-child(2) .meta')).includes('km'));
     check('順位マーカー5個＋出発地', (await page.$$eval('#map .pin', (e) => e.filter((x) => /^[1-5]$/.test(x.textContent)).length)) === 5);

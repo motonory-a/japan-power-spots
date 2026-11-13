@@ -59,9 +59,12 @@
   // 「🔗 このサイトのリンクをコピー」（魂の系統鑑定サイトと同じ形：ページのいちばん上と、いちばん下）
   function copyButton() {
     var wrap = el('span', 'copyurl-wrap');
-    var b = el('button', 'copyurl', '🔗 このサイトのリンクをコピー');
+    var b = el('button', 'copyurl');
+    // スマホの上の列では「このサイトの」を省いて1段に収める（読み上げは全文）
+    function label() { b.replaceChildren('🔗 ', el('span', 'cu-pre', 'このサイトの'), 'リンクをコピー'); b.setAttribute('aria-label', 'このサイトのリンクをコピー'); }
+    label();
     b.type = 'button';
-    var orig = b.textContent, timer = null;
+    var timer = null;
     var fail = el('span', 'copyurl-fail'); fail.hidden = true;
     b.addEventListener('click', function () {
       var url = siteUrl();
@@ -70,7 +73,7 @@
           b.textContent = '✓ コピーしました！';
           b.classList.add('done');
           clearTimeout(timer);
-          timer = setTimeout(function () { b.textContent = orig; b.classList.remove('done'); }, 2200);
+          timer = setTimeout(function () { label(); b.classList.remove('done'); }, 2200);
         } else {
           fail.textContent = 'コピーできませんでした。このURLを長押ししてコピーしてください：' + url;
           fail.hidden = false;

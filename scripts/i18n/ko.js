@@ -176,7 +176,7 @@ module.exports = {
       bornOnTerm: '일본 달력의 절기가 바뀌는 날에 태어나셨기 때문에, 태어난 시각에 따라 구성이 달라질 수 있습니다.',
       dirsForDate: '{d} 기준으로 출발지에서의 방위를 확인했습니다.',
       dirsThisMonth: '날짜를 고르지 않아 이번 달 기준으로 방위를 확인했습니다. 각 스폿에 가기 좋은 날도 함께 보여 드립니다.',
-      byMode: '{m} {t}', tooClose: '출발지와 아주 가까워 방위의 영향이 없습니다',
+      byMode: '{m} {t}', islandNote: '섬이라 배나 비행기로 이동', tooClose: '출발지와 아주 가까워 방위의 영향이 없습니다',
       notLuckyDay: '이날은 당신에게 길한 방위가 아닙니다', notLuckyMonth: '이번 달은 당신에게 길한 방위가 아닙니다', luckyAgain: '. {d}부터 다시 길한 방위',
       onThatDay: '(그날)', forYouThisMonth: '(이번 달)',
       matchesWish: '소원과 맞음: {w}', resonates: '당신의 수비학 숫자 {n}({t})과 어울림', tradFor: '예로부터 비는 소원: {w}',

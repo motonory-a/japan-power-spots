@@ -7,7 +7,9 @@
 (function (root) {
   'use strict';
   var id = (root.APP_CONFIG && root.APP_CONFIG.gaId) || '';
-  var on = /^G-[A-Z0-9]+$/.test(id);
+  // 手元の確認（file:// や localhost）では送らない
+  var local = /^(file:|)$/.test(location.protocol) || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  var on = /^G-[A-Z0-9]+$/.test(id) && !local;
   root.dataLayer = root.dataLayer || [];
   function gtag() { root.dataLayer.push(arguments); }
   if (on) {

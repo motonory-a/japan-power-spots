@@ -89,7 +89,7 @@
       var meib = Food.meibutsu(s.prefecture);
       if (meib.length) {
         var fp = el('p', 'small food-line', 'せっかくなら味わいたい' + s.prefecture.replace(/[都府県]$/, '') + 'の名物：' + meib.join('・') + '　');
-        fp.append(link('近くのお店を探す', 'https://www.google.com/maps/search/' + encodeURIComponent((s.municipality || s.prefecture) + ' ' + meib[0])));
+        fp.append(link('近くのお店を探す', 'https://www.google.com/maps/search/' + encodeURIComponent('グルメ') + '/@' + s.lat + ',' + s.lon + ',15z'));
         body.append(fp);
       }
     }

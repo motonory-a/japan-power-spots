@@ -176,7 +176,7 @@ module.exports = {
       bornOnTerm: '你出生在日本曆法的節氣交替日，九星可能會因出生時間而不同。',
       dirsForDate: '已依{d}判斷從出發地出發的方位。',
       dirsThisMonth: '沒有選擇日期，所以用本月的方位判斷。每個景點也會顯示適合出發的日子。',
-      byMode: '{m}{t}', tooClose: '離出發地很近，不受方位影響',
+      byMode: '{m}{t}', islandNote: '離島，需搭船或飛機', tooClose: '離出發地很近，不受方位影響',
       notLuckyDay: '這一天不是你的吉方位', notLuckyMonth: '本月不是你的吉方位', luckyAgain: '。{d}起再次成為吉方位',
       onThatDay: '（當天）', forYouThisMonth: '（本月）',
       matchesWish: '符合你的心願：{w}', resonates: '與你的生命靈數 {n}（{t}）相呼應', tradFor: '自古以來祈求：{w}',

@@ -94,7 +94,7 @@ async function route(page) {
     const dists = await page.$$eval('#results .near-dist', (ps) => ps.map((p) => Number((/約([\d.]+)km/.exec(p.textContent) || [])[1])));
     check('近い順・5km以内', dists.length > 0 && dists.every((x, i) => x <= 5 && (i === 0 || x >= dists[i - 1])), dists.slice(0, 5).join(','));
     await page.waitForTimeout(500);
-    check('検索結果の写真は50件ずつまとめて問い合わせ', wdCalls >= 1 && wdMaxIds <= 50, wdCalls + '回・最大' + wdMaxIds + '件');
+    check('検索結果の写真は50件ずつまとめて問い合わせ（同じスポットは2回目から問い合わせない）', wdMaxIds >= 1 && wdMaxIds <= 50, wdCalls + '回・最大' + wdMaxIds + '件');
     await page.click('#near-stop');
     check('周辺検索をやめられる', !(await page.$('.near-dist')));
 

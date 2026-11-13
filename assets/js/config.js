@@ -3,7 +3,7 @@
  * 重み（点数配分）や交通手段ごとの距離の目安はここだけ変更すれば反映されます。
  */
 var APP_CONFIG = {
-  version: '3.19.2',
+  version: '3.20.0',
 
   // Google アナリティクス 4 の測定ID（例：'G-ABC123XYZ'）。空のあいだは解析を送らない（assets/js/analytics.js）
   gaId: 'G-112KH1D2JP',

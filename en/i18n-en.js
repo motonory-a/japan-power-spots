@@ -243,7 +243,7 @@ EN.ui = {
   bornOnTerm: 'You were born on a seasonal turning day of the Japanese calendar, so your stars may differ depending on your birth time.',
   dirsForDate: 'Directions are checked from your starting point for {d}.',
   dirsThisMonth: 'No date chosen, so directions are checked for this month. Each spot also shows good days to go.',
-  byMode: '{t} by {m}', tooClose: 'Very close to your starting point, so direction does not apply',
+  byMode: '{t} by {m}', islandNote: 'island: ferry or flight needed', tooClose: 'Very close to your starting point, so direction does not apply',
   notLuckyDay: 'Not a lucky direction for you on that day', notLuckyMonth: 'Not a lucky direction for you this month', luckyAgain: '. Lucky again from {d}',
   onThatDay: ' on that day', forYouThisMonth: ' for you this month',
   matchesWish: 'Matches your wish: {w}', resonates: 'Resonates with your life path number {n} ({t})', tradFor: 'Traditionally visited for: {w}',

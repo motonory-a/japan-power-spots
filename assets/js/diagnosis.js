@@ -79,9 +79,12 @@
     return DIRECTIONS_8[Math.floor(((deg + 22.5) % 360) / 45)];
   }
 
+  // ダム・貯水池・ため池などの人工の水辺は、検索には出すが「おすすめ」には出さない（境内の神社・お寺は別）
+  var ARTIFICIAL_WATER = /ダム|貯水池|調整池|遊水地|浄水場|ため池|溜池|砂防/;
   function isRecommendable(spot, cfg) {
     if (spot.publication_status !== cfg.publicStatus) return false;
     if (cfg.excludeAccessStatus.indexOf(spot.access_status) !== -1) return false;
+    if (spot.category !== '神社' && spot.category !== '寺院' && ARTIFICIAL_WATER.test(spot.name || '')) return false;
     return true;
   }
 
@@ -102,6 +105,29 @@
     var local = Math.min(route, mode.localKm);
     var mins = mode.overheadMin + local / mode.localSpeedKmh * 60 + (route - local) / mode.longSpeedKmh * 60;
     return Math.max(1, Math.round(mins));
+  }
+
+  /*
+   * 船や飛行機で渡る島（橋でつながっていない主な離島）。中心と半径（km）のおおよその範囲。
+   * 出発地が同じ島の中でなければ、所要時間に乗り換え・船の分として ISLAND_EXTRA_MIN を足す。
+   */
+  var ISLANDS = [
+    ['佐渡島', 38.05, 138.40, 35], ['隠岐', 36.20, 133.20, 30], ['壱岐', 33.79, 129.72, 12], ['対馬', 34.42, 129.33, 45],
+    ['五島列島', 32.85, 128.95, 55], ['屋久島', 30.35, 130.53, 18], ['種子島', 30.55, 130.97, 30], ['甑島', 31.75, 129.80, 15],
+    ['奄美群島', 28.00, 129.30, 145], ['沖縄本島', 26.45, 127.85, 65], ['久米島', 26.34, 126.80, 12], ['宮古島', 24.78, 125.30, 25],
+    ['八重山', 24.40, 123.60, 70], ['伊豆大島', 34.74, 139.40, 12], ['新島・神津島', 34.30, 139.20, 20], ['三宅島・御蔵島', 34.00, 139.50, 20],
+    ['八丈島', 33.10, 139.79, 15], ['小笠原', 27.00, 142.20, 60], ['利尻・礼文', 45.25, 141.15, 30], ['奥尻島', 42.15, 139.47, 12],
+    ['天売・焼尻', 44.43, 141.33, 8], ['粟島', 38.47, 139.25, 5], ['小豆島', 34.50, 134.25, 15]
+  ];
+  var ISLAND_EXTRA_MIN = 90;
+  function islandOf(lat, lon) {
+    for (var i = 0; i < ISLANDS.length; i++) if (distanceKm(lat, lon, ISLANDS[i][1], ISLANDS[i][2]) <= ISLANDS[i][3]) return ISLANDS[i][0];
+    return null;
+  }
+  // 出発地から見て「海を渡る島」なら島の名前、そうでなければ null
+  function crossingIsland(origin, s) {
+    var to = islandOf(s.lat, s.lon);
+    return to && islandOf(origin.lat, origin.lon) !== to ? to : null;
   }
 
   function formatMinutes(m) {
@@ -212,6 +238,8 @@
       var km = distanceKm(input.origin.lat, input.origin.lon, s.lat, s.lon);
       var deg = bearingBy(cfg.bearingMethod, input.origin.lat, input.origin.lon, s.lat, s.lon);
       var mins = estimateMinutes(km, mode);
+      var island = crossingIsland(input.origin, s);
+      if (island) mins += ISLAND_EXTRA_MIN;
       var numHits = 0;
       for (var q = 0; q < numbers.length; q++) if (s.numbers.indexOf(numbers[q]) !== -1) numHits++;
       var numMatch = numHits > 0;
@@ -231,7 +259,7 @@
       };
       var raw = parts.wish + parts.kyusei + parts.day + parts.distance + parts.numerology + parts.fame + parts.reliability;
       light.push({
-        s: s, km: km, deg: deg, mins: mins, numMatch: numMatch, numHits: numHits, hit: hit, withinLimit: withinLimit,
+        s: s, km: km, deg: deg, mins: mins, island: island, numMatch: numMatch, numHits: numHits, hit: hit, withinLimit: withinLimit,
         tier: f ? f.tier : 1, parts: parts, raw: raw,
         score: Math.round(100 * raw / maxW),
         wishTier: wishes.length && hit ? 1 : 0
@@ -260,7 +288,7 @@
       if (fortune) reasons.push('出かける日の方位：' + fortune.mark + ' ' + fortune.label);
       return Object.assign({}, s, {
         km: x.km, bearing: x.deg, direction: x.km < 0.05 ? '—' : (K ? K.palaceFromBearing(x.deg) : direction8(x.deg)),
-        minutes: x.mins, minutesText: formatMinutes(x.mins), withinLimit: x.withinLimit, fortune: fortune,
+        minutes: x.mins, minutesText: formatMinutes(x.mins) + (x.island ? '（' + x.island + 'へは船か飛行機）' : ''), island: x.island, withinLimit: x.withinLimit, fortune: fortune,
         numMatch: x.numMatch, hitWishes: hitWishes,
         scoreParts: x.parts, score: x.score, scoreRaw: x.raw, scoreMax: maxW, scoreAvail: avail, reasons: reasons,
         lowConfidence: s.verification_status !== 'verified',
@@ -312,7 +340,7 @@
     NUMEROLOGY_MEANINGS: NUMEROLOGY_MEANINGS,
     digitSum: digitSum, lifePath: lifePath, validateBirthday: validateBirthday,
     distanceKm: distanceKm, bearingDeg: bearingDeg, rhumbBearingDeg: rhumbBearingDeg, bearingBy: bearingBy, direction8: direction8,
-    estimateMinutes: estimateMinutes, formatMinutes: formatMinutes, judgeFortune: judgeFortune,
+    estimateMinutes: estimateMinutes, formatMinutes: formatMinutes, islandOf: islandOf, crossingIsland: crossingIsland, judgeFortune: judgeFortune,
     isRecommendable: isRecommendable, rankSpots: rankSpots, judgeGroup: judgeGroup
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

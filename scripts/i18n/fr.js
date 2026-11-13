@@ -167,7 +167,7 @@ module.exports = {
       bornOnTerm: 'Vous êtes né(e) un jour de changement de saison du calendrier japonais : votre étoile peut varier selon votre heure de naissance.',
       dirsForDate: 'Les directions sont vérifiées depuis votre point de départ pour le {d}.',
       dirsThisMonth: 'Aucune date choisie : les directions sont vérifiées pour ce mois-ci. Chaque lieu indique aussi de bons jours pour y aller.',
-      byMode: '{t} {m}', tooClose: 'Très proche de votre point de départ : la direction ne compte pas',
+      byMode: '{t} {m}', islandNote: 'île : bateau ou avion nécessaire', tooClose: 'Très proche de votre point de départ : la direction ne compte pas',
       notLuckyDay: 'Direction défavorable pour vous ce jour-là', notLuckyMonth: 'Direction défavorable pour vous ce mois-ci', luckyAgain: '. De nouveau favorable à partir du {d}',
       onThatDay: ' ce jour-là', forYouThisMonth: ' pour vous ce mois-ci',
       matchesWish: 'Correspond à votre vœu : {w}', resonates: 'En résonance avec votre chemin de vie {n} ({t})', tradFor: 'Traditionnellement visité pour : {w}',

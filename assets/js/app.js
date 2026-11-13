@@ -35,7 +35,8 @@
     var out = [], rest = [];
     for (var i = 0; i < list.length && out.length < n; i++) {
       var s = list[i];
-      var close = out.some(function (t) { return D.distanceKm(s.lat, s.lon, t.lat, t.lon) < km; });
+      // 近すぎるもの・同じ名前のもの（厳島神社が並ぶなど）は後回し
+      var close = out.some(function (t) { return t.name === s.name || D.distanceKm(s.lat, s.lon, t.lat, t.lon) < km; });
       (close ? rest : out).push(s);
     }
     return out.concat(rest).slice(0, n);
@@ -558,7 +559,7 @@
     if (meib.length) dl.append(el('dt', null, s.prefecture + 'の名物'), el('dd', null, meib.join('・')));
     box.append(dl);
     var q = el('a', 'btn-link', '近くで評判のお店を探す（Googleマップ）');
-    q.href = 'https://www.google.com/maps/search/' + encodeURIComponent((s.municipality || s.prefecture) + ' ' + (meib[0] || 'グルメ'));
+    q.href = 'https://www.google.com/maps/search/' + encodeURIComponent('グルメ') + '/@' + s.lat + ',' + s.lon + ',15z';
     q.target = '_blank'; q.rel = 'noopener noreferrer'; q.setAttribute('data-track', 'food_search');
     box.append(q);
     wrap.append(box);

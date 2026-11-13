@@ -668,3 +668,11 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .outing-food dt{color:var(--muted);font-size:12.5px;margin-top:6px}
 .outing-food dd{margin:0;font-weight:600}
 .outing-food .btn-link{display:block;margin-top:10px;text-align:center;font-size:14px}
+/* スマホ幅で、上のリンク列が2段にならないように（2026-11） */
+@media (max-width:480px){
+  .toplink{padding:8px 8px;gap:6px;align-items:center}
+  .toplink .copyurl{font-size:11.5px;padding:6px 9px;letter-spacing:0;white-space:nowrap;min-height:32px}
+  .lang-links{flex-wrap:nowrap;gap:4px}
+  .lang-link{font-size:12px;padding:3px 7px;white-space:nowrap}
+}
+@media (max-width:480px){.toplink .cu-pre{display:none}}
