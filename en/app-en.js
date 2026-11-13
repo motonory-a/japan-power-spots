@@ -631,6 +631,7 @@
     });
     var box = $('course-list');
     box.replaceChildren();
+    var shownCourses = [];
     list.filter(function (c) { return c.region === courseRegion; }).forEach(function (c) {
       var t = EN.courses[c.id] || [c.title, c.lead];
       var art = el('article', 'en-course');
@@ -651,7 +652,35 @@
       var route = 'https://www.google.com/maps/dir/' + c.stops.map(function (st) { return st.lat + ',' + st.lon; }).join('/');
       art.append(link(route, U('openRoute'), 'btn-sub en-btn'));
       box.append(art);
+      shownCourses.push({ el: art, qs: c.stops.map(function (st) { return st.q; }).filter(Boolean) });
     });
+    coursePhotos(shownCourses);
+  }
+
+  // a strip of stop photos at the top of each route card (Wikimedia Commons, credited)
+  function coursePhotos(items) {
+    if (!window.SpotPhotos || !items.length) return;
+    var all = [];
+    items.forEach(function (x) { x.qs.forEach(function (q) { if (all.indexOf(q) === -1) all.push(q); }); });
+    SpotPhotos.lookup(all).then(function (res) {
+      items.forEach(function (x) {
+        if (!x.el.isConnected) return;
+        var got = x.qs.map(function (q) { return res[q]; }).filter(Boolean).slice(0, 3);
+        if (!got.length) return;
+        var strip = el('div', 'en-course-photos en-cp-' + got.length);
+        var credit = el('p', 'en-course-credit');
+        got.forEach(function (info, i) {
+          var img = el('img');
+          img.src = info.thumb; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+          img.onerror = function () { img.remove(); };
+          strip.append(img);
+          if (i) credit.append(document.createTextNode(' / '));
+          credit.append(link(info.page, (info.artist === '撮影者不明' ? 'Unknown' : info.artist) + ', ' + (/ライセンス/.test(info.license) ? 'see source' : info.license)));
+        });
+        credit.prepend(document.createTextNode('Photos: '));
+        x.el.prepend(strip, credit);
+      });
+    }).catch(function () {});
   }
 
 

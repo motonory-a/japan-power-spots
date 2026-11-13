@@ -196,3 +196,10 @@ body.en-light .en-map-toggle{background:none;border:0;padding:6px 2px;color:#5a3
 .en-food p{margin:2px 0}
 .en-food-head{font-weight:700}
 .en-food-link{display:inline-block;margin-top:4px}
+
+/* route photos (2026-11) */
+.en-course-photos{display:grid;gap:3px;margin:-16px -18px 4px;border-radius:14px 14px 0 0;overflow:hidden;height:150px}
+.en-cp-1{grid-template-columns:1fr}.en-cp-2{grid-template-columns:1fr 1fr}.en-cp-3{grid-template-columns:2fr 1fr 1fr}
+.en-course-photos img{width:100%;height:150px;object-fit:cover;display:block}
+.en-course-credit{margin:0 0 8px;font-size:10.5px;color:var(--muted);line-height:1.4}
+.en-course-credit a{color:inherit}
