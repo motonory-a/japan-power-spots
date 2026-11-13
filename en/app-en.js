@@ -50,7 +50,9 @@
     var all = D.rankSpots(POOL, Object.assign({}, input, { limitMinutes: null }), c, { top: POOL.length });
     all.forEach(function (s) { s.withinLimit = !limit || s.minutes <= limit; });
     // a small extra step down for directions to avoid, so lucky ones come first when scores are close
-    var key = function (x) { return x.score - (x.fortune && x.fortune.mark === '×' ? 8 : 0); };
+    // politically sensitive for many overseas visitors: keep it out of the top picks (still findable in search)
+    var SENSITIVE = { Q242803: 1 };
+    var key = function (x) { return x.score - (x.fortune && x.fortune.mark === '×' ? 8 : 0) - (SENSITIVE[x.wikidata] ? 60 : 0); };
     var sorted = all.slice().sort(function (a, b) {
       return (b.withinLimit - a.withinLimit) || (key(b) - key(a)) || ((b.fame || 0) - (a.fame || 0)) || (a.km - b.km);
     });
@@ -548,7 +550,7 @@
     }
     if (LIGHT && STYLE_KEY !== 'nature') {
       // famous must-sees: lean on how well-known a place is; hidden gems: skip the very famous ones
-      var adj = function (x) { var f = x.fame || 0; return STYLE_KEY === 'iconic' ? f / 3 : (f > 110 ? -40 : (f >= 20 ? 10 : 0)); };
+      var adj = function (x) { var f = x.fame || 0; return (x.wikidata === 'Q242803' ? -200 : 0) + (STYLE_KEY === 'iconic' ? f / 3 : (f > 110 ? -40 : (f >= 20 ? 10 : 0))); };
       all.sort(function (a, b) { return (b.withinLimit - a.withinLimit) || ((b.score + adj(b)) - (a.score + adj(a))) || (a.km - b.km); });
     }
     var within = all.filter(function (s) { return s.withinLimit; });
