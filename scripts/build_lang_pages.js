@@ -84,6 +84,12 @@ const PAGE = {
   about1: 'Japan Power Spot Journey is the English edition of <a href="../" lang="ja">開運パワースポット巡り</a>, a free site that lists about 96,000 shrines, temples, sacred trees, waterfalls and mountains across Japan. For visitors, we focus on around 1,400 well-known places.',
   about2: '<b>How we choose:</b> your wishes, your Nine Star Ki lucky directions from your hotel, your life path number, travel time, and how well known each place is. Nine Star Ki (九星気学) is a traditional Japanese practice that many people use when choosing where and when to travel. Please enjoy it as a cultural guide, not as a promise.',
   about3: '<b>Your data:</b> your birthday and location are used only inside your browser. Place names and photos are loaded from Wikidata and Wikimedia Commons.',
+  guideAlt: 'alt="Akki, the guide of this site"',
+  guideKicker: '<p class="en-guide-kicker">Your guide</p>',
+  guideH: '>Hello, I\'m Akki.</h2>',
+  guideP1: "<p>In Japan I'm known as <b>the Higher-Dimensional Negotiator</b> (<span lang=\"ja\">高次元ネゴシエイター</span>). I was born in Yokosuka and live in Tokyo, and Japan's shrines and sacred places are a big part of my life and work.</p>",
+  guideP2: '<p>Japan has more than 96,000 sacred places, far beyond the famous few. I made this finder so you can meet the one that feels like yours, and visit it with a little more meaning.</p>',
+  guideLink: '>Say hello on Instagram @japan_psj</a>',
   operator: "Run by <b>Akki, the Higher-Dimensional Negotiator</b> (<span lang=\"ja\">高次元ネゴシエイター アッキー</span>), a Tokyo-based spiritual guide to Japan's sacred places. Follow <a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">@japan_psj on Instagram</a> for sacred places and lucky days. Questions or a place to suggest? Message us there, or on Akki's <a href=\"https://www.instagram.com/nigihayahi03/\" target=\"_blank\" rel=\"noopener\">personal Instagram</a>, <a href=\"https://x.com/nigihayahi03\" target=\"_blank\" rel=\"noopener\">X</a> or <a href=\"https://lin.ee/wHX3skr3\" target=\"_blank\" rel=\"noopener\">LINE</a>. Videos on <a href=\"https://www.youtube.com/@nigihayahi03/videos\" target=\"_blank\" rel=\"noopener\">YouTube</a>.",
   foot1: 'Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata, Ministry of the Environment Japan · Photos: Wikimedia Commons',
   foot2: '>日本語版</a>'
@@ -136,6 +142,7 @@ LANGS.forEach((lang) => {
   h = h.replace(new RegExp('(href="\\.\\./' + lang + '/"[^>]*)>'), '$1 aria-current="page">');
   // 英語版と共有するファイルへの道すじ
   h = rep(h, 'href="en.css"', 'href="../en/en.css"', 'css');
+  h = h.split('img/akki-').join('../en/img/akki-');
   h = h.split("'img/hero-").join("'../en/img/hero-").split('src="img/hero-').join('src="../en/img/hero-');
   h = h.split('href="spots/').join('href="../en/spots/');
   h = rep(h, '<script src="i18n-en.js"></script>', '<script src="../en/i18n-en.js"></script>\n<script src="i18n.js"></script>', 'i18n');

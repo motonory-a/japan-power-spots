@@ -71,6 +71,12 @@ module.exports = {
     about1: '「日本能量景點之旅」是 <a href="../" lang="ja">開運パワースポット巡り</a> 的繁體中文版。這是一個免費網站，收錄日本全國約96,000處神社、寺院、神木、瀑布與山岳；中文版以其中約1,400處知名景點為主。',
     about2: '<b>推薦方式：</b>綜合你的心願、從飯店出發的九星氣學吉方位、生命靈數、交通時間，以及景點的知名度。九星氣學是日本的傳統學問，許多人會用它來決定旅行的方向和日子。請把它當作認識日本文化的指南來享受，而不是保證。',
     about3: '<b>你的資料：</b>生日與位置只在你的瀏覽器中使用。景點名稱與照片來自 Wikidata 和 Wikimedia Commons。',
+    guideAlt: "alt=\"本站嚮導 Akki\"",
+    guideKicker: "<p class=\"en-guide-kicker\">你的嚮導</p>",
+    guideH: ">你好，我是 Akki。</h2>",
+    guideP1: "<p>在日本，大家叫我<b>「高次元談判家」</b>（<span lang=\"ja\">高次元ネゴシエイター</span>）。我出生於橫須賀，現在住在東京，日本的神社與聖地是我生活與工作中很重要的一部分。</p>",
+    guideP2: "<p>日本有超過9萬6千處聖地，遠遠不只那幾個知名景點。我做了這個工具，希望你能遇見那個「屬於你」的地方，帶著多一點心意去參拜。</p>",
+    guideLink: ">在 Instagram @japan_psj 跟我打聲招呼</a>",
     operator: '營運者：<b>Akki, the Higher-Dimensional Negotiator</b>（<span lang="ja">高次元ネゴシエイター アッキー</span>），住在東京、帶你走訪日本聖地的心靈嚮導。追蹤 <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a>，看更多聖地與吉日資訊。有問題或想推薦景點，歡迎在那裡留言，或透過 Akki 的<a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">個人 Instagram</a>、<a href="https://x.com/nigihayahi03" target="_blank" rel="noopener">X</a>、<a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener">LINE</a> 聯絡。影片請看 <a href="https://www.youtube.com/@nigihayahi03/videos" target="_blank" rel="noopener">YouTube</a>。',
     foot1: '地圖資料 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · 景點資料：OpenStreetMap、Wikidata、日本環境省 · 照片：Wikimedia Commons',
     foot2: '>日文版</a>'

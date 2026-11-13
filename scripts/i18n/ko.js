@@ -71,6 +71,12 @@ module.exports = {
     about1: '일본 파워스폿 여행은 <a href="../" lang="ja">開運パワースポット巡り</a>의 한국어판입니다. 일본 전국의 신사, 절, 신목, 폭포, 산 약 96,000곳을 소개하는 무료 사이트이며, 한국어판에서는 그중 잘 알려진 약 1,400곳을 중심으로 소개합니다.',
     about2: '<b>추천 방식:</b> 소원, 호텔에서 본 구성기학의 길한 방위, 수비학, 이동 시간, 그리고 장소의 인지도를 함께 봅니다. 구성기학(九星気学)은 여행할 방향과 날을 고를 때 많은 일본인이 참고하는 전통입니다. 약속이 아닌, 일본 문화를 즐기는 안내서로 봐 주세요.',
     about3: '<b>개인 정보:</b> 생일과 위치는 브라우저 안에서만 쓰입니다. 장소 이름과 사진은 Wikidata와 Wikimedia Commons에서 불러옵니다.',
+    guideAlt: "alt=\"이 사이트의 가이드 아키\"",
+    guideKicker: "<p class=\"en-guide-kicker\">가이드</p>",
+    guideH: ">안녕하세요, 아키(Akki)입니다.</h2>",
+    guideP1: "<p>일본에서는 <b>‘고차원 네고시에이터’</b>(<span lang=\"ja\">高次元ネゴシエイター</span>)로 알려져 있어요. 요코스카에서 태어나 도쿄에 살고 있고, 일본의 신사와 성지는 제 삶과 일에서 아주 큰 부분이에요.</p>",
+    guideP2: "<p>일본에는 유명한 몇 곳을 훨씬 넘어 9만 6천 곳이 넘는 성지가 있어요. 그중에서 ‘나의 곳’이라고 느껴지는 한 곳을 만나고, 조금 더 의미 있게 다녀오실 수 있도록 이 사이트를 만들었습니다.</p>",
+    guideLink: ">Instagram @japan_psj 에서 인사해 주세요</a>",
     operator: '운영: <b>Akki, the Higher-Dimensional Negotiator</b>(<span lang="ja">高次元ネゴシエイター アッキー</span>), 도쿄에서 일본의 성지를 안내하는 스피리추얼 가이드. 성지와 길일 소식은 <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a>에서 확인하세요. 질문이나 추천하고 싶은 장소가 있으면 그곳이나 Akki의 <a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">개인 Instagram</a>, <a href="https://x.com/nigihayahi03" target="_blank" rel="noopener">X</a>, <a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener">LINE</a>으로 연락 주세요. 영상은 <a href="https://www.youtube.com/@nigihayahi03/videos" target="_blank" rel="noopener">YouTube</a>에 있습니다.',
     foot1: '지도 데이터 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · 장소 데이터: OpenStreetMap, Wikidata, 일본 환경성 · 사진: Wikimedia Commons',
     foot2: '>일본어판</a>'
