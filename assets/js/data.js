@@ -127,8 +127,11 @@
     return s;
   }
 
+  // 一般の人が行けない場所（data/exclude.js）は候補に入れない
+  function allowed(r) { var ex = root.SPOT_EXCLUDE; return !(ex && ex[r[0]]); }
+
   function build() {
-    var rows = root.SPOTS_OSM || [];
+    var rows = (root.SPOTS_OSM || []).filter(allowed);
     var list = rows.map(function (r) { var s = fromRow(r); s.tier = 1; return s; });
     if (!list.length) return (root.SPOTS || []).slice(); // 全国データがないときはデモデータ
     return mergeCurated(list, root.SPOTS || []).map(applyVerified);
@@ -142,6 +145,7 @@
     var all = root.ALL_SPOTS;
     var seen = root.__spotIds || (root.__spotIds = new Set(all.map(function (s) { return s.id; })));
     rows.forEach(function (r) {
+      if (!allowed(r)) return;
       var s = fromRow(r);
       if (seen.has(s.id)) return;
       s.tier = 2;
