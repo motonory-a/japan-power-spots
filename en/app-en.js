@@ -445,7 +445,7 @@
     list.forEach(function (m) { ul.append(el('li', null, m)); });
     box.append(ul);
     box.hidden = false;
-    box.focus();
+    box.focus({ preventScroll: true });
   }
 
   function run() {
@@ -455,7 +455,18 @@
     if (!origin) errs.push(U('errOrigin'));
     if (tripDate && tripDate < today()) errs.push(U('errTripDate'));
     showError(errs);
-    if (errs.length) return;
+    if (errs.length) {
+      if (window.track) track('diagnose_error', { fields: [be ? 'birthday' : '', origin ? '' : 'origin'].filter(Boolean).join(',') });
+      // jump to the first field that needs fixing (the message box sits far below it)
+      var bdRow = $('birthday') && $('birthday').parentNode.querySelector('.bd-row');
+      var first = be ? (bdRow && bdRow.querySelector('.bd-year')) : (!origin ? $('city') : null);
+      if (first) {
+        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function () { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }, 400);
+      }
+      return;
+    }
+    if (window.track) track('diagnose_submit', { wishes: document.querySelectorAll('input[name=wish]:checked').length, trip_date: tripDate ? 1 : 0 });
     try { localStorage.setItem('jps-en-bday', bday); } catch (e) { /* ignore */ }
 
     var wishes = Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; });
@@ -474,6 +485,7 @@
     res.hidden = false;
     $('result-cards').replaceChildren(el('p', 'small', U('finding')));
     res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (window.track) track('result_view', { count: shown.length });
 
     withTimeout(fetchLabels(shown.concat(more).map(function (s) { return s.wikidata; })), 4000).then(function () {
       youBox(n, stars, tripDate);

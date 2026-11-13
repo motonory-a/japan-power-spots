@@ -7,7 +7,7 @@
 
   var cfg = APP_CONFIG, D = Diagnosis;
   var SPOTS_ALL = window.ALL_SPOTS || SPOTS;
-  var PAGE = 60;
+  var PAGE = 20;
   var $ = function (id) { return document.getElementById(id); };
 
   function el(tag, cls, text) {
@@ -50,9 +50,9 @@
   function kmText(km) { return km < 10 ? km.toFixed(1) : String(Math.round(km)); }
 
   function statusBadge(s) {
-    var map = { demo: ['デモデータ', 'badge-demo'], unverified: ['OSM・未確認', 'badge-warn'], verified: ['公式情報あり', 'badge-ok'] };
-    var v = map[s.verification_status] || map.demo;
-    return el('span', 'badge ' + v[1], v[0]);
+    // 一覧のカードでは「公式情報あり」だけを出す（未確認の表示は詳しいページで伝える）
+    if (s.verification_status !== 'verified') return document.createDocumentFragment();
+    return el('span', 'badge badge-ok', '公式情報あり');
   }
 
   function goMap(s) {
@@ -87,7 +87,7 @@
     card.append(head, tags, el('p', null, s.description));
     var objTags = s.wishes.filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) card.append(el('p', 'small', '特徴：' + objTags.join('・')));
-    if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益（' + (s.deities && s.deities.length ? '祭神・名称' : '名称') + 'からの推定）：' + s.wishesInferred.join('・')));
+    if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益：' + s.wishesInferred.join('・')));
     if (window.Collection) card.append(Collection.buttons(s));
     if (cfg.reportForms && cfg.reportForms.fix) {
       var fix = el('a', 'report-link', '情報の誤りを報告');
@@ -201,6 +201,10 @@
       });
     });
     Birthday.init();
+    // 直したらその欄のエラーを消す
+    ['bd-y', 'bd-m', 'bd-d'].forEach(function (id) { $(id).addEventListener('change', function () { if ($('birthday').value) $('err-birthday').hidden = true; }); });
+    $('bd-y').addEventListener('input', function () { if ($('birthday').value) $('err-birthday').hidden = true; });
+    $('home').addEventListener('change', function () { if ($('home').value) $('err-home').hidden = true; });
 
     var groups = {};
     WISH_OPTIONS.forEach(function (w) { (groups[w.group] = groups[w.group] || []).push(w.key); });
@@ -585,8 +589,19 @@
     $('trip-date').setAttribute('aria-invalid', tErr ? 'true' : 'false');
     Birthday.setInvalid(!!bErr);
     $('home').setAttribute('aria-invalid', origin ? 'false' : 'true');
-    showError(errs);
-    if (errs.length) { $('form-error').focus(); $('form-error').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    // 生年月日と都道府県のエラーは、その欄のすぐ下に出す
+    var fieldErr = function (id, msg) { var e = $(id); if (!e) return; e.textContent = msg || ''; e.hidden = !msg; };
+    fieldErr('err-birthday', bErr); fieldErr('err-home', origin ? '' : 'お住まいの都道府県を選んでください。');
+    var others = errs.filter(function (m) { return m !== bErr && m !== 'お住まいの都道府県を選択してください。'; });
+    showError(others.length ? others : (errs.length ? ['入力が足りないところがあります。赤い表示の欄をご確認ください。'] : []));
+    if (errs.length) {
+      if (window.track) track('diagnose_error', { fields: [bErr ? 'birthday' : '', origin ? '' : 'home', tErr ? 'trip_date' : '', cErr ? 'companions' : ''].filter(Boolean).join(',') });
+      var first = bErr ? $('bd-y') : (!origin ? $('home') : $('form-error'));
+      first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function () { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }, 400);
+      return;
+    }
+    if (window.track) track('diagnose_submit', { wishes: document.querySelectorAll('input[name=wish]:checked').length, companions: comps.length, trip_date: tripDate ? 1 : 0 });
     if (window.Profiles) Profiles.remember();
     if (window.Courses) Courses.setOrigin(origin);
 
@@ -717,6 +732,7 @@
     if (window.SpotPhotos) SpotPhotos.attach(photoCards);
     SpotMap.showRanking(shown, origin);
     $('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (window.track) track('result_view', { count: shown.length });
   }
 
   /* ---------- 検索 ---------- */
@@ -792,7 +808,7 @@
     out.replaceChildren();
     shownCount = 0;
     if (!searchResult.length) out.append(el('p', 'notice', '該当するスポットはありません。条件を変えてお試しください。'));
-    else out.append(el('p', 'note list-note', nearOrigin ? '現在地から近い順に表示しています（直線距離）。' : '公式情報を確認済みのスポット、知名度の高い順に表示しています。地図には条件に合うすべてのスポットを表示します。'));
+    else out.append(el('p', 'note list-note', nearOrigin ? '現在地から近い順に表示しています（直線距離）。' : '公式情報を確認済みのスポット、知名度の高い順に表示しています。地図には条件に合うすべてのスポットを表示します。ご利益は祭神・本尊や名称からの一般的な推定です。'));
     renderMore();
     var filtered = !!(q || pref || cat || wish || onlyV || nearOrigin);
     var onMap = filtered ? searchResult : searchResult.filter(function (s) { return s.tier !== 2; });

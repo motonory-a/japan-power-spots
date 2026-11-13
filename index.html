@@ -59,13 +59,14 @@
   <div class="hero-copy">
     <p class="hero-catch">次のお休み、<br>どこに行こうか？<span class="hero-catch-sub">運命の聖地を簡単検索。</span></p>
     <p class="hero-sub">あなたの毎日に、<br class="sp-br">小さな奇跡とときめくお出かけを。</p>
-    <a class="hero-cta" href="#h-diagnose">私だけの聖地を見つける</a>
+    <a class="hero-cta" href="#h-diagnose" data-track="hero_cta">私だけの聖地を見つける</a>
+    <p class="hero-micro">無料・登録不要・約1分</p>
   </div>
 </header>
 
 <main>
   <p class="trial-banner" role="note">
-    全国<span id="spot-total">8</span>件の神社・寺院・滝・霊山・巨樹を掲載しています<span id="load-status"></span>。試作版のため、内容は順次確認中です。ご利益は祭神・本尊や名称から一般的なものを推定しています。
+    全国<span id="spot-total">8</span>件の神社・寺院・滝・霊山・巨樹から、あなたに合う聖地を探せます<span id="load-status"></span>。
   </p>
 
   <!-- 03-2 今日の幸せの扉（中身は assets/js/daily.js で作る） -->
@@ -118,6 +119,7 @@
               <select id="bd-m" aria-label="生まれた月"><option value="">月</option></select>
               <select id="bd-d" aria-label="生まれた日"><option value="">日</option></select>
             </div>
+            <p class="field-error" id="err-birthday" role="alert" hidden></p>
             <p class="bd-hint" id="bd-hint">年は西暦4けたで入力してください（例：1980）</p>
             <input type="hidden" id="birthday">
           </div>
@@ -136,6 +138,7 @@
           <div>
             <label for="home">お住まいの都道府県 <span class="req">必須</span></label>
             <select id="home" required><option value="">選択してください</option></select>
+            <p class="field-error" id="err-home" role="alert" hidden></p>
           </div>
         </div>
         <div class="origin-box">
@@ -195,10 +198,14 @@
 
   <section id="diagnosis" class="panel" aria-labelledby="h-result" hidden>
     <h2 id="h-result">あなたへのおすすめ</h2>
-    <div id="summary" class="summary"></div>
-    <div id="kigaku-panel" class="kigaku-panel"></div>
-    <div id="fortune-table" class="fortune-table" hidden></div>
+    <p class="result-lead">あなたの生年月日と出発地から選んだ聖地です。<span class="result-note">ご利益は、祭神・本尊や名称から一般的なものを推定しています。</span></p>
     <div id="recommended" class="cards"></div>
+    <details class="why-box" id="why-box">
+      <summary>なぜこの聖地？　あなたの数秘・気学と吉方位を見る</summary>
+      <div id="summary" class="summary"></div>
+      <div id="kigaku-panel" class="kigaku-panel"></div>
+      <div id="fortune-table" class="fortune-table" hidden></div>
+    </details>
     <div id="outing" class="outing" hidden></div>
     <aside class="line-box" aria-label="公式LINEのご案内">
       <p class="line-label">公式LINE</p>
@@ -349,6 +356,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/config.js"></script>
+<script src="assets/js/analytics.js"></script>
 <script src="assets/js/jst-date.js"></script>
 <script src="data/solar-terms.js"></script>
 <script src="assets/js/kyusei.js"></script>
