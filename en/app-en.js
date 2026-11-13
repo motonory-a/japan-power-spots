@@ -260,6 +260,66 @@
   }
   var BDW = { birthday: bdWidget('birthday'), plan: bdWidget('plan-bday') };
 
+
+  /* ---------- light mode (English only): 2 quick questions, everything else folded ---------- */
+  var LIGHT = LANG === 'en';
+  var STYLE_KEY = 'iconic';
+  var NATURE_TAGS = ['滝', '霊山', '御神木・巨木', '絶景', '森林', '湖・湧水', '海・島'];
+  function setupLight() {
+    if (!LIGHT) return;
+    document.body.classList.add('en-light');
+    var sub = document.querySelector('.en-sub');
+    if (sub) sub.textContent = 'Beautiful shrines, temples and sacred nature worth visiting near where you are staying.';
+    var note = document.querySelector('.en-hero-note');
+    if (note) note.textContent = 'Free · No sign-up · Just 2 quick questions';
+    var cta = document.querySelector('.hero-cta'); if (cta) cta.textContent = 'Show me places to visit';
+    var wishPanel = document.querySelector('.panel-wish'); if (wishPanel) wishPanel.hidden = true;
+    var h = $('h-finder'); if (h) h.textContent = 'Find places worth visiting';
+    var form = $('finder-form');
+    var steps = Array.prototype.slice.call(form.querySelectorAll(':scope > .en-step'));
+    var stWish = steps[0], stBday = steps[1], stCity = steps[2], stMode = steps[3], stDate = steps[4];
+    // Q1 where
+    stCity.querySelector('h3').innerHTML = '<span class="step-no">1</span>Where are you staying? <span class="req">required</span>';
+    // Q2 what kind of place
+    var q2 = el('div', 'en-step');
+    q2.innerHTML = '<h3><span class="step-no">2</span>What kind of place?</h3>';
+    var row = el('div', 'en-style-row');
+    [['iconic', '⛩', 'Famous must-sees', 'The shrines and temples everyone talks about'],
+     ['hidden', '🌿', 'Quiet hidden gems', 'Fewer crowds, local favorites'],
+     ['nature', '⛰', 'Sacred nature', 'Waterfalls, holy mountains, ancient trees']].forEach(function (o, i) {
+      var lab = el('label', 'en-style');
+      var inp = el('input'); inp.type = 'radio'; inp.name = 'style'; inp.value = o[0]; if (!i) inp.checked = true;
+      var box = el('span', 'en-style-box');
+      box.append(el('span', 'en-style-icon', o[1]), el('b', null, o[2]), el('span', 'small', o[3]));
+      lab.append(inp, box); row.append(lab);
+    });
+    q2.append(row);
+    // fold the rest
+    var more = el('details', 'en-more-opts');
+    more.append(el('summary', null, 'More options: wishes, birthday luck reading, travel time, date'));
+    stWish.querySelector('h3').innerHTML = 'Your wishes <span class="opt">optional</span>';
+    stBday.querySelector('h3').innerHTML = 'Your birthday <span class="opt">optional · for a fun luck reading</span>';
+    stMode.querySelector('h3').innerHTML = 'How will you travel?';
+    stDate.querySelector('h3').innerHTML = 'When will you go? <span class="opt">optional</span>';
+    more.append(stWish, stBday, stMode, stDate);
+    form.insertBefore(stCity, form.firstChild);
+    form.insertBefore(q2, stCity.nextSibling);
+    form.insertBefore(more, q2.nextSibling);
+    var btn = form.querySelector('.en-submit'); if (btn) btn.textContent = 'Show 3 places';
+    // keep the hotel map folded until asked for, so question 2 stays close
+    var mapEl = $('origin-map'), hint = stCity.querySelector('.en-origin-actions .small');
+    if (mapEl && hint) {
+      mapEl.hidden = true;
+      var tb = el('button', 'btn-link en-map-toggle', 'or pick your hotel on a map'); tb.type = 'button';
+      tb.addEventListener('click', function () {
+        mapEl.hidden = !mapEl.hidden;
+        if (!mapEl.hidden && originMap) setTimeout(function () { originMap.invalidateSize(); }, 50);
+      });
+      hint.replaceWith(tb);
+    }
+    cfg.resultCount = 3;
+  }
+
   /* ---------- starting point ---------- */
   var origin = null, originMap = null, originMarker = null;
   function setOrigin(o, fromMap) {
@@ -376,7 +436,7 @@
       (s.direction && s.direction !== '—' ? SEP + (EN.palaces[s.direction] || s.direction) : '') + ')';
     body.append(meta);
 
-    var days = (!ctx.tripDate && s.km >= 1) ? D.pickGoodDays(D.goodDays([ctx.stars], s.bearing, s.km, cfg, today(), 60), 4) : [];
+    var days = (ctx.stars && !ctx.tripDate && s.km >= 1) ? D.pickGoodDays(D.goodDays([ctx.stars], s.bearing, s.km, cfg, today(), 60), 4) : [];
     if (s.fortune) {
       var mk = s.fortune.mark, f = EN.fortune[mk] || EN.fortune['―'], txt;
       if (s.km < 1) txt = U('tooClose');
@@ -451,7 +511,7 @@
   function run() {
     var bday = $('birthday').value, tripDate = $('trip-date').value || '';
     var errs = [];
-    var be = checkBirthday(bday); if (be) errs.push(be);
+    var be = (LIGHT && !bday) ? '' : checkBirthday(bday); if (be) errs.push(be);
     if (!origin) errs.push(U('errOrigin'));
     if (tripDate && tripDate < today()) errs.push(U('errTripDate'));
     showError(errs);
@@ -466,16 +526,31 @@
       }
       return;
     }
-    if (window.track) track('diagnose_submit', { wishes: document.querySelectorAll('input[name=wish]:checked').length, trip_date: tripDate ? 1 : 0 });
-    try { localStorage.setItem('jps-en-bday', bday); } catch (e) { /* ignore */ }
+    if (window.track) track('diagnose_submit', { style: STYLE_KEY || '', bday: bday ? 1 : 0, wishes: document.querySelectorAll('input[name=wish]:checked').length, trip_date: tripDate ? 1 : 0 });
+    if (bday) { try { localStorage.setItem('jps-en-bday', bday); } catch (e) { /* ignore */ } }
 
     var wishes = Array.from(document.querySelectorAll('input[name=wish]:checked')).map(function (c) { return c.value; });
+    var styleIn = document.querySelector('input[name=style]:checked');
+    STYLE_KEY = styleIn ? styleIn.value : '';
+    if (STYLE_KEY === 'nature' && !wishes.length) wishes = NATURE_TAGS.slice();
     var mode = document.querySelector('input[name=mode]:checked').value;
     var limit = Number($('time-limit').value) || null;
-    var n = D.lifePath(bday);
-    var stars = K.birthStars(bday);
-    var boards = tripDate ? K.boardsFor(tripDate, stars) : Object.assign(K.boardsFor(today(), stars), { noDay: true });
+    var hasBday = !!bday;
+    var n = hasBday ? D.lifePath(bday) : null;
+    var stars = hasBday ? K.birthStars(bday) : null;
+    var boards = !hasBday ? null : (tripDate ? K.boardsFor(tripDate, stars) : Object.assign(K.boardsFor(today(), stars), { noDay: true }));
     var all = rankForVisitors({ number: n, numbers: [n], origin: origin, wishes: wishes, mode: mode, limitMinutes: limit, boards: boards });
+    if (LIGHT && STYLE_KEY === 'nature') {
+      // sacred nature: places that match a nature tag come first
+      var NAT = ['山', '滝', '湖', '岩・磐座', '絶景', '洞窟', '湧水', '巨木'];
+      var isNat = function (x) { return NAT.indexOf(x.category) !== -1 || ((x.hitWishes || []).length > 0 && x.category !== '神社' && x.category !== '寺院'); };
+      all.sort(function (a, b) { return (b.withinLimit - a.withinLimit) || (isNat(b) - isNat(a)) || ((b.score + (b.fame || 0) * 0.6) - (a.score + (a.fame || 0) * 0.6)) || (a.km - b.km); });
+    }
+    if (LIGHT && STYLE_KEY !== 'nature') {
+      // famous must-sees: lean on how well-known a place is; hidden gems: skip the very famous ones
+      var adj = function (x) { var f = x.fame || 0; return STYLE_KEY === 'iconic' ? f / 3 : (f > 110 ? -40 : (f >= 20 ? 10 : 0)); };
+      all.sort(function (a, b) { return (b.withinLimit - a.withinLimit) || ((b.score + adj(b)) - (a.score + adj(a))) || (a.km - b.km); });
+    }
     var within = all.filter(function (s) { return s.withinLimit; });
     var shown = pickSpread(within.length ? within : all, cfg.resultCount, cfg.spreadKm);
     var more = (within.length ? within : all).filter(function (s) { return shown.indexOf(s) === -1; }).slice(0, 10);
@@ -488,7 +563,7 @@
     if (window.track) track('result_view', { count: shown.length });
 
     withTimeout(fetchLabels(shown.concat(more).map(function (s) { return s.wikidata; })), 4000).then(function () {
-      youBox(n, stars, tripDate);
+      if (stars) youBox(n, stars, tripDate); else $('you-box').replaceChildren();
       var wrap = $('result-cards');
       wrap.replaceChildren();
       if (!within.length) wrap.append(el('p', 'notice', U('noneWithin')));
@@ -612,7 +687,7 @@
 
   function runPlan() {
     var bday = $('plan-bday').value, legs = readLegs(), errs = [];
-    var be = checkBirthday(bday); if (be) errs.push(be);
+    var be = (LIGHT && !bday) ? '' : checkBirthday(bday); if (be) errs.push(be);
     legs.forEach(function (l, i) { if (!l.from) errs.push(U('errLegDate', { n: i + 1 })); else if (l.from < today()) errs.push(U('errLegPast', { n: i + 1 })); });
     var box = $('plan-error'); box.replaceChildren();
     if (errs.length) { var ul = el('ul'); errs.forEach(function (m) { ul.append(el('li', null, m)); }); box.append(ul); box.hidden = false; return; }
@@ -742,6 +817,7 @@
 
   /* ---------- start ---------- */
   buildForm();
+  setupLight();
   initOrigin();
   renderCourses();
   initPlanner();
