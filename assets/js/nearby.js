@@ -105,7 +105,8 @@
       tile.className = 'food-tile'; tile.href = 'gourmet.html#d=' + encodeURIComponent(n) + (label !== n ? '&l=' + encodeURIComponent(label) : ''); tile.setAttribute('data-track', 'gourmet_open');
       tile.title = (p[2] ? p[2] + ' / ' : '') + p[3] + ' (Wikimedia Commons)';
       var img = document.createElement('img');
-      img.src = p[0]; img.alt = label; img.loading = 'lazy'; img.decoding = 'async';
+      img.src = p[0]; if (p[0].indexOf('/250px-') > 0) { img.srcset = p[0] + ' 250w, ' + p[0].replace('/250px-', '/500px-') + ' 500w'; img.sizes = '(max-width: 560px) 46vw, 260px'; }
+      img.alt = label; img.loading = 'lazy'; img.decoding = 'async';
       img.onerror = function () { img.remove(); tile.classList.add('no-photo'); };
       var cap = document.createElement('span'); cap.textContent = label;
       tile.append(img, cap); grid.append(tile);

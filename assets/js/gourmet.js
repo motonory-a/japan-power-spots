@@ -70,29 +70,26 @@
     sec.append(h);
     var grid = el('div', 'g-grid'), cards = [];
     list.forEach(function (d) {
+      // 写真が主役のカード。名前は写真の上に重ね、説明・お店探し・撮影者は押したときの大きな画面で見せる
       var ph = P[d[0]];
       var card = el('article', 'g-card' + (ph ? '' : ' no-photo'));
       card.dataset.q = (d[0] + ' ' + d[1] + ' ' + (tr(d) ? tr(d)[0] : '') + ' ' + p[0] + ' ' + p[1]).toLowerCase();
-      if (ph) {
-        var a = el('a', 'g-photo'); a.href = '#d=' + encodeURIComponent(d[0]); a.setAttribute('aria-label', L.zoom + '：' + dishName(d));
-        a.addEventListener('click', function (ev) { ev.preventDefault(); openDish(d[0]); });
-        var img = el('img'); img.src = ph[0]; img.srcset = ph[0] + ' 250w, ' + ph[0].replace('/250px-', '/500px-') + ' 500w';
-        img.sizes = '(max-width: 560px) 46vw, 240px'; img.alt = dishName(d); img.loading = 'lazy'; img.decoding = 'async';
-        img.onerror = function () { a.remove(); card.classList.add('no-photo'); };
-        a.append(img); card.append(a);
-      }
-      var body = el('div', 'g-body');
-      var nm = el('h3', 'g-name'); var na = el('a', null, dishName(d)); na.href = '#d=' + encodeURIComponent(d[0]);
-      na.addEventListener('click', function (ev) { ev.preventDefault(); openDish(d[0]); }); nm.append(na); body.append(nm);
       card.id = 'd-' + encodeURIComponent(d[0]).replace(/%/g, '');
       DISH[d[0]] = { d: d, p: p, card: card };
-      if (dishSub(d)) body.append(el('p', 'g-sub', dishSub(d)));
-      body.append(el('p', 'g-desc', dishDesc(d)));
-      var m = el('a', 'g-maps', L.maps); m.target = '_blank'; m.rel = 'noopener noreferrer'; m.setAttribute('data-track', 'food_search');
-      m.href = 'https://www.google.com/maps/search/' + encodeURIComponent(d[0] + ' ' + p[0]);
-      body.append(m);
-      if (ph) body.append(el('p', 'g-credit', L.credit + ': ' + (ph[2] || 'unknown') + ' / ' + ph[3]));
-      card.append(body); grid.append(card); cards.push(card);
+      var a = el('a', 'g-photo'); a.href = '#d=' + encodeURIComponent(d[0]); a.setAttribute('aria-label', L.zoom + '：' + dishName(d));
+      a.addEventListener('click', function (ev) { ev.preventDefault(); openDish(d[0]); });
+      if (ph) {
+        var img = el('img'); img.src = ph[0]; img.srcset = ph[0] + ' 250w, ' + ph[0].replace('/250px-', '/500px-') + ' 500w';
+        img.sizes = '(max-width: 560px) 48vw, 270px'; img.alt = dishName(d); img.loading = 'lazy'; img.decoding = 'async';
+        img.onerror = function () { img.remove(); card.classList.add('no-photo'); };
+        a.append(img);
+      }
+      var cap = el('span', 'g-cap');
+      cap.append(el('span', 'g-name', dishName(d)));
+      if (dishSub(d)) cap.append(el('span', 'g-sub', dishSub(d)));
+      cap.append(el('span', 'g-desc', dishDesc(d))); // 写真のないときだけ表示（CSS）
+      a.append(cap); card.append(a);
+      grid.append(card); cards.push(card);
     });
     sec.append(grid);
     var go = el('a', 'g-go', ja ? prefName(p) + L.spots : L.spots + prefName(p)); go.href = spotsHref;
