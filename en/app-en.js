@@ -336,7 +336,7 @@
   }
   function initOriginMap() {
     if (!window.L) return;
-    originMap = L.map('origin-map', { scrollWheelZoom: false }).setView([36.2, 138.25], 5);
+    originMap = L.map('origin-map', { scrollWheelZoom: true }).setView([36.2, 138.25], 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(originMap);
     originMap.on('click', function (e) {
       $('city').value = 'pin';
@@ -388,7 +388,7 @@
   function drawMap(o, spots) {
     if (!window.L) return;
     if (!resultMap) {
-      resultMap = L.map('result-map', { scrollWheelZoom: false });
+      resultMap = L.map('result-map', { scrollWheelZoom: true });
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(resultMap);
       resultLayer = L.layerGroup().addTo(resultMap);
     }

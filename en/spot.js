@@ -32,7 +32,7 @@
 
   // map
   if (window.L) {
-    var map = L.map('spot-map', { scrollWheelZoom: false }).setView([S.lat, S.lon], 14);
+    var map = L.map('spot-map', { scrollWheelZoom: true }).setView([S.lat, S.lon], 14);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
     L.marker([S.lat, S.lon]).addTo(map).bindTooltip(S.n);
   }

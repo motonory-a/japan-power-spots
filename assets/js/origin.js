@@ -155,16 +155,14 @@
     if (typeof L === 'undefined') { $('origin-map').textContent = '地図を読み込めませんでした。'; return; }
     var cur = current();
     if (!miniMap) {
-      miniMap = L.map('origin-map', { scrollWheelZoom: false });
+      miniMap = L.map('origin-map', { scrollWheelZoom: true });
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 19
       }).addTo(miniMap);
       miniMap.on('click', function (e) {
-        miniMap.scrollWheelZoom.enable();
         set({ lat: e.latlng.lat, lon: e.latlng.lng, label: '地図で指定した地点', source: 'map' });
         setMsg('地図で指定した位置を出発地にしました。ピンはドラッグで動かせます。', 'ok');
       });
-      miniMap.on('mouseout', function () { miniMap.scrollWheelZoom.disable(); });
       miniMap.setView(cur ? [cur.lat, cur.lon] : [36.4, 138], cur ? (precise ? 16 : 11) : 5);
       if (precise) placePin(precise.lat, precise.lon, false);
     }

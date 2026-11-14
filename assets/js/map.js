@@ -37,15 +37,13 @@
       el.textContent = '地図を読み込めませんでした。通信環境を確認して再読み込みしてください。';
       return false;
     }
-    map = L.map(elId, { scrollWheelZoom: false, preferCanvas: true }).setView([36.4, 138], 5);
+    map = L.map(elId, { scrollWheelZoom: true, preferCanvas: true }).setView([36.4, 138], 5);
     canvas = L.canvas({ padding: 0.3 });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 18
     }).addTo(map);
-    // ページのスクロール中に地図が勝手に拡大しないよう、クリック後にホイール拡大を有効化
-    map.on('click focus', function () { map.scrollWheelZoom.enable(); });
-    map.on('mouseout blur', function () { map.scrollWheelZoom.disable(); });
+    // PCではマウスホイールで拡大縮小できる
     spotLayer = L.layerGroup().addTo(map);
     rankLayer = L.layerGroup().addTo(map);
     homeLayer = L.layerGroup().addTo(map);
