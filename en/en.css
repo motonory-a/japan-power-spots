@@ -212,3 +212,15 @@ body.en-light .en-map-toggle{background:none;border:0;padding:6px 2px;color:#5a3
 .en-guide h2::before{display:none}
 .en-guide-body p{margin:0 0 6px;font-size:13.5px;line-height:1.6}
 .en-guide-link{font-size:13px}
+
+/* food photos & station (2026-11) */
+.en-food-sub{margin:8px 0 6px;font-size:13px;color:var(--muted)}
+.en-food .food-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.en-food .food-tile{display:block;text-decoration:none;color:inherit;border-radius:10px;overflow:hidden;background:#fff;border:1px solid #F0E2C8}
+.en-food .food-tile img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f3ece0}
+.en-food .food-tile span{display:block;padding:5px 6px;font-size:12px;font-weight:600;line-height:1.3;text-align:center}
+.en-food .food-tile.no-photo{display:flex;align-items:center;justify-content:center;min-height:56px;background:#FFF8EC}
+.en-food .food-credit{margin:6px 0 0;font-size:10.5px;color:var(--muted)}
+.en-station{margin:10px 0 0;font-size:14px}
+.en-station .st-sub{display:block;font-size:12.5px;color:var(--muted)}
+.food-rest{margin:6px 0 0;font-size:13.5px;font-weight:600}

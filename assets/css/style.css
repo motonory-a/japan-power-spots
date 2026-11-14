@@ -676,3 +676,17 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
   .lang-link{font-size:12px;padding:3px 7px;white-space:nowrap}
 }
 @media (max-width:480px){.toplink .cu-pre{display:none}}
+
+/* 最寄り駅・食べ物の写真（2026-11） */
+.station-line b,.outing-station b{font-weight:700}
+.station-line .st-sub,.outing-station .st-sub{display:block;font-size:.92em;color:var(--muted)}
+.outing-station{margin:12px auto 6px;max-width:520px;font-size:15px;text-align:left;padding:10px 14px;border-radius:12px;background:#F6F2FB}
+.outing-food-sub{margin:10px 0 6px;color:var(--muted);font-size:13px}
+.food-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.food-tile{display:block;text-decoration:none;color:inherit;border-radius:10px;overflow:hidden;background:#fff;border:1px solid #F0E2C8}
+.food-tile img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f3ece0}
+.food-tile span{display:block;padding:5px 6px 6px;font-size:12.5px;font-weight:600;line-height:1.35;text-align:center}
+.food-tile.no-photo{display:flex;align-items:center;justify-content:center;min-height:64px;background:#FFF8EC}
+.food-credit{margin:8px 0 0;font-size:10.5px;color:var(--muted);line-height:1.5}
+.spot-detail .food-tiles{margin:6px 0 4px}
+.food-rest{margin:6px 0 0;font-size:13.5px;font-weight:600}

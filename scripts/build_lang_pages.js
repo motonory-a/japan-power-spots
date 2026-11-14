@@ -91,7 +91,7 @@ const PAGE = {
   guideP2: '<p>Japan has more than 96,000 sacred places, far beyond the famous few. I made this finder so you can meet the one that feels like yours, and visit it with a little more meaning.</p>',
   guideLink: '>Say hello on Instagram @japan_psj</a>',
   operator: "Run by <b>Akki, the Higher-Dimensional Negotiator</b> (<span lang=\"ja\">高次元ネゴシエイター アッキー</span>), a Tokyo-based spiritual guide to Japan's sacred places. Follow <a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">@japan_psj on Instagram</a> for sacred places and lucky days. Questions or a place to suggest? Message us there, or on Akki's <a href=\"https://www.instagram.com/nigihayahi03/\" target=\"_blank\" rel=\"noopener\">personal Instagram</a>, <a href=\"https://x.com/nigihayahi03\" target=\"_blank\" rel=\"noopener\">X</a> or <a href=\"https://lin.ee/wHX3skr3\" target=\"_blank\" rel=\"noopener\">LINE</a>. Videos on <a href=\"https://www.youtube.com/@nigihayahi03/videos\" target=\"_blank\" rel=\"noopener\">YouTube</a>.",
-  foot1: 'Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata, Ministry of the Environment Japan · Photos: Wikimedia Commons',
+  foot1: 'Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata, Ministry of the Environment Japan · Stations: <a href="https://github.com/Seo-4d696b75/station_database" target="_blank" rel="noopener">station_database</a> (CC BY 4.0) · Photos: Wikimedia Commons',
   foot2: '>日本語版</a>'
 };
 

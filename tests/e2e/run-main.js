@@ -17,6 +17,9 @@ async function route(page, { blockCdn = false } = {}) {
       const type = f.endsWith('.css') ? 'text/css' : f.endsWith('.png') ? 'image/png' : 'application/javascript';
       return r.fulfill({ status: 200, contentType: type, headers: { 'access-control-allow-origin': '*' }, body: fs.readFileSync(f) });
     }
+    if (u.includes('upload.wikimedia.org')) { // 食べ物の写真（2026-11）：テストでは小さな画像を返す
+      return r.fulfill({ status: 200, contentType: 'image/gif', body: Buffer.from('R0lGODlhAQABAAAAACw=', 'base64') });
+    }
     if (u.includes('msearch.gsi.go.jp')) {
       const q = decodeURIComponent(u.split('q=')[1] || '');
       global.lastGsiQuery = q;

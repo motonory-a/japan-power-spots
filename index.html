@@ -328,7 +328,7 @@
       <ul class="caution">
         <li>生年月日・出発地・一緒に行く人の生年月日は、このページの中で計算に使うだけで、サーバーへは送りません。アクセス解析や広告の計測タグも入れていません。</li>
         <li>「この端末に保存する」をオンにしたときの入力内容、行きたい／行った／お気に入りなどのコレクション、今日の扉の記録は、お使いの端末のブラウザの中（localStorage）にだけ保存されます。消すときは、各コーナーの「すべて消す」ボタンか、ブラウザの「サイトデータの削除」をお使いください。</li>
-        <li>次の外部サービスから、地図・文字・写真などを読み込みます（読み込みのときに、閲覧している端末のIPアドレスなどが各サービスに伝わります）：OpenStreetMap（地図）、unpkg（地図の部品）、Google Fonts（見出しの文字）、Wikimedia Commons・Wikidata（スポットの写真）。「LINEでアッキーに相談する」「情報の誤りを報告」から送った内容は、LINEの仕組みでアカウント運営者（アッキー）に届きます。「住所から探す」を押したときだけ、入力した住所の文字を国土地理院の住所検索へ送ります。</li>
+        <li>次の外部サービスから、地図・文字・写真などを読み込みます（読み込みのときに、閲覧している端末のIPアドレスなどが各サービスに伝わります）：OpenStreetMap（地図）、unpkg（地図の部品）、Google Fonts（見出しの文字）、Wikimedia Commons・Wikidata（スポットと食べ物の写真）。「LINEでアッキーに相談する」「情報の誤りを報告」から送った内容は、LINEの仕組みでアカウント運営者（アッキー）に届きます。「住所から探す」を押したときだけ、入力した住所の文字を国土地理院の住所検索へ送ります。</li>
         <li>現在地は、「現在地を使う」「現在地の周辺を探す」を押して許可したときだけ使い、外部へは送りません。</li>
         <li>九星気学・数秘・おみくじなどは文化的・占術的な読みもので、ご利益や効果を約束するものではありません。</li>
       </ul>
@@ -352,7 +352,7 @@
 
 <dialog id="spot-detail" class="spot-detail" aria-labelledby="detail-title"></dialog>
 
-<footer><p class="foot-copy" id="foot-copy"></p><p class="foot-line"><a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener noreferrer">公式LINE：アッキーの『ニギハヤヒと俺日記』公式</a></p><p class="foot-title">開運パワースポット巡り　運営：アッキー　<span id="version"></span></p><p>スポットデータ：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors（ODbL）・<a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）<br>巨樹：環境省生物多様性センター「自然環境保全基礎調査 巨樹・巨木林調査」（<a href="https://www.biodic.go.jp/" target="_blank" rel="noopener noreferrer">生物多様性センター</a>）を加工して作成</p></footer>
+<footer><p class="foot-copy" id="foot-copy"></p><p class="foot-line"><a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener noreferrer">公式LINE：アッキーの『ニギハヤヒと俺日記』公式</a></p><p class="foot-title">開運パワースポット巡り　運営：アッキー　<span id="version"></span></p><p>スポットデータ：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors（ODbL）・<a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）<br>巨樹：環境省生物多様性センター「自然環境保全基礎調査 巨樹・巨木林調査」（<a href="https://www.biodic.go.jp/" target="_blank" rel="noopener noreferrer">生物多様性センター</a>）を加工して作成<br>駅：<a href="https://github.com/Seo-4d696b75/station_database" target="_blank" rel="noopener noreferrer">station_database</a>（CC BY 4.0）・食べ物の写真：Wikimedia Commons（各写真の撮影者とライセンスは写真の下に記載）</p></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/config.js"></script>
@@ -367,6 +367,8 @@
 <script src="data/known-benefits.js"></script>
 <script src="data/exclude.js"></script>
 <script src="data/food.js"></script>
+<script src="data/food-photos.js"></script>
+<script src="assets/js/nearby.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/diagnosis.js"></script>
 <script src="assets/js/map.js"></script>

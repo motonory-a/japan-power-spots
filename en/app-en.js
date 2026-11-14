@@ -476,15 +476,24 @@
       if (fe.length) {
         var fb = el('div', 'en-food');
         fb.append(el('p', 'en-food-head', 'Make it a food trip too'));
-        fb.append(el('p', null, 'Local specialties' + (EN.prefectures[s.prefecture_code] ? ' of ' + EN.prefectures[s.prefecture_code] : '') + ': ' + fe.join(SEP)));
-        if (se) fb.append(el('p', null, 'In season (' + se.season + ', ' + se.region + '): ' + se.items.join(SEP)));
+        var cr = [];
+        var addSec = function (title, jaNames, enNames) {
+          fb.append(el('p', 'en-food-sub', title));
+          if (window.Nearby) { var t = Nearby.foodTiles(jaNames, enNames, 'en'); fb.append(t.el); if (t.credit) cr.push(t.credit); }
+          else fb.append(el('p', null, enNames.join(SEP)));
+        };
+        addSec('Local specialties' + (EN.prefectures[s.prefecture_code] ? ' of ' + EN.prefectures[s.prefecture_code] : ''), Food.meibutsu(s.prefecture), fe);
+        var sj = Food.seasonal(s.prefecture, parseInt(String(ctx.tripDate || today()).slice(5, 7), 10));
+        if (se && sj) addSec('In season (' + se.season + ', ' + se.region + ')', sj.items, se.items);
         var fl = link('https://www.google.com/maps/search/restaurants/@' + s.lat + ',' + s.lon + ',15z', 'Find well-rated places nearby (Google Maps)', 'en-food-link');
         fl.setAttribute('data-track', 'food_search');
         fb.append(fl);
+        if (cr.length) fb.append(el('p', 'food-credit', 'Photos: Wikimedia Commons / ' + cr.join(', ')));
         body.append(fb);
       }
     }
 
+    if (LANG === 'en' && window.Nearby) { var est = el('p', 'en-station'); body.append(est); Nearby.station(est, s, 'en'); }
     var btns = el('div', 'en-btns');
     btns.append(link(gmapsDir(ctx.origin, s, ctx.mode), U('directionsGM'), 'btn-main en-btn'));
     var w = enWiki(s.wikidata);

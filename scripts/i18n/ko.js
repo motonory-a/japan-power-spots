@@ -78,7 +78,7 @@ module.exports = {
     guideP2: "<p>일본에는 유명한 몇 곳을 훨씬 넘어 9만 6천 곳이 넘는 성지가 있어요. 그중에서 ‘나의 곳’이라고 느껴지는 한 곳을 만나고, 조금 더 의미 있게 다녀오실 수 있도록 이 사이트를 만들었습니다.</p>",
     guideLink: ">Instagram @japan_psj 에서 인사해 주세요</a>",
     operator: '운영: <b>Akki, the Higher-Dimensional Negotiator</b>(<span lang="ja">高次元ネゴシエイター アッキー</span>), 도쿄에서 일본의 성지를 안내하는 스피리추얼 가이드. 성지와 길일 소식은 <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a>에서 확인하세요. 질문이나 추천하고 싶은 장소가 있으면 그곳이나 Akki의 <a href="https://www.instagram.com/nigihayahi03/" target="_blank" rel="noopener">개인 Instagram</a>, <a href="https://x.com/nigihayahi03" target="_blank" rel="noopener">X</a>, <a href="https://lin.ee/wHX3skr3" target="_blank" rel="noopener">LINE</a>으로 연락 주세요. 영상은 <a href="https://www.youtube.com/@nigihayahi03/videos" target="_blank" rel="noopener">YouTube</a>에 있습니다.',
-    foot1: '지도 데이터 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · 장소 데이터: OpenStreetMap, Wikidata, 일본 환경성 · 사진: Wikimedia Commons',
+    foot1: '지도 데이터 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · 장소 데이터: OpenStreetMap, Wikidata, 일본 환경성 · 역: <a href="https://github.com/Seo-4d696b75/station_database" target="_blank" rel="noopener">station_database</a> (CC BY 4.0) · 사진: Wikimedia Commons',
     foot2: '>일본어판</a>'
   },
   data: {

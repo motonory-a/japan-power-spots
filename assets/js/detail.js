@@ -85,11 +85,17 @@
     var objTags = (s.wishes || []).filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) body.append(el('p', 'small', '特徴：' + objTags.join('・')));
     if (s.wishesInferred && s.wishesInferred.length) body.append(el('p', 'small', 'ご利益（祭神・名称からの一般的な推定）：' + s.wishesInferred.join('・')));
+    if (root.Nearby) { var dst = el('p', 'small station-line'); body.append(dst); Nearby.station(dst, s, 'ja'); }
     if (root.Food) {
       var meib = Food.meibutsu(s.prefecture);
       if (meib.length) {
-        var fp = el('p', 'small food-line', 'せっかくなら味わいたい' + s.prefecture.replace(/[都府県]$/, '') + 'の名物：' + meib.join('・') + '　');
-        fp.append(link('近くのお店を探す', 'https://www.google.com/maps/search/' + encodeURIComponent('グルメ') + '/@' + s.lat + ',' + s.lon + ',15z'));
+        body.append(el('p', 'small food-line', 'せっかくなら味わいたい' + s.prefecture.replace(/[都府県]$/, '') + 'の名物'));
+        if (root.Nearby) {
+          var ft = Nearby.foodTiles(meib); body.append(ft.el);
+          if (ft.credit) body.append(el('p', 'food-credit', '写真：Wikimedia Commons ／ ' + ft.credit));
+        } else body.append(el('p', 'small', meib.join('・')));
+        var fp = el('p', 'small');
+        fp.append(link('近くのお店を探す（Googleマップ）', 'https://www.google.com/maps/search/' + encodeURIComponent('グルメ') + '/@' + s.lat + ',' + s.lon + ',15z'));
         body.append(fp);
       }
     }

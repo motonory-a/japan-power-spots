@@ -89,6 +89,7 @@
     var objTags = s.wishes.filter(function (w) { return !s.wishesInferred || s.wishesInferred.indexOf(w) === -1; });
     if (objTags.length) card.append(el('p', 'small', '特徴：' + objTags.join('・')));
     if (s.wishesInferred && s.wishesInferred.length) card.append(el('p', 'small', 'ご利益：' + s.wishesInferred.join('・')));
+    if (window.Nearby) { var stl = el('p', 'small station-line'); card.append(stl); Nearby.station(stl, s, 'ja'); }
     var meib = window.Food ? Food.meibutsu(s.prefecture) : [];
     if (meib.length) card.append(el('p', 'small food-line', 'せっかくなら味わいたい' + s.prefecture.replace(/[都府県]$/, '') + 'の名物：' + meib.join('・')));
     if (window.Collection) card.append(Collection.buttons(s));
@@ -523,6 +524,7 @@
     if (ctx.stars && (!ctx.tripDate || (fm !== '◎' && fm !== '○'))) box.append(goodDaysBox(s, ctx));
     var row = el('div', 'outing-btns');
     if (window.Collection) row.append(Collection.buttons(s));
+    if (window.Nearby) { var ost = el('p', 'outing-station'); box.append(ost); Nearby.station(ost, s, 'ja'); }
     var route = el('a', 'btn-sub', '経路を調べる（Googleマップ）');
     route.href = routeUrl(s, ctx.modeKey, ctx.origin); route.target = '_blank'; route.rel = 'noopener noreferrer';
     var inv = el('a', 'btn-sub btn-invite', 'LINEで誘う');
@@ -554,14 +556,19 @@
     if (!se && !meib.length) return wrap;
     var box = el('div', 'outing-food');
     box.append(el('p', 'outing-food-head', 'お参りのあとは、おいしいものも'));
-    var dl = el('dl');
-    if (se) dl.append(el('dt', null, (day ? 'その時期' : 'いま') + '（' + se.season + '）の' + se.region + 'の旬'), el('dd', null, se.items.join('・')));
-    if (meib.length) dl.append(el('dt', null, s.prefecture + 'の名物'), el('dd', null, meib.join('・')));
-    box.append(dl);
+    var credits = [];
+    function section(title, names) {
+      box.append(el('p', 'outing-food-sub', title));
+      if (window.Nearby) { var t = Nearby.foodTiles(names); box.append(t.el); if (t.credit) credits.push(t.credit); }
+      else box.append(el('p', 'outing-food-list', names.join('・')));
+    }
+    if (meib.length) section(s.prefecture + 'の名物', meib);
+    if (se) section((day ? 'その時期' : 'いま') + '（' + se.season + '）の' + se.region + 'の旬', se.items);
     var q = el('a', 'btn-link', '近くで評判のお店を探す（Googleマップ）');
     q.href = 'https://www.google.com/maps/search/' + encodeURIComponent('グルメ') + '/@' + s.lat + ',' + s.lon + ',15z';
     q.target = '_blank'; q.rel = 'noopener noreferrer'; q.setAttribute('data-track', 'food_search');
     box.append(q);
+    if (credits.length) box.append(el('p', 'food-credit', '写真：Wikimedia Commons ／ ' + credits.join('、')));
     wrap.append(box);
     return wrap;
   }
