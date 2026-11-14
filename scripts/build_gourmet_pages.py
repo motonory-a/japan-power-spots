@@ -26,6 +26,8 @@ for code, (hl, title, desc, h1, lead, back, f1, f2, site, loc) in L.items():
     s = s.replace('<h1>ご当地グルメ図鑑</h1>', f'<h1>{h1}</h1>')
     s = re.sub(r'<p class="g-lead">.*?</p>', f'<p class="g-lead">{lead}</p>', s, flags=re.S)
     s = re.sub(r'<footer class="g-foot">.*?</footer>', f'<footer class="g-foot">\n  <p>{f1}</p>\n  <p>{f2}</p>\n  <p><a href="./">{site}</a> · Akki</p>\n</footer>', s, flags=re.S)
+    if code != 'en':
+        s = s.replace('<script src="../data/gourmet.js"></script>', '<script src="../data/gourmet.js"></script>\n<script src="../data/gourmet-' + code + '.js"></script>')
     os.makedirs(os.path.join(root, code), exist_ok=True)
     open(os.path.join(root, code, 'gourmet.html'), 'w', encoding='utf-8').write(s)
     print(code, 'ok')

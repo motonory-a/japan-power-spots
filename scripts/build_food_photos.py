@@ -21,3 +21,15 @@ with open(os.path.join(root, 'data/gourmet.js'), 'w', encoding='utf-8') as fp:
     fp.write('var GOURMET = ' + json.dumps({k: [list(x) for x in v] for k, v in G.items()}, ensure_ascii=False, separators=(',', ':')) + ';\n')
 n = sum(len(v) for v in G.values()); w = sum(1 for v in G.values() for x in v if x[0] in out)
 print(n, 'dishes,', w, 'with photos; missing:', [x[0] for v in G.values() for x in v if x[0] not in out])
+
+# 料理名と説明の訳（中国語・韓国語・フランス語・スペイン語）
+import importlib
+for lg in ['zh', 'ko', 'fr', 'es']:
+    T = importlib.import_module('gourmet_i18n_' + lg).T
+    names = [x[0] for v in G.values() for x in v]
+    miss = [n for n in names if n not in T]
+    if miss: raise SystemExit(lg + ' missing: ' + ', '.join(miss))
+    with open(os.path.join(root, 'data/gourmet-' + lg + '.js'), 'w', encoding='utf-8') as fp:
+        fp.write('/* 自動生成：scripts/build_food_photos.py（訳は scripts/gourmet_i18n_' + lg + '.py） */\n')
+        fp.write('var GOURMET_T = ' + json.dumps({n: list(T[n]) for n in names}, ensure_ascii=False, separators=(',', ':')) + ';\n')
+    print(lg, 'ok')

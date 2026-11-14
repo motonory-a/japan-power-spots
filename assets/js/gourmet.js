@@ -25,9 +25,11 @@
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function fmt(s, n) { return s.replace('{n}', n); }
   function prefName(p) { return ja ? p[0] : p[1]; }
-  function dishName(d) { return ja || lang === 'zh' ? d[0] : d[1]; }
-  function dishSub(d) { return lang === 'zh' ? d[1] : ''; }
-  function dishDesc(d) { return ja ? d[2] : d[3]; }
+  var TR = window.GOURMET_T || null; // 中国語・韓国語・フランス語・スペイン語の訳
+  function tr(d) { return TR && TR[d[0]]; }
+  function dishName(d) { if (ja) return d[0]; var t = tr(d); return t && t[0] ? t[0] : d[1]; }
+  function dishSub(d) { return ja || lang === 'en' ? '' : d[0]; }
+  function dishDesc(d) { if (ja) return d[2]; var t = tr(d); return t && t[1] ? t[1] : d[3]; }
   var spotsHref = document.documentElement.getAttribute('data-spots') || './';
 
   var root = document.getElementById('gourmet');
@@ -70,7 +72,7 @@
     list.forEach(function (d) {
       var ph = P[d[0]];
       var card = el('article', 'g-card' + (ph ? '' : ' no-photo'));
-      card.dataset.q = (d[0] + ' ' + d[1] + ' ' + p[0] + ' ' + p[1]).toLowerCase();
+      card.dataset.q = (d[0] + ' ' + d[1] + ' ' + (tr(d) ? tr(d)[0] : '') + ' ' + p[0] + ' ' + p[1]).toLowerCase();
       if (ph) {
         var a = el('a', 'g-photo'); a.href = ph[1]; a.target = '_blank'; a.rel = 'noopener noreferrer';
         var img = el('img'); img.src = ph[0]; img.srcset = ph[0] + ' 250w, ' + ph[0].replace('/250px-', '/500px-') + ' 500w';

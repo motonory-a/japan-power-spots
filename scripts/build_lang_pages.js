@@ -145,6 +145,7 @@ LANGS.forEach((lang) => {
   // 英語版と共有するファイルへの道すじ
   h = rep(h, 'href="en.css"', 'href="../en/en.css"', 'css');
   h = h.split('img/akki-').join('../en/img/akki-');
+  h = rep(h, '<script src="../data/gourmet.js"></script>', '<script src="../data/gourmet.js"></script>\n<script src="../data/gourmet-' + lang + '.js"></script>', 'gourmet i18n');
   h = h.split("'img/hero-").join("'../en/img/hero-").split('src="img/hero-').join('src="../en/img/hero-');
   h = h.split('href="spots/').join('href="../en/spots/');
   h = rep(h, '<script src="i18n-en.js"></script>', '<script src="../en/i18n-en.js"></script>\n<script src="i18n.js"></script>', 'i18n');

@@ -477,7 +477,8 @@
       var sj = Food.seasonal(s.prefecture, mon);
       var fj = Food.meibutsu(s.prefecture);
       // 中国語版は漢字の日本語名のほうが伝わる。ほかは英語名
-      var lab = function (ja, en) { return LANG === 'zh' ? ja : en; };
+      var GT = window.GOURMET_T || null;
+      var lab = function (ja, en) { return ja.map(function (n, i) { var t = GT && GT[n]; return t && t[0] ? t[0] : (LANG === 'zh' ? n : en[i]); }); };
       if (fe.length) {
         var fb = el('div', 'en-food');
         fb.append(el('p', 'en-food-head', U('foodHead')));
