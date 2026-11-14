@@ -2,8 +2,8 @@
 import hashlib, json, os, sys, urllib.parse
 sys.path.insert(0, os.path.dirname(__file__))
 from food_photos_src import P
-SMALL = {'Imoni.jpg', 'Katsutan.jpg', 'すだち.jpg', 'Ipomoea_batatas.jpg'}  # 元画像が小さく縮小版がないもの
-def url(name, w=240):
+SMALL = set()  # 元画像が小さく縮小版がないもの
+def url(name, w=250):
     n = name.replace(' ', '_'); h = hashlib.md5(n.encode('utf-8')).hexdigest(); q = urllib.parse.quote(n)
     base = 'https://upload.wikimedia.org/wikipedia/commons/'
     return base + f'{h[0]}/{h[:2]}/{q}' if n in SMALL else base + f'thumb/{h[0]}/{h[:2]}/{q}/{w}px-{q}'
