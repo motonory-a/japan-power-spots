@@ -204,11 +204,11 @@ body.en-light .en-map-toggle{background:none;border:0;padding:6px 2px;color:#5a3
 .en-course-credit{margin:0 0 8px;font-size:10.5px;color:var(--muted);line-height:1.4}
 .en-course-credit a{color:inherit}
 
-/* guide card (2026-11) */
-.en-guide{display:flex;gap:18px;align-items:flex-start}
-.en-guide-pic{flex:0 0 auto;width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 14px rgba(60,30,90,.18)}
-.en-guide-kicker{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.en-guide h2{margin:2px 0 8px}
-.en-guide-body p{margin:0 0 8px}
-.en-guide-link{font-size:14px}
-@media (max-width:560px){.en-guide{flex-direction:column;align-items:center;text-align:center}.en-guide-pic{width:104px;height:104px}}
+/* guide card (2026-11): bottom of the page, quiet */
+.en-guide{display:flex;gap:14px;align-items:flex-start;padding:16px 18px}
+.en-guide-pic{flex:0 0 auto;width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 2px 8px rgba(60,30,90,.15)}
+.en-guide-kicker{margin:0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.en-guide h2{margin:0 0 6px;font-size:18px}
+.en-guide h2::before{display:none}
+.en-guide-body p{margin:0 0 6px;font-size:13.5px;line-height:1.6}
+.en-guide-link{font-size:13px}

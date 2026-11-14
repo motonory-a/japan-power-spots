@@ -303,7 +303,7 @@ test('時間を指定しないときは、近いほど距離の点が高い', ()
 });
 test('同じ点数なら、公式情報を確認済み→知名度の高い順（近さは最後）', () => {
   const mk = (id, lat, fame, verified) => Object.assign({}, SPOTS[0], { id, name: id, lat, lon: 139.7, fame, verified: verified ? {} : undefined, wishes: [], numbers: [] });
-  const list = [mk('近い・無名', 35.70, 0, false), mk('遠い・有名', 35.95, 8, false), mk('遠い・確認済み', 35.96, 1, true)];
+  const list = [mk('近い・無名', 35.70, 0, false), mk('遠い・有名', 35.95, 3, false), mk('遠い・確認済み', 35.96, 1, true)];
   const r = D.rankSpots(list, { number: 4, origin: { lat: 35.69, lon: 139.7 }, wishes: [], mode: 'car', limitMinutes: 120 }, cfg);
   assert.deepStrictEqual(r.map((s) => s.name), ['遠い・確認済み', '遠い・有名', '近い・無名']);
 });
