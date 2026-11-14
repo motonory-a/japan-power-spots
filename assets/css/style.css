@@ -682,7 +682,11 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .station-line .st-sub,.outing-station .st-sub{display:block;font-size:.92em;color:var(--muted)}
 .outing-station{margin:12px auto 6px;max-width:520px;font-size:15px;text-align:left;padding:10px 14px;border-radius:12px;background:#F6F2FB}
 .outing-food-sub{margin:10px 0 6px;color:var(--muted);font-size:13px}
-.food-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.food-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:560px){.food-tiles{grid-template-columns:repeat(2,1fr)}}
+.food-tile img{filter:brightness(1.04) saturate(1.06)}
+.food-more{display:block;margin:12px auto 0;text-align:center;font-weight:700;color:#C0392B;text-decoration:none;font-size:14.5px;border:1.5px solid #F2C9C2;border-radius:999px;padding:8px 12px;background:#fff}
+.food-more::after{content:" →"}
 .food-tile{display:block;text-decoration:none;color:inherit;border-radius:10px;overflow:hidden;background:#fff;border:1px solid #F0E2C8}
 .food-tile img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f3ece0}
 .food-tile span{display:block;padding:5px 6px 6px;font-size:12.5px;font-weight:600;line-height:1.35;text-align:center}
@@ -697,3 +701,15 @@ footer .copyurl.done{background:rgba(255,255,255,.22);color:#fff}
 .hikkoshi-banner .hb-go{display:inline-block;position:relative;margin-top:12px;font-size:14px;border:1px solid rgba(226,204,150,.8);color:#f6e7c1;padding:4px 14px}
 .hikkoshi-banner:hover{color:#fff}
 .hikkoshi-banner:hover .hb-go{background:rgba(226,204,150,.18)}
+
+/* ご当地グルメ図鑑への入口 */
+.panel-gourmet{padding:0;overflow:hidden}
+.gourmet-promo{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:#FFF8EC}
+.gp-photos{display:grid;grid-template-columns:repeat(4,1fr)}
+.gp-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;filter:brightness(1.05) saturate(1.08)}
+.gp-text{display:block;padding:14px 16px 16px;text-align:center}
+.gp-kicker{display:block;font-size:12.5px;color:#a0784a;font-weight:600}
+.gp-title{display:block;font-family:"Shippori Mincho",serif;font-size:24px;color:#3F2A5E;margin:2px 0}
+.gp-sub{display:block;font-size:14px;color:#5a4636}
+.gp-cta{display:inline-block;margin-top:10px;background:#C0392B;color:#fff;border-radius:999px;padding:8px 20px;font-weight:700;font-size:14.5px}
+.gp-cta::after{content:" →"}

@@ -92,14 +92,14 @@
 
   // 食べ物の写真タイル。names は日本語名（写真データのキー）、labels は表示名。
   // 写真のあるものを最大3つタイルにし、写真のないものは下に名前だけ並べる
-  function foodTiles(names, labels, lang, also) {
+  function foodTiles(names, labels, lang, also, max) {
     var P = root.FOOD_PHOTOS || {}, en = lang && lang !== 'ja';
     var wrap = document.createElement('div'); wrap.className = 'food-tiles-wrap';
     var grid = document.createElement('div'); grid.className = 'food-tiles';
     var credits = [], rest = [];
     names.forEach(function (n, i) {
       var p = P[n], label = (labels && labels[i]) || n;
-      if (!p || grid.children.length >= 3) { rest.push(label); return; }
+      if (!p || grid.children.length >= (max || 4)) { rest.push(label); return; }
       var tile = document.createElement('a');
       tile.className = 'food-tile'; tile.href = p[1]; tile.target = '_blank'; tile.rel = 'noopener noreferrer';
       tile.title = (p[2] ? p[2] + ' / ' : '') + p[3] + ' (Wikimedia Commons)';

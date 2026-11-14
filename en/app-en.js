@@ -488,11 +488,19 @@
           else fb.append(el('p', null, lab(jaNames, enNames).join(SEP)));
         };
         var pn = EN.prefectures[s.prefecture_code] || '';
+        // ご当地グルメ図鑑に写真つきの料理があれば、そこから4品
+        var GG = window.GOURMET && window.GOURMET[s.prefecture], FPh = window.FOOD_PHOTOS || {};
+        if (GG) { var gw = GG.filter(function (d) { return FPh[d[0]]; }).slice(0, 4); if (gw.length >= 4) { fj = gw.map(function (d) { return d[0]; }); fe = gw.map(function (d) { return d[1]; }); } }
         addSec(pn ? U('foodLocalOf', { pref: pn }) : U('foodLocal'), fj, fe);
         if (se && sj) addSec(LANG === 'en' ? 'In season (' + se.season + ', ' + se.region + ')' : U('foodSeason'), sj.items, se.items);
         var fl = link('https://www.google.com/maps/search/' + encodeURIComponent(U('foodMapsQ')) + '/@' + s.lat + ',' + s.lon + ',15z', U('foodMaps'), 'en-food-link');
         fl.setAttribute('data-track', 'food_search');
         fb.append(fl);
+        if (GG && GG.length > 4) {
+          var gm = link('gourmet.html#p-' + (Object.keys(window.GOURMET).indexOf(s.prefecture) + 1), U('foodMore', { pref: pn || s.prefecture, n: GG.length }), 'food-more');
+          gm.removeAttribute('target'); gm.removeAttribute('rel'); gm.setAttribute('data-track', 'gourmet_open');
+          fb.append(gm);
+        }
         if (cr.length) fb.append(el('p', 'food-credit', U('foodPhotos') + ' ' + cr.join(', ')));
         body.append(fb);
       }

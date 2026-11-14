@@ -553,6 +553,9 @@
     if (!window.Food) return wrap;
     var month = parseInt(String(day || todayStr()).slice(5, 7), 10);
     var se = Food.seasonal(s.prefecture, month), meib = Food.meibutsu(s.prefecture);
+    // ご当地グルメ図鑑に写真つきの料理があれば、そこから4品
+    var G = window.GOURMET && window.GOURMET[s.prefecture], FP = window.FOOD_PHOTOS || {};
+    if (G) { var withPh = G.filter(function (d) { return FP[d[0]]; }).map(function (d) { return d[0]; }); if (withPh.length >= 4) meib = withPh.slice(0, 4); }
     if (!se && !meib.length) return wrap;
     var box = el('div', 'outing-food');
     box.append(el('p', 'outing-food-head', 'お参りのあとは、おいしいものも'));
@@ -568,6 +571,12 @@
     q.href = 'https://www.google.com/maps/search/' + encodeURIComponent('グルメ') + '/@' + s.lat + ',' + s.lon + ',15z';
     q.target = '_blank'; q.rel = 'noopener noreferrer'; q.setAttribute('data-track', 'food_search');
     box.append(q);
+    if (G && G.length > 4) {
+      var gi = Object.keys(window.GOURMET).indexOf(s.prefecture) + 1;
+      var more = el('a', 'food-more', s.prefecture + 'のご当地グルメをもっと見る（' + G.length + '品）');
+      more.href = 'gourmet.html#p-' + gi; more.setAttribute('data-track', 'gourmet_open');
+      box.append(more);
+    }
     if (credits.length) box.append(el('p', 'food-credit', '写真：Wikimedia Commons ／ ' + credits.join('、')));
     wrap.append(box);
     return wrap;

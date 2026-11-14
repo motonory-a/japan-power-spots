@@ -2,6 +2,8 @@
 module.exports = {
   meta: { htmlLang: 'ko', ogLocale: 'ko_KR' },
   page: {
+    gpText: "<span class=\"gp-text\"><span class=\"gp-kicker\">참배 후의 또 하나의 즐거움</span><span class=\"gp-title\">일본 지역 음식 도감</span><span class=\"gp-sub\">47개 도도부현, 300가지 이상의 요리를 사진으로</span><span class=\"gp-cta\">요리 보러 가기</span></span>",
+    gpAria: "aria-label=\"일본 지역 음식 도감\"",
     title: '<title>일본 파워스폿 여행 | 나와 맞는 신사·절·성지 찾기</title>',
     desc: '일본 여행을 계획 중인가요? 소원, 생일, 숙소 위치를 알려 주시면 일본 전통의 구성기학과 수비학으로 나에게 맞는 신사, 절, 신목, 폭포를 추천해 드립니다.',
     ogTitle: '일본 파워스폿 여행 | 나만의 일본 성지 찾기',
@@ -186,6 +188,7 @@ module.exports = {
       notLuckyDay: '이날은 당신에게 길한 방위가 아닙니다', notLuckyMonth: '이번 달은 당신에게 길한 방위가 아닙니다', luckyAgain: '. {d}부터 다시 길한 방위',
       onThatDay: '(그날)', forYouThisMonth: '(이번 달)',
       matchesWish: '소원과 맞음: {w}', resonates: '당신의 수비학 숫자 {n}({t})과 어울림', tradFor: '예로부터 비는 소원: {w}',
+      foodMore: '{pref}의 지역 음식 {n}가지 모두 보기',
       foodHead: '맛집 여행도 함께', foodLocal: '지역 명물', foodLocalOf: '{pref}의 명물', foodSeason: '제철 음식', foodAlso: '그 밖에: ', foodMaps: 'Google 지도에서 근처 평점 좋은 식당 찾기', foodMapsQ: '식당', foodPhotos: '사진: Wikimedia Commons /',
       checkedOfficial: '공식 사이트에서 정보 확인함', goodDays: '가기 좋은 날:', checkThisDay: '이날의 스폿 보기',
       directionsGM: '길찾기(Google 지도)', directions: '길찾기', officialSite: '공식 사이트',

@@ -15,6 +15,8 @@ const LANGS = ['zh', 'ko', 'fr', 'es'];
 
 // 英語版の文章（en/index.html にそのままの形である部分）
 const PAGE = {
+  gpText: "<span class=\"gp-text\"><span class=\"gp-kicker\">One more joy of the trip</span><span class=\"gp-title\">Local Food Guide</span><span class=\"gp-sub\">300+ dishes from all 47 prefectures, in photos</span><span class=\"gp-cta\">See the dishes</span></span>",
+  gpAria: "aria-label=\"Local Food Guide\"",
   title: '<title>Japan Power Spot Journey | Find shrines, temples &amp; sacred nature that match you</title>',
   desc: 'Visiting Japan? Tell us your wish, your birthday and where you are staying. We suggest shrines, temples, sacred trees and waterfalls that suit you, using Japanese Nine Star Ki and numerology.',
   ogTitle: 'Japan Power Spot Journey | Find your sacred place in Japan',

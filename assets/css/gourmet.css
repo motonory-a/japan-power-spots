@@ -1,0 +1,43 @@
+/* ご当地グルメ図鑑 */
+.g-page{background:#FFFBF4;color:#3a2a1e;margin:0;font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6}
+.g-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px;font-size:13px;background:#fff;border-bottom:1px solid #F0E2C8;flex-wrap:wrap}
+.g-head a{color:#62409C;text-decoration:none;font-weight:600}
+.g-head .g-langs a{margin-left:10px;font-weight:500}
+.g-hero{position:relative;max-width:1100px;margin:0 auto;padding:22px 16px 6px;text-align:center}
+.g-mosaic{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;border-radius:16px;overflow:hidden;margin:0 0 16px}
+.g-mosaic img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;filter:brightness(1.05) saturate(1.08)}
+@media (max-width:640px){.g-mosaic{grid-template-columns:repeat(3,1fr)}}
+.g-hero h1{margin:0;font-family:"Shippori Mincho",serif;font-size:clamp(26px,6vw,40px);color:#3F2A5E;letter-spacing:.04em}
+.g-lead{margin:6px auto 0;max-width:640px;font-size:15px}
+.g-lead strong{color:#C0392B;font-size:1.25em}
+#gourmet{max-width:1100px;margin:0 auto;padding:6px 12px 40px}
+.g-bar{position:sticky;top:0;z-index:5;background:rgba(255,251,244,.96);backdrop-filter:blur(6px);padding:10px 0 8px;margin-bottom:4px}
+.g-search{width:100%;box-sizing:border-box;font-size:16px;padding:11px 14px;border:1.5px solid #E5CFA6;border-radius:12px;background:#fff}
+.g-chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}
+.g-chip{flex:0 0 auto;border:1px solid #E5CFA6;background:#fff;color:#5a4330;border-radius:999px;padding:6px 13px;font-size:13.5px;cursor:pointer}
+.g-chip.on{background:#C0392B;border-color:#C0392B;color:#fff;font-weight:700}
+.g-status{margin:4px 2px;font-size:13px;color:#7a6250;min-height:1em}
+.g-pref{scroll-margin-top:120px;margin:22px 0 8px}
+.g-pref-name{display:flex;align-items:baseline;gap:10px;margin:0 2px 10px;font-family:"Shippori Mincho",serif;font-size:22px;color:#3F2A5E;border-bottom:2px solid #F0D9B0;padding-bottom:4px}
+.g-pref-count{font-family:system-ui,sans-serif;font-size:13px;color:#a0784a;font-weight:600}
+.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+@media (max-width:560px){.g-grid{grid-template-columns:repeat(2,1fr);gap:9px}}
+.g-card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #F0E2C8;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(120,80,30,.06)}
+.g-card[hidden]{display:none}
+.g-photo{display:block;background:#f3ece0}
+.g-photo img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(1.04) saturate(1.06);transition:transform .25s}
+.g-card:hover .g-photo img{transform:scale(1.03)}
+.g-body{padding:9px 11px 10px;display:flex;flex-direction:column;flex:1}
+.g-name{margin:0;font-size:15.5px;line-height:1.35;color:#3a2a1e}
+.g-sub{margin:1px 0 0;font-size:12px;color:#8a7260}
+.g-desc{margin:4px 0 8px;font-size:13px;color:#5a4636;line-height:1.55;flex:1}
+.g-maps{align-self:flex-start;font-size:12.5px;color:#C0392B;text-decoration:none;font-weight:700;border:1px solid #F2C9C2;border-radius:999px;padding:3px 10px}
+.g-maps::before{content:"📍 "}
+.g-credit{margin:6px 0 0;font-size:10px;color:#a8988a;line-height:1.4;word-break:break-word}
+.g-card.no-photo .g-body{padding-top:14px}
+.g-go{display:inline-block;margin:12px 2px 0;color:#62409C;font-weight:700;text-decoration:none;font-size:14px}
+.g-go::after{content:" →"}
+.g-none{text-align:center;color:#7a6250;margin:30px 0}
+.g-top{position:fixed;right:14px;bottom:16px;background:#3F2A5E;color:#fff;text-decoration:none;font-size:13px;padding:8px 12px;border-radius:999px;opacity:.85}
+.g-foot{max-width:1100px;margin:0 auto;padding:16px;font-size:12px;color:#8a7260;border-top:1px solid #F0E2C8}
+.g-foot a{color:#62409C}

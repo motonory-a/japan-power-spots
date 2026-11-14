@@ -2,6 +2,8 @@
 module.exports = {
   meta: { htmlLang: 'es', ogLocale: 'es_ES' },
   page: {
+    gpText: "<span class=\"gp-text\"><span class=\"gp-kicker\">Otro placer del viaje</span><span class=\"gp-title\">Guía de comida local</span><span class=\"gp-sub\">Más de 300 platos de las 47 prefecturas, en fotos</span><span class=\"gp-cta\">Ver los platos</span></span>",
+    gpAria: "aria-label=\"Guía de comida local\"",
     title: '<title>Viaje a los lugares sagrados de Japón | Santuarios, templos y naturaleza sagrada para ti</title>',
     desc: '¿Viajas a Japón? Cuéntanos tu deseo, tu fecha de nacimiento y dónde te alojas. Te sugerimos santuarios, templos, árboles sagrados y cascadas que van contigo, según el Ki de las Nueve Estrellas japonés y la numerología.',
     ogTitle: 'Viaje a los lugares sagrados de Japón | Encuentra tu lugar sagrado',
@@ -178,6 +180,7 @@ module.exports = {
       notLuckyDay: 'No es una dirección favorable para ti ese día', notLuckyMonth: 'No es una dirección favorable para ti este mes', luckyAgain: '. Vuelve a ser favorable desde el {d}',
       onThatDay: ' ese día', forYouThisMonth: ' para ti este mes',
       matchesWish: 'Coincide con tu deseo: {w}', resonates: 'Conecta con tu número del camino de vida {n} ({t})', tradFor: 'Se visita tradicionalmente para: {w}',
+      foodMore: 'Ver los {n} platos locales de {pref}',
       foodHead: 'Conviértelo también en un viaje gastronómico', foodLocal: 'Especialidades locales', foodLocalOf: 'Especialidades de {pref}', foodSeason: 'De temporada', foodAlso: 'También: ', foodMaps: 'Buscar sitios bien valorados cerca (Google Maps)', foodMapsQ: 'restaurantes', foodPhotos: 'Fotos: Wikimedia Commons /',
       checkedOfficial: 'Datos comprobados en la web oficial', goodDays: 'Buenos días para ir:', checkThisDay: 'Ver lugares para este día',
       directionsGM: 'Cómo llegar (Google Maps)', directions: 'Cómo llegar', officialSite: 'Web oficial',

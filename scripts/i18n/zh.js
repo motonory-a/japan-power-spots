@@ -2,6 +2,8 @@
 module.exports = {
   meta: { htmlLang: 'zh-Hant', ogLocale: 'zh_TW' },
   page: {
+    gpText: "<span class=\"gp-text\"><span class=\"gp-kicker\">參拜之後的另一種樂趣</span><span class=\"gp-title\">日本在地美食圖鑑</span><span class=\"gp-sub\">用照片看47都道府縣、300道以上的料理</span><span class=\"gp-cta\">看看料理</span></span>",
+    gpAria: "aria-label=\"日本在地美食圖鑑\"",
     title: '<title>日本能量景點之旅｜找到與你相合的神社、寺院與聖地</title>',
     desc: '要去日本旅行嗎？告訴我們你的心願、生日和住宿地點，我們會用日本傳統的九星氣學與生命靈數，為你推薦合適的神社、寺院、神木和瀑布。',
     ogTitle: '日本能量景點之旅｜找到屬於你的日本聖地',
@@ -186,6 +188,7 @@ module.exports = {
       notLuckyDay: '這一天不是你的吉方位', notLuckyMonth: '本月不是你的吉方位', luckyAgain: '。{d}起再次成為吉方位',
       onThatDay: '（當天）', forYouThisMonth: '（本月）',
       matchesWish: '符合你的心願：{w}', resonates: '與你的生命靈數 {n}（{t}）相呼應', tradFor: '自古以來祈求：{w}',
+      foodMore: '看{pref}的全部 {n} 道在地美食',
       foodHead: '順便來趟美食之旅', foodLocal: '當地名產', foodLocalOf: '{pref}的名產', foodSeason: '當季美味', foodAlso: '其他：', foodMaps: '在 Google 地圖找附近評價好的餐廳', foodMapsQ: '餐廳', foodPhotos: '照片：Wikimedia Commons /',
       checkedOfficial: '資訊已在官方網站確認', goodDays: '適合出發的日子：', checkThisDay: '查看這一天的景點',
       directionsGM: '路線（Google 地圖）', directions: '路線', officialSite: '官方網站',
