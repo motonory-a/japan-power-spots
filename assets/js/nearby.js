@@ -31,21 +31,25 @@
     }
     if (!best) return null;
     var clean = function (x) { return x.replace(/[（(][^)）]*[)）]$/, ''); };
-    var lines = [];
-    best[3].forEach(function (k) { var n = clean(S.l[k]); if (lines.indexOf(n) === -1) lines.push(n); });
-    return { name: clean(best[0]), km: bd, lines: lines };
+    var lines = [], linesEn = [];
+    best[3].forEach(function (k) {
+      var n = clean(S.l[k]); if (lines.indexOf(n) !== -1) return;
+      lines.push(n); linesEn.push((S.le && S.le[k]) || n);
+    });
+    return { name: clean(best[0]), kana: best[4] || '', en: best[5] || '', km: bd, lines: lines, linesEn: linesEn };
   }
   var T = {
     ja: function (n) {
       var lines = n.lines.slice(0, 2).join('・') + (n.lines.length > 2 ? 'ほか' : '');
       var dist = n.km < 0.1 ? 'すぐ近く' : '直線で約' + Math.round(n.km * 10) / 10 + 'km';
       var walk = n.km <= 2.5 ? '・歩いて約' + Math.max(1, Math.round(n.km * 1.25 / 0.08)) + '分（目安）' : '（バスやタクシーが便利です）';
-      return { label: '最寄り駅', text: lines + '　' + n.name + '駅', sub: dist + walk };
+      var yomi = [n.kana, n.en].filter(Boolean).join('／');
+      return { label: '最寄り駅', text: lines + '　' + n.name + '駅' + (yomi ? '（' + yomi + '）' : ''), sub: dist + walk };
     },
     en: function (n) {
-      var lines = n.lines.slice(0, 2).join(' / ') + (n.lines.length > 2 ? ' and more' : '');
+      var lines = n.linesEn.slice(0, 2).join(' / ') + (n.lines.length > 2 ? ' and more' : '');
       var walk = n.km <= 2.5 ? ' · about ' + Math.max(1, Math.round(n.km * 1.25 / 0.08)) + ' min walk' : ' · bus or taxi recommended';
-      return { label: 'Nearest station', text: n.name + ' Station (' + lines + ')', sub: 'About ' + (Math.round(n.km * 10) / 10) + ' km in a straight line' + walk };
+      return { label: 'Nearest station', text: (n.en || n.name) + ' Station' + (n.en ? ' (' + n.name + '駅)' : '') + ' · ' + lines, sub: 'About ' + (Math.round(n.km * 10) / 10) + ' km in a straight line' + walk };
     }
   };
   // 駅から5km以上離れているときは、駅名を出さずに案内だけ（山越えの駅を「最寄り」と出さないため）
