@@ -434,6 +434,9 @@ G = {
 
 # 新しく写真を足した料理（名前 → ファイル名, 撮影者, ライセンス）
 NEW = {
+ '白えび': ('Siroebi_siraebi_gunkan_sushi.jpg', "7'o'7", 'CC BY-SA 3.0'),
+ 'オリーブハマチ': ('ハマチ刺身_(1690547276).jpg', 'ketou-daisuki', 'CC BY-SA 2.0'),
+ '呼子のイカ': ('Yobuko_Squid_Drying_02.jpg', 'STA3816', 'CC BY-SA 3.0'),
  '石狩鍋': ('Ishikari_nabe_by_Adonis_Chen_in_Hokkaido.jpg', 'Adonis Chen', 'CC BY 2.0'),
  'ちゃんちゃん焼き': ('Grilled_Fish_HokkeChanChanYaki.jpg', 'サフィル', 'CC BY-SA 4.0'),
  '松前漬け': ('Matsumaezuke_001.jpg', 'Ocdp', 'CC0'),
