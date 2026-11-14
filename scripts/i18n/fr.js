@@ -177,6 +177,7 @@ module.exports = {
       notLuckyDay: 'Direction défavorable pour vous ce jour-là', notLuckyMonth: 'Direction défavorable pour vous ce mois-ci', luckyAgain: '. De nouveau favorable à partir du {d}',
       onThatDay: ' ce jour-là', forYouThisMonth: ' pour vous ce mois-ci',
       matchesWish: 'Correspond à votre vœu : {w}', resonates: 'En résonance avec votre chemin de vie {n} ({t})', tradFor: 'Traditionnellement visité pour : {w}',
+      foodHead: 'Et pourquoi pas un voyage gourmand ?', foodLocal: 'Spécialités locales', foodLocalOf: 'Spécialités de {pref}', foodSeason: 'De saison', foodAlso: 'Aussi : ', foodMaps: 'Trouver de bonnes adresses à proximité (Google Maps)', foodMapsQ: 'restaurants', foodPhotos: 'Photos : Wikimedia Commons /',
       checkedOfficial: 'Informations vérifiées sur le site officiel', goodDays: 'Bons jours pour y aller :', checkThisDay: 'Voir les lieux pour ce jour',
       directionsGM: 'Itinéraire (Google Maps)', directions: 'Itinéraire', officialSite: 'Site officiel',
       photoOf: 'Photo de {n}', photoCredit: 'Photo : {a} / {l} (Wikimedia Commons)',

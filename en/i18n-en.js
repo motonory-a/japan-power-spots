@@ -247,6 +247,7 @@ EN.ui = {
   notLuckyDay: 'Not a lucky direction for you on that day', notLuckyMonth: 'Not a lucky direction for you this month', luckyAgain: '. Lucky again from {d}',
   onThatDay: ' on that day', forYouThisMonth: ' for you this month',
   matchesWish: 'Matches your wish: {w}', resonates: 'Resonates with your life path number {n} ({t})', tradFor: 'Traditionally visited for: {w}',
+  foodHead: 'Make it a food trip too', foodLocal: 'Local specialties', foodLocalOf: 'Local specialties of {pref}', foodSeason: 'In season', foodAlso: 'Also: ', foodMaps: 'Find well-rated places nearby (Google Maps)', foodMapsQ: 'restaurants', foodPhotos: 'Photos: Wikimedia Commons /',
   checkedOfficial: 'Details checked on the official website', goodDays: 'Good days to go:', checkThisDay: 'Check spots for this day',
   directionsGM: 'Directions (Google Maps)', directions: 'Directions', officialSite: 'Official site',
   photoOf: 'Photo of {n}', photoCredit: 'Photo: {a} / {l} (Wikimedia Commons)',

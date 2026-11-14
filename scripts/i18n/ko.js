@@ -186,6 +186,7 @@ module.exports = {
       notLuckyDay: '이날은 당신에게 길한 방위가 아닙니다', notLuckyMonth: '이번 달은 당신에게 길한 방위가 아닙니다', luckyAgain: '. {d}부터 다시 길한 방위',
       onThatDay: '(그날)', forYouThisMonth: '(이번 달)',
       matchesWish: '소원과 맞음: {w}', resonates: '당신의 수비학 숫자 {n}({t})과 어울림', tradFor: '예로부터 비는 소원: {w}',
+      foodHead: '맛집 여행도 함께', foodLocal: '지역 명물', foodLocalOf: '{pref}의 명물', foodSeason: '제철 음식', foodAlso: '그 밖에: ', foodMaps: 'Google 지도에서 근처 평점 좋은 식당 찾기', foodMapsQ: '식당', foodPhotos: '사진: Wikimedia Commons /',
       checkedOfficial: '공식 사이트에서 정보 확인함', goodDays: '가기 좋은 날:', checkThisDay: '이날의 스폿 보기',
       directionsGM: '길찾기(Google 지도)', directions: '길찾기', officialSite: '공식 사이트',
       photoOf: '{n} 사진', photoCredit: '사진: {a} / {l} (Wikimedia Commons)',

@@ -470,30 +470,35 @@
       }
     }
 
-    if (LANG === 'en' && window.Food) {
+    if (window.Food) {
+      var mon = parseInt(String(ctx.tripDate || today()).slice(5, 7), 10);
       var fe = Food.meibutsu(s.prefecture, 'en');
-      var se = Food.seasonal(s.prefecture, parseInt(String(ctx.tripDate || today()).slice(5, 7), 10), 'en');
+      var se = Food.seasonal(s.prefecture, mon, 'en');
+      var sj = Food.seasonal(s.prefecture, mon);
+      var fj = Food.meibutsu(s.prefecture);
+      // 中国語版は漢字の日本語名のほうが伝わる。ほかは英語名
+      var lab = function (ja, en) { return LANG === 'zh' ? ja : en; };
       if (fe.length) {
         var fb = el('div', 'en-food');
-        fb.append(el('p', 'en-food-head', 'Make it a food trip too'));
+        fb.append(el('p', 'en-food-head', U('foodHead')));
         var cr = [];
         var addSec = function (title, jaNames, enNames) {
           fb.append(el('p', 'en-food-sub', title));
-          if (window.Nearby) { var t = Nearby.foodTiles(jaNames, enNames, 'en'); fb.append(t.el); if (t.credit) cr.push(t.credit); }
-          else fb.append(el('p', null, enNames.join(SEP)));
+          if (window.Nearby) { var t = Nearby.foodTiles(jaNames, lab(jaNames, enNames), LANG, U('foodAlso')); fb.append(t.el); if (t.credit) cr.push(t.credit); }
+          else fb.append(el('p', null, lab(jaNames, enNames).join(SEP)));
         };
-        addSec('Local specialties' + (EN.prefectures[s.prefecture_code] ? ' of ' + EN.prefectures[s.prefecture_code] : ''), Food.meibutsu(s.prefecture), fe);
-        var sj = Food.seasonal(s.prefecture, parseInt(String(ctx.tripDate || today()).slice(5, 7), 10));
-        if (se && sj) addSec('In season (' + se.season + ', ' + se.region + ')', sj.items, se.items);
-        var fl = link('https://www.google.com/maps/search/restaurants/@' + s.lat + ',' + s.lon + ',15z', 'Find well-rated places nearby (Google Maps)', 'en-food-link');
+        var pn = EN.prefectures[s.prefecture_code] || '';
+        addSec(pn ? U('foodLocalOf', { pref: pn }) : U('foodLocal'), fj, fe);
+        if (se && sj) addSec(LANG === 'en' ? 'In season (' + se.season + ', ' + se.region + ')' : U('foodSeason'), sj.items, se.items);
+        var fl = link('https://www.google.com/maps/search/' + encodeURIComponent(U('foodMapsQ')) + '/@' + s.lat + ',' + s.lon + ',15z', U('foodMaps'), 'en-food-link');
         fl.setAttribute('data-track', 'food_search');
         fb.append(fl);
-        if (cr.length) fb.append(el('p', 'food-credit', 'Photos: Wikimedia Commons / ' + cr.join(', ')));
+        if (cr.length) fb.append(el('p', 'food-credit', U('foodPhotos') + ' ' + cr.join(', ')));
         body.append(fb);
       }
     }
 
-    if (LANG === 'en' && window.Nearby) { var est = el('p', 'en-station'); body.append(est); Nearby.station(est, s, 'en'); }
+    if (window.Nearby) { var est = el('p', 'en-station'); body.append(est); Nearby.station(est, s, LANG); }
     var btns = el('div', 'en-btns');
     btns.append(link(gmapsDir(ctx.origin, s, ctx.mode), U('directionsGM'), 'btn-main en-btn'));
     var w = enWiki(s.wikidata);

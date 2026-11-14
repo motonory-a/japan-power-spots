@@ -178,6 +178,7 @@ module.exports = {
       notLuckyDay: 'No es una dirección favorable para ti ese día', notLuckyMonth: 'No es una dirección favorable para ti este mes', luckyAgain: '. Vuelve a ser favorable desde el {d}',
       onThatDay: ' ese día', forYouThisMonth: ' para ti este mes',
       matchesWish: 'Coincide con tu deseo: {w}', resonates: 'Conecta con tu número del camino de vida {n} ({t})', tradFor: 'Se visita tradicionalmente para: {w}',
+      foodHead: 'Conviértelo también en un viaje gastronómico', foodLocal: 'Especialidades locales', foodLocalOf: 'Especialidades de {pref}', foodSeason: 'De temporada', foodAlso: 'También: ', foodMaps: 'Buscar sitios bien valorados cerca (Google Maps)', foodMapsQ: 'restaurantes', foodPhotos: 'Fotos: Wikimedia Commons /',
       checkedOfficial: 'Datos comprobados en la web oficial', goodDays: 'Buenos días para ir:', checkThisDay: 'Ver lugares para este día',
       directionsGM: 'Cómo llegar (Google Maps)', directions: 'Cómo llegar', officialSite: 'Web oficial',
       photoOf: 'Foto de {n}', photoCredit: 'Foto: {a} / {l} (Wikimedia Commons)',

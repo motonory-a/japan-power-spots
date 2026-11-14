@@ -52,10 +52,27 @@
       return { label: 'Nearest station', text: (n.en || n.name) + ' Station' + (n.en ? ' (' + n.name + '駅)' : '') + ' · ' + lines, sub: 'About ' + (Math.round(n.km * 10) / 10) + ' km in a straight line' + walk };
     }
   };
+  // 中国語・韓国語・フランス語・スペイン語（駅名はローマ字＋漢字、路線は中国語だけ日本語表記のまま）
+  function mk(o) {
+    return function (n) {
+      var km = Math.round(n.km * 10) / 10, min = Math.max(1, Math.round(n.km * 1.25 / 0.08));
+      var ls = (o.jaLines ? n.lines : n.linesEn).slice(0, 2).join(o.jaLines ? '・' : ' / ') + (n.lines.length > 2 ? o.more : '');
+      var name = o.jaLines ? n.name + '站' + (n.en ? '（' + n.en + '）' : '') : (n.en || n.name) + ' (' + n.name + '駅)';
+      return { label: o.label, text: name + ' · ' + ls, sub: o.dist(km) + (n.km <= 2.5 ? o.walk(min) : o.bus) };
+    };
+  }
+  T.zh = mk({ jaLines: true, label: '最近車站', more: '等', dist: function (k) { return '直線距離約' + k + '公里'; }, walk: function (m) { return '・步行約' + m + '分鐘（參考）'; }, bus: '・建議搭公車或計程車' });
+  T.ko = mk({ label: '가까운 역', more: ' 외', dist: function (k) { return '직선거리 약 ' + k + 'km'; }, walk: function (m) { return ' · 걸어서 약 ' + m + '분(기준)'; }, bus: ' · 버스나 택시가 편해요' });
+  T.fr = mk({ label: 'Gare la plus proche', more: ' et autres', dist: function (k) { return 'Environ ' + String(k).replace('.', ',') + ' km à vol d’oiseau'; }, walk: function (m) { return ' · environ ' + m + ' min à pied'; }, bus: ' · bus ou taxi conseillé' });
+  T.es = mk({ label: 'Estación más cercana', more: ' y otras', dist: function (k) { return 'Unos ' + String(k).replace('.', ',') + ' km en línea recta'; }, walk: function (m) { return ' · unos ' + m + ' min a pie'; }, bus: ' · mejor en autobús o taxi' });
   // 駅から5km以上離れているときは、駅名を出さずに案内だけ（山越えの駅を「最寄り」と出さないため）
   var FAR = {
     ja: { label: '公共交通', text: '鉄道の駅からは離れています（直線で5km以上）', sub: 'バスやタクシー、車での参拝がおすすめです' },
-    en: { label: 'Getting there', text: 'More than 5 km from the nearest train station', sub: 'A bus, taxi or car is the easiest way' }
+    en: { label: 'Getting there', text: 'More than 5 km from the nearest train station', sub: 'A bus, taxi or car is the easiest way' },
+    zh: { label: '交通方式', text: '距離鐵路車站超過5公里', sub: '建議搭公車、計程車或開車前往' },
+    ko: { label: '가는 방법', text: '기차역에서 5km 이상 떨어져 있어요', sub: '버스, 택시, 자동차가 편해요' },
+    fr: { label: 'Accès', text: 'À plus de 5 km de la gare la plus proche', sub: 'Le plus simple : bus, taxi ou voiture' },
+    es: { label: 'Cómo llegar', text: 'A más de 5 km de la estación de tren más cercana', sub: 'Lo más cómodo es ir en autobús, taxi o coche' }
   };
   function station(el, spot, lang) {
     if (!el || !spot || spot.lat == null) return;
@@ -65,7 +82,7 @@
       if (!n) return;
       var t = n.km > 5 ? (FAR[lang] || FAR.ja) : (T[lang] || T.ja)(n);
       el.replaceChildren();
-      var b = document.createElement('b'); b.textContent = t.label + (lang === 'en' ? ': ' : '：');
+      var b = document.createElement('b'); b.textContent = t.label + (lang === 'ja' || lang === 'zh' ? '：' : ': ');
       var main = document.createElement('span'); main.className = 'st-name'; main.textContent = t.text;
       var sub = document.createElement('span'); sub.className = 'st-sub'; sub.textContent = t.sub;
       el.append(b, main, sub);
@@ -75,8 +92,8 @@
 
   // 食べ物の写真タイル。names は日本語名（写真データのキー）、labels は表示名。
   // 写真のあるものを最大3つタイルにし、写真のないものは下に名前だけ並べる
-  function foodTiles(names, labels, lang) {
-    var P = root.FOOD_PHOTOS || {}, en = lang === 'en';
+  function foodTiles(names, labels, lang, also) {
+    var P = root.FOOD_PHOTOS || {}, en = lang && lang !== 'ja';
     var wrap = document.createElement('div'); wrap.className = 'food-tiles-wrap';
     var grid = document.createElement('div'); grid.className = 'food-tiles';
     var credits = [], rest = [];
@@ -96,7 +113,7 @@
     if (grid.children.length) wrap.append(grid);
     if (rest.length) {
       var r = document.createElement('p'); r.className = 'food-rest';
-      r.textContent = (grid.children.length ? (en ? 'Also: ' : 'ほかに：') : '') + rest.join(en ? ', ' : '・');
+      r.textContent = (grid.children.length ? (also || (en ? 'Also: ' : 'ほかに：')) : '') + rest.join(en ? ', ' : '・');
       wrap.append(r);
     }
     return { el: wrap, credit: credits.join(en ? ', ' : '、') };

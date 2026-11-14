@@ -186,6 +186,7 @@ module.exports = {
       notLuckyDay: '這一天不是你的吉方位', notLuckyMonth: '本月不是你的吉方位', luckyAgain: '。{d}起再次成為吉方位',
       onThatDay: '（當天）', forYouThisMonth: '（本月）',
       matchesWish: '符合你的心願：{w}', resonates: '與你的生命靈數 {n}（{t}）相呼應', tradFor: '自古以來祈求：{w}',
+      foodHead: '順便來趟美食之旅', foodLocal: '當地名產', foodLocalOf: '{pref}的名產', foodSeason: '當季美味', foodAlso: '其他：', foodMaps: '在 Google 地圖找附近評價好的餐廳', foodMapsQ: '餐廳', foodPhotos: '照片：Wikimedia Commons /',
       checkedOfficial: '資訊已在官方網站確認', goodDays: '適合出發的日子：', checkThisDay: '查看這一天的景點',
       directionsGM: '路線（Google 地圖）', directions: '路線', officialSite: '官方網站',
       photoOf: '{n}的照片', photoCredit: '照片：{a} / {l}（Wikimedia Commons）',
