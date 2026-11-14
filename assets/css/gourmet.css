@@ -41,3 +41,25 @@
 .g-top{position:fixed;right:14px;bottom:16px;background:#3F2A5E;color:#fff;text-decoration:none;font-size:13px;padding:8px 12px;border-radius:999px;opacity:.85}
 .g-foot{max-width:1100px;margin:0 auto;padding:16px;font-size:12px;color:#8a7260;border-top:1px solid #F0E2C8}
 .g-foot a{color:#62409C}
+.g-name a{color:inherit;text-decoration:none}
+.g-name a:hover{text-decoration:underline}
+.g-photo{cursor:zoom-in}
+/* 写真を大きく見る */
+.g-view{width:min(94vw,760px);max-height:92vh;padding:0;border:0;border-radius:18px;overflow:auto;background:#FFFBF4;color:#3a2a1e;box-shadow:0 20px 60px rgba(40,20,10,.35)}
+.g-view::backdrop{background:rgba(30,18,10,.72)}
+.gv-photo{background:#2a1d14;line-height:0}
+.gv-photo img{display:block;width:100%;max-height:62vh;object-fit:contain;margin:0 auto}
+.gv-close{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:24px;line-height:1;cursor:pointer}
+.gv-nav{position:absolute;top:28%;width:42px;height:54px;border:0;background:rgba(0,0,0,.45);color:#fff;font-size:30px;line-height:1;cursor:pointer}
+.gv-prev{left:0;border-radius:0 10px 10px 0}
+.gv-next{right:0;border-radius:10px 0 0 10px}
+.gv-nav[hidden]{display:none}
+.gv-body{padding:14px 18px 18px}
+.gv-pref{margin:0;font-size:13px;color:#a0784a;font-weight:700}
+.gv-name{margin:2px 0 0;font-family:"Shippori Mincho",serif;font-size:24px;color:#3F2A5E;line-height:1.3}
+.gv-sub{margin:2px 0 0;font-size:13px;color:#8a7260}
+.gv-desc{margin:8px 0 12px;font-size:15px;line-height:1.7}
+.gv-links{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.gv-links .g-go{margin:0}
+.gv-credit{margin:14px 0 0;font-size:11px;color:#a8988a;word-break:break-word}
+.gv-credit a{color:#8a7260}

@@ -101,7 +101,8 @@
       var p = P[n], label = (labels && labels[i]) || n;
       if (!p || grid.children.length >= (max || 4)) { rest.push(label); return; }
       var tile = document.createElement('a');
-      tile.className = 'food-tile'; tile.href = p[1]; tile.target = '_blank'; tile.rel = 'noopener noreferrer';
+      // 写真を押すと、同じ言語のグルメ図鑑でその料理を大きく表示する（Commons の英語ページへは飛ばさない）
+      tile.className = 'food-tile'; tile.href = 'gourmet.html#d=' + encodeURIComponent(n) + (label !== n ? '&l=' + encodeURIComponent(label) : ''); tile.setAttribute('data-track', 'gourmet_open');
       tile.title = (p[2] ? p[2] + ' / ' : '') + p[3] + ' (Wikimedia Commons)';
       var img = document.createElement('img');
       img.src = p[0]; img.alt = label; img.loading = 'lazy'; img.decoding = 'async';
