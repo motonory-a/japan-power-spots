@@ -30,14 +30,90 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "開運パワースポット巡り",
-  "url": "https://motonory-a.github.io/japan-power-spots/",
-  "description": "次のお休み、どこに行こうか？運命の聖地を簡単検索。生年月日とお住まいから、九星気学と数秘であなたに合う全国のパワースポットを探せるサイトです。",
-  "inLanguage": "ja",
-  "image": "https://motonory-a.github.io/japan-power-spots/assets/img/hero-1200.jpg",
-  "publisher": { "@type": "Person", "name": "アッキー" }
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://motonory-a.github.io/japan-power-spots/#site",
+   "name": "開運パワースポット巡り",
+   "url": "https://motonory-a.github.io/japan-power-spots/",
+   "inLanguage": [
+    "ja",
+    "en",
+    "zh-Hant",
+    "ko",
+    "fr",
+    "es"
+   ],
+   "publisher": {
+    "@id": "https://motonory-a.github.io/japan-power-spots/#akki"
+   }
+  },
+  {
+   "@type": "WebApplication",
+   "@id": "https://motonory-a.github.io/japan-power-spots/#app",
+   "name": "開運パワースポット巡り",
+   "alternateName": [
+    "Japan Power Spot Journey",
+    "日本全国パワースポット巡り"
+   ],
+   "url": "https://motonory-a.github.io/japan-power-spots/",
+   "description": "生年月日とお住まいから、九星気学と数秘をもとに、あなたに合う日本全国のパワースポットを探せる無料サイト。全国約9.6万件のスポット検索、今日の運命の聖地、ご当地グルメ図鑑も。",
+   "applicationCategory": "TravelApplication",
+   "operatingSystem": "Web",
+   "browserRequirements": "JavaScript",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+   },
+   "inLanguage": [
+    "ja",
+    "en",
+    "zh-Hant",
+    "ko",
+    "fr",
+    "es"
+   ],
+   "author": {
+    "@id": "https://motonory-a.github.io/japan-power-spots/#akki"
+   },
+   "publisher": {
+    "@id": "https://motonory-a.github.io/japan-power-spots/#akki"
+   },
+   "isRelatedTo": [
+    {
+     "@type": "WebApplication",
+     "name": "魂の系統鑑定",
+     "url": "https://motonory-a.github.io/my-first-project/"
+    },
+    {
+     "@type": "WebApplication",
+     "name": "開運！吉方位　引越しナビ",
+     "url": "https://motonory-a.github.io/kippoui-hikkoshi/"
+    }
+   ],
+   "image": "https://motonory-a.github.io/japan-power-spots/assets/img/hero-1200.jpg"
+  },
+  {
+   "@type": "Person",
+   "@id": "https://motonory-a.github.io/japan-power-spots/#akki",
+   "name": "高次元ネゴシエイター アッキー",
+   "alternateName": [
+    "アッキー",
+    "Akki, the Higher-Dimensional Negotiator"
+   ],
+   "description": "東京を拠点に、日本の聖地を案内しています。A Tokyo-based spiritual guide to Japan's sacred places.",
+   "sameAs": [
+    "https://note.com/nigihayahi03/m/me5c3d299b032",
+    "https://x.com/nigihayahi03",
+    "https://www.youtube.com/@nigihayahi03/videos",
+    "https://www.instagram.com/nigihayahi03/",
+    "https://lin.ee/wHX3skr3"
+   ]
+  }
+ ]
 }
 </script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">

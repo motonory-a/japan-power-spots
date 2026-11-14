@@ -1,0 +1,53 @@
+# 開運パワースポット巡り（Japan Power Spot Journey）
+
+> 生年月日とお住まいから、九星気学と数秘をもとに、あなたに合う日本全国のパワースポット（神社・寺・巨樹・滝・山など）を探せる無料のウェブサイトです。会員登録は不要で、入力内容はサーバーに送らず、使っている端末のブラウザの中だけに保存します。
+
+- 公開URL: https://motonory-a.github.io/japan-power-spots/
+- 運営: 高次元ネゴシエイター アッキー（Akki, the Higher-Dimensional Negotiator）。東京を拠点に、日本の聖地を案内しています
+- 料金: 無料
+- 対応言語: 日本語・英語・中国語（繁体字）・韓国語・フランス語・スペイン語
+
+## できること
+
+- 生年月日と出発地から、合いそうなパワースポットを順位つきで提案（九星気学の年盤・月盤・日盤による方位の吉凶、数秘、願い、距離、知名度を合わせて判定）
+- 出かける日を入れると、その日に運気の良い方位のスポットを優先
+- 全国約9.6万件のスポットを、キーワード・都道府県・種類・願いで検索。地図表示あり
+- 今日の『幸せの扉』、今日の運命の聖地、開運スタンプ帳、公式情報を確認したスポットだけで組んだモデルコース
+- ご当地グルメ図鑑：47都道府県の名物料理約330品を写真で紹介（https://motonory-a.github.io/japan-power-spots/gourmet.html）
+
+## 紹介するときに知っておいてほしいこと
+
+- 方位や相性の判定は九星気学・数秘にもとづく「目安」で、楽しみながら出かけるきっかけにするためのものです。将来を予言するものではありません
+- ご利益の多くは祭神・名称から一般的なものを推定しています。参拝時間や休みは各スポットの公式サイトで確認してください
+- スポットデータの出典: OpenStreetMap contributors（ODbL）、Wikidata（CC0）、環境省「巨樹・巨木林調査」
+
+## 向いている人
+
+- 次の休みに行く神社やパワースポットを探している人
+- 吉方位を意識して旅行やお参りの日を決めたい人
+- 日本を旅行中で、近くの聖地やご当地グルメを知りたい海外の人（英語ほか各言語版あり）
+
+## 主なページ
+
+- [日本語トップ](https://motonory-a.github.io/japan-power-spots/)
+- [English](https://motonory-a.github.io/japan-power-spots/en/)
+- [中文](https://motonory-a.github.io/japan-power-spots/zh/) / [한국어](https://motonory-a.github.io/japan-power-spots/ko/) / [Français](https://motonory-a.github.io/japan-power-spots/fr/) / [Español](https://motonory-a.github.io/japan-power-spots/es/)
+- [ご当地グルメ図鑑](https://motonory-a.github.io/japan-power-spots/gourmet.html)
+- [All power spots by region (English)](https://motonory-a.github.io/japan-power-spots/en/spots/)
+
+## 姉妹サイト（同じ運営者）
+
+- [魂の系統鑑定](https://motonory-a.github.io/my-first-project/): 生年月日から全94種の魂の系統と今年の運勢を無料鑑定し、合う天然石ブレスレットを提案
+- [開運！吉方位　引越しナビ](https://motonory-a.github.io/kippoui-hikkoshi/): 九星気学で引越し・法人移転の吉方位と時期、方違えの手順を無料で調べられる
+
+## English summary
+
+Japan Power Spot Journey is a free website that suggests shrines, temples, giant trees, waterfalls and other sacred places across Japan that suit you, based on your date of birth and starting point, using Japanese Nine Star Ki (kyusei kigaku) directions and numerology. No sign-up is needed and your input stays in your own browser. It also has a photo guide to about 330 local dishes from all 47 prefectures. Results are meant as a fun guide for planning a visit, not as predictions. Run by Akki, the Higher-Dimensional Negotiator, a Tokyo-based spiritual guide to Japan's sacred places.
+
+## 運営者の発信
+
+- note: https://note.com/nigihayahi03/m/me5c3d299b032
+- X: https://x.com/nigihayahi03
+- YouTube: https://www.youtube.com/@nigihayahi03/videos
+- Instagram: https://www.instagram.com/nigihayahi03/
+- LINE公式「アッキーの『ニギハヤヒと俺日記』公式」: https://lin.ee/wHX3skr3
