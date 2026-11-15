@@ -81,3 +81,52 @@
 .g-card.no-photo .g-cap .g-name{color:#3F2A5E}
 .g-card.no-photo .g-cap .g-sub{color:#8a7260}
 .g-card.no-photo .g-cap .g-desc{display:block;margin-top:6px;font-size:12.5px;line-height:1.5;color:#5a4636}
+/* ===== 2026-11-15 種類・材料・旬・食べ方 ===== */
+.g-kinds{padding-top:4px}
+.g-kchip{font-size:13px;padding:5px 12px;background:#FFFBF3}
+.g-kchip.on{background:#2F5D50;border-color:#2F5D50;color:#fff}
+.gv-info{margin:4px 0 14px}
+.gv-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.gv-kind,.gv-season{font-size:12.5px;border-radius:999px;padding:3px 10px;font-weight:700}
+.gv-kind{background:#2F5D50;color:#fff}
+.gv-season{background:#FFF1D6;color:#8a5a00;border:1px solid #F0D08A}
+.gv-ing{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:10px}
+.gv-ing-t{font-size:12px;color:#8a7360;margin-right:4px}
+.gv-chip{font-size:12.5px;background:#F6EFE4;border:1px solid #E5D6BE;color:#5a4330;border-radius:6px;padding:2px 8px}
+.gv-chip.veg{background:#EEF6EC;border-color:#BFD8B8;color:#2F5D2A}
+.gv-tip{background:#FFF8E8;border-left:4px solid #E0A526;border-radius:8px;padding:10px 12px;margin:0 0 10px}
+.gv-tip strong{display:block;font-size:13px;color:#9a6b00;margin-bottom:3px}
+.gv-tip p{margin:0;font-size:14.5px;line-height:1.7}
+.gv-note{font-size:12px;color:#8a7360;line-height:1.6;margin:0}
+.g-read{max-width:1100px;margin:14px auto 4px;padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g-read-t{grid-column:1/-1;margin:0;font-size:13px;font-weight:700;color:#C0392B;letter-spacing:.05em}
+.g-read-card{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #EAD9BC;border-radius:14px;padding:8px;text-decoration:none;color:#3a2a1e;box-shadow:0 2px 8px rgba(120,80,30,.08)}
+.g-read-card img{width:64px;height:64px;object-fit:cover;border-radius:10px;flex:0 0 auto}
+.g-read-card b{display:block;font-size:14.5px;line-height:1.35}
+.g-read-card small{display:block;font-size:12px;color:#8a7360;line-height:1.4;margin-top:2px}
+@media (max-width:560px){.g-read{gap:8px}.g-read-card{flex-direction:column;align-items:stretch;padding:0;overflow:hidden;gap:0}.g-read-card img{width:100%;height:74px;border-radius:0}.g-read-card span{padding:7px 9px 9px}.g-read-card b{font-size:13.5px}.g-read-card small{font-size:11px}}
+/* 読みものページ */
+.fg-hero{min-height:52vh;display:flex;flex-direction:column;justify-content:flex-end;padding:28px 18px 26px;background-size:cover;background-position:center;color:#fff;text-align:center}
+.fg-hero h1{font-family:'Shippori Mincho',serif;font-size:clamp(28px,6vw,46px);margin:0 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.fg-hero .g-lead{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6);margin:0 auto;max-width:640px}
+.fg-toc{max-width:1000px;margin:16px auto 0;padding:0 14px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.fg-toc a{flex:0 0 auto;background:#fff;border:1px solid #EAD9BC;border-radius:999px;padding:6px 12px;font-size:13px;color:#5a4330;text-decoration:none}
+.fg-toc b{color:#C0392B;margin-right:6px}
+.fg-main{max-width:1000px;margin:0 auto;padding:10px 14px}
+.fg-item{display:grid;grid-template-columns:46% 1fr;gap:22px;align-items:center;padding:26px 0;border-bottom:1px solid #EFE2CC;scroll-margin-top:10px}
+.fg-item:nth-child(even) .fg-photo{order:2}
+.fg-photo{position:relative;display:block;border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:#EFE4D2;box-shadow:0 6px 20px rgba(90,50,20,.15)}
+.fg-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.fg-photo:hover img{transform:scale(1.04)}
+.fg-photo span{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12.5px;padding:3px 10px;border-radius:999px}
+.fg-num{margin:0;font-family:'Shippori Mincho',serif;font-size:30px;color:#E0A526;line-height:1}
+.fg-text h2{font-family:'Shippori Mincho',serif;font-size:clamp(20px,3.6vw,26px);margin:6px 0 10px;color:#3a2a1e;line-height:1.4}
+.fg-text p{font-size:15.5px;line-height:1.9;margin:0 0 10px;color:#3a2a1e}
+.fg-links{display:flex;flex-wrap:wrap;gap:8px}
+.fg-links a{font-size:13.5px;background:#C0392B;color:#fff;text-decoration:none;border-radius:999px;padding:5px 12px}
+.fg-text p.fg-credit{font-size:11px;color:#9a8670;line-height:1.5}
+.fg-credit a{color:inherit}
+.fg-next{max-width:1000px;margin:20px auto;padding:0 14px;display:grid;gap:10px}
+.fg-next p{margin:0;font-weight:700;color:#C0392B;font-size:13px}
+.fg-card{display:block;background:#fff;border:1px solid #EAD9BC;border-radius:14px;padding:14px 16px;color:#3a2a1e;text-decoration:none;font-weight:700}
+@media (max-width:700px){.fg-item{grid-template-columns:1fr;gap:12px}.fg-item:nth-child(even) .fg-photo{order:0}.fg-hero{min-height:44vh}}

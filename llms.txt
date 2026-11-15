@@ -32,7 +32,9 @@
 - [日本語トップ](https://motonory-a.github.io/japan-power-spots/)
 - [English](https://motonory-a.github.io/japan-power-spots/en/)
 - [中文](https://motonory-a.github.io/japan-power-spots/zh/) / [한국어](https://motonory-a.github.io/japan-power-spots/ko/) / [Français](https://motonory-a.github.io/japan-power-spots/fr/) / [Español](https://motonory-a.github.io/japan-power-spots/es/)
-- [ご当地グルメ図鑑](https://motonory-a.github.io/japan-power-spots/gourmet.html)
+- [ご当地グルメ図鑑](https://motonory-a.github.io/japan-power-spots/gourmet.html)：料理ごとに種類・主な材料・旬・食べ方のコツつき
+- [日本の食べ方ガイド](https://motonory-a.github.io/japan-power-spots/gourmet-guide.html)：お箸のタブー、お通し、チップ、食べ歩き、だしとうま味（英語版 /en/gourmet-guide.html）
+- [門前グルメと神さまの食](https://motonory-a.github.io/japan-power-spots/gourmet-shrine.html)：神饌と直会、精進料理、門前の名物、縁起物（英語版 /en/gourmet-shrine.html）
 - [All power spots by region (English)](https://motonory-a.github.io/japan-power-spots/en/spots/)
 
 ## 姉妹サイト（同じ運営者）
