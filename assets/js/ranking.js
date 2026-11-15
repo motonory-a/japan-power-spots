@@ -16,32 +16,32 @@
     ja: { regions: ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州・沖縄'], all: 'すべて', pick: '都道府県をえらぶ',
       rank: '{n}位', shopsT: '{d} お店ベスト3', shopsBtn: 'お店ベスト3', find: 'お店を探す', map: '地図で見る', since: '創業{y}年',
       hasShops: 'お店ランキングがある料理', soon: 'お店ランキングは順次ふやしていきます。', top: '↑ 上へ',
-      era: { edo_late: '江戸時代後期創業', edo_end: '江戸時代末期創業' }, areaT: 'エリア別 お店ベスト3', aw: { mich: 'ミシュランガイド掲載', mich_bib: 'ミシュランガイド ビブグルマン', mich_star: 'ミシュランガイド {n}つ星', hyaku: '食べログ百名店 {y}', bunka: '建物が国の登録有形文化財' },
+      era: { meiji: '明治創業', over100: '創業100年以上', edo_late: '江戸時代後期創業', edo_end: '江戸時代末期創業' }, areaT: 'エリア別 お店ベスト3', aw: { mich: 'ミシュランガイド掲載', mich_bib: 'ミシュランガイド ビブグルマン', mich_star: 'ミシュランガイド {n}つ星', hyaku: '食べログ百名店 {y}', bunka: '建物が国の登録有形文化財' },
       rule: 'お店の順位：ミシュランガイド掲載・食べログ百名店選出・国の登録有形文化財など、公開されている受賞・選出の数が多い順。同じ数なら創業が古い順です（{c}時点で確認）。', src: '確認したページ' },
     en: { regions: ['Hokkaido', 'Tohoku', 'Kanto', 'Chubu', 'Kansai', 'Chugoku', 'Shikoku', 'Kyushu & Okinawa'], all: 'All', pick: 'Choose a prefecture',
       rank: 'No.{n}', shopsT: 'Top 3 places for {d}', shopsBtn: 'Top 3 places', find: 'Find a place', map: 'Map', since: 'Since {y}',
       hasShops: 'Dishes with a restaurant ranking', soon: 'More restaurant rankings are on the way.', top: '↑ Top',
-      era: { edo_late: 'Since the late Edo period', edo_end: 'Since the final years of the Edo period' }, areaT: 'Top 3 places by area', aw: { mich: 'Listed in the MICHELIN Guide', mich_bib: 'MICHELIN Guide Bib Gourmand', mich_star: 'MICHELIN Guide {n} star(s)', hyaku: 'Tabelog Hyakumeiten {y}', bunka: 'Building is a registered Tangible Cultural Property' },
+      era: { meiji: 'Since the Meiji era', over100: 'Over 100 years old', edo_late: 'Since the late Edo period', edo_end: 'Since the final years of the Edo period' }, areaT: 'Top 3 places by area', aw: { mich: 'Listed in the MICHELIN Guide', mich_bib: 'MICHELIN Guide Bib Gourmand', mich_star: 'MICHELIN Guide {n} star(s)', hyaku: 'Tabelog Hyakumeiten {y}', bunka: 'Building is a registered Tangible Cultural Property' },
       rule: 'How restaurants are ranked: by the number of public awards and selections (MICHELIN Guide, Tabelog Hyakumeiten, national cultural property, etc.). Ties go to the older restaurant. Checked {c}.', src: 'Source' },
     zh: { regions: ['北海道', '東北', '關東', '中部', '近畿', '中國', '四國', '九州・沖繩'], all: '全部', pick: '選擇都道府縣',
       rank: '第{n}名', shopsT: '{d} 名店前三名', shopsBtn: '名店前三名', find: '找店家', map: '地圖', since: '創業於{y}年',
       hasShops: '有店家排行的料理', soon: '店家排行會陸續增加。', top: '↑ 回到頂端',
-      era: { edo_late: '創業於江戶時代後期', edo_end: '創業於江戶時代末期' }, areaT: '各地區名店前三名', aw: { mich: '米其林指南推薦', mich_bib: '米其林指南 必比登推介', mich_star: '米其林指南 {n}星', hyaku: 'Tabelog 百名店 {y}', bunka: '建築為日本國家登錄有形文化財' },
+      era: { meiji: '創業於明治時代', over100: '創業逾100年', edo_late: '創業於江戶時代後期', edo_end: '創業於江戶時代末期' }, areaT: '各地區名店前三名', aw: { mich: '米其林指南推薦', mich_bib: '米其林指南 必比登推介', mich_star: '米其林指南 {n}星', hyaku: 'Tabelog 百名店 {y}', bunka: '建築為日本國家登錄有形文化財' },
       rule: '店家排名方式：依米其林指南、Tabelog 百名店、國家登錄有形文化財等公開獲獎・入選次數由多到少排列；次數相同時，創業較早者在前（{c} 確認）。', src: '資料來源' },
     ko: { regions: ['홋카이도', '도호쿠', '간토', '주부', '간사이', '주고쿠', '시코쿠', '규슈·오키나와'], all: '전체', pick: '지역 선택',
       rank: '{n}위', shopsT: '{d} 맛집 베스트 3', shopsBtn: '맛집 베스트 3', find: '가게 찾기', map: '지도', since: '{y}년 창업',
       hasShops: '맛집 순위가 있는 요리', soon: '맛집 순위는 계속 늘려 갈 예정입니다.', top: '↑ 맨 위로',
-      era: { edo_late: '에도 시대 후기 창업', edo_end: '에도 시대 말기 창업' }, areaT: '지역별 맛집 베스트 3', aw: { mich: '미쉐린 가이드 선정', mich_bib: '미쉐린 가이드 빕 구르망', mich_star: '미쉐린 가이드 {n}스타', hyaku: '타베로그 백명점 {y}', bunka: '건물이 국가 등록유형문화재' },
+      era: { meiji: '메이지 시대 창업', over100: '창업 100년 이상', edo_late: '에도 시대 후기 창업', edo_end: '에도 시대 말기 창업' }, areaT: '지역별 맛집 베스트 3', aw: { mich: '미쉐린 가이드 선정', mich_bib: '미쉐린 가이드 빕 구르망', mich_star: '미쉐린 가이드 {n}스타', hyaku: '타베로그 백명점 {y}', bunka: '건물이 국가 등록유형문화재' },
       rule: '맛집 순위 기준: 미쉐린 가이드, 타베로그 백명점, 국가 등록유형문화재 등 공개된 수상·선정 수가 많은 순. 같으면 창업이 오래된 순입니다({c} 확인).', src: '확인한 페이지' },
     fr: { regions: ['Hokkaido', 'Tohoku', 'Kanto', 'Chubu', 'Kansai', 'Chugoku', 'Shikoku', 'Kyushu et Okinawa'], all: 'Tout', pick: 'Choisir une préfecture',
       rank: 'N°{n}', shopsT: 'Top 3 des adresses : {d}', shopsBtn: 'Top 3 des adresses', find: 'Trouver une adresse', map: 'Carte', since: 'Depuis {y}',
       hasShops: 'Plats avec un classement d’adresses', soon: 'D’autres classements d’adresses arrivent.', top: '↑ Haut',
-      era: { edo_late: 'Fondé à la fin de l’époque d’Edo', edo_end: 'Fondé dans les dernières années d’Edo' }, areaT: 'Top 3 des adresses par région', aw: { mich: 'Sélectionné par le Guide MICHELIN', mich_bib: 'Guide MICHELIN Bib Gourmand', mich_star: 'Guide MICHELIN {n} étoile(s)', hyaku: 'Tabelog Hyakumeiten {y}', bunka: 'Bâtiment inscrit bien culturel national' },
+      era: { meiji: 'Fondé à l’ère Meiji', over100: 'Plus de 100 ans d’histoire', edo_late: 'Fondé à la fin de l’époque d’Edo', edo_end: 'Fondé dans les dernières années d’Edo' }, areaT: 'Top 3 des adresses par région', aw: { mich: 'Sélectionné par le Guide MICHELIN', mich_bib: 'Guide MICHELIN Bib Gourmand', mich_star: 'Guide MICHELIN {n} étoile(s)', hyaku: 'Tabelog Hyakumeiten {y}', bunka: 'Bâtiment inscrit bien culturel national' },
       rule: 'Classement des adresses : selon le nombre de distinctions publiques (Guide MICHELIN, Tabelog Hyakumeiten, bien culturel national…). À égalité, la plus ancienne passe devant. Vérifié en {c}.', src: 'Source' },
     es: { regions: ['Hokkaido', 'Tohoku', 'Kanto', 'Chubu', 'Kansai', 'Chugoku', 'Shikoku', 'Kyushu y Okinawa'], all: 'Todo', pick: 'Elige una prefectura',
       rank: 'N.º {n}', shopsT: 'Top 3 de sitios: {d}', shopsBtn: 'Top 3 de sitios', find: 'Buscar un sitio', map: 'Mapa', since: 'Desde {y}',
       hasShops: 'Platos con ranking de restaurantes', soon: 'Pronto habrá más rankings de restaurantes.', top: '↑ Arriba',
-      era: { edo_late: 'Fundado a finales del periodo Edo', edo_end: 'Fundado en los últimos años del periodo Edo' }, areaT: 'Top 3 de sitios por zona', aw: { mich: 'Recomendado por la Guía MICHELIN', mich_bib: 'Guía MICHELIN Bib Gourmand', mich_star: 'Guía MICHELIN {n} estrella(s)', hyaku: 'Tabelog Hyakumeiten {y}', bunka: 'Edificio registrado como bien cultural nacional' },
+      era: { meiji: 'Fundado en la era Meiji', over100: 'Más de 100 años de historia', edo_late: 'Fundado a finales del periodo Edo', edo_end: 'Fundado en los últimos años del periodo Edo' }, areaT: 'Top 3 de sitios por zona', aw: { mich: 'Recomendado por la Guía MICHELIN', mich_bib: 'Guía MICHELIN Bib Gourmand', mich_star: 'Guía MICHELIN {n} estrella(s)', hyaku: 'Tabelog Hyakumeiten {y}', bunka: 'Edificio registrado como bien cultural nacional' },
       rule: 'Orden de los restaurantes: por número de premios y selecciones públicas (Guía MICHELIN, Tabelog Hyakumeiten, bien cultural nacional, etc.). En caso de empate, el más antiguo va primero. Comprobado en {c}.', src: 'Fuente' }
   };
   var lang = document.documentElement.getAttribute('data-glang') || 'ja';
@@ -53,11 +53,13 @@
   function prefName(p) { return ja ? p[0] : p[1]; }
   var byName = {};
   Object.keys(G).forEach(function (k) { G[k].forEach(function (d) { byName[k + '|' + d[0]] = d; }); });
-  function dishName(d) { if (ja) return d[0]; var t = TR && TR[d[0]]; return t && t[0] ? t[0] : d[1]; }
+  var GX = window.GOURMET_EXTRA || {}, TX = window.GOURMET_EXTRA_T || {};
+  Object.keys(GX).forEach(function (k) { GX[k].forEach(function (d) { if (!byName[k + '|' + d[0]]) byName[k + '|' + d[0]] = d; }); });
+  function dishName(d) { if (ja) return d[0]; var t = (TX[d[0]] && TX[d[0]][lang]) || (TR && TR[d[0]]); return t && t[0] ? t[0] : d[1]; }
   function dishSub(d) { return ja || lang === 'en' ? '' : d[0]; }
-  function dishDesc(d) { if (ja) return d[2]; var t = TR && TR[d[0]]; return t && t[1] ? t[1] : d[3]; }
+  function dishDesc(d) { if (ja) return d[2]; var t = (TX[d[0]] && TX[d[0]][lang]) || (TR && TR[d[0]]); return t && t[1] ? t[1] : d[3]; }
   function awText(c) { var a = c.split(':'); var s = L.aw[a[0]]; if (!s) return c; return a[1] ? f(s, { n: a[1], y: a[1] }) : s.replace(/\s*\{y\}/, ''); }
-  var ERA_Y = { edo_late: 1790, edo_end: 1860 };
+  var ERA_Y = { edo_late: 1790, edo_end: 1860, meiji: 1880, over100: 1924 };
   function sortY(s) { return s.y || ERA_Y[s.e] || 9999; }
   function sortShops(list) {
     return list.slice().sort(function (a, b) { return (b.aw || []).length - (a.aw || []).length || sortY(a) - sortY(b); });

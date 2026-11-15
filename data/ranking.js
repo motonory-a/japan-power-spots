@@ -69,8 +69,25 @@ window.GOURMET_SHOP_AREAS = [
   ["大阪府|お好み焼き", ["大阪・道頓堀", "Osaka (Dotonbori)"]],
   ["島根県|出雲そば", ["出雲", "Izumo"]],
   ["広島県|あなご飯", ["宮島", "Miyajima"]],
-  ["福岡県|博多ラーメン", ["福岡", "Fukuoka"]]
+  ["福岡県|博多ラーメン", ["福岡", "Fukuoka"]],
+  ["福岡県|梅ヶ枝餅", ["太宰府", "Dazaifu"]],
+  ["神奈川県|横浜中華街の点心", ["横浜・中華街", "Yokohama (Chinatown)"]],
+  ["兵庫県|神戸牛", ["神戸・三宮", "Kobe (Sannomiya)"]],
+  ["栃木県|日光の湯葉", ["日光", "Nikko"]],
+  ["和歌山県|胡麻豆腐", ["高野山", "Mt. Koya"]]
 ];
+/* 図鑑（data/gourmet.js）にない料理。[日本語, 英語, 説明(日), 説明(英)] と各言語の [名前, 説明] */
+window.GOURMET_EXTRA = {
+  "福岡県": [["梅ヶ枝餅", "Umegae-mochi", "太宰府天満宮の参道名物。薄い餅で粒あんを包み、梅の焼き印をつけて香ばしく焼いたお菓子。", "A Dazaifu Tenmangu specialty: thin rice-cake dough filled with sweet red bean paste, grilled crisp and stamped with a plum blossom."]]
+};
+window.GOURMET_EXTRA_T = {
+  "梅ヶ枝餅": {
+    zh: ["梅枝餅", "太宰府天滿宮參道的名產。薄薄的麻糬包紅豆餡，烤得香脆，印有梅花圖案。"],
+    ko: ["우메가에모치", "다자이후 텐만구 참배길의 명물. 얇은 떡에 팥소를 넣고 매화 무늬를 찍어 고소하게 구운 과자."],
+    fr: ["Umegae-mochi", "Spécialité de Dazaifu Tenmangu : fine pâte de riz fourrée aux haricots rouges, grillée et marquée d’une fleur de prunier."],
+    es: ["Umegae-mochi", "Especialidad de Dazaifu Tenmangu: masa fina de arroz rellena de pasta de judía roja, tostada y marcada con una flor de ciruelo."]
+  }
+};
 window.GOURMET_SHOPS = {
   "東京都|天丼": [
     { n: "土手の伊勢屋", r: "Dote no Iseya", a: ["台東区日本堤（三ノ輪）", "Nihonzutsumi, Taito (Minowa)"], y: 1889, aw: ["bunka"],
@@ -162,5 +179,45 @@ window.GOURMET_SHOPS = {
       q: "元祖赤のれん 節ちゃんラーメン 本店", src: "https://tabi-mag.jp/fu0364" },
     { n: "元祖長浜屋", r: "Ganso Nagahamaya", a: ["中央区長浜", "Nagahama, Chuo"], y: 1952, aw: [],
       q: "元祖長浜屋 福岡市中央区長浜", src: "https://tabi-mag.jp/fu0363/" }
+  ],
+  "福岡県|梅ヶ枝餅": [
+    { n: "かさの家", r: "Kasanoya", a: ["太宰府天満宮の参道", "Dazaifu Tenmangu approach"], y: 1922, aw: [],
+      q: "かさの家 太宰府 梅ヶ枝餅", src: "https://www.walkerplus.com/article/131526/" },
+    { n: "梅園菓子処", r: "Baien Kashidokoro", a: ["太宰府天満宮の参道（入口近く）", "Dazaifu Tenmangu approach (near the entrance)"], y: 1948, aw: [],
+      q: "梅園菓子処 太宰府市宰府2-6-16", src: "https://www.nap-camp.com/mag/121599" },
+    { n: "寿庵 寺田屋", r: "Juan Teradaya", a: ["太宰府天満宮の参道", "Dazaifu Tenmangu approach"], aw: [],
+      q: "寿庵 寺田屋 太宰府市宰府4-6-15", src: "https://www.nap-camp.com/mag/121599" }
+  ],
+  "神奈川県|横浜中華街の点心": [
+    { n: "萬珍樓 本店", r: "Manchinro Honten", a: ["横浜中華街", "Yokohama Chinatown"], y: 1892, aw: [],
+      q: "萬珍樓 本店 横浜中華街", src: "https://www.gltjp.com/ja/directory/item/15205/" },
+    { n: "華正樓 本店", r: "Kaseiro Honten", a: ["横浜中華街", "Yokohama Chinatown"], y: 1939, aw: [],
+      q: "華正樓 本店 横浜市中区山下町186", src: "https://www.welcome.city.yokohama.jp/gourmet/chinatown/page_06.php" },
+    { n: "重慶茶樓 横浜中華街本店", r: "Chung King Saro", a: ["横浜中華街", "Yokohama Chinatown"], y: 1959, aw: [],
+      q: "重慶茶樓 横浜中華街 本店", src: "https://hitosara.com/0031059626/" }
+  ],
+  "兵庫県|神戸牛": [
+    { n: "モーリヤ 本店", r: "Mouriya Honten", a: ["神戸市中央区（三宮・いくたロード）", "Sannomiya, Chuo-ku, Kobe"], y: 1885, aw: [],
+      q: "モーリヤ 本店 神戸 三宮", src: "https://macaro-ni.jp/60921?page=4" },
+    { n: "あぶり肉工房 和黒 北野坂本店", r: "Wakkoku Kitanozaka", a: ["神戸市中央区（北野坂）", "Kitanozaka, Chuo-ku, Kobe"], aw: [],
+      q: "和黒 北野坂本店 神戸", src: "https://www.gltjp.com/ja/directory/item/11407/" },
+    { n: "麤皮", r: "Aragawa", a: ["神戸市中央区（三宮）", "Sannomiya, Chuo-ku, Kobe"], aw: [],
+      q: "麤皮 あらがわ 神戸 三宮", src: "https://tabelog.com/matome/31747/" }
+  ],
+  "栃木県|日光の湯葉": [
+    { n: "日光湯波 ふじや", r: "Nikko Yuba Fujiya", a: ["日光市（日光駅と東照宮の間）", "Nikko (between the station and Toshogu)"], y: 1868, aw: [],
+      q: "日光湯波 ふじや", src: "https://www.yukoyuko.net/onsen/spot/s0002798" },
+    { n: "元祖日光ゆば料理 恵比寿家", r: "Ebisuya", a: ["日光市下鉢石町", "Shimohatsuishi, Nikko"], e: "over100", aw: [],
+      q: "元祖日光ゆば料理 恵比寿家 日光市下鉢石町955", src: "https://www.mapple.net/article/35596/" },
+    { n: "日光ゆば遊膳", r: "Nikko Yuba Yuzen", a: ["日光市安川町（神橋の近く）", "Yasukawa, Nikko (near Shinkyo Bridge)"], aw: [],
+      q: "日光ゆば遊膳 日光市安川町1-22", src: "https://www.fun-japan.jp/tw/articles/10253" }
+  ],
+  "和歌山県|胡麻豆腐": [
+    { n: "濱田屋", r: "Hamadaya", a: ["高野山（奥之院への参道近く）", "Mt. Koya (near the Okunoin approach)"], e: "meiji", aw: [],
+      q: "濱田屋 胡麻豆腐 高野山444", src: "https://www.mapple.net/region/a0507030500_g02060000/spot/" },
+    { n: "角濱ごまとうふ総本舗 大門店", r: "Kadohama Daimon", a: ["高野山（大門の近く）", "Mt. Koya (near the Daimon Gate)"], e: "over100", aw: [],
+      q: "角濱ごまとうふ総本舗 大門店", src: "https://voix.jp/life/?p=42172" },
+    { n: "森下商店総本舗", r: "Morishita Shoten", a: ["高野山", "Mt. Koya"], y: 1950, aw: [],
+      q: "森下商店総本舗 高野山 胡麻豆腐", src: "https://www.nap-camp.com/mag/124460" }
   ]
 };
