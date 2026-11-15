@@ -96,16 +96,16 @@
 
   // 読みもの（食べ方ガイド・門前グルメ）への入口。写真つきで目に入る位置に
   var READ = {
-    ja: ['はじめての方へ', '日本の食べ方ガイド', 'お箸のタブー・お通し・チップなど10のこと', '門前グルメと神さまの食', '神饌・精進料理・縁起物のお話'],
-    en: ['New to Japan?', 'How to Eat in Japan', 'Chopstick taboos, otōshi, tipping and more', 'Food of Shrines and Temples', 'Offerings, temple cuisine and lucky foods'],
-    zh: ['第一次來日本？', '日本用餐指南', '筷子禁忌、小菜、小費等10件事', '門前美食與神明的食物', '神饌、精進料理與吉祥食物'],
-    ko: ['일본이 처음이라면', '일본 식사 가이드', '젓가락 금기·오토시·팁 등 10가지', '신사 앞 먹거리와 신의 음식', '신찬·쇼진 요리·길한 음식 이야기'],
-    fr: ['Première fois au Japon ?', 'Manger au Japon', 'Baguettes, otōshi, pourboire et plus', 'La cuisine des sanctuaires et des temples', 'Offrandes, cuisine des temples, mets porte-bonheur'],
-    es: ['¿Primera vez en Japón?', 'Cómo comer en Japón', 'Palillos, otōshi, propinas y más', 'La comida de santuarios y templos', 'Ofrendas, cocina de templos y comidas de suerte']
+    ja: ['はじめての方へ', '日本の食べ方ガイド', 'お箸のタブー・お通し・チップなど10のこと', '門前グルメと神さまの食', '神饌・精進料理・縁起物のお話', 'ご当地グルメランキング', '県ごとの名物TOP5とお店ベスト3'],
+    en: ['New to Japan?', 'How to Eat in Japan', 'Chopstick taboos, otōshi, tipping and more', 'Food of Shrines and Temples', 'Offerings, temple cuisine and lucky foods', 'Local Food Rankings', 'Top 5 dishes per prefecture and top 3 places'],
+    zh: ['第一次來日本？', '日本用餐指南', '筷子禁忌、小菜、小費等10件事', '門前美食與神明的食物', '神饌、精進料理與吉祥食物', '在地美食排行榜', '各縣名產前五名與名店前三名'],
+    ko: ['일본이 처음이라면', '일본 식사 가이드', '젓가락 금기·오토시·팁 등 10가지', '신사 앞 먹거리와 신의 음식', '신찬·쇼진 요리·길한 음식 이야기', '향토 음식 랭킹', '지역별 명물 TOP5와 맛집 베스트 3'],
+    fr: ['Première fois au Japon ?', 'Manger au Japon', 'Baguettes, otōshi, pourboire et plus', 'La cuisine des sanctuaires et des temples', 'Offrandes, cuisine des temples, mets porte-bonheur', 'Classements de la cuisine locale', 'Top 5 des plats et top 3 des adresses'],
+    es: ['¿Primera vez en Japón?', 'Cómo comer en Japón', 'Palillos, otōshi, propinas y más', 'La comida de santuarios y templos', 'Ofrendas, cocina de templos y comidas de suerte', 'Rankings de comida local', 'Top 5 platos y top 3 de sitios']
   }[lang] || null;
   if (READ) {
     var rd = el('div', 'g-read'); rd.append(el('p', 'g-read-t', READ[0]));
-    [['gourmet-guide.html', '江戸前寿司', READ[1], READ[2]], ['gourmet-shrine.html', '赤福餅', READ[3], READ[4]]].forEach(function (r) {
+    [['gourmet-guide.html', '江戸前寿司', READ[1], READ[2]], ['gourmet-shrine.html', '赤福餅', READ[3], READ[4]], ['ranking.html', '天丼', READ[5], READ[6]]].forEach(function (r) {
       var a = el('a', 'g-read-card'); a.href = r[0];
       var ph = P[r[1]]; if (ph) { var im = el('img'); im.src = ph[0]; im.alt = ''; im.loading = 'lazy'; a.append(im); }
       var tx = el('span'); tx.append(el('b', null, r[2]), el('small', null, r[3])); a.append(tx);
