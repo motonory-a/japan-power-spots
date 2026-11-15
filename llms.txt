@@ -46,6 +46,8 @@ Japan Power Spot Journey is a free website that suggests shrines, temples, giant
 
 ## 運営者の発信
 
+- 運営者の入口ページ（全サイトの一覧）: https://motonory-a.github.io/
+
 - note: https://note.com/nigihayahi03/m/me5c3d299b032
 - X: https://x.com/nigihayahi03
 - YouTube: https://www.youtube.com/@nigihayahi03/videos
