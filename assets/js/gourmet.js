@@ -144,7 +144,8 @@
       if (dishSub(d)) vBody.append(el('p', 'gv-sub', dishSub(d)));
       vBody.append(el('p', 'gv-desc', dishDesc(d)));
       var row = el('div', 'gv-links');
-      var m = el('a', 'g-maps', L.maps); m.target = '_blank'; m.rel = 'noopener noreferrer'; m.setAttribute('data-track', 'food_search');
+      // 同じタブで開く：地図から「戻る」で、この料理の大きな画面に戻れるようにする
+      var m = el('a', 'g-maps', L.maps); m.rel = 'noopener noreferrer'; m.setAttribute('data-track', 'food_search');
       m.href = 'https://www.google.com/maps/search/' + encodeURIComponent(d[0] + ' ' + p[0]);
       var go = el('a', 'g-go', ja ? prefName(p) + L.spots : L.spots + prefName(p)); go.href = spotsHref;
       row.append(m, go); vBody.append(row);
@@ -154,7 +155,7 @@
     }
     if (ph) {
       var cr = el('p', 'gv-credit', L.credit + ': ' + (ph[2] || 'unknown') + ' / ' + ph[3] + ' ・ ');
-      var o = el('a', null, L.orig); o.href = ph[1]; o.target = '_blank'; o.rel = 'noopener noreferrer';
+      var o = el('a', null, L.orig); o.href = ph[1]; o.rel = 'noopener noreferrer';
       cr.append(o); vBody.append(cr);
     }
     var vis = it ? visibleNames() : [];
