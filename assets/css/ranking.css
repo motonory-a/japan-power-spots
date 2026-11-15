@@ -38,3 +38,4 @@
 .r-since{font-size:12px;background:#F3EDF8;border:1px solid #D9CBE8;color:#3F2A5E;border-radius:6px;padding:2px 7px}
 .r-rule{margin:10px 0 0;font-size:12px;color:#7a6250;line-height:1.6}
 @media (max-width:420px){.r-item{grid-template-columns:34px 72px 1fr}.r-photo{width:72px;height:72px}}
+.r-areas{margin:14px 0 6px}.r-areas .r-quick-row{margin:4px 0 12px}

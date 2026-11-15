@@ -57,6 +57,20 @@ window.GOURMET_RANK = {
 };
 
 window.GOURMET_SHOPS_CHECKED = "2026-11";
+/* エリア別のお店ベスト3。並び順＝ページに出る順。キーは "都道府県|料理名"、a はエリア名 [日本語, 英語] */
+window.GOURMET_SHOP_AREAS = [
+  ["北海道|札幌ラーメン", ["札幌", "Sapporo"]],
+  ["宮城県|牛たん焼き", ["仙台", "Sendai"]],
+  ["東京都|天丼", ["東京・浅草", "Tokyo (Asakusa)"]],
+  ["東京都|どぜう鍋", ["東京・浅草", "Tokyo (Asakusa)"]],
+  ["愛知県|ひつまぶし", ["名古屋・熱田", "Nagoya (Atsuta)"]],
+  ["三重県|伊勢うどん", ["伊勢", "Ise"]],
+  ["京都府|湯豆腐", ["京都", "Kyoto"]],
+  ["大阪府|お好み焼き", ["大阪・道頓堀", "Osaka (Dotonbori)"]],
+  ["島根県|出雲そば", ["出雲", "Izumo"]],
+  ["広島県|あなご飯", ["宮島", "Miyajima"]],
+  ["福岡県|博多ラーメン", ["福岡", "Fukuoka"]]
+];
 window.GOURMET_SHOPS = {
   "東京都|天丼": [
     { n: "土手の伊勢屋", r: "Dote no Iseya", a: ["台東区日本堤（三ノ輪）", "Nihonzutsumi, Taito (Minowa)"], y: 1889, aw: ["bunka"],
@@ -67,5 +81,86 @@ window.GOURMET_SHOPS = {
       q: "雷門 三定 浅草", src: "https://livejapan.com/ja/article/a0000405" },
     { n: "大黒家天麩羅", r: "Daikokuya Tempura", a: ["台東区浅草", "Asakusa, Taito"], y: 1887, aw: [],
       q: "大黒家天麩羅 台東区浅草1-38-10", src: "https://www.gltjp.com/ja/directory/item/10627/" }
+  ],
+  "東京都|どぜう鍋": [
+    { n: "駒形どぜう 本店", r: "Komagata Dozeu", a: ["台東区駒形（浅草）", "Komagata, Taito (Asakusa)"], y: 1801, aw: [],
+      q: "駒形どぜう 本店 台東区駒形1-7-12", src: "https://www.mec-h.com/town/mh-ueno/74" },
+    { n: "どぜう飯田屋", r: "Dozeu Iidaya", a: ["台東区西浅草", "Nishi-Asakusa, Taito"], y: 1902, aw: [],
+      q: "どぜう飯田屋 台東区西浅草3-3-2", src: "https://www.tv-tokyo.co.jp/adomachi/backnumber/20121006/77761.html" },
+    { n: "どぜう ひら井", r: "Dozeu Hirai", a: ["墨田区吾妻橋", "Azumabashi, Sumida"], y: 1903, aw: [],
+      q: "どぜう ひら井 墨田区吾妻橋1-7-8", src: "https://www.tv-tokyo.co.jp/adomachi/backnumber/20200912/141012.html" }
+  ],
+  "北海道|札幌ラーメン": [
+    { n: "だるま軒", r: "Darumaken", a: ["札幌市中央区（新二条市場）", "Chuo-ku, Sapporo (Nijo Market)"], y: 1947, aw: [],
+      q: "だるま軒 札幌 新二条市場", src: "https://rurubu.jp/andmore/spot/80000174" },
+    { n: "味の三平", r: "Aji no Sanpei", a: ["札幌市中央区（大通）", "Chuo-ku, Sapporo (Odori)"], y: 1950, aw: [],
+      q: "味の三平 札幌市中央区南1条西3丁目", src: "https://tabi-mag.jp/ho1214/" },
+    { n: "すみれ 札幌中の島本店", r: "Sumire Nakanoshima", a: ["札幌市豊平区中の島", "Nakanoshima, Toyohira, Sapporo"], y: 1964, aw: [],
+      q: "すみれ 札幌中の島本店", src: "https://livejapan.com/ja/in-hokkaido/in-pref-hokkaido/in-sapporo_chitose/article-a1000177/" }
+  ],
+  "宮城県|牛たん焼き": [
+    { n: "旨味 太助", r: "Umami Tasuke", a: ["仙台市青葉区国分町", "Kokubuncho, Aoba, Sendai"], y: 1948, aw: [],
+      q: "旨味太助 仙台市青葉区国分町2-11-11", src: "https://www.gltjp.com/ja/directory/item/13862/" },
+    { n: "味の牛たん喜助 駅前中央本店", r: "Kisuke (Ekimae Chuo)", a: ["仙台駅前", "Near Sendai Station"], y: 1975, aw: [],
+      q: "味の牛たん喜助 駅前中央本店", src: "https://www.gltjp.com/ja/directory/item/17643/" },
+    { n: "牛たん料理 閣", r: "Gyutan Ryori Kaku", a: ["仙台市青葉区一番町", "Ichibancho, Aoba, Sendai"], y: 1988, aw: [],
+      q: "牛たん料理 閣 仙台", src: "https://livejapan.com/ja/in-tohoku/in-pref-miyagi/in-sendai_matsushima/article-a3000022/" }
+  ],
+  "愛知県|ひつまぶし": [
+    { n: "あつた蓬莱軒 本店", r: "Atsuta Horaiken", a: ["名古屋市熱田区（熱田神宮のそば）", "Atsuta, Nagoya (by Atsuta Shrine)"], y: 1873,
+      aw: ["hyaku:2018", "hyaku:2019", "hyaku:2022", "hyaku:2024"],
+      q: "あつた蓬莱軒 本店 名古屋市熱田区神戸町503", src: "https://tabelog.com/aichi/A2301/A230112/23000063/" },
+    { n: "イチビキ", r: "Ichibiki", a: ["名古屋市中村区（名古屋駅と伏見の間）", "Nakamura, Nagoya"], y: 1939, aw: ["hyaku"],
+      q: "うなぎ イチビキ 名古屋", src: "https://macaro-ni.jp/171528" },
+    { n: "いば昇 本店", r: "Ibasho", a: ["名古屋市中区（栄）", "Sakae, Naka, Nagoya"], y: 1909, aw: [],
+      q: "いば昇 本店 名古屋", src: "https://ssl.tabelog.com/en/aichi/A2301/A230103/23006881/" }
+  ],
+  "三重県|伊勢うどん": [
+    { n: "ちとせ", r: "Chitose", a: ["伊勢市岩渕（宇治山田駅前）", "Iwabuchi, Ise (by Ujiyamada Sta.)"], y: 1917, aw: [],
+      q: "ちとせ 伊勢うどん 伊勢市岩渕1-15-11", src: "https://www.mapple.net/region/a0405000000_g03050e00/spot/" },
+    { n: "伊勢うどんのまめや", r: "Mameya", a: ["伊勢市宮後（伊勢市駅そば）", "Miyajiri, Ise (near Iseshi Sta.)"], y: 1923, aw: [],
+      q: "伊勢うどんのまめや 伊勢市宮後2-19-11", src: "https://www.mapple.net/region/a0405000000_g03050e00/spot/" },
+    { n: "福野屋", r: "Fukunoya", a: ["伊勢市河崎", "Kawasaki, Ise"], y: 1927, aw: [],
+      q: "福野屋 伊勢市河崎3-2-1", src: "https://www.mapple.net/region/a0405010000_g03050e00/spot/" }
+  ],
+  "京都府|湯豆腐": [
+    { n: "南禅寺 順正", r: "Nanzenji Junsei", a: ["左京区（南禅寺の門前）", "Sakyo (by Nanzen-ji)"], aw: ["bunka"],
+      q: "南禅寺 順正", src: "https://www.gltjp.com/ja/directory/item/13879/" },
+    { n: "総本家ゆどうふ 奥丹清水", r: "Okutan Kiyomizu", a: ["東山区（清水寺への産寧坂）", "Higashiyama (Sannenzaka, Kiyomizu-dera)"], y: 1635, aw: [],
+      q: "奥丹清水 湯豆腐", src: "https://www.walkerplus.com/article/1193959/amp/" },
+    { n: "西山艸堂", r: "Seizan Sodo", a: ["右京区嵯峨（天龍寺の塔頭）", "Saga, Ukyo (in Tenryu-ji)"], aw: [],
+      q: "西山艸堂 嵯峨天龍寺", src: "https://www.walkerplus.com/article/203185/" }
+  ],
+  "大阪府|お好み焼き": [
+    { n: "美津の", r: "Mizuno", a: ["中央区道頓堀", "Dotonbori, Chuo"], y: 1945, aw: ["mich"],
+      q: "美津の お好み焼き 道頓堀", src: "https://retty.me/restaurant/100000014901/" },
+    { n: "味乃家", r: "Ajinoya", a: ["中央区難波（道頓堀のそば）", "Namba, Chuo"], y: 1964, aw: ["mich_bib"],
+      q: "味乃家 お好み焼き 難波", src: "https://aumo.jp/articles/45727" },
+    { n: "福太郎 本店", r: "Fukutaro", a: ["中央区千日前（なんば）", "Sennichimae, Chuo (Namba)"], aw: ["hyaku"],
+      q: "福太郎 本店 お好み焼き なんば", src: "https://tabelog.com/matome/28979/" }
+  ],
+  "島根県|出雲そば": [
+    { n: "荒木屋", r: "Arakiya", a: ["出雲市大社町（出雲大社のそば）", "Taisha, Izumo (near Izumo Taisha)"], e: "edo_late", aw: [],
+      q: "荒木屋 出雲そば 大社町", src: "https://www.mapple.net/collection/f5119b81f1a2461d9bb7b27694cfdbdc/" },
+    { n: "献上そば 羽根屋本店", r: "Haneya", a: ["出雲市今市町（出雲市駅そば）", "Imaichi, Izumo (near Izumoshi Sta.)"], e: "edo_end", aw: [],
+      q: "献上そば 羽根屋本店", src: "https://www.gltjp.com/ja/directory/item/17856/" },
+    { n: "かねや", r: "Kaneya", a: ["出雲市大社町（出雲大社のそば）", "Taisha, Izumo (near Izumo Taisha)"], y: 1929, aw: [],
+      q: "かねや 出雲そば 大社町", src: "https://www.mapple.net/region/a0601040300_g03050d00/spot/" }
+  ],
+  "広島県|あなご飯": [
+    { n: "ふじたや", r: "Fujitaya", a: ["宮島（嚴島神社から大聖院への道）", "Miyajima (near Itsukushima Shrine)"], aw: ["mich_star:1"],
+      q: "ふじたや 宮島 あなごめし", src: "https://macaro-ni.jp/105410" },
+    { n: "あなごめし うえの 宮島口本店", r: "Anagomeshi Ueno", a: ["廿日市市宮島口（駅前）", "Miyajimaguchi (by the station)"], y: 1901, aw: [],
+      q: "あなごめし うえの 宮島口本店", src: "https://www.gltjp.com/ja/directory/item/14838/" },
+    { n: "あなごめし 和田", r: "Anagomeshi Wada", a: ["宮島（五重塔の近く）", "Miyajima (near the five-story pagoda)"], aw: [],
+      q: "あなごめし 和田 宮島", src: "https://dive-hiroshima.com/feature/seafood-anago/" }
+  ],
+  "福岡県|博多ラーメン": [
+    { n: "らーめん博多荘", r: "Ramen Hakataso", a: ["博多区中洲", "Nakasu, Hakata"], y: 1946, aw: [],
+      q: "らーめん博多荘 中洲", src: "https://tabi-mag.jp/fu0362/" },
+    { n: "元祖赤のれん 節ちゃんラーメン 本店", r: "Ganso Akanoren Setchan Ramen", a: ["中央区大名", "Daimyo, Chuo"], y: 1946, aw: [],
+      q: "元祖赤のれん 節ちゃんラーメン 本店", src: "https://tabi-mag.jp/fu0364" },
+    { n: "元祖長浜屋", r: "Ganso Nagahamaya", a: ["中央区長浜", "Nagahama, Chuo"], y: 1952, aw: [],
+      q: "元祖長浜屋 福岡市中央区長浜", src: "https://tabi-mag.jp/fu0363/" }
   ]
 };
