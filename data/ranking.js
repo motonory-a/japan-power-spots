@@ -60,16 +60,24 @@ window.GOURMET_SHOPS_CHECKED = "2026-11";
 /* エリア別のお店ベスト3。並び順＝ページに出る順。キーは "都道府県|料理名"、a はエリア名 [日本語, 英語] */
 window.GOURMET_SHOP_AREAS = [
   ["北海道|札幌ラーメン", ["札幌", "Sapporo"]],
+  ["北海道|ジンギスカン", ["札幌・すすきの", "Sapporo (Susukino)"]],
   ["宮城県|牛たん焼き", ["仙台", "Sendai"]],
+  ["宮城県|ずんだ餅", ["仙台", "Sendai"]],
   ["東京都|天丼", ["東京・浅草", "Tokyo (Asakusa)"]],
   ["東京都|どぜう鍋", ["東京・浅草", "Tokyo (Asakusa)"]],
+  ["東京都|もんじゃ焼き", ["東京・月島", "Tokyo (Tsukishima)"]],
   ["愛知県|ひつまぶし", ["名古屋・熱田", "Nagoya (Atsuta)"]],
+  ["愛知県|手羽先", ["名古屋", "Nagoya"]],
   ["三重県|伊勢うどん", ["伊勢", "Ise"]],
   ["京都府|湯豆腐", ["京都", "Kyoto"]],
+  ["京都府|八ツ橋", ["京都", "Kyoto"]],
   ["大阪府|お好み焼き", ["大阪・道頓堀", "Osaka (Dotonbori)"]],
+  ["大阪府|たこ焼き", ["大阪", "Osaka"]],
   ["島根県|出雲そば", ["出雲", "Izumo"]],
   ["広島県|あなご飯", ["宮島", "Miyajima"]],
+  ["広島県|広島風お好み焼き", ["広島市", "Hiroshima City"]],
   ["福岡県|博多ラーメン", ["福岡", "Fukuoka"]],
+  ["福岡県|もつ鍋", ["福岡", "Fukuoka"]],
   ["福岡県|梅ヶ枝餅", ["太宰府", "Dazaifu"]],
   ["神奈川県|横浜中華街の点心", ["横浜・中華街", "Yokohama (Chinatown)"]],
   ["兵庫県|神戸牛", ["神戸・三宮", "Kobe (Sannomiya)"]],
@@ -219,5 +227,67 @@ window.GOURMET_SHOPS = {
       q: "角濱ごまとうふ総本舗 大門店", src: "https://voix.jp/life/?p=42172" },
     { n: "森下商店総本舗", r: "Morishita Shoten", a: ["高野山", "Mt. Koya"], y: 1950, aw: [],
       q: "森下商店総本舗 高野山 胡麻豆腐", src: "https://www.nap-camp.com/mag/124460" }
+  ],
+  "北海道|ジンギスカン": [
+    { n: "成吉思汗だるま 本店", r: "Jingisukan Daruma", a: ["札幌市中央区（すすきの）", "Susukino, Chuo-ku, Sapporo"], y: 1954, aw: [],
+      q: "成吉思汗だるま 本店 札幌", src: "https://www.gltjp.com/ja/directory/item/14002/" },
+    { n: "松尾ジンギスカン 札幌駅前店", r: "Matsuo Jingisukan Sapporo Ekimae", a: ["札幌駅前", "Near Sapporo Station"], y: 1956, aw: [],
+      q: "松尾ジンギスカン 札幌駅前店", src: "https://rurubu.jp/andmore/article/16762" },
+    { n: "さっぽろジンギスカン 本店", r: "Sapporo Jingisukan Honten", a: ["札幌市中央区（すすきの）", "Susukino, Chuo-ku, Sapporo"], aw: [],
+      q: "さっぽろジンギスカン 本店 南六条西6", src: "https://www.mapple.net/article/45617/" }
+  ],
+  "宮城県|ずんだ餅": [
+    { n: "村上屋餅店", r: "Murakamiya Mochiten", a: ["仙台市青葉区（五橋）", "Itsutsubashi, Aoba, Sendai"], y: 1877, aw: [],
+      q: "村上屋餅店 仙台", src: "https://co-trip.jp/article/34172" },
+    { n: "ずんだ茶寮 仙台駅ずんだ小径店", r: "Zunda Saryo (Sendai Sta.)", a: ["仙台駅構内", "Inside Sendai Station"], aw: [],
+      q: "ずんだ茶寮 仙台駅ずんだ小径店", src: "https://hoshinoresorts.com/jp/guide/area/hokkaidotohoku/miyagi/sendai/akiu_zunda/" },
+    { n: "玉澤総本店", r: "Tamazawa Sohonten", a: ["仙台駅・市内", "Sendai Station and city"], aw: [],
+      q: "玉澤総本店 仙台", src: "https://tabelog.com/matome/37/" }
+  ],
+  "東京都|もんじゃ焼き": [
+    { n: "もんじゃ 近どう 本店", r: "Monja Kondo", a: ["中央区月島", "Tsukishima, Chuo"], y: 1950, aw: [],
+      q: "もんじゃ 近どう 本店 月島", src: "https://r.gnavi.co.jp/g903500/menu4/" },
+    { n: "もんじゃ いろは", r: "Monja Iroha", a: ["中央区月島", "Tsukishima, Chuo"], y: 1955, aw: [],
+      q: "もんじゃ いろは 本店 月島", src: "https://ssl.tabelog.com/en/tokyo/A1313/A131302/13052710/" },
+    { n: "まろん", r: "Maron", a: ["中央区月島", "Tsukishima, Chuo"], y: 1982, aw: [],
+      q: "もんじゃ まろん 月島", src: "https://aumo.jp/articles/72354" }
+  ],
+  "愛知県|手羽先": [
+    { n: "風来坊", r: "Furaibo", a: ["名古屋市（栄・名駅ほか）", "Nagoya (Sakae, Meieki, etc.)"], y: 1963, aw: [],
+      q: "風来坊 手羽先 名古屋 栄", src: "https://macaro-ni.jp/102986?page=4" },
+    { n: "世界の山ちゃん", r: "Sekai no Yamachan", a: ["名古屋市（市内各所）", "Nagoya (many branches)"], y: 1981, aw: [],
+      q: "世界の山ちゃん 本店 名古屋", src: "https://www.thenewslens.com/article/156776" },
+    { n: "伍味酉", r: "Gomitori", a: ["名古屋市中区（栄）", "Sakae, Naka, Nagoya"], aw: [],
+      q: "伍味酉 本店 栄", src: "https://macaro-ni.jp/102986?page=4" }
+  ],
+  "京都府|八ツ橋": [
+    { n: "本家西尾八ッ橋 本店", r: "Honke Nishio Yatsuhashi", a: ["左京区（聖護院）", "Shogoin, Sakyo"], y: 1687, aw: [],
+      q: "本家西尾八ッ橋 本店", src: "https://www.mapple.net/magazine/2404/contents_18" },
+    { n: "聖護院八ッ橋総本店", r: "Shogoin Yatsuhashi Sohonten", a: ["左京区（聖護院）", "Shogoin, Sakyo"], y: 1689, aw: [],
+      q: "聖護院八ッ橋総本店 本店", src: "https://www.mapple.net/magazine/2404/contents_18" },
+    { n: "井筒八ッ橋本舗 祇園本店", r: "Izutsu Yatsuhashi Gion", a: ["東山区（祇園四条）", "Gion-Shijo, Higashiyama"], y: 1805, aw: [],
+      q: "井筒八ッ橋本舗 祇園本店", src: "https://www.mapple.net/magazine/2404/contents_18" }
+  ],
+  "大阪府|たこ焼き": [
+    { n: "甲賀流 本店", r: "Kogaryu", a: ["中央区西心斎橋（アメリカ村）", "Amerikamura, Chuo"], y: 1974, aw: ["mich_bib"],
+      q: "甲賀流 本店 アメリカ村", src: "https://www.funliday.com/posts/?p=101618" },
+    { n: "会津屋 玉出本店", r: "Aizuya Tamade", a: ["西成区玉出", "Tamade, Nishinari"], y: 1933, aw: [],
+      q: "会津屋 玉出本店", src: "https://rurubu.jp/andmore/spot/80028048" },
+    { n: "たこやき道楽 わなか 千日前本店", r: "Wanaka Sennichimae", a: ["中央区千日前（なんば）", "Sennichimae, Chuo (Namba)"], aw: [],
+      q: "わなか 千日前本店", src: "https://www.funliday.com/posts/?p=101618" }
+  ],
+  "広島県|広島風お好み焼き": [
+    { n: "元祖へんくつや 総本店", r: "Ganso Henkutsuya", a: ["広島市中区（新天地）", "Shintenchi, Naka, Hiroshima"], y: 1947, aw: [],
+      q: "元祖へんくつや 総本店 広島", src: "https://www.mapple.net/article/63088/" },
+    { n: "みっちゃん総本店 八丁堀本店", r: "Micchan Sohonten Hatchobori", a: ["広島市中区八丁堀", "Hatchobori, Naka, Hiroshima"], y: 1950, aw: [],
+      q: "みっちゃん総本店 八丁堀本店", src: "https://www.mapple.net/collection/3c3c71ddd45e443a98ce4084be45d38c/" },
+    { n: "広島名物お好み焼き 麗ちゃん", r: "Reichan", a: ["広島駅（ekie 1階）", "Hiroshima Station (ekie 1F)"], y: 1957, aw: [],
+      q: "麗ちゃん 広島駅 ekie", src: "https://www.gltjp.com/ja/directory/item/17404/" }
+  ],
+  "福岡県|もつ鍋": [
+    { n: "元祖もつ鍋 楽天地 福岡天神総本店", r: "Rakutenchi Tenjin", a: ["中央区今泉（天神）", "Imaizumi, Chuo (Tenjin)"], y: 1977, aw: [],
+      q: "元祖もつ鍋楽天地 福岡天神総本店", src: "https://www.gltjp.com/ja/article/item/21195/" },
+    { n: "博多もつ鍋 やま中 本店", r: "Hakata Motsunabe Yamanaka", a: ["福岡市南区", "Minami-ku, Fukuoka"], aw: [],
+      q: "博多もつ鍋 やま中 本店", src: "https://www.atpress.ne.jp/news/1226055" }
   ]
 };
