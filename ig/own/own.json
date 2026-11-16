@@ -1,9 +1,59 @@
 {
   "_note": "アッキー本人が撮った写真（独自性が最も高い。優先して使う）。場所は本人の申告のまま。撮影日・位置情報は写真に入っていない。使ったら used に日付とアカウントを書く。",
   "photos": [
-    {"file": "nikko-shirataki-akki.jpg", "place": "栃木県日光市 白滝", "people": "アッキー本人が写っている", "season": "晩秋（落ち葉）", "received": "2026-11-17", "used": []},
-    {"file": "nikko-shirataki.jpg", "place": "栃木県日光市 白滝", "people": "なし", "season": "晩秋（落ち葉）", "received": "2026-11-17", "used": []},
-    {"file": "kinugawa-sky.jpg", "place": "栃木県日光市 鬼怒川", "people": "なし", "season": "紅葉", "received": "2026-11-17", "used": []},
-    {"file": "kinugawa.jpg", "place": "栃木県日光市 鬼怒川", "people": "なし", "season": "紅葉", "received": "2026-11-17", "used": []}
+    {
+      "file": "nikko-shirataki-akki.jpg",
+      "place": "栃木県日光市川治温泉高原 白滝（本人の申告：〒321-2612 栃木県日光市川治温泉高原）",
+      "people": "アッキー本人が写っている",
+      "season": "晩秋（落ち葉）",
+      "received": "2026-11-17",
+      "used": [],
+      "facts": [
+        "日塩もみじライン（鬼怒川温泉と塩原温泉を結ぶ道。現在の栃木県道19号）沿いにある滝。近くに峠の茶屋（白滝ドライブイン）・駐車場・トイレがある（栃ナビ）",
+        "名前の由来：何本もの白い糸が重なって落ちるように見えることから（栃ナビ）",
+        "日塩もみじラインは2020年12月11日から無料（栃ナビ・旅行読売系サイト）。「有料道路」と書かない",
+        "落差は「約17m」（栃ナビ）と「10m」（4travelの口コミ）で食い違うため、投稿には書かない"
+      ],
+      "sources": [
+        "https://tochinavi.net/spot/home/?id=15225",
+        "https://tochinavi.net/spot/home/?id=9723",
+        "https://tabi-mag.jp/tg0299"
+      ]
+    },
+    {
+      "file": "nikko-shirataki.jpg",
+      "place": "栃木県日光市川治温泉高原 白滝（本人の申告：〒321-2612 栃木県日光市川治温泉高原）",
+      "people": "なし",
+      "season": "晩秋（落ち葉）",
+      "received": "2026-11-17",
+      "used": [],
+      "facts": [
+        "日塩もみじライン（鬼怒川温泉と塩原温泉を結ぶ道。現在の栃木県道19号）沿いにある滝。近くに峠の茶屋（白滝ドライブイン）・駐車場・トイレがある（栃ナビ）",
+        "名前の由来：何本もの白い糸が重なって落ちるように見えることから（栃ナビ）",
+        "日塩もみじラインは2020年12月11日から無料（栃ナビ・旅行読売系サイト）。「有料道路」と書かない",
+        "落差は「約17m」（栃ナビ）と「10m」（4travelの口コミ）で食い違うため、投稿には書かない"
+      ],
+      "sources": [
+        "https://tochinavi.net/spot/home/?id=15225",
+        "https://tochinavi.net/spot/home/?id=9723",
+        "https://tabi-mag.jp/tg0299"
+      ]
+    },
+    {
+      "file": "kinugawa-sky.jpg",
+      "place": "栃木県日光市 鬼怒川",
+      "people": "なし",
+      "season": "紅葉",
+      "received": "2026-11-17",
+      "used": []
+    },
+    {
+      "file": "kinugawa.jpg",
+      "place": "栃木県日光市 鬼怒川",
+      "people": "なし",
+      "season": "紅葉",
+      "received": "2026-11-17",
+      "used": []
+    }
   ]
 }
