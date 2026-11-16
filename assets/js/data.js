@@ -29,6 +29,18 @@
     return 'https://' + w.slice(0, i) + '.wikipedia.org/wiki/' + encodeURIComponent(w.slice(i + 1).replace(/ /g, '_'));
   }
 
+  // 名前に混ざったローマ字の読み・英語名を外す（v3.22.1）
+  //   「杉山神社 (Sugiyama Shrine)」「Kotohira Shrine 琴平神社」「細岡展望台 Kushiro Marsh Hosooka Observatory」→ 日本語名だけに
+  //   日本語が残らないとき（FUJIYAMAツインテラス など）はそのまま
+  var JA = /[\u3040-\u30ff\u3400-\u9fff]/;
+  function cleanName(n) {
+    if (!n || !/[A-Za-z]{3,}/.test(n) || !JA.test(n)) return n;
+    var t = n.replace(/\s*[(（][^()（）]*[A-Za-z][^()（）]*[)）]/g, '')
+      .replace(/^[A-Za-z][A-Za-z\s.'’-]*\s+(?=[\u3040-\u30ff\u3400-\u9fff])/, '')
+      .replace(/([\u3040-\u30ff\u3400-\u9fff」』])\s+[A-Za-z][A-Za-z\s.'’-]*$/, '$1').trim();
+    return JA.test(t) ? t : n;
+  }
+
   function fromRow(r) {
     var obj = r[7] ? r[7].split('|') : [];
     var inferred = r[8] ? r[8].split('|') : [];
@@ -48,7 +60,7 @@
     }
     if (heritage) desc += heritage + '。';
     return {
-      id: fromWd ? 'wd-' + r[0].slice(3) : (fromBt ? 'bt-' + r[0].slice(3) : 'osm-' + r[0]), source_ids: [fromWd || fromBt ? r[0] : 'osm:' + r[0]], name: r[1], aliases: [], category: r[2],
+      id: fromWd ? 'wd-' + r[0].slice(3) : (fromBt ? 'bt-' + r[0].slice(3) : 'osm-' + r[0]), source_ids: [fromWd || fromBt ? r[0] : 'osm:' + r[0]], name: cleanName(r[1]), aliases: cleanName(r[1]) !== r[1] ? [r[1]] : [], category: r[2],
       prefecture_code: r[3], prefecture: pref, municipality: r[4], lat: r[5], lon: r[6],
       geometry_type: 'point', parent_id: r[12] ? (r[12].indexOf('wd:') === 0 ? 'wd-' + r[12].slice(3) : 'osm-' + r[12]) : null,
       wishes: obj.concat(inferred), wishesInferred: inferred,

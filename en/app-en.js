@@ -597,8 +597,11 @@
       all.sort(function (a, b) { return (b.withinLimit - a.withinLimit) || ((b.score + adj(b)) - (a.score + adj(a))) || (a.km - b.km); });
     }
     var within = all.filter(function (s) { return s.withinLimit; });
-    var shown = pickSpread(within.length ? within : all, cfg.resultCount, cfg.spreadKm);
-    var more = (within.length ? within : all).filter(function (s) { return shown.indexOf(s) === -1; }).slice(0, 10);
+    // nothing within the time limit: show the closest places first, not far-away famous ones
+    // 指定時間内が0件のときは、遠くの有名スポットではなく近い順に出す
+    var pool = within.length ? within : all.slice().sort(function (a, b) { return a.minutes - b.minutes; });
+    var shown = pickSpread(pool, cfg.resultCount, cfg.spreadKm);
+    var more = pool.filter(function (s) { return shown.indexOf(s) === -1; }).slice(0, 10);
     var ctx = { n: n, stars: stars, tripDate: tripDate, mode: mode, origin: origin };
 
     var res = $('results');

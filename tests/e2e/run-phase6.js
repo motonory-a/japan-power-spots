@@ -37,7 +37,8 @@ const check = (name, ok, info = '') => { results.push(ok); console.log((ok ? '  
   check('OGP（タイトル・説明・画像・URL）', meta.og.every(Boolean) && /^https:\/\//.test(meta.og[2]));
   let ld = null;
   try { ld = JSON.parse(meta.ld[0]); } catch (e) { /* 下でNG */ }
-  check('構造化データ（WebSite）が正しいJSON', !!ld && ld['@type'] === 'WebSite' && ld.url === meta.canon);
+  const site = ld && (ld['@graph'] ? ld['@graph'].find((x) => x['@type'] === 'WebSite') : ld);
+  check('構造化データ（WebSite）が正しいJSON', !!site && site['@type'] === 'WebSite' && site.url === meta.canon);
   console.log('[関連サイト・広告の表示]');
   const cards = await page.$$eval('.more-you-card', (as) => as.map((a) => ({ href: a.href, label: a.querySelector('.ad-label').textContent, rel: a.rel })));
   check('「もっと自分を知る」に魂の系統鑑定と高次元SHOP', cards.length === 2 && cards.some((c) => /my-first-project/.test(c.href)) && cards.some((c) => /kojigen\.base\.shop/.test(c.href)));

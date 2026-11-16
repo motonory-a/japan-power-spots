@@ -492,7 +492,7 @@
       else if (f.mark === '×') out.push(when + s.direction + 'が避けたい方位にあたるため、参考の候補です。');
       else out.push('方角は' + s.direction + '（' + (ctx.tripDate ? 'この日の' : '今月の') + '吉凶はなし）です。');
     } else if (f) out.push('出発地のすぐ近くです。');
-    out.push(ctx.mode.label + 'で' + s.minutesText + '（目安）' + (s.withinLimit ? '' : '、指定の時間より少しかかります') + '。');
+    out.push(ctx.mode.label + 'で' + s.minutesText + '（目安）' + (s.withinLimit ? '' : '、指定の時間を超えます') + '。');
     if (s.numMatch) {
       var hits = ctx.numbers.filter(function (nn, i) { return s.numbers.indexOf(nn) !== -1 && ctx.numbers.indexOf(nn) === i; });
       out.push('数秘ナンバー' + hits.join('・') + 'のテーマとも重なります。');

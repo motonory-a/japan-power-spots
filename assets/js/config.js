@@ -40,8 +40,8 @@ var APP_CONFIG = {
   //   refMinutes   … 時間の指定がないとき「近さ」の点数がゼロになる時間（分）
   travelModes: {
     walk:    { label: '徒歩',     detour: 1.3, localKm: 9999, localSpeedKmh: 4,  longSpeedKmh: 4,   overheadMin: 0,  refMinutes: 120, gmaps: 'walking' },
-    transit: { label: '公共交通', detour: 1.3, localKm: 40,   localSpeedKmh: 30, longSpeedKmh: 130, overheadMin: 30, refMinutes: 480, gmaps: 'transit' },
-    car:     { label: '車',       detour: 1.3, localKm: 20,   localSpeedKmh: 30, longSpeedKmh: 80,  overheadMin: 10, refMinutes: 420, gmaps: 'driving' },
+    transit: { label: '公共交通', detour: 1.3, localKm: 40,   localSpeedKmh: 30, longSpeedKmh: 130, overheadMin: 30, refMinutes: 240, gmaps: 'transit' },
+    car:     { label: '車',       detour: 1.3, localKm: 20,   localSpeedKmh: 30, longSpeedKmh: 80,  overheadMin: 10, refMinutes: 240, gmaps: 'driving' },
     bike:    { label: '自転車',   detour: 1.3, localKm: 9999, localSpeedKmh: 15, longSpeedKmh: 15, overheadMin: 5,  refMinutes: 180, gmaps: 'bicycling' }
   },
 

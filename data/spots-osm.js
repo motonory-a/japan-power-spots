@@ -4,7 +4,7 @@
  *     数秘(暫定), Wikipedia, Wikidata, 親スポットのosm, 優先度, 祭神・本尊, 文化財, Wikipedia言語版数, 巨樹（樹種|幹周cm|樹高m）
  * 祭神・文化財は Wikidata（CC0）から。巨樹は環境省生物多様性センター 自然環境保全基礎調査 巨樹・巨木林調査（政府標準利用規約）を加工
  */
-var SPOTS_OSM_META = {"count": 10000, "total": 96431, "built": "2026-11-03", "extracted": "2026-11-03T08:13:57Z", "extraParts": ["data/extra/spots-extra-1.js", "data/extra/spots-extra-2.js", "data/extra/spots-extra-3.js", "data/extra/spots-extra-4.js", "data/extra/spots-extra-5.js", "data/extra/spots-extra-6.js", "data/extra/spots-extra-7.js", "data/extra/spots-extra-8.js"]};
+var SPOTS_OSM_META = {"count": 10000, "total": 96425, "built": "2026-11-03", "extracted": "2026-11-03T08:13:57Z", "extraParts": ["data/extra/spots-extra-1.js", "data/extra/spots-extra-2.js", "data/extra/spots-extra-3.js", "data/extra/spots-extra-4.js", "data/extra/spots-extra-5.js", "data/extra/spots-extra-6.js", "data/extra/spots-extra-7.js", "data/extra/spots-extra-8.js"]};
 var SPOTS_OSM = [
 ["w146432491","北海道神宮","神社","01","札幌市",43.05458,141.3092,"神社","恋愛・縁結び|健康祈願","912","ja:北海道神宮","Q710826","",244,"明治天皇|大国主神|スクナビコナ|国魂","",14,""],
 ["n794322581","北海道神宮頓宮","神社","01","札幌市",43.05998,141.36142,"神社","","91","ja:北海道神宮頓宮","Q21654596","",168,"","",0,""],
