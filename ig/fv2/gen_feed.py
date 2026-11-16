@@ -1,5 +1,6 @@
 # Feed v2 (2026-11-14): bright "white frame" design.
 # Photo is never darkened or covered; text sits on an ivory caption area.
+# 2026-11-17: photo is full-bleed (top/left/right edges) — see FULL in base().
 # Navy serif title (trust, readable at grid size) + one vermilion accent (draws the eye, shrine colour).
 import os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
@@ -34,8 +35,14 @@ def spaced(d, xy, t, f, fill, sp=4, anchor='l'):
         d.text((x, y), c, font=f, fill=fill); x += d.textlength(c, font=f) + sp
     return w
 
+FULL = True  # 2026-11-17 本人の提案：写真を上・左右の端まで（白い額縁なし）。False で旧デザイン
+
 def base(src, ph, fx=0.5, fy=0.5, crop=None):
     im = Image.new('RGB', (W, H), BG)
+    if FULL:
+        # 写真を上・左右いっぱいに。高さは旧デザインの「上余白＋写真」と同じなので、下の文字の位置は変わらない
+        im.paste(cover(src, W, M + ph, fx, fy, crop), (0, 0))
+        return im
     photo = cover(src, W - 2 * M, ph, fx, fy, crop)
     mask = Image.new('L', photo.size, 0); ImageDraw.Draw(mask).rounded_rectangle((0, 0, *photo.size), radius=22, fill=255)
     sh = Image.new('RGBA', (W, H), (0, 0, 0, 0))
