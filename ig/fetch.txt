@@ -84,3 +84,6 @@ w2-thu-ko3 | commons:Kusatsu Onsen
 w2-thu-es3 | commons:Kinosaki Onsen
 w2-wed-es3 | commons:Kinugawa Onsen
 w2-fri-jp2 | commons:Higashi Chaya Kanazawa
+w2-thu-ko4 | commons:Yubatake Kusatsu
+w2-thu-es4 | commons:Kinosaki Onsen willow canal
+w2-thu-jp3 | commons:Kurokawa Onsen
