@@ -20,3 +20,50 @@ cm-w0-arashiyama | commons:Arashiyama Togetsukyo autumn
 cm-w0-arashiyama2 | commons:Arashiyama autumn leaves Kyoto
 cm-w0-chitose | commons:chitose ame shichi-go-san
 cm-w0-shichigosan | commons:shichigosan shrine
+
+# w2 (2026-11-23〜29) 言語アカウントごとに別の写真（同じ写真は自動で避ける）
+w2-mon-en | commons:Meiji Jingu shrine
+w2-mon-zh | commons:Meiji Jingu shrine
+w2-mon-ko | commons:Meiji Jingu shrine
+w2-mon-fr | commons:Meiji Jingu shrine
+w2-mon-es | commons:Meiji Jingu shrine
+w2-mon-jp | commons:Meiji Jingu shrine
+w2-tue-en | commons:oden Japanese food
+w2-tue-zh | commons:oden Japanese food
+w2-tue-ko | commons:oden Japanese food
+w2-tue-fr | commons:oden Japanese food
+w2-tue-es | commons:oden Japanese food
+w2-tue-jp | commons:oden Japanese food
+w2-thu-en | commons:rotenburo onsen
+w2-thu-zh | commons:rotenburo onsen
+w2-thu-ko | commons:rotenburo onsen
+w2-thu-fr | commons:rotenburo onsen
+w2-thu-es | commons:rotenburo onsen
+w2-thu-jp | commons:rotenburo onsen
+w2-fri-en | commons:Kenrokuen garden
+w2-fri-zh | commons:Kenrokuen garden
+w2-fri-ko | commons:Kenrokuen garden
+w2-fri-fr | commons:Kenrokuen garden
+w2-fri-es | commons:Kenrokuen garden
+w2-fri-jp | commons:Kenrokuen garden
+w2-sat-en | commons:Korankei autumn
+w2-sat-zh | commons:Korankei autumn
+w2-sat-ko | commons:Korankei autumn
+w2-sat-fr | commons:Korankei autumn
+w2-sat-es | commons:Korankei autumn
+w2-sat-jp | commons:Korankei autumn
+w2-sun-en | commons:Fushimi Inari torii
+w2-sun-zh | commons:Fushimi Inari torii
+w2-sun-ko | commons:Fushimi Inari torii
+w2-sun-fr | commons:Fushimi Inari torii
+w2-sun-es | commons:Fushimi Inari torii
+w2-sun-jp | commons:Fushimi Inari torii
+w2-wed-fr | commons:Kinugawa river autumn
+w2-wed-es | commons:Kinugawa river autumn
+w2-am23-en | commons:torii vermilion shrine
+w2-am24-en | commons:shimenawa rope shrine
+w2-am25-en | commons:komainu shrine guardian
+w2-am26-en | commons:ema wooden plaques shrine
+w2-am27-en | commons:omamori amulet
+w2-am28-en | commons:shrine haiden main hall
+w2-am29-en | commons:shrine approach morning

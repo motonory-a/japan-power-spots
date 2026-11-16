@@ -4,6 +4,8 @@
 Each non-empty line:  name | url:<direct url>   or   name | commons:<search words>
 Commons results are saved with a credit line in ig/src/<name>.json.
 Already-downloaded names are skipped.
+A photo (Commons title) already used by another name is skipped, so the same query can be
+listed several times to get different photos (one per language account).
 """
 import json, os, re, sys, urllib.parse, urllib.request
 
@@ -11,6 +13,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'ig', 'src')
 UA = {'User-Agent': 'JapanPowerSpotJourney/1.0 (https://motonory-a.github.io/japan-power-spots/)'}
 os.makedirs(SRC, exist_ok=True)
+USED = set()
+for f in os.listdir(SRC):
+    if f.endswith('.json'):
+        try: USED.add(json.load(open(os.path.join(SRC, f))).get('title'))
+        except Exception: pass
 
 def get(url):
     req = urllib.request.Request(url, headers=UA)
@@ -23,7 +30,7 @@ def strip(html):
 def commons(name, q):
     api = 'https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode({
         'action': 'query', 'format': 'json', 'generator': 'search', 'gsrnamespace': 6,
-        'gsrsearch': q + ' filetype:bitmap', 'gsrlimit': 8, 'prop': 'imageinfo',
+        'gsrsearch': q + ' filetype:bitmap', 'gsrlimit': 30, 'prop': 'imageinfo',
         'iiprop': 'url|size|extmetadata', 'iiurlwidth': 1600})
     pages = json.loads(get(api)).get('query', {}).get('pages', {})
     cands = sorted(pages.values(), key=lambda p: p.get('index', 99))
@@ -33,13 +40,16 @@ def commons(name, q):
             continue
         meta = ii.get('extmetadata', {})
         lic = strip(meta.get('LicenseShortName', {}).get('value'))
-        if not re.search(r'CC|Public domain|PD', lic or '', re.I):
+        if not re.search(r'CC|Public domain|PD', lic or '', re.I) or re.search(r'NC|ND', lic or ''):
+            continue
+        if p['title'] in USED:
             continue
         data = get(ii.get('thumburl') or ii['url'])
         open(os.path.join(SRC, name + '.jpg'), 'wb').write(data)
         info = {'title': p['title'], 'page': ii.get('descriptionurl'),
                 'artist': strip(meta.get('Artist', {}).get('value')), 'license': lic, 'query': q}
         json.dump(info, open(os.path.join(SRC, name + '.json'), 'w'), ensure_ascii=False, indent=1)
+        USED.add(p['title'])
         print('ok', name, p['title'], lic)
         return
     print('none', name, q, file=sys.stderr)
