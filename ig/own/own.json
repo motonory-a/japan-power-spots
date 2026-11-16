@@ -1,0 +1,9 @@
+{
+  "_note": "アッキー本人が撮った写真（独自性が最も高い。優先して使う）。場所は本人の申告のまま。撮影日・位置情報は写真に入っていない。使ったら used に日付とアカウントを書く。",
+  "photos": [
+    {"file": "nikko-shirataki-akki.jpg", "place": "栃木県日光市 白滝", "people": "アッキー本人が写っている", "season": "晩秋（落ち葉）", "received": "2026-11-17", "used": []},
+    {"file": "nikko-shirataki.jpg", "place": "栃木県日光市 白滝", "people": "なし", "season": "晩秋（落ち葉）", "received": "2026-11-17", "used": []},
+    {"file": "kinugawa-sky.jpg", "place": "栃木県日光市 鬼怒川", "people": "なし", "season": "紅葉", "received": "2026-11-17", "used": []},
+    {"file": "kinugawa.jpg", "place": "栃木県日光市 鬼怒川", "people": "なし", "season": "紅葉", "received": "2026-11-17", "used": []}
+  ]
+}
