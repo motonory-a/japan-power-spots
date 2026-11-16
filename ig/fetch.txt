@@ -77,3 +77,10 @@ w2-thu-es2 | commons:Kinosaki Onsen
 w2-am29-en2 | commons:Shinto shrine sando approach
 w2-wed-fr2 | commons:Kinugawa Onsen
 w2-wed-es2 | commons:Ryuokyo
+w2-mon-fr2 | commons:Meiji Shrine main hall
+w2-mon-es2 | commons:Meiji Shrine main hall
+w2-thu-jp2 | commons:Nyuto Onsen
+w2-thu-ko3 | commons:Kusatsu Onsen
+w2-thu-es3 | commons:Kinosaki Onsen
+w2-wed-es3 | commons:Kinugawa Onsen
+w2-fri-jp2 | commons:Higashi Chaya Kanazawa
