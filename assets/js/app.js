@@ -676,6 +676,16 @@
     var all = D.rankSpots(SPOTS_ALL, { number: n, numbers: numbers, group: group, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: limit, boards: dirBoards }, cfg, { top: 300 });
     var within = all.filter(function (s) { return s.withinLimit; });
     var shown = within.length ? pickSpread(within, cfg.resultCount, cfg.spreadKm || 5) : all.slice(0, 3);
+    // 指定時間内に1件もないとき：全国の上位（遠い吉方位のスポット）ではなく、出発地にいちばん近いスポットを近い順に出す
+    if (limit && !within.length) {
+      var nearest = SPOTS_ALL.filter(function (x) { return D.isRecommendable(x, cfg); })
+        .map(function (x) { return { s: x, km: D.distanceKm(origin.lat, origin.lon, x.lat, x.lon) }; })
+        .sort(function (a, b) { return a.km - b.km; }).slice(0, 60).map(function (x) { return x.s; });
+      var nr = D.rankSpots(nearest, { number: n, numbers: numbers, group: group, origin: origin, wishes: wishes, mode: modeKey, limitMinutes: null, boards: dirBoards }, cfg);
+      nr.forEach(function (x) { x.withinLimit = false; });
+      nr.sort(function (a, b) { return (a.minutes - b.minutes) || (b.score - a.score); });
+      shown = pickSpread(nr, cfg.resultCount, cfg.spreadKm || 5);
+    }
 
     var sum = $('summary');
     sum.replaceChildren();
@@ -719,7 +729,7 @@
     var out = $('recommended');
     out.replaceChildren();
     if (limit && !within.length) {
-      out.append(el('p', 'notice', mode.label + 'で' + limitText(limit) + '以内（目安）に行けるスポットは見つかりませんでした。いまはデモデータが8件だけのためです。参考として、条件に近い候補を表示します。'));
+      out.append(el('p', 'notice', mode.label + 'で' + limitText(limit) + '以内（目安）に行けるスポットは見つかりませんでした。代わりに、出発地からいちばん近いスポットを近い順に表示します。' + (modeKey === 'transit' ? '公共交通は、駅までの移動や待ち時間を30分ほど見込んで計算しているため、短い時間では見つからないことがあります。' : '')));
     } else if (limit && all.withinCount < cfg.resultCount) {
       out.append(el('p', 'notice', mode.label + 'で' + limitText(limit) + '以内（目安）のスポットは' + all.withinCount + '件でした。'));
     }
