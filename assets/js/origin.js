@@ -129,7 +129,16 @@
     navigator.geolocation.getCurrentPosition(function (pos) {
       var acc = Math.round(pos.coords.accuracy);
       set({ lat: pos.coords.latitude, lon: pos.coords.longitude, label: '現在地（誤差 約' + acc + 'm）', source: 'gps' });
-      setMsg('現在地を出発地にしました。', 'ok');
+      // 現在地を使うのは「今いる場所の近く」を探したいとき。所要時間が「指定しない」のままだと、
+      // 吉方位を求めて遠く（他県）のスポットが上位に来るので、2時間以内を自動で入れる（あとから変えられる）
+      var tl = $('time-limit'), auto = cfg.gpsAutoLimitMinutes || 120;
+      if (tl && !tl.value && tl.querySelector('option[value="' + auto + '"]')) {
+        tl.value = String(auto);
+        tl.dispatchEvent(new Event('change', { bubbles: true }));
+        setMsg('現在地を出発地にしました。近くを探せるよう、所要時間を「' + tl.options[tl.selectedIndex].text + '」にしました（下の「出かける日と交通手段」で変えられます）。', 'ok');
+      } else {
+        setMsg('現在地を出発地にしました。', 'ok');
+      }
     }, function (err) {
       setMsg(err.code === 1 ? '位置情報の利用が許可されませんでした。住所検索か地図での指定をお使いください。'
         : '現在地を取得できませんでした。住所検索か地図での指定をお使いください。', 'err');
