@@ -67,3 +67,13 @@ w2-am26-en | commons:ema wooden plaques shrine
 w2-am27-en | commons:omamori amulet
 w2-am28-en | commons:shrine haiden main hall
 w2-am29-en | commons:shrine approach morning
+# w2 やり直し（球場・米国の温泉・スリランカの寺だったため）
+w2-mon-en2 | commons:Meiji Jingu torii
+w2-thu-en2 | commons:rotenburo Japan outdoor bath
+w2-thu-zh2 | commons:Kusatsu Onsen Yubatake
+w2-thu-ko2 | commons:Japanese hot spring bath ryokan
+w2-thu-fr2 | commons:Ginzan Onsen
+w2-thu-es2 | commons:Kinosaki Onsen
+w2-am29-en2 | commons:Shinto shrine sando approach
+w2-wed-fr2 | commons:Kinugawa Onsen
+w2-wed-es2 | commons:Ryuokyo
