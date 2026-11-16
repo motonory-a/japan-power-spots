@@ -1,0 +1,9 @@
+story 11-23 all7 done
+story ALL 49 done (11-23..29)
+feed 11-23 all7 + am 11-23 done
+feed 11-24 all7 + am 11-24 done
+feed 11-25 all7 + am 11-25 + reels r2a all7 done
+feed 11-26 all7 + am 11-26 done
+feed 11-27 all7 + am 11-27 done
+feed 11-28 all7 + am 11-28 + reels r2b all7 done
+ALL w2 scheduled (119 posts), verified en=23
