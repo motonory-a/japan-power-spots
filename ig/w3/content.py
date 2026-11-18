@@ -196,7 +196,7 @@ More seasonal Japan 👉 link in bio
 #미조레나베 #일본음식 #일본겨울 #일본여행 #일본요리""",
  'fr': """L'amazake 🍵 la douce boisson de l'hiver japonais
 
-L'amazake est une boisson chaude à base de riz, naturellement sucrée. Quand il fait froid, on la trouve dans les cafés, pendant les fêtes et, au Nouvel An, dans beaucoup de sanctuaires qui l'offrent aux visiteurs.
+L'amazake est une boisson chaude à base de riz, naturellement sucrée. Quand il fait froid, on la trouve dans les cafés, pendant les fêtes et, au Nouvel An, dans des sanctuaires qui l'offrent aux visiteurs.
 
 ✔ L'amazake au riz koji ne contient pas d'alcool : sa douceur vient du riz lui-même
 ✔ Celui à base de lie de saké peut contenir un peu d'alcool : renseignez-vous si besoin
