@@ -87,3 +87,73 @@ w2-fri-jp2 | commons:Higashi Chaya Kanazawa
 w2-thu-ko4 | commons:Yubatake Kusatsu
 w2-thu-es4 | commons:Kinosaki Onsen willow canal
 w2-thu-jp3 | commons:Kurokawa Onsen
+
+# w3 (11/30-12/06)
+w3-mon-1 | commons:Chichibu Night Festival
+w3-mon-2 | commons:Chichibu Yomatsuri yatai
+w3-mon-3 | commons:Chichibu Night Festival fireworks
+w3-mon-4 | commons:Chichibu Shrine
+w3-mon-5 | commons:Chichibu Night Festival kasaboko
+w3-mon-6 | commons:Chichibu Yomatsuri
+w3-mon-x1 | commons:Chichibu Night Festival
+w3-mon-x2 | commons:Chichibu Yomatsuri yatai
+w3-mon-x3 | commons:Chichibu Night Festival fireworks
+w3-tue-1 | commons:yuba Nikko
+w3-tue-2 | commons:yuba tofu skin
+w3-tue-3 | commons:yuba Japanese food
+w3-tue-4 | commons:Nikko yuba
+w3-tue-5 | commons:yuba dish
+w3-tue-6 | commons:yuba
+w3-tue-x1 | commons:yuba Nikko
+w3-tue-x2 | commons:yuba tofu skin
+w3-tue-x3 | commons:yuba Japanese food
+w3-wed-1 | commons:Chureito Pagoda Mount Fuji
+w3-wed-2 | commons:Arakurayama Sengen Park Fuji
+w3-wed-3 | commons:Chureito Pagoda snow
+w3-wed-4 | commons:Chureito Pagoda autumn
+w3-wed-5 | commons:Fujiyoshida Chureito
+w3-wed-6 | commons:Arakura Fuji Sengen Shrine
+w3-wed-x1 | commons:Chureito Pagoda Mount Fuji
+w3-wed-x2 | commons:Arakurayama Sengen Park Fuji
+w3-wed-x3 | commons:Chureito Pagoda snow
+w3-thu-1 | commons:torii sunset Japan
+w3-thu-2 | commons:pagoda sunset Japan
+w3-thu-3 | commons:shrine dusk lanterns Japan
+w3-thu-4 | commons:temple sunset Kyoto
+w3-thu-5 | commons:Japanese shrine evening
+w3-thu-6 | commons:torii dusk
+w3-thu-x1 | commons:torii sunset Japan
+w3-thu-x2 | commons:pagoda sunset Japan
+w3-thu-x3 | commons:shrine dusk lanterns Japan
+w3-fri-1 | commons:Toki no Kane Kawagoe
+w3-fri-2 | commons:Kawagoe Hikawa Shrine
+w3-fri-3 | commons:Kawagoe kurazukuri street
+w3-fri-4 | commons:Kashiya Yokocho Kawagoe
+w3-fri-5 | commons:Kawagoe Ichibangai
+w3-fri-6 | commons:Kawagoe Hikawa Shrine wind chimes
+w3-fri-x1 | commons:Toki no Kane Kawagoe
+w3-fri-x2 | commons:Kawagoe Hikawa Shrine
+w3-fri-x3 | commons:Kawagoe kurazukuri street
+w3-sun-1 | commons:Hakone Shrine torii lake
+w3-sun-2 | commons:Nachi Falls pagoda
+w3-sun-3 | commons:Kifune Shrine lanterns
+w3-sun-4 | commons:Takachiho Gorge
+w3-sun-5 | commons:Yakushima Jomon Sugi
+w3-sun-6 | commons:Mitsumine Shrine
+w3-sun-x1 | commons:Hakone Shrine torii lake
+w3-sun-x2 | commons:Nachi Falls pagoda
+w3-sun-x3 | commons:Kifune Shrine lanterns
+w3-am30-en | commons:daruma doll
+w3-am30-en-x | commons:daruma doll
+w3-am01-en | commons:maneki-neko Gotokuji
+w3-am01-en-x | commons:maneki-neko Gotokuji
+w3-am02-en | commons:Inari fox statue kitsune
+w3-am02-en-x | commons:Inari fox statue kitsune
+w3-am03-en | commons:bonsho temple bell Japan
+w3-am03-en-x | commons:bonsho temple bell Japan
+w3-am04-en | commons:toshikoshi soba
+w3-am04-en-x | commons:toshikoshi soba
+w3-am05-en | commons:kadomatsu
+w3-am05-en-x | commons:kadomatsu
+w3-am06-en | commons:hatsumode crowd shrine
+w3-am06-en-x | commons:hatsumode crowd shrine
