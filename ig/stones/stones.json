@@ -142,5 +142,47 @@
   "drive_id": "19fL1kNvNPKzfCoRNbfDmD9ZLWXQ1vi_a",
   "drive_name": "IMG_9875.jpeg",
   "used": false
+ },
+ {
+  "file": "lib/IMG_9860.jpg",
+  "stones": "アンバー",
+  "note": "値札「アンバー」(IMG_9862)と同じ。w3 月曜",
+  "used": true
+ },
+ {
+  "file": "lib/IMG_9887.jpg",
+  "stones": "ガーデンクォーツ",
+  "note": "値札「ガーデンクォーツ」(IMG_9886)。w3 火曜",
+  "used": true
+ },
+ {
+  "file": "lib/IMG_9829.jpg",
+  "stones": "水晶",
+  "note": "見た目で判断。w3 水曜 豆知識No.6",
+  "used": true
+ },
+ {
+  "file": "lib/IMG_9835.jpg",
+  "stones": "隕石(鉄隕石・ローズゴールド色)",
+  "note": "ウィドマンシュテッテン模様。産地名は未確認。w3 木曜",
+  "used": true
+ },
+ {
+  "file": "lib/IMG_9858.jpg",
+  "stones": "アメジスト",
+  "note": "値札「アメジスト」(IMG_9859)。w3 金曜",
+  "used": true
+ },
+ {
+  "file": "lib/IMG_9905.jpg",
+  "stones": null,
+  "note": "手のひらにブレスレット。名前は書かずに使用。w3 土曜 豆知識No.7",
+  "used": true
+ },
+ {
+  "file": "lib/IMG_9815.jpg",
+  "stones": null,
+  "note": "紫・黄・ピンクなどのミックス。名前は書かずに使用。w3 日曜",
+  "used": true
  }
 ]

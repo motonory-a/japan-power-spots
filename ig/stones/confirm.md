@@ -18,3 +18,11 @@
 - IMG_6824.jpeg(drive id 1rNXCR_yyy4n18YLXFXOogmvjbWK04Jxp):黒い丸玉(オニキス？モリオン？)
 - IMG_9683.jpeg(drive id 1tiHmBwAvbT5WAAUdiaivD_DTD6fjmWNK):木の玉と水晶(木の種類)
 - IMG_9900.jpeg(drive id 1qxWeKz0ZpXvwxU8ntq0waCJiEuVV7l4_):茶色に黒い斑点の玉と水晶(菩提樹の実？)
+
+## lib/ から（2026-11-18 確認分、値札なし）
+- IMG_9840.jpg：青く光る灰色の玉（ラブラドライト？）
+- IMG_9820/9821.jpg：青緑に白い筋（アマゾナイト？）
+- IMG_9883/9884.jpg：ラベンダー色の玉（クンツァイト？レピドライト？）
+- IMG_9871.jpg：黄緑の玉、値札は「サンストーン」と読めるが色が合わない
+- IMG_9878.jpg：赤茶の内包物入り水晶、値札が読み取れない
+- IMG_9889/9890.jpg：深緑に赤い点（ブラッドストーン？）
