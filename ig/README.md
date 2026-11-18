@@ -112,3 +112,10 @@
   - CC BY系の写真は右下に小さくクレジット。
 - ストーリー：`ig/sx/gen2.py`（1080×1920）。写真を全面に使い、文字は小さな白いカード／チップに収めて下側にまとめる。ぼかし・紺の帯は使わない。
 - Canvaで文字入りの画像を作った場合は、文字部分を切り落としてから使う（`src/canva-*-crop.jpg`）。
+
+## メインへの導線（2026-11-18 決定）
+- @japan_psj_jp の全投稿（フィード・リール）に「案内人：高次元ネゴシエイター アッキー @nigihayahi03」を入れる。
+- 海外版は、アッキーに触れるときの表記を「Akki, the Higher-Dimensional Negotiator @nigihayahi03」にする。
+- @japan_psj_jp は週1〜2本、instagramData.collaborators に nigihayahi03 を入れて共同投稿にする（本人の写真の回が向く）。
+- 本人の写真で、同じ写真が別名で入っていることがある（kinugawa-gorge = kinugawa.jpg など）。使う前に md5 で重複を確かめる。
+- w3 からリールに動画の区間を入れられる（ig/w3/reels.py の build_reel / overlay）。
