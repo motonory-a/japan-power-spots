@@ -157,3 +157,24 @@ w3-am05-en | commons:kadomatsu
 w3-am05-en-x | commons:kadomatsu
 w3-am06-en | commons:hatsumode crowd shrine
 w3-am06-en-x | commons:hatsumode crowd shrine
+# w3 追加
+w3-mon-7 | commons:Chichibu-jinja haiden
+w3-mon-8 | commons:Chichibu jinja shrine Saitama
+w3-mon-9 | commons:Chichibu Yomatsuri float night
+w3-mon-10 | commons:秩父夜祭
+w3-tue-7 | commons:湯葉
+w3-tue-8 | commons:湯波
+w3-tue-9 | commons:Yuba Kyoto
+w3-tue-10 | commons:Yuba soba
+w3-tue-11 | commons:Nikko yuba cuisine
+w3-tue-12 | commons:hikiage yuba
+w3-wed-7 | commons:Chureito Pagoda winter
+w3-wed-8 | commons:Mount Fuji Chureito Pagoda snow winter
+w3-wed-9 | commons:Fujiyoshida Mount Fuji winter
+w3-thu-7 | commons:Kiyomizu-dera sunset
+w3-thu-8 | commons:Yasaka Shrine evening
+w3-thu-9 | commons:Fushimi Inari dusk
+w3-fri-7 | commons:Kawagoe Hikawa Shrine torii
+w3-fri-8 | commons:Kawagoe Kitain
+w3-am04-en2 | commons:kake soba
+w3-am04-en3 | commons:soba noodles bowl Japan
