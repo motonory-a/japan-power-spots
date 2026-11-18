@@ -178,3 +178,13 @@ w3-fri-7 | commons:Kawagoe Hikawa Shrine torii
 w3-fri-8 | commons:Kawagoe Kitain
 w3-am04-en2 | commons:kake soba
 w3-am04-en3 | commons:soba noodles bowl Japan
+w3-tue-a1 | commons:amazake
+w3-tue-a2 | commons:amazake
+w3-tue-a3 | commons:amazake
+w3-tue-a4 | commons:amazake shrine
+w3-tue-a5 | commons:amazake Japanese drink
+w3-tue-a6 | commons:甘酒
+w3-tue-a7 | commons:甘酒
+w3-tue-n1 | commons:nabe hot pot Japan
+w3-tue-n2 | commons:nabe hot pot Japan
+w3-tue-n3 | commons:yosenabe
