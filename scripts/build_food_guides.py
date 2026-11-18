@@ -36,6 +36,9 @@ for page, pg in PAGES.items():
         out = [f'''<!DOCTYPE html>
 <html lang="{HL[lang]}">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CX2WH9VGQ5"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-CX2WH9VGQ5');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)}｜{e(u["site"])}</title>
