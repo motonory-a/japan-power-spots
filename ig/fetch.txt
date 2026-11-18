@@ -188,3 +188,7 @@ w3-tue-a7 | commons:甘酒
 w3-tue-n1 | commons:nabe hot pot Japan
 w3-tue-n2 | commons:nabe hot pot Japan
 w3-tue-n3 | commons:yosenabe
+w3-wed-c1 | commons:Chureito Pagoda
+w3-wed-c2 | commons:Chureito Pagoda
+w3-wed-c3 | commons:Chureito
+w3-wed-c4 | commons:Arakurayama Sengen Park
