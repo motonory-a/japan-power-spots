@@ -221,3 +221,9 @@ r1-22-jp3 | commons:Hakone Shrine torii Lake Ashi
 r1-21-zh4 | commons:Oishi Park Mount Fuji
 r1-21-zh5 | commons:Fuji autumn maple Kawaguchi
 r1-22-es-w | commons:Shirahige Shrine torii Lake Biwa
+# 2026-11-19 本人の指摘：朝の豆知識の写真が内容と合っていない → 差し替え
+fix-am20 | commons:Saisenbako offering box coins shrine
+fix-am20b | commons:Five yen coin offering
+fix-am22 | commons:Meiji Jingu torii forest
+fix-am27 | commons:Omamori amulets shrine
+fix-am27b | commons:Omamori charms Japan
