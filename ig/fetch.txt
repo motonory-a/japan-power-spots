@@ -192,3 +192,20 @@ w3-wed-c1 | commons:Chureito Pagoda
 w3-wed-c2 | commons:Chureito Pagoda
 w3-wed-c3 | commons:Chureito
 w3-wed-c4 | commons:Arakurayama Sengen Park
+
+# w1 差し替え (11/20〜22) 2026-11-19 本人の依頼：言語ごとに別の写真
+r1-20-zh | commons:Kotoku-in Great Buddha Kamakura
+r1-20-ko | commons:Hasedera Kamakura
+r1-20-fr | commons:Zeniarai Benzaiten Kamakura
+r1-20-es | commons:Engaku-ji Kamakura
+r1-20-jp | commons:Tsurugaoka Hachimangu Kamakura
+r1-21-zh | commons:Kawaguchiko momiji corridor
+r1-21-ko | commons:Chureito pagoda Mount Fuji autumn
+r1-21-fr | commons:Lake Kawaguchi Mount Fuji autumn leaves
+r1-21-es | commons:Mount Fuji maple leaves
+r1-21-jp | commons:Fujikawaguchiko autumn leaves Fuji
+r1-22-zh | commons:Fushimi Inari Taisha torii
+r1-22-ko | commons:Itsukushima Shrine torii
+r1-22-fr | commons:Nachi Falls Kumano
+r1-22-es | commons:Ise Grand Shrine
+r1-22-jp | commons:Izumo Taisha
