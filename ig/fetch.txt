@@ -209,3 +209,9 @@ r1-22-ko | commons:Itsukushima Shrine torii
 r1-22-fr | commons:Nachi Falls Kumano
 r1-22-es | commons:Ise Grand Shrine
 r1-22-jp | commons:Izumo Taisha
+r1-20-zh2 | commons:Kamakura Daibutsu Kotoku-in statue
+r1-20-ko2 | commons:Kenchō-ji Kamakura
+r1-21-zh2 | commons:Mount Fuji Kawaguchiko autumn foliage
+r1-21-ko2 | commons:Arakurayama Sengen Park Mount Fuji
+r1-22-es2 | commons:Ise Jingu Uji Bridge
+r1-22-jp2 | commons:Izumo Taisha shimenawa
