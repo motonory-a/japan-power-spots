@@ -10,8 +10,8 @@ PHOTO = {
  'mon': {'en': S+'w3-mon-1.jpg', 'zh': S+'w3-mon-x1.jpg', 'ko': S+'w3-mon-2.jpg', 'fr': S+'w3-mon-6.jpg', 'es': S+'w3-mon-7.jpg', 'jp': S+'w3-mon-10.jpg'},
  'tue': {'en': S+'w3-tue-a1.jpg', 'zh': S+'w3-tue-n1.jpg', 'ko': S+'w3-tue-n2.jpg', 'fr': S+'w3-tue-a3.jpg', 'es': S+'w3-tue-n3.jpg', 'jp': O+'kinugawa-yuba-soba.jpg'},
  'wed': {'en': S+'w3-wed-1.jpg', 'zh': S+'w3-wed-2.jpg', 'ko': S+'w3-wed-x2.jpg', 'fr': S+'w3-wed-4.jpg', 'es': S+'w3-wed-c2.jpg', 'jp': S+'w3-wed-6.jpg'},
- 'thu': {'en': S+'w3-thu-7.jpg', 'zh': S+'w3-thu-1.jpg', 'ko': S+'w3-thu-9.jpg', 'fr': S+'w3-thu-6.jpg', 'es': S+'w3-thu-x1.jpg', 'jp': S+'w3-thu-4.jpg'},
- 'fri': {'en': S+'w3-fri-x1.jpg', 'zh': S+'w3-fri-3.jpg', 'ko': S+'w3-fri-4.jpg', 'fr': S+'w3-fri-1.jpg', 'es': S+'w3-fri-8.jpg', 'jp': S+'w3-fri-2.jpg'},
+ 'thu': {'en': S+'w3-thu-7.jpg', 'zh': S+'w3-thu-1.jpg', 'ko': S+'fx-sunset-ko2.jpg', 'fr': S+'w3-thu-6.jpg', 'es': S+'w3-thu-x1.jpg', 'jp': S+'fx-sunset-jp.jpg'},
+ 'fri': {'en': S+'w3-fri-x1.jpg', 'zh': S+'w3-fri-3.jpg', 'ko': S+'w3-fri-4.jpg', 'fr': S+'w3-fri-1.jpg', 'es': S+'w3-fri-8.jpg', 'jp': S+'fx-hikawa-jp.jpg'},
  'sat': {'en': OW+'momiji1c.jpg', 'zh': O+'kinugawa-momiji-street.jpg', 'ko': OW+'vid-14.jpg', 'fr': O+'kinugawa-sakuranamiki-stone.jpg', 'es': OW+'vid-8.jpg', 'jp': OW+'momiji2c.jpg'},
  'sun': {'en': S+'w3-sun-1.jpg', 'zh': S+'w3-sun-2.jpg', 'ko': S+'w3-sun-4.jpg', 'fr': S+'w3-sun-6.jpg', 'es': S+'w3-thu-3.jpg', 'jp': S+'w3-sun-5.jpg'},
 }
@@ -354,7 +354,7 @@ Plan your days in Japan 👉 link in bio
 ✔ 해가 지면 금방 추워져요. 겉옷을 하나 더 챙기세요
 
 시간: 일본 국립천문대, 도쿄, 2026년
-사진: 교토 후시미 이나리 신사의 누문, 해 질 녘
+사진: 히로시마 미야지마, 이쓰쿠시마 신사의 오토리이와 해 질 녘
 
 일본 여행 일정 짜기 👉 프로필 링크
 
@@ -400,7 +400,7 @@ Planea tus días en Japón 👉 enlace en la bio
 3. 16時ごろの低い光は、写真がきれいに撮れる時間
 4. 日が落ちると一気に冷えるので、上着を一枚
 
-写真は京都・大徳寺の夕暮れ。
+写真は京都・清水寺の仁王門と夕暮れ。
 短い昼を大切に、冬の社寺めぐりを楽しみましょう。
 
 冬のお出かけ先は、プロフィールのリンクから探せます⛩
@@ -478,7 +478,7 @@ Lugares sagrados cerca de Tokio 👉 enlace en la bio
 
 ⛩ 蔵造りの町並みと、高さ約16mの「時の鐘」（1日4回、6時・12時・15時・18時に鳴ります）
 ⛩ 石畳の路地「菓子屋横丁」で、昔ながらのお菓子を
-⛩ 写真は、晩秋の氷川神社のもみじ
+⛩ 写真は、川越氷川神社の鯛みくじ
 
 良いご縁を願いに、週末の小江戸へ。
 

@@ -84,6 +84,15 @@ src2 = open(IG + 'sx/gen2.py').read()
 exec(src2[:src2.index('# tonight titles')])          # 部品（panel, chip, block, pill, handle, wrap, measure など）
 exec(src2[src2.index('T={'):src2.index("SRC=IG+'src/'")])  # 各言語の定型文 T
 OUT = IG + 'w2/out/'  # gen2 の部品が OUT を上書きするので戻す
+W2Q = {  # 2026-11-19 本人指摘「ストーリーと写真は合うように」→ 二択の言葉を、上下の写真に写っているものそのものにする
+ 'jp': [('今日やるなら、どっち？', '明治神宮にお参り', 'あつあつのおでん'), ('行くなら、どっち？', '日光・白滝', '温泉街の夜'), ('行くなら、どっち？', '金沢・兼六園', '香嵐渓の紅葉')],
+ 'en': [('What would you do today?', 'Visit Meiji Jingu', 'Eat hot oden'), ('Where would you go?', 'Shirataki Falls', 'A hot spring bath'), ('Where would you go?', 'Kenrokuen, Kanazawa', 'Korankei maples')],
+ 'zh': [('今天想做哪一個？', '參拜明治神宮', '吃熱呼呼的關東煮'), ('你想去哪裡？', '鬼怒川溪谷', '溫泉鄉'), ('你想去哪裡？', '金澤・兼六園', '香嵐溪紅葉')],
+ 'ko': [('오늘 하나만 한다면?', '메이지진구 참배', '따끈한 오뎅'), ('어디로 갈래요?', '기누가와 계곡', '온천 마을'), ('어디로 갈래요?', '가나자와 겐로쿠엔', '고란케이 단풍')],
+ 'fr': [("Aujourd’hui, que feriez-vous ?", 'Visiter le Meiji-jingū', 'Manger un oden chaud'), ('Où iriez-vous ?', 'Kinugawa Onsen', 'Un village thermal'), ('Où iriez-vous ?', 'Le Kenroku-en à Kanazawa', 'Les érables de Kōrankei')],
+ 'es': [('¿Qué harías hoy?', 'Visitar Meiji-jingū', 'Comer oden caliente'), ('¿A dónde irías?', 'Kinugawa Onsen', 'Un baño termal'), ('¿A dónde irías?', 'Kenroku-en (Kanazawa)', 'Arces de Kōrankei')],
+}
+for _l in W2Q: T[_l]['q'] = W2Q[_l]
 SPLAN = {'mon': 'pre', 'tue': 'q0', 'wed': 'pre', 'thu': 'q1', 'fri': 'pre', 'sat': 'q2', 'sun': 'guide'}
 def story_pre(lang, day, title, bg):
     L = T[lang]; h = HANDLE[lang]; t = FEED_T[lang]

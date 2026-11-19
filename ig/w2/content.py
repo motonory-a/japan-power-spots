@@ -6,11 +6,11 @@ LANGS = ['en', 'zh', 'ko', 'fr', 'es', 'jp']
 DATES = {'mon': '11-23', 'tue': '11-24', 'wed': '11-25', 'thu': '11-26', 'fri': '11-27', 'sat': '11-28', 'sun': '11-29'}
 
 PHOTO = {
- 'mon': {'en': S+'w2-mon-en2.jpg', 'zh': S+'w2-mon-zh.jpg', 'ko': S+'w2-mon-ko.jpg', 'fr': S+'w2-mon-fr2.jpg', 'es': S+'w2-mon-es2.jpg', 'jp': S+'w2-mon-jp.jpg'},
+ 'mon': {'en': S+'w2-mon-en2.jpg', 'zh': S+'fx-meiji-zh.jpg', 'ko': S+'w2-mon-ko.jpg', 'fr': S+'w2-mon-fr2.jpg', 'es': S+'w2-mon-es2.jpg', 'jp': S+'fix-am22b.jpg'},
  'tue': {l: S+f'w2-tue-{l}.jpg' for l in LANGS},
  'wed': {'en': O+'nikko-shirataki-akki.jpg', 'zh': O+'kinugawa-sky.jpg', 'ko': O+'kinugawa.jpg', 'fr': S+'w2-wed-fr2.jpg', 'es': S+'w2-wed-es3.jpg', 'jp': O+'nikko-shirataki.jpg'},
- 'thu': {'en': S+'w2-thu-en2.jpg', 'zh': S+'w2-thu-zh2.jpg', 'ko': S+'w2-thu-ko4.jpg', 'fr': S+'w2-thu-fr2.jpg', 'es': S+'w2-thu-jp2.jpg', 'jp': S+'w2-thu-jp3.jpg'},
- 'fri': {'en': S+'w2-fri-en.jpg', 'zh': S+'w2-fri-zh.jpg', 'ko': S+'w2-fri-ko.jpg', 'fr': S+'w2-fri-fr.jpg', 'es': S+'w2-fri-es.jpg', 'jp': S+'w2-fri-jp2.jpg'},
+ 'thu': {'en': S+'w2-thu-en2.jpg', 'zh': S+'w2-thu-zh2.jpg', 'ko': S+'w2-thu-ko4.jpg', 'fr': S+'w2-thu-fr2.jpg', 'es': S+'w2-thu-jp.jpg', 'jp': S+'w2-thu-jp3.jpg'},
+ 'fri': {'en': S+'w2-fri-en.jpg', 'zh': S+'w2-fri-zh.jpg', 'ko': S+'w2-fri-ko.jpg', 'fr': S+'w2-fri-fr.jpg', 'es': S+'w2-fri-es.jpg', 'jp': S+'fx-kanazawa-jp.jpg'},
  'sat': {l: S+f'w2-sat-{l}.jpg' for l in LANGS},
  'sun': {l: S+f'w2-sun-{l}.jpg' for l in LANGS},
 }
@@ -360,7 +360,7 @@ Las 5 reglas que siguen los japoneses:
 
 Bebe agua después del baño y evítalo si has bebido mucho alcohol.
 
-Foto: Nyuto Onsen, en Akita.
+Foto: baño al aire libre de Tsurunoyu, en Nyuto Onsen (Akita).
 
 Encuentra pueblos termales cerca de tu lugar sagrado 👉 enlace en la bio
 
@@ -446,7 +446,7 @@ Lugares sagrados cerca de Kanazawa 👉 enlace en la bio
 なかでも唐崎松は、5本の柱と約800本の縄で吊られる、兼六園の冬の主役です。
 
 ✨ 日本の金箔の99%以上は金沢で作られています。金運アップを願って、金箔スイーツも
-✨ 写真は、ひがし茶屋街の灯り。夕暮れの散歩が素敵です
+✨ 写真は、兼六園の雪吊り。円すい形に張られた縄が、冬の訪れを告げます
 ✨ 東京から北陸新幹線（最速）で約2時間30分
 
 金沢まわりのパワースポットは、プロフィールのリンクから探せます⛩

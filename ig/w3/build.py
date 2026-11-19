@@ -158,14 +158,17 @@ def stories():
                 im = story_pre(lang, day, title, bg)
             elif kind.startswith('q'):
                 i = int(kind[1]); other = {'q0': 'mon', 'q1': 'wed', 'q2': 'fri'}[kind]
-                im = story_q(lang, i, C.PHOTO[other][lang], bg)
+                # 2026-11-19 本人指摘：二択の言葉と写真を合わせる（小江戸＝川越の町並み、温泉の町＝鬼怒川）
+                ia = {('sat', 'jp'): IG + 'src/fx-kawagoe-jp2.jpg'}.get((day, lang), C.PHOTO[other][lang])
+                bg = {('sat', 'fr'): IG + 'own/kinugawa-gorge.jpg'}.get((day, lang), bg)
+                im = story_q(lang, i, ia, bg)
             else:
                 im = story_guide(lang, bg)
             def _cr(img, path, y):
                 c = credit_img(path)
                 if c: ImageDraw.Draw(img).text((W - 24, y), c, font=ImageFont.truetype(SANSM, 20, index=0), fill=(255, 255, 255), anchor='rs', stroke_width=2, stroke_fill=(40, 40, 50))
             if kind.startswith('q'):
-                _cr(im, C.PHOTO[{'q0': 'mon', 'q1': 'wed', 'q2': 'fri'}[kind]][lang], H // 2 - 58); _cr(im, bg, H - 24)
+                _cr(im, ia, H // 2 - 58); _cr(im, bg, H - 24)
             else: _cr(im, bg, H - 24)
             fn = f'story-{date}-{lang}.jpg'; im.save(OUT + fn, quality=90); add(lang, date, '12:30', 'STORY', fn, '')
         globals()['F'] = lambda p, s: ImageFont.truetype(p, s, index=0)
