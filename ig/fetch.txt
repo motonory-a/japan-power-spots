@@ -215,3 +215,6 @@ r1-21-zh2 | commons:Mount Fuji Kawaguchiko autumn foliage
 r1-21-ko2 | commons:Arakurayama Sengen Park Mount Fuji
 r1-22-es2 | commons:Ise Jingu Uji Bridge
 r1-22-jp2 | commons:Izumo Taisha shimenawa
+r1-21-zh3 | commons:Fuji Five Lakes autumn leaves Mount Fuji
+r1-22-es3 | commons:Yasaka Shrine Kyoto
+r1-22-jp3 | commons:Hakone Shrine torii Lake Ashi
