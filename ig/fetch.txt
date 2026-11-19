@@ -227,3 +227,8 @@ fix-am20b | commons:Five yen coin offering
 fix-am22 | commons:Meiji Jingu torii forest
 fix-am27 | commons:Omamori amulets shrine
 fix-am27b | commons:Omamori charms Japan
+fix-am20c | commons:Saisen-bako
+fix-am20d | commons:offertory box shrine Japan
+fix-am20e | commons:5 yen coin
+fix-am22b | commons:Meiji Shrine otorii
+fix-am22c | commons:Fushimi Inari senbon torii
