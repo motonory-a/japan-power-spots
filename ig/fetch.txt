@@ -220,3 +220,4 @@ r1-22-es3 | commons:Yasaka Shrine Kyoto
 r1-22-jp3 | commons:Hakone Shrine torii Lake Ashi
 r1-21-zh4 | commons:Oishi Park Mount Fuji
 r1-21-zh5 | commons:Fuji autumn maple Kawaguchi
+r1-22-es-w | commons:Shirahige Shrine torii Lake Biwa
