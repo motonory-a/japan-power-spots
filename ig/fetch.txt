@@ -232,3 +232,18 @@ fix-am20d | commons:offertory box shrine Japan
 fix-am20e | commons:5 yen coin
 fix-am22b | commons:Meiji Shrine otorii
 fix-am22c | commons:Fushimi Inari senbon torii
+# 2026-11-19 本人の指摘「ストーリーと写真は合うように」→ 話題が写っていない写真の差し替え
+fx-meiji-zh | commons:Meiji Jingu main hall
+fx-meiji-zh2 | commons:Meiji Shrine honden
+fx-onsen-es | commons:rotenburo outdoor hot spring bath Japan
+fx-onsen-es2 | commons:onsen bath ryokan
+fx-kanazawa-jp | commons:Kenrokuen yukitsuri
+fx-kanazawa-jp2 | commons:Kenrokuen Kotoji lantern
+fx-sunset-jp | commons:Kiyomizu-dera sunset
+fx-sunset-jp2 | commons:temple pagoda sunset Kyoto
+fx-sunset-ko | commons:Zojoji Tokyo Tower sunset
+fx-sunset-ko2 | commons:shrine torii sunset Japan
+fx-hikawa-jp | commons:Kawagoe Hikawa Shrine
+fx-hikawa-jp2 | commons:Kawagoe Hikawa Jinja torii
+fx-kawagoe-jp | commons:Kawagoe Kurazukuri street
+fx-kawagoe-jp2 | commons:Kawagoe old town warehouse
