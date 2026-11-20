@@ -66,6 +66,10 @@ for lang in C.LANGS:
     M.reel(f'r2a-{lang}', [M.slide(p, t, h, small=(k == 4)) for k, (p, t) in enumerate(zip(s1, R1[lang]))])
     out.append({'lang': lang, 'brand': BRAND[lang], 'date': '11-25', 'time': REEL_T[lang], 'type': 'REEL', 'file': f'r2a-{lang}.mp4', 'text': CAP1[lang] + credits(s1)})
     s2 = [P['thu'][lang], P['tue'][lang], s1[0], P['mon'][lang], P['sun'][lang]]
+    # 2026-11-20 本人指摘「ストーリーと写真は合うように」：「温泉街」のコマは温泉街が写った写真に（滝・渓谷だけの写真は使わない）
+    S = '/home/claude/japan-power-spots/ig/src/'
+    s2[2] = {'en': S+'fx-ot-zh2.jpg', 'jp': '/home/claude/japan-power-spots/ig/w2/crop-kinugawa-gorge-jp.jpg', 'ko': S+'fx-ot-ko.jpg', 'zh': S+'fx-ot-ko3.jpg'}.get(lang, s2[2])
+    if lang == 'ko': s2[0] = S+'fx-ot-ko2.jpg'  # 湯気の岩のアップ → 草津・湯畑の夜
     M.reel(f'r2b-{lang}', [M.slide(p, t, h, small=(k == 4)) for k, (p, t) in enumerate(zip(s2, R2[lang]))])
     out.append({'lang': lang, 'brand': BRAND[lang], 'date': '11-28', 'time': REEL_T[lang], 'type': 'REEL', 'file': f'r2b-{lang}.mp4', 'text': CAP2[lang] + credits(s2)})
     print(lang, 'ok')
