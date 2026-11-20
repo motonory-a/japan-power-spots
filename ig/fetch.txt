@@ -247,3 +247,11 @@ fx-hikawa-jp | commons:Kawagoe Hikawa Shrine
 fx-hikawa-jp2 | commons:Kawagoe Hikawa Jinja torii
 fx-kawagoe-jp | commons:Kawagoe Kurazukuri street
 fx-kawagoe-jp2 | commons:Kawagoe old town warehouse
+# 2026-11-20 リール11/28「温泉街」のコマ用（温泉街そのものが写った写真）
+fx-ot-en | commons:Kinosaki Onsen street willow
+fx-ot-en2 | commons:Kinosaki onsen townscape
+fx-ot-ko | commons:Shibu Onsen town
+fx-ot-ko2 | commons:Kusatsu Onsen Yubatake night
+fx-ot-ko3 | commons:Ginzan Onsen street
+fx-ot-zh | commons:Arima Onsen town
+fx-ot-zh2 | commons:Shuzenji Onsen
