@@ -102,6 +102,11 @@ function rep(html, from, to, label) {
   if (html.indexOf(from) === -1) throw new Error('見つからない文章：' + label);
   return html.split(from).join(to);
 }
+// 正規表現で置き換える。見つからなければエラー
+function repRe(html, re, fn, label) {
+  if (!re.test(html)) throw new Error('見つからない文章：' + label);
+  return html.replace(new RegExp(re.source, 'g'), fn);
+}
 function deepMergeScript(data) {
   return `/* 自動生成：scripts/build_lang_pages.js（訳は scripts/i18n/${data.lang}.js で直す） */
 (function () {
@@ -143,13 +148,17 @@ LANGS.forEach((lang) => {
   h = rep(h, 'hreflang="en" lang="en" aria-current="page">', 'hreflang="en" lang="en">', 'current en');
   h = h.replace(new RegExp('(href="\\.\\./' + lang + '/"[^>]*)>'), '$1 aria-current="page">');
   // 英語版と共有するファイルへの道すじ
-  h = rep(h, 'href="en.css"', 'href="../en/en.css"', 'css');
+  // ファイル名のうしろの「?v=番号」(キャッシュ対策)があってもなくても置き換える
+  h = repRe(h, /href="en\.css(\?v=[^"]*)?"/, (m, v) => 'href="../en/en.css' + (v || '') + '"', 'css');
   h = h.split('img/akki-').join('../en/img/akki-');
-  h = rep(h, '<script src="../data/gourmet.js"></script>', '<script src="../data/gourmet.js"></script>\n<script src="../data/gourmet-' + lang + '.js"></script>', 'gourmet i18n');
+  h = repRe(h, /<script src="\.\.\/data\/gourmet\.js(\?v=[^"]*)?"><\/script>/, (m, v) => m + '\n<script src="../data/gourmet-' + lang + '.js' + (v || '') + '"></script>', 'gourmet i18n');
   h = h.split("'img/hero-").join("'../en/img/hero-").split('src="img/hero-').join('src="../en/img/hero-');
   h = h.split('href="spots/').join('href="../en/spots/');
-  h = rep(h, '<script src="i18n-en.js"></script>', '<script src="../en/i18n-en.js"></script>\n<script src="i18n.js"></script>', 'i18n');
-  ['pool-en.js', 'mylist.js', 'app-en.js'].forEach((f) => { h = rep(h, `<script src="${f}"></script>`, `<script src="../en/${f}"></script>`, f); });
+  h = repRe(h, /<script src="i18n-en\.js(\?v=[^"]*)?"><\/script>/, (m, v) => '<script src="../en/i18n-en.js' + (v || '') + '"></script>\n<script src="i18n.js' + (v || '') + '"></script>', 'i18n');
+  ['pool-en.js', 'mylist.js', 'app-en.js'].forEach((f) => {
+    const re = new RegExp('<script src="' + f.replace(/\./g, '\\.') + '(\\?v=[^"]*)?"></script>');
+    h = repRe(h, re, (m, v) => `<script src="../en/${f}${v || ''}"></script>`, f);
+  });
   fs.mkdirSync(path.join(ROOT, lang), { recursive: true });
   fs.writeFileSync(path.join(ROOT, lang, 'index.html'), h);
   fs.writeFileSync(path.join(ROOT, lang, 'i18n.js'), deepMergeScript(Object.assign({ lang, spotBase: '../en/spots/' }, T.data)));
