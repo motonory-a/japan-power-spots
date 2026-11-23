@@ -1,0 +1,181 @@
+{
+ "_note": "アッキー本人が撮った動画。ファイルは media ブランチ clips/（1080p作業用コピー、元の4Kは本人のドライブ/iPhone）。urlはコミット固定なのでMetricoolにそのまま使える。場所は本人が確認したものだけ書く。使ったら used に日付とアカウントを書く。",
+ "videos": [
+  {
+   "id": "IMG_0059",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_0059.mp4",
+   "shot": "2025-03-30",
+   "sec": 21,
+   "orient": "縦",
+   "content": "海の朝日（曇り空の太陽が海面に光の道）。岩場。人なし",
+   "place": "未確認",
+   "note": "同じ日の写真が箱根の海辺の神社（seaside-shrine）。場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_0568",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_0568.mp4",
+   "shot": "2025-11-02",
+   "sec": 187,
+   "orient": "縦",
+   "content": "鳥居→長い石段を登る白装束の人（アッキー本人と思われる・後ろ姿）→大きな社殿→境内の端の展望",
+   "place": "未確認",
+   "note": "場所は本人に確認中。10/30の写真（new-05xx）と近い日付",
+   "used": []
+  },
+  {
+   "id": "IMG_1199",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_1199.mp4",
+   "shot": "2025-05-05",
+   "sec": 21,
+   "orient": "縦",
+   "content": "紫の幕の参道→赤い提灯の大きな屋根の下→赤い社殿と「奉納」の賽銭箱。人なし",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_1986",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_1986.mp4",
+   "shot": "2025-06-09",
+   "sec": 25,
+   "orient": "縦",
+   "content": "曇りの浜辺に寄せる波（砂浜）。人なし",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_2045",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_2045.mp4",
+   "shot": "2025-06-09",
+   "sec": 8,
+   "orient": "縦",
+   "content": "森に囲まれた小さな社殿と白い砂利の境内（360度ぐるっと）。人なし",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_2054",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_2054.mp4",
+   "shot": "2025-06-13",
+   "sec": 36,
+   "orient": "縦",
+   "content": "石畳の道と小さな橋→池→小さな祠→滝と滝つぼ。人なし",
+   "place": "未確認",
+   "note": "場所は本人に確認中（看板あり）",
+   "used": []
+  },
+  {
+   "id": "IMG_5792",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_5792.mp4",
+   "shot": "2025-10-29",
+   "sec": 13,
+   "orient": "縦",
+   "content": "木漏れ日の中、黄色い上着の人が社に向かって立つ（後ろ姿・顔なし）",
+   "place": "未確認",
+   "note": "黄色い上着の人が本人か本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_6986",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_6986.mp4",
+   "shot": "2025-11-26",
+   "sec": 32,
+   "orient": "横",
+   "content": "夕方の社殿・狛犬（石の獣）のアップ・しめ縄の門",
+   "place": "未確認",
+   "note": "写真 new-6987 と同じ日。場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_7001",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_7001.mp4",
+   "shot": "2025-11-26",
+   "sec": 35,
+   "orient": "横",
+   "content": "赤い鳥居が連なる道→紅葉の谷と建物",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_7282",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_7282.mp4",
+   "shot": "2024-12-15",
+   "sec": 30,
+   "orient": "縦",
+   "content": "石段を登り大きな社殿の前へ。人なし",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_7355",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_7355.mp4",
+   "shot": "2024-12-12",
+   "sec": 55,
+   "orient": "縦",
+   "content": "赤い鳥居・のぼり・岩だらけの山道（磐座のような岩場）。手ぶれ多め",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_7359",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_7359.mp4",
+   "shot": "2024-12-12",
+   "sec": 10,
+   "orient": "縦",
+   "content": "木と岩の斜面（逆光で白っぽい）。使いにくい",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_7973",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_7973.mp4",
+   "shot": "2025-01-04",
+   "sec": 16,
+   "orient": "縦",
+   "content": "走る電車の窓から見た田園と山並み・青空",
+   "place": "未確認",
+   "note": "移動シーンに使える",
+   "used": []
+  },
+  {
+   "id": "IMG_8039",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_8039.mp4",
+   "shot": "2025-01-05",
+   "sec": 26,
+   "orient": "縦",
+   "content": "狛犬の間の石段を登る→唐破風の大きな社殿。人なし",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_8619",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_8619.mp4",
+   "shot": "2025-02-07",
+   "sec": 64,
+   "orient": "縦",
+   "content": "霧の渓谷、苔むした岩→そびえる岩壁の間の滝と淵。奥に人が小さく写る",
+   "place": "未確認",
+   "note": "場所は本人に確認中",
+   "used": []
+  },
+  {
+   "id": "IMG_8654",
+   "url": "https://raw.githubusercontent.com/motonory-a/japan-power-spots/0ee9f4cf3e1c110c1731fb6d3ea2b2959c41bc10/clips/IMG_8654.mp4",
+   "shot": "2025-02-02",
+   "sec": 11,
+   "orient": "縦",
+   "content": "寺の境内→長い石段の上のお堂。五色の幕。最初の方に男性2人の顔が写る（2秒目あたり）",
+   "place": "未確認",
+   "note": "顔が写る部分は使わない（本人の許可があれば別）。場所は本人に確認中",
+   "used": []
+  }
+ ]
+}
