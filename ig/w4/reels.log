@@ -1,0 +1,39 @@
+made r-12-07-jp.mp4
+made r-12-07-st.mp4
+made r-12-07-en.mp4
+made r-12-07-zh.mp4
+made r-12-07-ko.mp4
+made r-12-07-fr.mp4
+made r-12-07-es.mp4
+made r-12-09-jp.mp4
+made r-12-09-en.mp4
+made r-12-09-zh.mp4
+made r-12-09-ko.mp4
+made r-12-09-fr.mp4
+made r-12-09-es.mp4
+made r-12-09-st.mp4
+made r-12-11-jp.mp4
+made r-12-11-st.mp4
+made r-12-11-en.mp4
+made r-12-11-zh.mp4
+made r-12-11-ko.mp4
+made r-12-11-fr.mp4
+made r-12-11-es.mp4
+made r-12-12-en.mp4
+made r-12-12-zh.mp4
+made r-12-12-ko.mp4
+made r-12-12-fr.mp4
+made r-12-12-es.mp4
+Traceback (most recent call last):
+  File "/home/claude/japan-power-spots/ig/w4/reels.py", line 208, in <module>
+    make(OUT + f, shots, HANDLE[lang]); print('made', f)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/claude/japan-power-spots/ig/reels/hook.py", line 92, in make
+    fr = os.path.join(tmp, f'ph{i}.jpg'); _photo_frame(sh['src'], sh.get('x', 0.5)).save(fr, quality=95)
+                                          ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/claude/japan-power-spots/ig/reels/hook.py", line 69, in _photo_frame
+    im = Image.open(path).convert('RGB')
+         ~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/PIL/Image.py", line 3670, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: '/home/claude/japan-power-spots/ig/w4/src/ks-torii.jpg'
