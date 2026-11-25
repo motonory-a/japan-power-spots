@@ -1,0 +1,11 @@
+# w4(2026-12-07〜12-13)事実の出典
+- 報徳二宮神社:own.json facts(境内の看板:学問・経営の神、尊徳翁の墓=県指定史跡)/尊徳が1856年に今市で没:tabi-mag.jp/tk0457/ /東武下今市駅徒歩3分・合格などのご利益:tochinavi.net/spot/home/index.shtml?id=10293 ※墓所については吉祥寺(東京)説もあり、「お墓がある(看板どおり)」の書き方にとどめた
+- 伊勢神宮 参拝時間(10〜12月 5:00〜17:00、内宮・外宮同じ):kankomie.or.jp/spot/2937.html、kankomie.or.jp/report/1365、mapple.net/article/32306/ ※写真の橋は宇治橋と確認できないため名前を書かない
+- 箱根神社:平和の鳥居 1952年・サンフランシスコ講和条約記念・湖畔、757年万巻上人(伝承):mlit.go.jp/tagengo-db/R1-01104.html/バス約33分・元箱根徒歩10分:tabi-mag.jp/kn0640/
+- 出雲大社:大国主大神・縁結び・二礼四拍手一礼・旧暦10月に神々が集まる:mapple.net/article/82857/、rurubu.jp/andmore/article/5124、walkerplus.com/article/1005535/ ※写真の大しめ縄の建物は「推定:神楽殿」のため建物名と大きさは書かない
+- 鹿島神宮 御手洗池:1日40万リットル以上の湧水・禊の池:walkerplus.com/article/1006050、iko-yo.net/facilities/9115、tabi-mag.jp/ib0046/
+- 東国三社:下三宮参り・御祭神・直角二等辺三角形・鹿島〜香取12km:tabi-mag.jp/power-tougoku3shrine/、tabi-mag.jp/tougoku3shrine/ /息栖の忍潮井:tabi-mag.jp/ib0124/ /要石:tabi-mag.jp/ib0046/
+- お守りの返し方:mlit.go.jp/tagengo-db/en/H30-00525.html(明治神宮・古札納所)、allabout.co.jp/gm/gc/450218/(神社本庁広報部への取材:他の神社でもたいてい可、どんど焼き1/15前後、自分で処分は禁じられていない)、news.allabout.co.jp/articles/o/75475/(1年が目安)
+- 神社とお寺の違い:一般的な知識(鳥居/山門、二礼二拍手一礼/合掌、神仏習合)。断定を避け「〜が基本」「〜もある」とした
+- 天然石 No.8・No.9:セレナイト=水に弱い、アメジスト=日光で退色しやすい(一般的な鉱物の性質)。効果は「と言われています」にとどめた
+- 正月事始め(12/13)は情報源を確認できなかったので使わなかった
