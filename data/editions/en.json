@@ -10,7 +10,8 @@
       "lat": 35.6812,
       "lon": 139.7671,
       "region": "Tokyo & Kanto",
-      "tagline": "Shrines hidden in city forests, and old temple towns a short train ride away."
+      "tagline": "Shrines hidden in city forests, and old temple towns a short train ride away.",
+      "pref": "東京都"
     },
     {
       "key": "kyoto",
@@ -19,7 +20,8 @@
       "lat": 34.9858,
       "lon": 135.7588,
       "region": "Kansai",
-      "tagline": "The old capital, with more famous shrines and temples than one trip can hold."
+      "tagline": "The old capital, with more famous shrines and temples than one trip can hold.",
+      "pref": "京都府"
     },
     {
       "key": "osaka",
@@ -28,7 +30,8 @@
       "lat": 34.7025,
       "lon": 135.4959,
       "region": "Kansai",
-      "tagline": "Lively city shrines, and an easy base for Nara, Kyoto and Mt. Koya."
+      "tagline": "Lively city shrines, and an easy base for Nara, Kyoto and Mt. Koya.",
+      "pref": "大阪府"
     },
     {
       "key": "nara",
@@ -37,7 +40,8 @@
       "lat": 34.6851,
       "lon": 135.8048,
       "region": "Kansai",
-      "tagline": "Great temples of the ancient capital, with deer in the park."
+      "tagline": "Great temples of the ancient capital, with deer in the park.",
+      "pref": "奈良県"
     },
     {
       "key": "nikko",
@@ -47,7 +51,8 @@
       "lon": 139.6075,
       "region": "Tokyo & Kanto",
       "tagline": "Mountain shrines and temples among tall cedars, north of Tokyo.",
-      "dayTripMinutes": 100
+      "dayTripMinutes": 100,
+      "pref": "栃木県"
     },
     {
       "key": "hakone",
@@ -62,7 +67,8 @@
         "Q39231",
         "Q653180",
         "Q11401286"
-      ]
+      ],
+      "pref": "神奈川県"
     },
     {
       "key": "ise",
@@ -71,7 +77,8 @@
       "lat": 34.4875,
       "lon": 136.7092,
       "region": "Central Japan",
-      "tagline": "Ise Jingu, the most sacred shrine in Shinto, and the sea at Futami."
+      "tagline": "Ise Jingu, the most sacred shrine in Shinto, and the sea at Futami.",
+      "pref": "三重県"
     },
     {
       "key": "hiroshima",
@@ -83,7 +90,8 @@
       "tagline": "The island shrine of Itsukushima and its gate standing in the sea.",
       "pins": [
         "Q191763"
-      ]
+      ],
+      "pref": "広島県"
     },
     {
       "key": "kanazawa",
@@ -92,7 +100,8 @@
       "lat": 36.5781,
       "lon": 136.6479,
       "region": "Central Japan",
-      "tagline": "A castle town on the Sea of Japan with quiet temple districts."
+      "tagline": "A castle town on the Sea of Japan with quiet temple districts.",
+      "pref": "石川県"
     },
     {
       "key": "fukuoka",
@@ -104,7 +113,8 @@
       "tagline": "The gateway to Kyushu, with Dazaifu Tenmangu nearby.",
       "pins": [
         "Q710786"
-      ]
+      ],
+      "pref": "福岡県"
     }
   ],
   "buildCities": [
@@ -206,6 +216,10 @@
     "akkiAlt": "Akki, the guide of this site",
     "akkiH": "Hello, I'm Akki.",
     "akkiP": "In Japan I'm known as <b>the Higher-Dimensional Negotiator</b>. I was born in Yokosuka and live in Tokyo, and Japan's shrines and sacred places are a big part of my life and work.",
-    "akkiLinks": "<a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">Instagram @japan_psj</a> · <a href=\"https://www.youtube.com/@nigihayahi03\" target=\"_blank\" rel=\"noopener\">YouTube</a>"
+    "akkiLinks": "<a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">Instagram @japan_psj</a> · <a href=\"https://www.youtube.com/@nigihayahi03\" target=\"_blank\" rel=\"noopener\">YouTube</a>",
+    "foodH": "Local food to try in {pref}",
+    "foodSub": "The best-known local dishes, with more in the Local Food Guide.",
+    "foodMore": "See the local food ranking ›",
+    "go": "Route"
   }
 }

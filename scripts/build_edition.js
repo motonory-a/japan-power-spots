@@ -35,9 +35,13 @@ ctx.window = ctx; ctx.globalThis = ctx;
 vm.createContext(ctx);
 ['assets/js/config.js', 'assets/js/jst-date.js', 'data/solar-terms.js', 'assets/js/kyusei.js', 'data/spots-demo.js', 'data/spots-osm.js',
   'data/curated-info.js', 'data/known-benefits.js', 'assets/js/data.js', 'assets/js/diagnosis.js', 'data/model-courses.js',
-  'en/i18n-en.js', 'en/pool-en.js', 'data/en-labels.js']
+  'en/i18n-en.js', 'en/pool-en.js', 'data/en-labels.js', 'data/ranking.js', 'data/gourmet.js', 'data/food-photos.js']
   .forEach((f) => vm.runInContext(fs.readFileSync(r(f), 'utf8').replace(/^var (\w+)/mg, 'this.$1').replace(/^const (\w+)/mg, 'this.$1'), ctx, { filename: f }));
-const { ALL_SPOTS, EN, EnPool, Diagnosis: D, MODEL_COURSES, APP_CONFIG, EN_LABELS } = ctx;
+const { ALL_SPOTS, EN, EnPool, Diagnosis: D, MODEL_COURSES, APP_CONFIG, EN_LABELS, GOURMET_RANK, GOURMET, FOOD_PHOTOS, PREFECTURES } = ctx;
+const ALL_PREF = {};   // 都道府県コード → 日本語名(北海道・福岡県…)
+(PREFECTURES || []).forEach((p) => { ALL_PREF[p[0]] = p[1]; });
+// 料理名の訳(韓国語など)。英語は data/gourmet.js の中にある
+const GT = LANG === 'en' ? null : (() => { const c2 = {}; vm.createContext(c2); vm.runInContext(fs.readFileSync(r('data/gourmet-' + LANG + '.js'), 'utf8').replace(/^var (\w+)/mg, 'this.$1'), c2); return c2.GOURMET_T; })();
 const transit = APP_CONFIG.travelModes.transit;
 // 言語ごとの名前(都道府県・種類・ご利益・コース名)。英語以外は scripts/i18n/<言語>.js の data
 const LOC = LANG === 'en' ? EN : Object.assign({}, EN, require('./i18n/' + LANG + '.js').data);
@@ -146,9 +150,11 @@ const ICON = {
 };
 const typeShort = (s) => (s.category === '神社' ? T.shrine : s.category === '寺院' ? T.temple : cat(s));
 // スポットのカード。写真(と英語以外の名前)は開いたときに ui.js が Wikimedia Commons・Wikidata から入れる
-function spotItem(s, depth, note, small) {
+function spotItem(s, depth, note, small, from) {
   const b = blessings(s);
-  return `<li class="ed-spot${small ? ' ed-spot-s' : ''}" data-q="${s.wikidata}"><a href="${spotHref(s, depth)}">
+  // 都市のページでは、その都市から電車・バスでの道順(Google マップ)をすぐ開けるボタンを付ける
+  const go = from ? `<a class="ed-go" href="https://www.google.com/maps/dir/?api=1&amp;origin=${from.lat},${from.lon}&amp;destination=${s.lat},${s.lon}&amp;travelmode=transit" target="_blank" rel="noopener">${ICON.pin}${esc(T.go)}</a>` : '';
+  return `<li class="ed-spot${small ? ' ed-spot-s' : ''}${go ? ' ed-has-go' : ''}" data-q="${s.wikidata}">${go}<a href="${spotHref(s, depth)}">
     <span class="ed-thumb" aria-hidden="true"></span>
     <span class="ed-spot-body"><span class="ed-spot-name" data-label="${s.wikidata}">${esc(s.en)}</span><span class="ed-spot-ja" lang="ja">${esc(s.name)}</span>
     <span class="ed-chips"><span class="ed-chip">${ICON.torii}${esc(typeShort(s))}</span>${note ? `<span class="ed-chip">${ICON.walk}${esc(note)}</span>` : `<span class="ed-chip">${ICON.pin}${esc(pref(s))}</span>`}${!small && b.length ? `<span class="ed-chip ed-chip-b">${esc(b.slice(0, 2).join(' / '))}</span>` : ''}</span></span>
@@ -192,11 +198,11 @@ function cityPage(c) {
   <section class="ed-sec">
     <h2 class="ed-h2">${esc(fill(T.nearH, o))}</h2>
     <p class="ed-sub">${esc(T.nearSub)}</p>
-    <ul class="ed-spots">${d.near.map((x) => spotItem(x.s, depth, fmtMin(x.min))).join('\n')}</ul>
+    <ul class="ed-spots">${d.near.map((x) => spotItem(x.s, depth, fmtMin(x.min), false, c)).join('\n')}</ul>
   </section>
   ${d.trips.length ? `<section class="ed-band">
     <h2 class="ed-h2">${esc(fill(T.tripsH, o))}</h2>
-    <ul class="ed-spots ed-grid2">${d.trips.map((x) => spotItem(x.s, depth, fmtMin(x.min), true)).join('\n')}</ul>
+    <ul class="ed-spots ed-grid2">${d.trips.map((x) => spotItem(x.s, depth, fmtMin(x.min), true, c)).join('\n')}</ul>
   </section>` : ''}
   ${d.courses.length ? `<section class="ed-sec">
     <h2 class="ed-h2">${esc(T.routesH)}</h2>
@@ -205,10 +211,38 @@ function cityPage(c) {
       <ol class="ed-steps">${co.stops.map((st) => { const s = SPOTS.find((x) => x.wikidata === st.q); return '<li>' + (s ? `<a href="${spotHref(s, depth)}" data-label="${s.wikidata}">${esc(s.en)}</a>` : `<span lang="ja">${esc(st.name)}</span>`) + '</li>'; }).join('')}</ol>
       <a class="ed-purple" href="${gm(co)}" target="_blank" rel="noopener">${ICON.pin}${esc(T.routeMap)}</a></div>`).join('\n')}
   </section>` : ''}
+  ${foodSection(c, depth)}
   ${miniCards(depth, '../../')}
   <p class="ed-credits" data-credits hidden></p>
 </main>
 ` + foot(depth);
+}
+// その都市の都道府県の名物料理(data/ranking.js の TOP5)。写真は Wikimedia Commons(撮影者とライセンスを下に出す)
+function foodSection(c, depth) {
+  const list = (GOURMET_RANK[c.pref] || []).slice(0, 5);
+  if (!list.length) return '';
+  const all = GOURMET[c.pref] || [];
+  const dish = (jp) => {
+    const g = all.find((x) => x[0] === jp);
+    if (LANG === 'en') return g ? [g[1], g[3]] : [jp, ''];
+    const t = GT && GT[jp];
+    return t ? [t[0], t[1]] : [g ? g[1] : jp, ''];
+  };
+  const credits = [];
+  const items = list.map((jp) => {
+    const [name, desc] = dish(jp);
+    const ph = FOOD_PHOTOS[jp];
+    if (ph) credits.push(`<a href="${esc(ph[1])}" target="_blank" rel="noopener noreferrer">${esc(ph[2])} (${esc(ph[3])})</a>`);
+    return `<li class="ed-food"><span class="ed-food-pic"${ph ? ` style="background-image:url('${esc(ph[0])}')"` : ''} aria-hidden="true"></span><span><b>${esc(name)}</b><span class="ed-spot-ja" lang="ja">${esc(jp)}</span>${desc ? `<small>${esc(desc)}</small>` : ''}</span></li>`;
+  }).join('\n');
+  const prefName = LOC.prefectures[Object.keys(EN.prefectures).find((k) => (ALL_PREF[k] || '') === c.pref)] || c.pref;
+  return `<section class="ed-sec">
+    <h2 class="ed-h2">${esc(fill(T.foodH, { pref: prefName }))}</h2>
+    <p class="ed-sub">${esc(T.foodSub)}</p>
+    <ul class="ed-foods">${items}</ul>
+    <p class="ed-more ed-more-d"><a href="${up(depth)}${LANG}/ranking.html">${esc(T.foodMore)}</a></p>
+    ${credits.length ? `<p class="ed-credits">${LANG === 'ko' ? '사진' : 'Photos'} (Wikimedia Commons): ${credits.join(' · ')}</p>` : ''}
+  </section>`;
 }
 function miniCards(depth, base) {
   return `<section class="ed-sec ed-row3">

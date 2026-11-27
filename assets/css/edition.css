@@ -138,3 +138,17 @@
 .ed .en-near a,.ed .en-index-list a{color:var(--pu);font-weight:700}
 .ed .en-jump a{color:var(--pu)}
 .ed .ed-langs a{margin:0 2px}
+
+/* ---------- 都市のページ:道順ボタン・名物料理(2026-11-28) ---------- */
+.ed-spot{position:relative}
+.ed-spot a.ed-go{position:absolute;right:10px;bottom:9px;z-index:2;display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border:0;border-radius:999px;background:var(--pu);color:#fff;font-size:11px;font-weight:700;text-decoration:none;box-shadow:none;width:auto;height:auto}
+.ed-spot a.ed-go svg{width:12px;height:12px}
+.ed-has-go > a:not(.ed-go){padding-bottom:30px}
+.ed-has-go .ed-chev{align-self:flex-start;margin-top:18px}
+.ed-foods{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+@media (min-width:760px){.ed-foods{grid-template-columns:1fr 1fr}}
+.ed-food{display:flex;gap:10px;align-items:center;padding:8px;border-radius:12px;background:#fff;border:1.5px solid #E6D7B4}
+.ed-food-pic{flex:none;width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);background:linear-gradient(135deg,#f3e3c0,#d9c7f1) center/cover no-repeat}
+.ed-food b{display:block;font-size:15px;color:var(--pu2)}
+.ed-food small{display:block;font-size:12px;color:var(--mut);line-height:1.4;margin-top:2px}
+.ed-more-d a{color:var(--pu)}

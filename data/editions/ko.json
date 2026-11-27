@@ -15,7 +15,8 @@
       "pins": [
         "Q710786"
       ],
-      "tagline": "한국에서 가장 가까운 큰 도시. 다자이후 텐만구까지 전철로 쉽게 갈 수 있어요."
+      "tagline": "한국에서 가장 가까운 큰 도시. 다자이후 텐만구까지 전철로 쉽게 갈 수 있어요.",
+      "pref": "福岡県"
     },
     {
       "key": "osaka",
@@ -24,7 +25,8 @@
       "lat": 34.6661,
       "lon": 135.501,
       "region": "간사이",
-      "tagline": "먹거리의 도시이자 교토·나라·고야산으로 가는 거점."
+      "tagline": "먹거리의 도시이자 교토·나라·고야산으로 가는 거점.",
+      "pref": "大阪府"
     },
     {
       "key": "tokyo",
@@ -33,7 +35,8 @@
       "lat": 35.6812,
       "lon": 139.7671,
       "region": "간토",
-      "tagline": "도심 속 숲의 신사와, 전철로 금방 가는 옛 절 마을."
+      "tagline": "도심 속 숲의 신사와, 전철로 금방 가는 옛 절 마을.",
+      "pref": "東京都"
     },
     {
       "key": "kyoto",
@@ -42,7 +45,8 @@
       "lat": 34.9858,
       "lon": 135.7588,
       "region": "간사이",
-      "tagline": "천 년의 옛 수도. 유명한 신사와 절이 한 번의 여행으로는 다 못 볼 만큼 많아요."
+      "tagline": "천 년의 옛 수도. 유명한 신사와 절이 한 번의 여행으로는 다 못 볼 만큼 많아요.",
+      "pref": "京都府"
     },
     {
       "key": "sapporo",
@@ -54,7 +58,8 @@
       "pins": [
         "Q710826"
       ],
-      "tagline": "홋카이도 여행의 출발점. 홋카이도 신궁과 넓은 자연."
+      "tagline": "홋카이도 여행의 출발점. 홋카이도 신궁과 넓은 자연.",
+      "pref": "北海道"
     },
     {
       "key": "nara",
@@ -63,7 +68,8 @@
       "lat": 34.6851,
       "lon": 135.805,
       "region": "간사이",
-      "tagline": "옛 수도의 큰 절과, 사슴이 노니는 공원."
+      "tagline": "옛 수도의 큰 절과, 사슴이 노니는 공원.",
+      "pref": "奈良県"
     },
     {
       "key": "hiroshima",
@@ -75,7 +81,8 @@
       "pins": [
         "Q191763"
       ],
-      "tagline": "바다 위에 선 도리이로 유명한 이쓰쿠시마 신사."
+      "tagline": "바다 위에 선 도리이로 유명한 이쓰쿠시마 신사.",
+      "pref": "広島県"
     },
     {
       "key": "nagasaki",
@@ -84,7 +91,8 @@
       "lat": 32.7522,
       "lon": 129.87,
       "region": "규슈",
-      "tagline": "언덕과 항구의 도시. 역사가 깊은 신사와 절."
+      "tagline": "언덕과 항구의 도시. 역사가 깊은 신사와 절.",
+      "pref": "長崎県"
     },
     {
       "key": "kagoshima",
@@ -96,7 +104,8 @@
       "pins": [
         "Q704622"
       ],
-      "tagline": "사쿠라지마가 보이는 남쪽 도시. 기리시마 신궁으로 가는 거점."
+      "tagline": "사쿠라지마가 보이는 남쪽 도시. 기리시마 신궁으로 가는 거점.",
+      "pref": "鹿児島県"
     },
     {
       "key": "beppu",
@@ -108,7 +117,8 @@
       "pins": [
         "Q715632"
       ],
-      "tagline": "온천의 마을. 우사 신궁까지 당일치기로 갈 수 있어요."
+      "tagline": "온천의 마을. 우사 신궁까지 당일치기로 갈 수 있어요.",
+      "pref": "大分県"
     }
   ],
   "buildCities": [
@@ -215,6 +225,10 @@
     "akkiAlt": "이 사이트의 가이드 아키",
     "akkiH": "안녕하세요, 아키(Akki)입니다.",
     "akkiP": "일본에서 <b>Akki, the Higher-Dimensional Negotiator</b>로 활동하고 있어요. 요코스카에서 태어나 도쿄에 살고 있으며, 일본의 신사와 성지는 제 삶과 일의 큰 부분입니다.",
-    "akkiLinks": "<a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">Instagram @japan_psj</a> · <a href=\"https://www.youtube.com/@nigihayahi03\" target=\"_blank\" rel=\"noopener\">YouTube</a>"
+    "akkiLinks": "<a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">Instagram @japan_psj</a> · <a href=\"https://www.youtube.com/@nigihayahi03\" target=\"_blank\" rel=\"noopener\">YouTube</a>",
+    "foodH": "{pref}에서 맛보는 지역 음식",
+    "foodSub": "그 지역에서 가장 유명한 음식들. 더 많은 요리는 지역 음식 도감에서.",
+    "foodMore": "지역 음식 랭킹 보기 ›",
+    "go": "길찾기"
   }
 }
