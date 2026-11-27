@@ -241,7 +241,7 @@ function foodSection(c, depth) {
     <p class="ed-sub">${esc(T.foodSub)}</p>
     <ul class="ed-foods">${items}</ul>
     <p class="ed-more ed-more-d"><a href="${up(depth)}${LANG}/ranking.html">${esc(T.foodMore)}</a></p>
-    ${credits.length ? `<p class="ed-credits">${({ ko: '사진', zh: '照片' })[LANG] || 'Photos'} (Wikimedia Commons): ${credits.join(' · ')}</p>` : ''}
+    ${credits.length ? `<p class="ed-credits">${({ ko: '사진', zh: '照片', es: 'Fotos' })[LANG] || 'Photos'} (Wikimedia Commons): ${credits.join(' · ')}</p>` : ''}
   </section>`;
 }
 function miniCards(depth, base) {

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CX2WH9VGQ5"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX2WH9VGQ5');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trouvez les lieux sacrés qui vous correspondent | Voyage aux lieux sacrés du Japon</title>
+<meta name="description" content="Indiquez votre vœu, votre lieu de séjour et votre date de naissance : nous vous proposons des sanctuaires, temples et lieux sacrés du Japon faits pour vous.">
+<link rel="canonical" href="https://motonory-a.github.io/japan-power-spots/fr/finder/">
+<meta name="theme-color" content="#4B2D7E">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Voyage aux lieux sacrés du Japon">
+<meta property="og:title" content="Trouvez les lieux sacrés qui vous correspondent | Voyage aux lieux sacrés du Japon">
+<meta property="og:description" content="Indiquez votre vœu, votre lieu de séjour et votre date de naissance : nous vous proposons des sanctuaires, temples et lieux sacrés du Japon faits pour vous.">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/edition/hero-autumn-1200.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../en/en.css">
+<link rel="stylesheet" href="../../assets/css/edition.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""></head>
+<body class="en en-page ed ed-fr">
+
+<header class="ed-bar">
+  <a class="ed-brand" href="../../fr/"><img src="../../assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>Voyage aux lieux sacrés du Japon</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
+  <nav class="ed-nav"><a href="../../fr/cities/">Villes</a><a href="../../en/spots/">Tous les lieux</a><a href="../../fr/guide/">Guide des sanctuaires</a><a href="../../fr/my-list/">Ma liste <span class="en-count" data-mylist-count></span></a></nav>
+</header>
+
+<main class="en-main ed-main ed-tool">
+  <nav class="ed-crumbs ed-crumbs-d"><a href="../">Accueil</a> › Trouver mes lieux</nav>
+<section class="panel panel-wish" aria-labelledby="h-wish">
+    <h2 id="h-wish">Quel est votre vœu ?</h2>
+    <p class="lead-small">Choisissez le vœu le plus cher à votre cœur. Il sera reporté dans la recherche ci-dessous.</p>
+    <div class="wish-tiles" id="wish-tiles"></div>
+  </section>
+<section class="panel" id="finder" aria-labelledby="h-finder">
+    <h2 id="h-finder">Trouver mon lieu sacré</h2>
+    <form id="finder-form" novalidate>
+      <div class="en-step">
+        <h3><span class="step-no">1</span>Vos vœux <span class="opt">facultatif · plusieurs choix possibles</span></h3>
+        <div class="chip-row" id="wish-chips"></div>
+        <p class="en-sub-label">Les lieux que vous aimeriez découvrir</p>
+        <div class="chip-row" id="exp-chips"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">2</span>Votre date de naissance <span class="req">obligatoire</span></h3>
+        <input type="date" id="birthday" min="1900-01-01" autocomplete="bday" aria-describedby="bday-note">
+        <p class="note" id="bday-note">Elle sert à calculer votre étoile dans les Neuf Étoiles (un système japonais traditionnel des directions favorables) et votre chemin de vie. Elle reste sur votre appareil et n'est envoyée nulle part.</p>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">3</span>Où séjournez-vous ? <span class="req">obligatoire</span></h3>
+        <select id="city" aria-label="Ville où vous séjournez"></select>
+        <div class="en-origin-actions">
+          <button type="button" class="btn-sub" id="use-location">Utiliser ma position actuelle</button>
+          <span class="small">ou touchez la carte ci-dessous pour indiquer votre hôtel</span>
+        </div>
+        <p class="origin-status" id="origin-status" role="status" aria-live="polite"></p>
+        <div id="origin-map" class="en-origin-map" aria-label="Carte pour choisir votre point de départ"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">4</span>Comment vous déplacez-vous ?</h3>
+        <div class="chip-row" id="mode-chips"></div>
+        <label class="en-inline">Jusqu'à
+          <select id="time-limit"></select> aller simple
+        </label>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">5</span>Quand partez-vous ? <span class="opt">facultatif</span></h3>
+        <input type="date" id="trip-date">
+        <p class="note">Si vous choisissez une date, la direction depuis votre hôtel est vérifiée pour ce jour précis. Sinon, nous utilisons les directions favorables du mois et vous proposons de bons jours.</p>
+      </div>
+
+      <div class="form-error" id="form-error" role="alert" tabindex="-1" hidden></div>
+      <button type="submit" class="btn-main en-submit">Voir mes lieux sacrés</button>
+    </form>
+  </section>
+<section class="panel" id="results" aria-labelledby="h-results" hidden>
+    <h2 id="h-results">Vos lieux sacrés</h2>
+    <div id="result-cards" class="cards"></div>
+    <div id="you-box" class="en-you"></div>
+    <div id="more-box"></div>
+    <div id="result-map" class="en-result-map" aria-label="Carte de vos lieux sacrés"></div>
+    <p class="note">Les temps de trajet sont des estimations à partir de la distance à vol d'oiseau. Vérifiez l'itinéraire, les horaires et l'accès sur Google Maps ou le site officiel avant de partir. Les bienfaits indiqués sont ceux traditionnellement associés aux divinités ou au nom de chaque lieu.</p>
+  </section>
+</main>
+<footer class="en-foot">
+  <p>Données cartographiques © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">contributeurs d'OpenStreetMap</a> · Lieux : OpenStreetMap, Wikidata · Photos : Wikimedia Commons</p>
+  <p class="ed-langs"><a href="../../" hreflang="ja" lang="ja">日本語</a> · <a href="../../en/" hreflang="en" lang="en">English</a> · <a href="../../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a> · <a href="../../ko/" hreflang="ko" lang="ko">한국어</a> · <a href="../../fr/" hreflang="fr" lang="fr" aria-current="page">Français</a> · <a href="../../es/" hreflang="es" lang="es">Español</a></p>
+  <p>Voyage aux lieux sacrés du Japon / <a href="../../" lang="ja">開運パワースポット巡り</a> · Site tenu par Akki, the Higher-Dimensional Negotiator, Tokyo · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../../assets/js/config.js?v=3.23.0"></script>
+<script src="../../assets/js/analytics.js?v=3.23.0"></script>
+<script src="../../assets/js/jst-date.js?v=3.23.0"></script>
+<script src="../../data/solar-terms.js?v=3.23.0"></script>
+<script src="../../assets/js/kyusei.js?v=3.23.0"></script>
+<script src="../../data/spots-demo.js?v=3.23.0"></script>
+<script src="../../data/spots-osm.js?v=3.23.0"></script>
+<script src="../../data/curated-info.js?v=3.23.0"></script>
+<script src="../../data/known-benefits.js?v=3.23.0"></script>
+<script src="../../data/en-labels.js?v=3.23.0"></script>
+<script src="../../data/exclude.js?v=3.23.0"></script>
+<script src="../../data/food.js?v=3.23.0"></script>
+<script src="../../data/food-photos.js?v=3.23.0"></script>
+<script src="../../data/gourmet.js?v=3.23.0"></script>
+<script src="../../data/gourmet-fr.js?v=3.23.0"></script>
+<script src="../../assets/js/nearby.js?v=3.23.0"></script>
+<script src="../../assets/js/data.js?v=3.23.0"></script>
+<script src="../../assets/js/diagnosis.js?v=3.23.0"></script>
+<script src="../../assets/js/photos.js?v=3.23.0"></script>
+<script src="../../data/model-courses.js?v=3.23.0"></script>
+<script src="../../intl/i18n-en.js?v=3.23.0"></script>
+<script src="../../fr/i18n.js?v=3.23.0"></script>
+<script src="../../intl/pool-en.js?v=3.23.0"></script>
+<script src="../../intl/mylist.js?v=3.23.0"></script>
+<script src="../../assets/js/edition/app.js"></script>
+
+<script src="../../assets/js/edition/ui.js"></script>
+<script src="../../assets/js/pwa.js" defer></script>
+</body>
+</html>
