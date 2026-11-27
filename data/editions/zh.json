@@ -1,0 +1,232 @@
+{
+  "_note": "繁體中文版(台灣・香港)の見せ方の設定(2026-11-28)。リピーター向けに沖縄・北海道・九州・中部(名古屋・高山)も。説明文は確認できる一般的な内容だけ。",
+  "lang": "zh",
+  "live": true,
+  "locale": "zh_TW",
+  "siteName": "日本能量景點之旅",
+  "cities": [
+    {
+      "key": "tokyo",
+      "name": "東京",
+      "slug": "tokyo",
+      "pref": "東京都",
+      "region": "關東",
+      "tagline": "都市森林裡的神社，搭電車就能到的古寺小鎮。",
+      "lat": 35.6812,
+      "lon": 139.7671
+    },
+    {
+      "key": "osaka",
+      "name": "大阪",
+      "slug": "osaka",
+      "pref": "大阪府",
+      "region": "關西",
+      "tagline": "美食之都，也是前往京都・奈良・高野山的據點。",
+      "lat": 34.6661,
+      "lon": 135.501
+    },
+    {
+      "key": "kyoto",
+      "name": "京都",
+      "slug": "kyoto",
+      "pref": "京都府",
+      "region": "關西",
+      "tagline": "千年古都，有名的神社和寺院多到一趟玩不完。",
+      "lat": 34.9858,
+      "lon": 135.7588
+    },
+    {
+      "key": "fukuoka",
+      "name": "福岡",
+      "slug": "fukuoka",
+      "pref": "福岡県",
+      "region": "九州",
+      "pins": [
+        "Q710786"
+      ],
+      "tagline": "九州的玄關，搭電車就能去太宰府天滿宮。",
+      "lat": 33.5902,
+      "lon": 130.4207
+    },
+    {
+      "key": "naha",
+      "name": "沖繩（那霸）",
+      "slug": "okinawa-naha",
+      "pref": "沖縄県",
+      "region": "沖繩",
+      "pins": [
+        "Q704636"
+      ],
+      "tagline": "海邊斷崖上的波上宮，和琉球獨特的祈禱文化。",
+      "lat": 26.2124,
+      "lon": 127.6792
+    },
+    {
+      "key": "sapporo",
+      "name": "札幌",
+      "slug": "sapporo",
+      "pref": "北海道",
+      "region": "北海道",
+      "pins": [
+        "Q710826"
+      ],
+      "tagline": "北海道旅行的起點，北海道神宮和遼闊的大自然。",
+      "lat": 43.0687,
+      "lon": 141.3508
+    },
+    {
+      "key": "nara",
+      "name": "奈良",
+      "slug": "nara",
+      "pref": "奈良県",
+      "region": "關西",
+      "tagline": "古都的大寺院，和小鹿悠遊的公園。",
+      "lat": 34.6851,
+      "lon": 135.805
+    },
+    {
+      "key": "nagoya",
+      "name": "名古屋",
+      "slug": "nagoya",
+      "pref": "愛知県",
+      "region": "中部",
+      "pins": [
+        "Q482065"
+      ],
+      "tagline": "供奉草薙神劍的熱田神宮所在的城市。",
+      "lat": 35.1709,
+      "lon": 136.8815
+    },
+    {
+      "key": "hiroshima",
+      "name": "廣島・宮島",
+      "slug": "hiroshima-miyajima",
+      "pref": "広島県",
+      "region": "中國地方",
+      "pins": [
+        "Q191763"
+      ],
+      "tagline": "以海上大鳥居聞名的嚴島神社。",
+      "lat": 34.3978,
+      "lon": 132.4752
+    },
+    {
+      "key": "takayama",
+      "name": "高山（飛驒）",
+      "slug": "takayama",
+      "pref": "岐阜県",
+      "region": "中部",
+      "pins": [
+        "Q11537980"
+      ],
+      "tagline": "保留古老街景的山城，櫻山八幡宮與高山祭。",
+      "lat": 36.141,
+      "lon": 137.2516
+    }
+  ],
+  "buildCities": [
+    "tokyo",
+    "osaka",
+    "kyoto",
+    "fukuoka",
+    "naha",
+    "sapporo",
+    "nara",
+    "nagoya",
+    "hiroshima",
+    "takayama"
+  ],
+  "cityRules": {
+    "nearMinutes": 60,
+    "dayTripMinutes": 150,
+    "perGroup": 12,
+    "routeKm": 25
+  },
+  "home": {
+    "featuredCount": 8
+  },
+  "skip": {
+    "_note": "en.json と同じ+繁體中文版の i18n の exclude(靖国神社・護国神社)。繁體中文版だけ追加(推測による配慮):日清・日露戦争の軍人をまつる Q1384780 東郷神社・Q3342690 乃木神社",
+    "q": [
+      "Q242803",
+      "Q1333799",
+      "Q27103981",
+      "Q11581011",
+      "Q16482294",
+      "Q1148463",
+      "Q2815999",
+      "Q1384780",
+      "Q3342690"
+    ]
+  },
+  "t": {
+    "preview": "新版繁體中文預覽（尚未公開）",
+    "current": "目前網站",
+    "byline": "by Akki, the Higher-Dimensional Negotiator",
+    "navCities": "依城市",
+    "navAll": "所有景點",
+    "navGuide": "參拜方式",
+    "navList": "我的清單",
+    "footData": "地圖資料 © <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap contributors</a> · 地點資料：OpenStreetMap、Wikidata · 照片：Wikimedia Commons",
+    "footRun": "經營：Akki, the Higher-Dimensional Negotiator（東京）",
+    "home": "首頁",
+    "cities": "依城市",
+    "minFmt": "約 {m} 分鐘",
+    "hourFmt": "約 {h} 小時",
+    "hourMinFmt": "約 {h} 小時 {m} 分鐘",
+    "shrine": "神社",
+    "temple": "寺院",
+    "cityTitle": "{city}的能量景點：神社・寺院・聖地",
+    "cityDesc": "從{city}出發可以去的知名神社、寺院和聖地共 {n} 處，附交通時間和一日路線。{tagline}",
+    "cityH1": "{city}的能量景點",
+    "cityCount": "約 {h} 小時內可到達的<br>知名聖地 {n} 處",
+    "findBtn": "找出適合我的地方",
+    "nearH": "{city}市區與周邊",
+    "nearSub": "搭電車・巴士約 1 小時以內。交通時間僅供參考。",
+    "tripsH": "從{city}出發的一日遊",
+    "routesH": "一天走得完的路線",
+    "routesSub": "所有地點都已在官方網站確認。",
+    "routeMap": "在 Google 地圖開啟路線",
+    "miniGuide": "神社・寺院<br>參拜方式",
+    "miniPlan": "每日<br>行程規劃",
+    "miniFood": "日本在地<br>美食圖鑑",
+    "citiesTitle": "依城市找能量景點",
+    "citiesDesc": "東京、大阪、京都、福岡、沖繩、札幌等，從住宿城市出發可以去的神社、寺院和聖地。",
+    "citiesH1": "你住在哪裡？",
+    "citiesLead": "選擇住宿的城市，就能看到從那裡出發可以去的聖地，以及交通時間和路線。",
+    "guideTitle": "日本神社・寺院參拜方式",
+    "guideDesc": "從鳥居、淨手、祈禱方式到御朱印和御守，日本神社與寺院的簡單參拜禮儀。",
+    "guideCrumb": "參拜方式",
+    "guideH1": "神社與寺院的參拜方式",
+    "finderCrumb": "尋找能量景點",
+    "finderTitle": "找出適合你的能量景點",
+    "finderDesc": "告訴我們你的願望、住宿地點和生日，為你推薦適合的日本神社、寺院和聖地。",
+    "planCrumb": "規劃行程",
+    "planTitle": "規劃每日的日本旅行行程",
+    "planDesc": "輸入旅行的城市和日期，每天為你推薦從住宿地點出發、位於吉方位的能量景點。",
+    "listCrumb": "我的清單",
+    "listTitle": "我的能量景點清單",
+    "listDesc": "你收藏的神社和寺院。可以在 Google 地圖用路線開啟，或分享給朋友。",
+    "homeTitle": "{site}｜日本的神社・寺院・聖地之旅",
+    "homeDesc": "依住宿城市、願望或地區，尋找日本的神社、寺院、神木和瀑布。還有參拜方式、一日路線和吉日。",
+    "heroAlt": "沿著石燈籠排列的參道走向紅色鳥居的旅人",
+    "heroH1": "日本的聖地，<br>輕鬆走訪",
+    "heroP": "神社、寺院、神木、瀑布，連同交通方式和參拜方法一起告訴你。",
+    "doorsAria": "從這裡開始",
+    "door1": "你住在<br>哪裡？",
+    "door2": "你的<br>願望是？",
+    "door3": "依地區<br>瀏覽",
+    "featH": "第一次來推薦這些地方",
+    "featSub": "每個都道府縣挑選一處，已在官方網站確認的知名聖地。",
+    "planByCity": "依城市尋找",
+    "allCities": "查看全部 {n} 個城市 ›",
+    "akkiAlt": "本網站的嚮導 Akki",
+    "akkiH": "你好，我是 Akki。",
+    "akkiP": "我在日本以 <b>Akki, the Higher-Dimensional Negotiator</b> 的身分活動。出生於橫須賀，住在東京，日本的神社和聖地是我生活與工作中很重要的一部分。",
+    "akkiLinks": "<a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">Instagram @japan_psj</a> · <a href=\"https://www.youtube.com/@nigihayahi03\" target=\"_blank\" rel=\"noopener\">YouTube</a>",
+    "foodH": "在{pref}品嚐在地美食",
+    "foodSub": "當地最有名的料理。更多料理請看在地美食圖鑑。",
+    "foodMore": "查看在地美食排行 ›",
+    "go": "路線"
+  }
+}

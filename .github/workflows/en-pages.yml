@@ -58,6 +58,7 @@ jobs:
         run: |
           node scripts/build_edition.js --lang en
           node scripts/build_edition.js --lang ko
+          node scripts/build_edition.js --lang zh
 
       - name: main に反映
         run: |
