@@ -278,8 +278,11 @@ fs.writeFileSync(r('data/en-labels.js'), '/* 英語版：英語名・スポッ�
 // sitemap
 const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 // 新しい英語版のページ(scripts/build_edition.js、2026-11-28〜)
-const ED = JSON.parse(fs.readFileSync(r('data/editions/en.json'), 'utf8'));
-const EDITION_URLS = ['en/cities/', 'en/guide/', 'en/finder/', 'en/plan/'].concat(ED.cities.filter((c) => ED.buildCities.indexOf(c.key) !== -1).map((c) => 'en/cities/' + c.slug + '/')).map((u) => [SITE + u, 'weekly']);
+// 新しい版を公開している言語(data/editions/<言語>.json の live が true)のページ
+const EDITION_URLS = fs.readdirSync(r('data/editions')).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(fs.readFileSync(r('data/editions/' + f), 'utf8')))
+  .filter((ed) => ed.live).flatMap((ed) => [ed.lang + '/cities/', ed.lang + '/guide/', ed.lang + '/finder/', ed.lang + '/plan/']
+    .concat(ed.cities.filter((c) => ed.buildCities.indexOf(c.key) !== -1).map((c) => ed.lang + '/cities/' + c.slug + '/')))
+  .map((u) => [SITE + u, 'weekly']);
 const urls = [[SITE, 'daily'], [SITE + 'en/', 'weekly']].concat(EDITION_URLS, [ [SITE + 'zh/', 'weekly'], [SITE + 'ko/', 'weekly'], [SITE + 'fr/', 'weekly'], [SITE + 'es/', 'weekly'], [SITE + 'en/spots/', 'weekly']]).concat(
   ['', 'en/', 'zh/', 'ko/', 'fr/', 'es/'].flatMap((l) => ['gourmet', 'gourmet-guide', 'gourmet-shrine'].map((g) => [SITE + l + g + '.html', 'monthly'])),
   pages.map((p) => [SITE + 'en/spots/' + p.slug + '.html', 'monthly']));

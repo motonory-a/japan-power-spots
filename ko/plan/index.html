@@ -6,15 +6,15 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX2WH9VGQ5');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>내 파워스폿 리스트 | 일본 파워스폿 여행</title>
-<meta name="description" content="저장한 신사와 절. Google 지도에서 경로로 열거나 친구에게 공유할 수 있어요.">
-<meta name="robots" content="noindex,nofollow">
+<title>하루하루 일본 여행 일정 만들기 | 일본 파워스폿 여행</title>
+<meta name="description" content="여행할 도시와 날짜를 입력하면, 날마다 묵는 곳에서 길한 방위에 있는 파워스폿을 추천해 드립니다.">
+<link rel="canonical" href="https://motonory-a.github.io/japan-power-spots/ko/plan/">
 <meta name="theme-color" content="#4B2D7E">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="일본 파워스폿 여행">
-<meta property="og:title" content="내 파워스폿 리스트 | 일본 파워스폿 여행">
-<meta property="og:description" content="저장한 신사와 절. Google 지도에서 경로로 열거나 친구에게 공유할 수 있어요.">
+<meta property="og:title" content="하루하루 일본 여행 일정 만들기 | 일본 파워스폿 여행">
+<meta property="og:description" content="여행할 도시와 날짜를 입력하면, 날마다 묵는 곳에서 길한 방위에 있는 파워스폿을 추천해 드립니다.">
 <meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/edition/hero-autumn-1200.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
@@ -28,25 +28,29 @@
 <link rel="stylesheet" href="../../assets/css/edition.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""></head>
 <body class="en en-page ed ed-ko">
-<p class="ed-preview">새로운 한국어판 미리보기(아직 공개 전) · <a href="../../ko/">지금 사이트</a></p>
+
 <header class="ed-bar">
-  <a class="ed-brand" href="../../ko-next/"><img src="../../assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>일본 파워스폿 여행</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
-  <nav class="ed-nav"><a href="../../ko-next/cities/">도시별</a><a href="../../en/spots/">모든 스폿</a><a href="../../ko-next/guide/">참배 방법</a><a href="../../ko-next/my-list/">내 리스트 <span class="en-count" data-mylist-count></span></a></nav>
+  <a class="ed-brand" href="../../ko/"><img src="../../assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>일본 파워스폿 여행</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
+  <nav class="ed-nav"><a href="../../ko/cities/">도시별</a><a href="../../en/spots/">모든 스폿</a><a href="../../ko/guide/">참배 방법</a><a href="../../ko/my-list/">내 리스트 <span class="en-count" data-mylist-count></span></a></nav>
 </header>
 
 <main class="en-main ed-main ed-tool">
-  <nav class="ed-crumbs ed-crumbs-d"><a href="../">홈</a> › 내 리스트</nav>
-<section class="panel" id="mylist" aria-labelledby="h-mylist">
-    <h2 id="h-mylist">내 리스트 <span class="en-count" data-mylist-count></span></h2>
-    <div id="shared-list" class="en-shared" hidden></div>
-    <div id="mylist-items"></div>
-    <div class="en-btns" id="mylist-actions" hidden>
-      <a class="btn-main en-btn" id="list-route" href="#" target="_blank" rel="noopener">Google 지도에서 경로로 열기</a>
-      <button type="button" class="btn-sub en-btn" id="list-csv">Google 내 지도용 파일 다운로드(CSV)</button>
-      <button type="button" class="btn-sub en-btn" id="list-share">내 리스트 공유</button>
-    </div>
-    <p class="small" id="list-msg" role="status" aria-live="polite"></p>
-    <p class="note">팁: <a href="https://www.google.com/maps/d/" target="_blank" rel="noopener">Google 내 지도</a>에서 "가져오기"를 누르고 CSV 파일을 고르면, 휴대폰에서 모든 장소를 한 지도에 볼 수 있습니다.</p>
+  <nav class="ed-crumbs ed-crumbs-d"><a href="../">홈</a> › 여행 일정 짜기</nav>
+<section class="panel" id="planner" aria-labelledby="h-planner">
+    <h2 id="h-planner">하루하루 여행 일정 만들기</h2>
+    <p class="lead-small">곧 일본에 오시나요? 여행할 도시와 날짜를 입력하면, 그날 밤 묵는 곳에서 길한 방위에 있는 파워스폿을 날마다 추천해 드립니다.</p>
+    <form id="plan-form" novalidate>
+      <div class="en-plan-top">
+        <label>생일 <input type="date" id="plan-bday" min="1900-01-01"></label>
+        <label>소원 <select id="plan-wish"></select></label>
+      </div>
+      <p class="en-sub-label">어디에 묵으시나요?</p>
+      <div id="legs"></div>
+      <button type="button" class="btn-sub" id="add-leg">+ 도시 추가</button>
+      <div class="form-error" id="plan-error" role="alert" hidden></div>
+      <button type="submit" class="btn-main en-submit">내 여행 일정 만들기</button>
+    </form>
+    <div id="plan-out" class="en-plan-out"></div>
   </section>
 </main>
 <footer class="en-foot">

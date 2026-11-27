@@ -55,7 +55,9 @@ jobs:
         run: node scripts/build_lang_pages.js
 
       - name: 新しい英語版のトップ・都市・ガイドなどのページを作る（2026-11-28〜）
-        run: node scripts/build_edition.js --out en
+        run: |
+          node scripts/build_edition.js --lang en
+          node scripts/build_edition.js --lang ko
 
       - name: main に反映
         run: |
