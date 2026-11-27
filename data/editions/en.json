@@ -1,5 +1,5 @@
 {
-  "_note": "英語版の見せ方の設定(2026-11-27)。スポットのデータは data/ の共通のものを使う。都市の key・座標は en/i18n-en.js の EN.cities と同じ。説明文は確認できる一般的な内容だけを書く。",
+  "_note": "英語版の見せ方の設定(2026-11-27)。スポットのデータは data/ の共通のものを使う。都市の key・座標は en/i18n-en.js の EN.cities と同じ。説明文は確認できる一般的な内容だけを書く。 pins=その都市で必ず先頭に出すスポット。dayTripMinutes=日帰りの範囲を都市ごとに狭める(小さな町で東京などが混ざらないように)。",
   "lang": "en",
   "siteName": "Japan Power Spot Journey",
   "cities": [
@@ -46,7 +46,8 @@
       "lat": 36.7499,
       "lon": 139.6075,
       "region": "Tokyo & Kanto",
-      "tagline": "Mountain shrines and temples among tall cedars, north of Tokyo."
+      "tagline": "Mountain shrines and temples among tall cedars, north of Tokyo.",
+      "dayTripMinutes": 100
     },
     {
       "key": "hakone",
@@ -55,7 +56,13 @@
       "lat": 35.2329,
       "lon": 139.1069,
       "region": "Central Japan",
-      "tagline": "Lakeside shrines and views of sacred Mt. Fuji, close to Tokyo."
+      "tagline": "Lakeside shrines and views of sacred Mt. Fuji, close to Tokyo.",
+      "dayTripMinutes": 90,
+      "pins": [
+        "Q39231",
+        "Q653180",
+        "Q11401286"
+      ]
     },
     {
       "key": "ise",
@@ -73,7 +80,10 @@
       "lat": 34.3976,
       "lon": 132.4754,
       "region": "Chugoku & Shikoku",
-      "tagline": "The island shrine of Itsukushima and its gate standing in the sea."
+      "tagline": "The island shrine of Itsukushima and its gate standing in the sea.",
+      "pins": [
+        "Q191763"
+      ]
     },
     {
       "key": "kanazawa",
@@ -91,13 +101,23 @@
       "lat": 33.5897,
       "lon": 130.4207,
       "region": "Kyushu & Okinawa",
-      "tagline": "The gateway to Kyushu, with Dazaifu Tenmangu nearby."
+      "tagline": "The gateway to Kyushu, with Dazaifu Tenmangu nearby.",
+      "pins": [
+        "Q710786"
+      ]
     }
   ],
   "buildCities": [
     "tokyo",
     "kyoto",
-    "osaka"
+    "osaka",
+    "nara",
+    "nikko",
+    "hakone",
+    "ise",
+    "hiroshima",
+    "kanazawa",
+    "fukuoka"
   ],
   "cityRules": {
     "nearMinutes": 60,
@@ -109,10 +129,15 @@
     "featuredCount": 8
   },
   "skip": {
-    "_note": "都市・トップのおすすめに出さない(スポットのページは残す)。Q242803=靖国神社(海外の人には政治的に敏感、英語版の診断でも上位に出していない)、Q1333799=法隆寺地域の仏教建造物(世界遺産の地域名で、法隆寺と重なる)",
+    "_note": "都市・トップのおすすめに出さない(スポットのページは残す)。Q242803=靖国神社(海外の人には政治的に敏感、英語版の診断でも上位に出していない)、Q1333799=法隆寺地域の仏教建造物(世界遺産の地域名で、法隆寺と重なる)。Q27103981=おりづるタワー(聖地ではない)、Q11581011=皇大神宮(内宮 Q687168 と同じ場所)。Q16482294=世界遺産「富士山-信仰の対象と芸術の源泉」(地域名)。Q1148463=通天閣、Q2815999=山口国際交流文化センター(どちらも聖地ではない)",
     "q": [
       "Q242803",
-      "Q1333799"
+      "Q1333799",
+      "Q27103981",
+      "Q11581011",
+      "Q16482294",
+      "Q1148463",
+      "Q2815999"
     ]
   }
 }

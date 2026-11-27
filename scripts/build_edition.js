@@ -94,17 +94,17 @@ ${extra || ''}</head>
 ${PREVIEW ? '<p class="ed-preview">Preview of the new English edition (not public yet) · <a href="' + R + 'en/">Current site</a></p>' : ''}
 <header class="en-bar">
   <a class="en-brand" href="${R}${OUT}/">${esc(ED.siteName)}</a>
-  <nav class="en-bar-links"><a href="${R}${OUT}/cities/">Cities</a><a href="${R}en/spots/">All spots</a><a href="${R}${OUT}/guide/">Shrine guide</a><a href="${R}en/#mylist">My list <span class="en-count" data-mylist-count></span></a></nav>
+  <nav class="en-bar-links"><a href="${R}${OUT}/cities/">Cities</a><a href="${R}en/spots/">All spots</a><a href="${R}${OUT}/guide/">Shrine guide</a><a href="${R}${OUT}/my-list/">My list <span class="en-count" data-mylist-count></span></a></nav>
 </header>
 `;
 }
-function foot(depth) {
+function foot(depth, scripts) {
   const R = up(depth);
   return `<footer class="en-foot">
   <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata · Photos: Wikimedia Commons</p>
   <p>${esc(ED.siteName)} / <a href="${R}" lang="ja">開運パワースポット巡り</a> · Run by Akki, the Higher-Dimensional Negotiator, Tokyo · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
 </footer>
-<script src="${R}en/mylist.js"></script>
+${scripts || `<script src="${R}en/mylist.js"></script>`}
 <script src="${R}assets/js/pwa.js" defer></script>
 </body>
 </html>
@@ -124,12 +124,15 @@ function cityData(c) {
   });
   const R = ED.cityRules;
   const byFame = (a, b) => (b.s.fame - a.s.fame) || (a.km - b.km);
-  const near = rows.filter((x) => x.min <= R.nearMinutes).sort(byFame).slice(0, R.perGroup);
-  const trips = rows.filter((x) => x.min > R.nearMinutes && x.min <= R.dayTripMinutes).sort(byFame).slice(0, R.perGroup);
+  const dayMax = c.dayTripMinutes || R.dayTripMinutes;
+  const pins = (c.pins || []).map((q) => rows.find((x) => x.s.wikidata === q)).filter(Boolean);
+  const notPin = (x) => pins.indexOf(x) === -1;
+  const near = pins.concat(rows.filter((x) => notPin(x) && x.min <= R.nearMinutes).sort(byFame)).slice(0, R.perGroup);
+  const trips = rows.filter((x) => notPin(x) && x.min > R.nearMinutes && x.min <= dayMax).sort(byFame).slice(0, R.perGroup);
   const courses = (MODEL_COURSES || []).filter((co) => co.stops.length && D.distanceKm(c.lat, c.lon, co.stops[0].lat, co.stops[0].lon) <= (R.routeKm || 25))
     .map((co) => ({ co, en: (EN.courses || {})[co.id] })).filter((x) => x.en);
-  const total = rows.filter((x) => x.min <= R.dayTripMinutes).length;
-  return { near, trips, courses, total };
+  const total = rows.filter((x) => x.min <= dayMax).length;
+  return { near, trips, courses, total, dayMax };
 }
 function cityPage(c) {
   const depth = 3;
@@ -144,8 +147,8 @@ function cityPage(c) {
     <p class="ed-kicker">${esc(c.region)}</p>
     <h1>Power spots in ${esc(c.name)}</h1>
     <p class="ed-lead">${esc(c.tagline)}</p>
-    <p class="ed-note">${d.total} well-known sacred places within about ${Math.round(ED.cityRules.dayTripMinutes / 60 * 10) / 10} hours by train and bus. Times are rough estimates from straight-line distance.</p>
-    <p><a class="btn-main" href="${up(depth)}en/#finder">Find the ones that match you</a></p>
+    <p class="ed-note">${d.total} well-known sacred places within about ${Math.round(d.dayMax / 60 * 10) / 10} hours by train and bus. Times are rough estimates from straight-line distance.</p>
+    <p><a class="btn-main" href="../../finder/">Find the ones that match you</a></p>
   </section>
   <section class="panel">
     <h2>In and around ${esc(c.name)}</h2>
@@ -154,7 +157,7 @@ function cityPage(c) {
   </section>
   ${d.trips.length ? `<section class="panel">
     <h2>Day trips from ${esc(c.name)}</h2>
-    <p class="ed-sub">About 1 to 2.5 hours away</p>
+    <p class="ed-sub">About 1 to ${Math.round(d.dayMax / 60 * 10) / 10} hours away</p>
     <ul class="ed-spots">${d.trips.map((x) => spotItem(x.s, depth, fmtMin(x.min))).join('\n')}</ul>
   </section>` : ''}
   ${d.courses.length ? `<section class="panel">
@@ -206,6 +209,43 @@ function guidePage() {
 ` + foot(depth);
 }
 
+
+// ---------- 聖地さがし・旅程・マイリスト(今の英語版トップの欄を、そのままの形で別ページにする) ----------
+const EN_TOP = fs.readFileSync(r('en/index.html'), 'utf8');
+function sectionById(id) {
+  const start = EN_TOP.search(new RegExp('<section[^>]*(id="' + id + '"|class="[^"]*' + id + '[^"]*")'));
+  if (start < 0) throw new Error('en/index.html に欄が見つからない:' + id);
+  const re = /<\/?section\b[^>]*>/g; re.lastIndex = start; let depth = 0, m;
+  while ((m = re.exec(EN_TOP))) { depth += m[0][1] === '/' ? -1 : 1; if (!depth) return EN_TOP.slice(start, re.lastIndex); }
+  throw new Error('欄の終わりが見つからない:' + id);
+}
+function fixLinks(html, depth) {
+  const R = up(depth);
+  return html.split('href="spots/').join('href="' + R + 'en/spots/')
+    .split('href="#planner"').join('href="' + R + OUT + '/plan/"')
+    .split('href="#mylist"').join('href="' + R + OUT + '/my-list/"')
+    .split('href="#finder"').join('href="' + R + OUT + '/finder/"')
+    .split('href="gourmet').join('href="' + R + 'en/gourmet');
+}
+function appScripts(depth) {
+  const R = up(depth);
+  const tail = EN_TOP.slice(EN_TOP.indexOf('<script src="https://unpkg.com/leaflet'), EN_TOP.indexOf('<script src="../assets/js/pwa.js"'));
+  return tail.split('src="../').join('src="' + R)
+    .replace(/src="(i18n-en|pool-en|mylist)\.js/g, 'src="' + R + 'en/$1.js')
+    .replace(/src="app-en\.js(\?v=[^"]*)?"/, 'src="' + R + 'assets/js/edition/app.js"');
+}
+const LEAFLET_CSS = '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">';
+function toolPage({ rel, title, desc, crumb, ids }) {
+  const depth = 2;
+  const body = ids.map((id) => fixLinks(sectionById(id), depth)).join('\n');
+  return head({ title: title + ' | ' + ED.siteName, desc, canon: OUT + '/' + rel + '/', depth, extra: LEAFLET_CSS }) + `
+<main class="en-main ed-main">
+  <nav class="ed-crumbs"><a href="../">Home</a> › ${esc(crumb)}</nav>
+${body}
+</main>
+` + foot(depth, appScripts(depth));
+}
+
 // ---------- トップ ----------
 function homePage() {
   const depth = 1;
@@ -224,7 +264,7 @@ function homePage() {
 <main class="en-main ed-main">
   <section class="ed-doors" aria-label="Start here">
     <a class="ed-door" href="cities/"><b>Where are you staying?</b><span>Places you can reach from Tokyo, Kyoto, Osaka and more</span></a>
-    <a class="ed-door" href="../en/#finder"><b>What do you wish for?</b><span>Love, luck, health… find places that match you</span></a>
+    <a class="ed-door" href="finder/"><b>What do you wish for?</b><span>Love, luck, health… find places that match you</span></a>
     <a class="ed-door" href="../en/spots/"><b>Browse by region</b><span>About 1,400 well-known places across Japan</span></a>
   </section>
   <section class="panel">
@@ -239,7 +279,7 @@ function homePage() {
   </section>
   <section class="panel ed-two">
     <a class="ed-card" href="guide/"><b>How to visit a shrine or temple</b><span>Bowing, purifying, praying, goshuin and omamori</span></a>
-    <a class="ed-card" href="../en/#planner"><b>Plan your trip, day by day</b><span>Lucky directions from where you stay each night</span></a>
+    <a class="ed-card" href="plan/"><b>Plan your trip, day by day</b><span>Lucky directions from where you stay each night</span></a>
     <a class="ed-card" href="../en/gourmet.html"><b>Local Food Guide</b><span>300+ dishes from all 47 prefectures</span></a>
   </section>
   <section class="panel en-guide" aria-labelledby="h-guide">
@@ -265,4 +305,10 @@ write('index.html', homePage());
 write('cities/index.html', citiesIndex());
 cityCfg.filter((c) => ED.buildCities.indexOf(c.key) !== -1).forEach((c) => write('cities/' + c.slug + '/index.html', cityPage(c)));
 write('guide/index.html', guidePage());
+write('finder/index.html', toolPage({ rel: 'finder', crumb: 'Find my power spots', title: 'Find the power spots that match you',
+  desc: 'Tell us your wish, where you are staying and (if you like) your birthday. We suggest shrines, temples and sacred nature in Japan that suit you.', ids: ['panel-wish', 'finder', 'results'] }));
+write('plan/index.html', toolPage({ rel: 'plan', crumb: 'Plan my trip', title: 'Plan your trip to Japan, day by day',
+  desc: 'Enter the cities and dates of your trip. For each day we suggest power spots in a lucky direction from where you stay.', ids: ['planner'] }));
+write('my-list/index.html', toolPage({ rel: 'my-list', crumb: 'My list', title: 'My list of power spots',
+  desc: 'The shrines and temples you saved, on this device. Open them as a route in Google Maps or share the list.', ids: ['mylist'] }));
 console.log(OUT + '/ を作りました(トップ・都市の一覧・都市 ' + ED.buildCities.join(', ') + '・参拝ガイド)');
