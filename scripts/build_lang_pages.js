@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 /*
  * 多言語版のトップページを作る（v3.17）
- *   en/index.html（英語版）をもとに、scripts/i18n/<言語>.js の訳で zh/ ko/ fr/ es/ の index.html と i18n.js を作る。
- *   画面の動き（en/app-en.js）・見た目（en/en.css）・画像（en/img/）は英語版のものを共有する。
+ *   scripts/i18n/base-en-index.html（作り直す前の英語版トップ、2026-11-27 に固定）をもとに、
+ *   scripts/i18n/<言語>.js の訳で zh/ ko/ fr/ es/ の index.html と i18n.js を作る。
+ *   画面の動き・見た目は intl/（en/ から写したもの）、画像は en/img/ を使う。
+ *   英語版(/en/)を作り直しても、この4言語は変わらない（各言語を新しい仕組みで作り直すまでの仮の形）。
  *   英語版の文章を変えたときは、下の PAGE の英語も同じに直し、各言語の訳を足す（見つからない文章があると止まる）。
  *   node scripts/build_lang_pages.js
  */
@@ -128,7 +130,7 @@ function deepMergeScript(data) {
 `;
 }
 
-const enHtml = fs.readFileSync(path.join(ROOT, 'en/index.html'), 'utf8');
+const enHtml = fs.readFileSync(path.join(__dirname, 'i18n/base-en-index.html'), 'utf8');
 LANGS.forEach((lang) => {
   const T = require('./i18n/' + lang + '.js');
   let h = enHtml;
@@ -149,15 +151,15 @@ LANGS.forEach((lang) => {
   h = h.replace(new RegExp('(href="\\.\\./' + lang + '/"[^>]*)>'), '$1 aria-current="page">');
   // 英語版と共有するファイルへの道すじ
   // ファイル名のうしろの「?v=番号」(キャッシュ対策)があってもなくても置き換える
-  h = repRe(h, /href="en\.css(\?v=[^"]*)?"/, (m, v) => 'href="../en/en.css' + (v || '') + '"', 'css');
+  h = repRe(h, /href="en\.css(\?v=[^"]*)?"/, (m, v) => 'href="../intl/en.css' + (v || '') + '"', 'css');
   h = h.split('img/akki-').join('../en/img/akki-');
   h = repRe(h, /<script src="\.\.\/data\/gourmet\.js(\?v=[^"]*)?"><\/script>/, (m, v) => m + '\n<script src="../data/gourmet-' + lang + '.js' + (v || '') + '"></script>', 'gourmet i18n');
   h = h.split("'img/hero-").join("'../en/img/hero-").split('src="img/hero-').join('src="../en/img/hero-');
   h = h.split('href="spots/').join('href="../en/spots/');
-  h = repRe(h, /<script src="i18n-en\.js(\?v=[^"]*)?"><\/script>/, (m, v) => '<script src="../en/i18n-en.js' + (v || '') + '"></script>\n<script src="i18n.js' + (v || '') + '"></script>', 'i18n');
+  h = repRe(h, /<script src="i18n-en\.js(\?v=[^"]*)?"><\/script>/, (m, v) => '<script src="../intl/i18n-en.js' + (v || '') + '"></script>\n<script src="i18n.js' + (v || '') + '"></script>', 'i18n');
   ['pool-en.js', 'mylist.js', 'app-en.js'].forEach((f) => {
     const re = new RegExp('<script src="' + f.replace(/\./g, '\\.') + '(\\?v=[^"]*)?"></script>');
-    h = repRe(h, re, (m, v) => `<script src="../en/${f}${v || ''}"></script>`, f);
+    h = repRe(h, re, (m, v) => `<script src="../intl/${f}${v || ''}"></script>`, f);
   });
   fs.mkdirSync(path.join(ROOT, lang), { recursive: true });
   fs.writeFileSync(path.join(ROOT, lang, 'index.html'), h);
