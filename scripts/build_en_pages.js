@@ -123,15 +123,18 @@ function head({ title, desc, url, img, extra }) {
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/style.css">
 <link rel="stylesheet" href="../en.css">
+<link rel="stylesheet" href="../../assets/css/edition.css">
+<link rel="manifest" href="../../manifest.webmanifest">
 ${extra || ''}</head>
-<body class="en en-page">
-<header class="en-bar">
-  <a class="en-brand" href="../">Japan Power Spot Journey</a>
-  <nav class="en-bar-links"><a href="../cities/">Cities</a><a href="../plan/">Plan my trip</a><a href="./">All spots</a><a href="../my-list/">My list <span class="en-count" data-mylist-count></span></a></nav>
+<body class="en en-page ed">
+<header class="ed-bar">
+  <a class="ed-brand" href="../"><img src="../../assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>Japan Power <i>Spot</i> Journey</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
+  <nav class="ed-nav"><a href="../cities/">Cities</a><a href="./">All spots</a><a href="../guide/">Shrine guide</a><a href="../my-list/">My list <span class="en-count" data-mylist-count></span></a></nav>
 </header>
 `;
 }
 const FOOT = `<footer class="en-foot">
+  <p class="ed-langs"><a href="../../" hreflang="ja" lang="ja">日本語</a> · <a href="../" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a> · <a href="../../ko/" hreflang="ko" lang="ko">한국어</a> · <a href="../../fr/" hreflang="fr" lang="fr">Français</a> · <a href="../../es/" hreflang="es" lang="es">Español</a></p>
   <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata · Descriptions: Wikipedia (CC BY-SA 4.0) · Photos: Wikimedia Commons</p>
   <p>Japan Power Spot Journey / <a href="../../" lang="ja">開運パワースポット巡り</a> · Run by Akki, the Higher-Dimensional Negotiator, Tokyo · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
 </footer>
@@ -225,6 +228,7 @@ ${FOOT}<script>var SPOT = ${JSON.stringify(data).replace(/</g, "\\u003c")};</scr
 <script src="../i18n-en.js"></script>
 <script src="../mylist.js"></script>
 <script src="../spot.js"></script>
+<script src="../../assets/js/pwa.js" defer></script>
 </body>
 </html>
 `;
@@ -244,7 +248,7 @@ function indexPage() {
       regions[rg][pc].map((p) => `<li><a href="${p.slug}.html">${esc(p.name)}</a> <span class="small">${esc(cat(p.s))}</span></li>`).join('') + '</ul>').join('') + '</section>').join('\n');
   return head({ title: 'All power spots in Japan – shrines, temples & sacred nature | Japan Power Spot Journey',
     desc: `${pages.length} famous shrines, temples, sacred trees, waterfalls and mountains across Japan, with traditional blessings, access and your lucky days to visit.`, url }) +
-    `<main>
+    `<main class="ed-main ed-tool en-index">
   <section class="panel"><h1 class="en-spot-title">All power spots</h1>
   <p>${pages.length} well-known shrines, temples and sacred places across Japan. Each page shows what the place is traditionally visited for, how to get there, and your lucky days to visit.</p>
   <p class="en-jump">${order.filter((rg) => regions[rg]).map((rg) => `<a href="#${slugify(rg)}">${esc(rg)}</a>`).join(' · ')}</p></section>
@@ -252,6 +256,7 @@ ${body}
 </main>
 ${FOOT}<script src="../mylist.js"></script>
 <script>(function(){var n=MyList.read().length;document.querySelectorAll('[data-mylist-count]').forEach(function(e){e.textContent=n?'('+n+')':'';});})();</script>
+<script src="../../assets/js/pwa.js" defer></script>
 </body>
 </html>
 `;
