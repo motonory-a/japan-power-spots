@@ -120,6 +120,16 @@
 - 本人の写真で、同じ写真が別名で入っていることがある（kinugawa-gorge = kinugawa.jpg など）。使う前に md5 で重複を確かめる。
 - w3 からリールに動画の区間を入れられる（ig/w3/reels.py の build_reel / overlay）。
 
+## 海外版サイトの都市ページへの案内（2026-11-28 追加）
+海外版5言語のサイトを新しくした（都市ごとのページに、近くの聖地・日帰り・モデルコース・名物料理・道順がそろっている）。投稿の話題がこの都市の中かそばなら、キャプションの最後の案内を「プロフィールのリンク →（都市名）のページ」にして、その都市のページがあることを伝える。キャプションのURLは押せないので、URLそのものは書かない。
+- 各アカウントのプロフィールのリンク：@japan_psj → https://motonory-a.github.io/japan-power-spots/en/ 、@japan_psj_kr → /ko/、@japan_psj_tw → /zh/、@japan_psj_fr → /fr/、@japan_psj_es → /es/、@japan_psj_jp → トップ（日本語）
+- 都市ページ（URLは /言語/cities/名前/）
+  - en・fr・es：tokyo, kyoto, osaka, nara, nikko, hakone-fuji, ise, hiroshima-miyajima, kanazawa, fukuoka
+  - ko：fukuoka, osaka, tokyo, kyoto, sapporo, nara, hiroshima-miyajima, nagasaki, kagoshima, beppu-oita
+  - zh：tokyo, osaka, kyoto, fukuoka, okinawa-naha, sapporo, nara, nagoya, hiroshima-miyajima, takayama
+- 海外向けのお試しリールの最後のコマに「（都市名）の聖地めぐりはプロフィールのリンクから」を入れてよい（各言語で）。
+- 都市の一覧・作り方は data/editions/<言語>.json。都市が増えたらここも直す。
+
 ## 写真は「話題そのもの」が写っているものだけ（2026-11-19 本人の指摘）
 - おみくじの回に京都の住宅街の写真が出てしまい、「おみくじとは無関係な写真。もっとよく考えて写真選定して」と指摘された。
 - 写真は、その投稿の話題そのもの（おみくじの回ならおみくじ、5円玉の回なら5円玉やさい銭箱、お守りの回ならお守り）が、ひと目でわかるように写っているものだけを使う。
