@@ -127,7 +127,7 @@ ${extra || ''}</head>
 <body class="en en-page">
 <header class="en-bar">
   <a class="en-brand" href="../">Japan Power Spot Journey</a>
-  <nav class="en-bar-links"><a href="../#planner">Plan my trip</a><a href="./">All spots</a><a href="../#mylist">My list <span class="en-count" data-mylist-count></span></a></nav>
+  <nav class="en-bar-links"><a href="../cities/">Cities</a><a href="../plan/">Plan my trip</a><a href="./">All spots</a><a href="../my-list/">My list <span class="en-count" data-mylist-count></span></a></nav>
 </header>
 `;
 }
@@ -209,9 +209,9 @@ function spotPage(p) {
       </div>
       <div id="lk-out" role="status" aria-live="polite"></div>
     </section>
-    ${courses.length ? `<section class="en-spot-sec"><h2>Model routes with this place</h2><ul>${courses.map((c2) => `<li><a href="../#courses">${esc((EN.courses[c2.id] || [c2.title])[0])}</a></li>`).join('')}</ul></section>` : ''}
+    ${courses.length ? `<section class="en-spot-sec"><h2>Model routes with this place</h2><ul>${courses.map((c2) => `<li><a href="../cities/">${esc((EN.courses[c2.id] || [c2.title])[0])}</a></li>`).join('')}</ul></section>` : ''}
     ${near.length ? `<section class="en-spot-sec"><h2>Power spots nearby</h2><ul class="en-near">${near.map((x) => `<li><a href="${x.p.slug}.html">${esc(x.p.name)}</a> <span class="small">${esc(cat(x.p.s))} · ${x.km.toFixed(1)} km</span></li>`).join('')}</ul></section>` : ''}
-    <p class="en-cta"><a class="btn-main en-btn" href="../#finder">Find more power spots for you</a></p>
+    <p class="en-cta"><a class="btn-main en-btn" href="../finder/">Find more power spots for you</a></p>
   </article>
 </main>
 ${FOOT}<script>var SPOT = ${JSON.stringify(data).replace(/</g, "\\u003c")};</script>
@@ -272,7 +272,10 @@ fs.writeFileSync(r('data/en-labels.js'), '/* 英語版：英語名・スポッ�
 
 // sitemap
 const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
-const urls = [[SITE, 'daily'], [SITE + 'en/', 'weekly'], [SITE + 'zh/', 'weekly'], [SITE + 'ko/', 'weekly'], [SITE + 'fr/', 'weekly'], [SITE + 'es/', 'weekly'], [SITE + 'en/spots/', 'weekly']].concat(
+// 新しい英語版のページ(scripts/build_edition.js、2026-11-28〜)
+const ED = JSON.parse(fs.readFileSync(r('data/editions/en.json'), 'utf8'));
+const EDITION_URLS = ['en/cities/', 'en/guide/', 'en/finder/', 'en/plan/'].concat(ED.cities.filter((c) => ED.buildCities.indexOf(c.key) !== -1).map((c) => 'en/cities/' + c.slug + '/')).map((u) => [SITE + u, 'weekly']);
+const urls = [[SITE, 'daily'], [SITE + 'en/', 'weekly']].concat(EDITION_URLS, [ [SITE + 'zh/', 'weekly'], [SITE + 'ko/', 'weekly'], [SITE + 'fr/', 'weekly'], [SITE + 'es/', 'weekly'], [SITE + 'en/spots/', 'weekly']]).concat(
   ['', 'en/', 'zh/', 'ko/', 'fr/', 'es/'].flatMap((l) => ['gourmet', 'gourmet-guide', 'gourmet-shrine'].map((g) => [SITE + l + g + '.html', 'monthly'])),
   pages.map((p) => [SITE + 'en/spots/' + p.slug + '.html', 'monthly']));
 fs.writeFileSync(r('sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +

@@ -60,8 +60,14 @@ const up = (depth) => '../'.repeat(depth);
 const blessings = (s) => (s.wishesInferred || []).map((k) => EN.wishes[k]).filter(Boolean).slice(0, 3);
 
 // ---------- 共通の部品 ----------
-function head({ title, desc, canon, depth, extra }) {
+const LANGS = [['ja', '', '日本語'], ['en', 'en/', 'English'], ['zh-Hant', 'zh/', '繁體中文'], ['ko', 'ko/', '한국어'], ['fr', 'fr/', 'Français'], ['es', 'es/', 'Español']];
+function head({ title, desc, canon, depth, extra, home }) {
   const R = up(depth);
+  if (home && !PREVIEW) {
+    extra = (extra || '') + LANGS.map(([hl, p]) => `<link rel="alternate" hreflang="${hl}" href="${SITE}${p}">`).join('\n') + `\n<link rel="alternate" hreflang="x-default" href="${SITE}en/">\n`
+      // 前のトップの中の欄(#finder など)へのリンク・共有されたマイリスト(#list=)を、新しいページへ案内する
+      + `<script>(function(h){var m={'#finder':'finder/','#results':'finder/','#panel-wish':'finder/','#planner':'plan/','#mylist':'my-list/','#courses':'cities/','#manners':'guide/'};if(m[h])location.replace(m[h]);else if(/^#list=/.test(h))location.replace('my-list/'+h);})(location.hash);</script>\n`;
+  }
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,7 +84,7 @@ ${PREVIEW ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="cano
 <meta property="og:site_name" content="${esc(ED.siteName)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${SITE}${OUT}/img/hero-autumn-1200.jpg">
+<meta property="og:image" content="${SITE}assets/img/edition/hero-autumn-1200.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="${R}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${R}apple-touch-icon.png">
@@ -88,7 +94,7 @@ ${PREVIEW ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="cano
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap">
 <link rel="stylesheet" href="${R}assets/css/style.css">
 <link rel="stylesheet" href="${R}en/en.css">
-<link rel="stylesheet" href="${R}${OUT}/edition.css">
+<link rel="stylesheet" href="${R}assets/css/edition.css">
 ${extra || ''}</head>
 <body class="en en-page ed">
 ${PREVIEW ? '<p class="ed-preview">Preview of the new English edition (not public yet) · <a href="' + R + 'en/">Current site</a></p>' : ''}
@@ -102,11 +108,12 @@ function foot(depth, scripts) {
   const R = up(depth);
   return `<footer class="en-foot">
   <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata · Photos: Wikimedia Commons</p>
+  <p class="ed-langs">${LANGS.map(([hl, p, n]) => `<a href="${R}${p}" hreflang="${hl}" lang="${hl}"${hl === 'en' ? ' aria-current="page"' : ''}>${n}</a>`).join(' · ')}</p>
   <p>${esc(ED.siteName)} / <a href="${R}" lang="ja">開運パワースポット巡り</a> · Run by Akki, the Higher-Dimensional Negotiator, Tokyo · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
 </footer>
 ${scripts || `<script src="${R}en/mylist.js"></script>
 <script src="${R}assets/js/photos.js"></script>`}
-<script src="${R}${OUT}/edition-ui.js"></script>
+<script src="${R}assets/js/edition/ui.js"></script>
 <script src="${R}assets/js/pwa.js" defer></script>
 </body>
 </html>
@@ -215,9 +222,9 @@ function cityCard(c, base) {
 // ---------- 参拝ガイド(今の英語版トップの文章を使う) ----------
 function guidePage() {
   const depth = 2;
-  const src = fs.readFileSync(r('en/index.html'), 'utf8');
+  const src = fs.readFileSync(r('scripts/i18n/base-en-index.html'), 'utf8');
   const m = src.match(/<section class="panel" id="manners"[\s\S]*?<\/section>/);
-  if (!m) throw new Error('en/index.html に参拝の作法の欄が見つからない');
+  if (!m) throw new Error('ひな形に参拝の作法の欄が見つからない');
   const body = m[0].replace(/<section[^>]*>/, '').replace(/<\/section>$/, '').replace(/<h2[^>]*>[\s\S]*?<\/h2>/, '');
   return head({ title: `How to visit a shrine or temple in Japan | ${ED.siteName}`, desc: 'Simple etiquette for Shinto shrines and Buddhist temples in Japan: the torii gate, purifying, how to pray, goshuin and omamori.', canon: OUT + '/guide/', depth }) + `
 <main class="en-main ed-main ed-tool">
@@ -229,7 +236,8 @@ function guidePage() {
 
 
 // ---------- 聖地さがし・旅程・マイリスト(今の英語版トップの欄を、そのままの形で別ページにする) ----------
-const EN_TOP = fs.readFileSync(r('en/index.html'), 'utf8');
+// 作り直す前の英語版トップ(固定したひな形)。聖地さがし・旅程・マイリスト・参拝ガイドの欄はここから取る
+const EN_TOP = fs.readFileSync(r('scripts/i18n/base-en-index.html'), 'utf8');
 function sectionById(id) {
   const start = EN_TOP.search(new RegExp('<section[^>]*(id="' + id + '"|class="[^"]*' + id + '[^"]*")'));
   if (start < 0) throw new Error('en/index.html に欄が見つからない:' + id);
@@ -270,9 +278,9 @@ function homePage() {
   const seen = {};
   const featured = SPOTS.filter((s) => s.verified).sort((a, b) => b.fame - a.fame)
     .filter((s) => (seen[s.prefecture_code] = (seen[s.prefecture_code] || 0) + 1) <= 1).slice(0, ED.home.featuredCount);
-  return head({ title: `${ED.siteName} | Shrines, temples & sacred nature in Japan`, desc: "Plan your visits to Japan's shrines, temples, sacred trees and waterfalls: by the city you stay in, by your wish, or by region. Etiquette, routes and lucky days.", canon: OUT + '/', depth }) + `
+  return head({ home: true, title: `${ED.siteName} | Shrines, temples & sacred nature in Japan`, desc: "Plan your visits to Japan's shrines, temples, sacred trees and waterfalls: by the city you stay in, by your wish, or by region. Etiquette, routes and lucky days.", canon: OUT + '/', depth }) + `
 <header class="ed-hero">
-  <picture data-hero><source type="image/webp" srcset="img/hero-autumn-800.webp 800w, img/hero-autumn-1200.webp 1200w, img/hero-autumn-1672.webp 1672w" sizes="100vw"><img src="img/hero-autumn-1200.jpg" alt="A traveler walks toward a red torii gate along a shrine path with stone lanterns" width="1672" height="941"></picture>
+  <picture data-hero><source type="image/webp" srcset="../assets/img/edition/hero-autumn-800.webp 800w, ../assets/img/edition/hero-autumn-1200.webp 1200w, ../assets/img/edition/hero-autumn-1672.webp 1672w" sizes="100vw"><img src="../assets/img/edition/hero-autumn-1200.jpg" alt="A traveler walks toward a red torii gate along a shrine path with stone lanterns" width="1672" height="941"></picture>
   <div class="ed-hero-text">
     <h1>Japan's sacred places,<br> made easy to visit</h1>
     <p>Discover shrines, temples, sacred trees and waterfalls, with how to get there and how to pray.</p>
@@ -303,7 +311,7 @@ function homePage() {
     <img src="../en/img/akki-240.jpg" srcset="../en/img/akki-240.jpg 1x, ../en/img/akki-480.jpg 2x" width="96" height="96" alt="Akki, the guide of this site" loading="lazy" decoding="async">
     <div>
       <h2 id="h-guide">Hello, I'm Akki.</h2>
-      <p>In Japan I'm known as <b>the Higher-Dimensional Negotiator</b> (<span lang="ja">高次元ネゴシエイター</span>). I was born in Yokosuka and live in Tokyo, and Japan's shrines and sacred places are a big part of my life and work.</p>
+      <p>In Japan I'm known as <b>the Higher-Dimensional Negotiator</b>. I was born in Yokosuka and live in Tokyo, and Japan's shrines and sacred places are a big part of my life and work.</p>
       <p><a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a> · <a href="https://www.youtube.com/@nigihayahi03" target="_blank" rel="noopener">YouTube</a></p>
     </div>
   </section>
