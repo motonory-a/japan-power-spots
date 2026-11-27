@@ -78,7 +78,7 @@ ${PREVIEW ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="cano
 <meta property="og:site_name" content="${esc(ED.siteName)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${SITE}en/img/hero-spring-1200.jpg">
+<meta property="og:image" content="${SITE}${OUT}/img/hero-autumn-1200.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="${R}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${R}apple-touch-icon.png">
@@ -92,9 +92,9 @@ ${PREVIEW ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="cano
 ${extra || ''}</head>
 <body class="en en-page ed">
 ${PREVIEW ? '<p class="ed-preview">Preview of the new English edition (not public yet) · <a href="' + R + 'en/">Current site</a></p>' : ''}
-<header class="en-bar">
-  <a class="en-brand" href="${R}${OUT}/">${esc(ED.siteName)}</a>
-  <nav class="en-bar-links"><a href="${R}${OUT}/cities/">Cities</a><a href="${R}en/spots/">All spots</a><a href="${R}${OUT}/guide/">Shrine guide</a><a href="${R}${OUT}/my-list/">My list <span class="en-count" data-mylist-count></span></a></nav>
+<header class="ed-bar">
+  <a class="ed-brand" href="${R}${OUT}/"><img src="${R}assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>Japan Power <i>Spot</i> Journey</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
+  <nav class="ed-nav"><a href="${R}${OUT}/cities/">Cities</a><a href="${R}en/spots/">All spots</a><a href="${R}${OUT}/guide/">Shrine guide</a><a href="${R}${OUT}/my-list/">My list <span class="en-count" data-mylist-count></span></a></nav>
 </header>
 `;
 }
@@ -104,16 +104,34 @@ function foot(depth, scripts) {
   <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata · Photos: Wikimedia Commons</p>
   <p>${esc(ED.siteName)} / <a href="${R}" lang="ja">開運パワースポット巡り</a> · Run by Akki, the Higher-Dimensional Negotiator, Tokyo · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
 </footer>
-${scripts || `<script src="${R}en/mylist.js"></script>`}
+${scripts || `<script src="${R}en/mylist.js"></script>
+<script src="${R}assets/js/photos.js"></script>`}
+<script src="${R}${OUT}/edition-ui.js"></script>
 <script src="${R}assets/js/pwa.js" defer></script>
 </body>
 </html>
 `;
 }
-function spotItem(s, depth, note) {
+// 小さな絵(SVG)。色は CSS の currentColor
+const ICON = {
+  torii: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5c4 1 16 1 20 0v2.5c-1 .3-2 .5-3 .6V20h-2V8.3c-1.6.1-3.3.2-5 .2s-3.4-.1-5-.2V20H5V8.1c-1-.1-2-.3-3-.6zM6 11h12v2H6z" fill="currentColor"/></svg>',
+  bed: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h2v7h14a2 2 0 0 1 2 2v4h-2v-2H5v2H3zm4 2.5A1.5 1.5 0 1 1 7 11.5a1.5 1.5 0 0 1 0-3zM10 9h7a2 2 0 0 1 2 2v1h-9z" fill="currentColor"/></svg>',
+  pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5z" fill="currentColor"/></svg>',
+  walk: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM9.8 8.9 7 22h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3A7 7 0 0 0 19 12v-2a5 5 0 0 1-4.3-2.4l-1-1.6A2 2 0 0 0 11 5.3L6 7.4V12h2V8.6z" fill="currentColor"/></svg>',
+  cal: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3zm-1 8v10h12V10zm2 2h3v3H8z" fill="currentColor"/></svg>',
+  bowl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11h20a10 10 0 0 1-6 8.2V21H8v-1.8A10 10 0 0 1 2 11zm7-8c1 1.2 1 2.6 0 4M13 3c1 1.2 1 2.6 0 4" fill="currentColor" stroke="currentColor" stroke-width="1.4"/></svg>',
+  search: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3a7 7 0 0 1 5.6 11.2l5.6 5.6-1.4 1.4-5.6-5.6A7 7 0 1 1 10 3zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="currentColor"/></svg>',
+  map: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2zm0 2.2 6 2v13.6l-6-2z" fill="currentColor"/></svg>'
+};
+const typeShort = (s) => (s.category === '神社' ? 'Shrine' : s.category === '寺院' ? 'Temple' : cat(s));
+// スポットのカード。写真は開いたときに edition-ui.js が Wikimedia Commons から入れる(撮影者・ライセンスも表示)
+function spotItem(s, depth, note, small) {
   const b = blessings(s);
-  return `<li class="ed-spot"><a href="${up(depth)}en/spots/${s.slug}.html"><span class="ed-spot-name">${esc(s.en)}</span><span class="ed-spot-ja" lang="ja">${esc(s.name)}</span></a>
-    <span class="ed-spot-meta">${esc(cat(s))} · ${esc(pref(s))}${note ? ' · ' + esc(note) : ''}</span>${b.length ? `<span class="ed-spot-bless">${esc(b.join(' · '))}</span>` : ''}</li>`;
+  return `<li class="ed-spot${small ? ' ed-spot-s' : ''}" data-q="${s.wikidata}"><a href="${up(depth)}en/spots/${s.slug}.html">
+    <span class="ed-thumb" aria-hidden="true"></span>
+    <span class="ed-spot-body"><span class="ed-spot-name">${esc(s.en)}</span><span class="ed-spot-ja" lang="ja">${esc(s.name)}</span>
+    <span class="ed-chips"><span class="ed-chip">${ICON.torii}${esc(typeShort(s))}</span>${note ? `<span class="ed-chip">${ICON.walk}${esc(note.replace(/^about /, 'about '))}</span>` : `<span class="ed-chip">${ICON.pin}${esc(pref(s))}</span>`}${!small && b.length ? `<span class="ed-chip ed-chip-b">${esc(b.slice(0, 2).join(' / '))}</span>` : ''}</span></span>
+    <span class="ed-chev" aria-hidden="true">›</span></a></li>`;
 }
 
 // ---------- 都市のまとめ ----------
@@ -141,37 +159,38 @@ function cityPage(c) {
   const desc = `${d.total} well-known shrines, temples and sacred places you can reach from ${c.name}, with routes and travel times. ${c.tagline}`;
   const gm = (co) => 'https://www.google.com/maps/dir/' + co.stops.map((st) => st.lat + ',' + st.lon).join('/');
   return head({ title, desc, canon: OUT + '/cities/' + c.slug + '/', depth }) + `
-<main class="en-main ed-main">
-  <nav class="ed-crumbs"><a href="../../">Home</a> › <a href="../">Cities</a> › ${esc(c.name)}</nav>
-  <section class="panel ed-city-head">
-    <p class="ed-kicker">${esc(c.region)}</p>
+<header class="ed-cityhero" data-q="${d.near[0] ? d.near[0].s.wikidata : ''}">
+  <div class="ed-cityhero-in">
+    <nav class="ed-crumbs"><a href="../../">Home</a> › <a href="../">Cities</a> › ${esc(c.name)}</nav>
     <h1>Power spots in ${esc(c.name)}</h1>
     <p class="ed-lead">${esc(c.tagline)}</p>
-    <p class="ed-note">${d.total} well-known sacred places within about ${Math.round(d.dayMax / 60 * 10) / 10} hours by train and bus. Times are rough estimates from straight-line distance.</p>
-    <p><a class="btn-main" href="../../finder/">Find the ones that match you</a></p>
-  </section>
-  <section class="panel">
-    <h2>In and around ${esc(c.name)}</h2>
-    <p class="ed-sub">Up to about an hour away</p>
+    <p class="ed-count">${ICON.torii}<span>${d.total} well-known sacred places<br>within about ${Math.round(d.dayMax / 60 * 10) / 10} hours</span></p>
+    <a class="ed-gold" href="../../finder/">${ICON.search}Find the ones that match you <span aria-hidden="true">›</span></a>
+  </div>
+</header>
+<main class="ed-main">
+  <section class="ed-sec">
+    <h2 class="ed-h2">In and around ${esc(c.name)}</h2>
+    <p class="ed-sub">Up to about an hour by train and bus. Times are rough estimates.</p>
     <ul class="ed-spots">${d.near.map((x) => spotItem(x.s, depth, fmtMin(x.min))).join('\n')}</ul>
   </section>
-  ${d.trips.length ? `<section class="panel">
-    <h2>Day trips from ${esc(c.name)}</h2>
-    <p class="ed-sub">About 1 to ${Math.round(d.dayMax / 60 * 10) / 10} hours away</p>
-    <ul class="ed-spots">${d.trips.map((x) => spotItem(x.s, depth, fmtMin(x.min))).join('\n')}</ul>
+  ${d.trips.length ? `<section class="ed-band">
+    <h2 class="ed-h2">Day trips from ${esc(c.name)}</h2>
+    <ul class="ed-spots ed-grid2">${d.trips.map((x) => spotItem(x.s, depth, fmtMin(x.min), true)).join('\n')}</ul>
   </section>` : ''}
-  ${d.courses.length ? `<section class="panel">
-    <h2>Routes you can walk in a day</h2>
+  ${d.courses.length ? `<section class="ed-sec">
+    <h2 class="ed-h2">Routes you can walk in a day</h2>
     <p class="ed-sub">Every stop has been checked on its official website.</p>
-    ${d.courses.map(({ co, en }) => `<div class="ed-route"><h3>${esc(en[0])}</h3><p>${esc(en[1])}</p>
-      <ol>${co.stops.map((st) => { const s = SPOTS.find((x) => x.wikidata === st.q); return '<li>' + (s ? `<a href="${up(depth)}en/spots/${s.slug}.html">${esc(s.en)}</a>` : `<span lang="ja">${esc(st.name)}</span>`) + '</li>'; }).join('')}</ol>
-      <p><a href="${gm(co)}" target="_blank" rel="noopener">Open the route in Google Maps</a></p></div>`).join('\n')}
+    ${d.courses.map(({ co, en }) => `<div class="ed-route"><h3>${ICON.map}${esc(en[0])}</h3><p>${esc(en[1])}</p>
+      <ol class="ed-steps">${co.stops.map((st) => { const s = SPOTS.find((x) => x.wikidata === st.q); return '<li>' + (s ? `<a href="${up(depth)}en/spots/${s.slug}.html">${esc(s.en)}</a>` : `<span lang="ja">${esc(st.name)}</span>`) + '</li>'; }).join('')}</ol>
+      <a class="ed-purple" href="${gm(co)}" target="_blank" rel="noopener">${ICON.pin}Open the route in Google Maps</a></div>`).join('\n')}
   </section>` : ''}
-  <section class="panel ed-next">
-    <h2>Before you go</h2>
-    <p><a href="../../guide/">How to visit a shrine or temple →</a></p>
-    <p><a href="${up(depth)}en/gourmet.html">Local food to try nearby →</a></p>
+  <section class="ed-sec ed-row3">
+    <a class="ed-mini" href="../../guide/">${ICON.torii}<span>How to visit<br>a shrine or temple</span></a>
+    <a class="ed-mini" href="../../plan/">${ICON.cal}<span>Plan your trip,<br>day by day</span></a>
+    <a class="ed-mini" href="${up(depth)}en/gourmet.html">${ICON.bowl}<span>Local Food<br>Guide</span></a>
   </section>
+  <p class="ed-credits" data-credits hidden></p>
 </main>
 ` + foot(depth);
 }
@@ -180,18 +199,17 @@ function cityPage(c) {
 function citiesIndex() {
   const depth = 2;
   return head({ title: `Power spots by city | ${ED.siteName}`, desc: 'Shrines, temples and sacred nature you can visit from Tokyo, Kyoto, Osaka and other cities in Japan.', canon: OUT + '/cities/', depth }) + `
-<main class="en-main ed-main">
-  <nav class="ed-crumbs"><a href="../">Home</a> › Cities</nav>
-  <section class="panel"><h1>Where are you staying?</h1><p class="ed-lead">Pick your base. We show the sacred places you can reach from there, with travel times and routes.</p></section>
-  <section class="panel"><ul class="ed-cities">${cityCfg.map((c) => cityCard(c, '')).join('\n')}</ul></section>
+<main class="ed-main">
+  <section class="ed-sec"><nav class="ed-crumbs ed-crumbs-d"><a href="../">Home</a> › Cities</nav><h1 class="ed-h1">Where are you staying?</h1><p class="ed-lead">Pick your base. We show the sacred places you can reach from there, with travel times and routes.</p></section>
+  <section class="ed-band"><ul class="ed-cities">${cityCfg.map((c) => cityCard(c, '')).join('\n')}</ul></section>
+  <p class="ed-credits" data-credits hidden></p>
 </main>
 ` + foot(depth);
 }
+// 都市のタイル。背景の写真は、その都市でいちばん有名なスポットの写真(edition-ui.js が入れる)
 function cityCard(c, base) {
-  const built = ED.buildCities.indexOf(c.key) !== -1;
-  return built
-    ? `<li class="ed-city"><a href="${base}${c.slug}/"><b>${esc(c.name)}</b><span>${esc(c.tagline)}</span></a></li>`
-    : `<li class="ed-city ed-soon"><b>${esc(c.name)}</b><span>${esc(c.tagline)}</span><em>Coming soon</em></li>`;
+  const top = cityData(c).near[0];
+  return `<li class="ed-city" data-q="${top ? top.s.wikidata : ''}"><a href="${base}${c.slug}/"><span class="ed-city-name">${esc(c.name)}</span><span class="ed-city-tag">${esc(c.tagline)}</span><span class="ed-chev" aria-hidden="true">›</span></a></li>`;
 }
 
 // ---------- 参拝ガイド(今の英語版トップの文章を使う) ----------
@@ -202,8 +220,8 @@ function guidePage() {
   if (!m) throw new Error('en/index.html に参拝の作法の欄が見つからない');
   const body = m[0].replace(/<section[^>]*>/, '').replace(/<\/section>$/, '').replace(/<h2[^>]*>[\s\S]*?<\/h2>/, '');
   return head({ title: `How to visit a shrine or temple in Japan | ${ED.siteName}`, desc: 'Simple etiquette for Shinto shrines and Buddhist temples in Japan: the torii gate, purifying, how to pray, goshuin and omamori.', canon: OUT + '/guide/', depth }) + `
-<main class="en-main ed-main">
-  <nav class="ed-crumbs"><a href="../">Home</a> › Shrine guide</nav>
+<main class="en-main ed-main ed-tool">
+  <nav class="ed-crumbs ed-crumbs-d"><a href="../">Home</a> › Shrine guide</nav>
   <section class="panel" id="manners"><h1>How to visit a shrine or temple</h1>${body}</section>
 </main>
 ` + foot(depth);
@@ -239,8 +257,8 @@ function toolPage({ rel, title, desc, crumb, ids }) {
   const depth = 2;
   const body = ids.map((id) => fixLinks(sectionById(id), depth)).join('\n');
   return head({ title: title + ' | ' + ED.siteName, desc, canon: OUT + '/' + rel + '/', depth, extra: LEAFLET_CSS }) + `
-<main class="en-main ed-main">
-  <nav class="ed-crumbs"><a href="../">Home</a> › ${esc(crumb)}</nav>
+<main class="en-main ed-main ed-tool">
+  <nav class="ed-crumbs ed-crumbs-d"><a href="../">Home</a> › ${esc(crumb)}</nav>
 ${body}
 </main>
 ` + foot(depth, appScripts(depth));
@@ -254,43 +272,42 @@ function homePage() {
     .filter((s) => (seen[s.prefecture_code] = (seen[s.prefecture_code] || 0) + 1) <= 1).slice(0, ED.home.featuredCount);
   return head({ title: `${ED.siteName} | Shrines, temples & sacred nature in Japan`, desc: "Plan your visits to Japan's shrines, temples, sacred trees and waterfalls: by the city you stay in, by your wish, or by region. Etiquette, routes and lucky days.", canon: OUT + '/', depth }) + `
 <header class="ed-hero">
-  <picture><source type="image/webp" srcset="../en/img/hero-autumn-800.webp 800w, ../en/img/hero-autumn-1200.webp 1200w" sizes="100vw"><img src="../en/img/hero-autumn-1200.jpg" alt="A red torii gate with Mt. Fuji and a five-story pagoda among autumn leaves" width="1200" height="675"></picture>
+  <picture data-hero><source type="image/webp" srcset="img/hero-autumn-800.webp 800w, img/hero-autumn-1200.webp 1200w, img/hero-autumn-1672.webp 1672w" sizes="100vw"><img src="img/hero-autumn-1200.jpg" alt="A traveler walks toward a red torii gate along a shrine path with stone lanterns" width="1672" height="941"></picture>
   <div class="ed-hero-text">
-    <p class="ed-kicker" lang="ja">開運パワースポット巡り</p>
     <h1>Japan's sacred places,<br> made easy to visit</h1>
-    <p>Shrines, temples, ancient trees and waterfalls, with how to get there and how to pray.</p>
+    <p>Discover shrines, temples, sacred trees and waterfalls, with how to get there and how to pray.</p>
   </div>
+  <nav class="ed-doors" aria-label="Start here">
+    <a class="ed-door" href="cities/">${ICON.bed}<span>Where are you<br>staying?</span></a>
+    <a class="ed-door" href="finder/">${ICON.torii}<span>What do you<br>wish for?</span></a>
+    <a class="ed-door" href="../en/spots/">${ICON.pin}<span>Browse<br>by region</span></a>
+  </nav>
 </header>
-<main class="en-main ed-main">
-  <section class="ed-doors" aria-label="Start here">
-    <a class="ed-door" href="cities/"><b>Where are you staying?</b><span>Places you can reach from Tokyo, Kyoto, Osaka and more</span></a>
-    <a class="ed-door" href="finder/"><b>What do you wish for?</b><span>Love, luck, health… find places that match you</span></a>
-    <a class="ed-door" href="../en/spots/"><b>Browse by region</b><span>About 1,400 well-known places across Japan</span></a>
-  </section>
-  <section class="panel">
-    <h2>First time in Japan? Start with these</h2>
+<main class="ed-main">
+  <section class="ed-sec">
+    <h2 class="ed-h2">First time in Japan? Start with these</h2>
     <p class="ed-sub">Well-known sacred places, one per prefecture, checked on their official websites.</p>
     <ul class="ed-spots">${featured.map((s) => spotItem(s, depth)).join('\n')}</ul>
   </section>
-  <section class="panel">
-    <h2>Plan by city</h2>
-    <ul class="ed-cities">${cityCfg.slice(0, 6).map((c) => cityCard(c, 'cities/')).join('\n')}</ul>
-    <p><a href="cities/">All cities →</a></p>
+  <section class="ed-band">
+    <h2 class="ed-h2">Plan by city</h2>
+    <ul class="ed-cities ed-cities-3">${cityCfg.slice(0, 6).map((c) => cityCard(c, 'cities/')).join('\n')}</ul>
+    <p class="ed-more"><a href="cities/">All 10 cities ›</a></p>
   </section>
-  <section class="panel ed-two">
-    <a class="ed-card" href="guide/"><b>How to visit a shrine or temple</b><span>Bowing, purifying, praying, goshuin and omamori</span></a>
-    <a class="ed-card" href="plan/"><b>Plan your trip, day by day</b><span>Lucky directions from where you stay each night</span></a>
-    <a class="ed-card" href="../en/gourmet.html"><b>Local Food Guide</b><span>300+ dishes from all 47 prefectures</span></a>
+  <section class="ed-sec ed-row3">
+    <a class="ed-mini" href="guide/">${ICON.torii}<span>How to visit<br>a shrine or temple</span></a>
+    <a class="ed-mini" href="plan/">${ICON.cal}<span>Plan your trip,<br>day by day</span></a>
+    <a class="ed-mini" href="../en/gourmet.html">${ICON.bowl}<span>Local Food<br>Guide</span></a>
   </section>
-  <section class="panel en-guide" aria-labelledby="h-guide">
-    <img class="en-guide-pic" src="../en/img/akki-240.jpg" srcset="../en/img/akki-240.jpg 1x, ../en/img/akki-480.jpg 2x" width="72" height="72" alt="Akki, the guide of this site" loading="lazy" decoding="async">
-    <div class="en-guide-body">
-      <p class="en-guide-kicker">Your guide</p>
+  <section class="ed-akki" aria-labelledby="h-guide">
+    <img src="../en/img/akki-240.jpg" srcset="../en/img/akki-240.jpg 1x, ../en/img/akki-480.jpg 2x" width="96" height="96" alt="Akki, the guide of this site" loading="lazy" decoding="async">
+    <div>
       <h2 id="h-guide">Hello, I'm Akki.</h2>
       <p>In Japan I'm known as <b>the Higher-Dimensional Negotiator</b> (<span lang="ja">高次元ネゴシエイター</span>). I was born in Yokosuka and live in Tokyo, and Japan's shrines and sacred places are a big part of my life and work.</p>
-      <p class="en-guide-link"><a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Say hello on Instagram @japan_psj</a> · <a href="https://www.youtube.com/@nigihayahi03" target="_blank" rel="noopener">Watch my videos on YouTube</a></p>
+      <p><a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a> · <a href="https://www.youtube.com/@nigihayahi03" target="_blank" rel="noopener">YouTube</a></p>
     </div>
   </section>
+  <p class="ed-credits" data-credits hidden></p>
 </main>
 ` + foot(depth);
 }
