@@ -76,8 +76,24 @@ const hours = (min) => Math.round(min / 60 * 10) / 10;
 // ---------- 共通の部品 ----------
 const LANGS = [['ja', '', '日本語'], ['en', 'en/', 'English'], ['zh-Hant', 'zh/', '繁體中文'], ['ko', 'ko/', '한국어'], ['fr', 'fr/', 'Français'], ['es', 'es/', 'Español']];
 const HTML_LANG = LANG === 'zh' ? 'zh-Hant' : LANG;
+// 公開中の言語版と、それぞれにあるページ(都市・一覧・ガイド・診断・旅程・マイリスト)
+const EDITION_PAGES = fs.readdirSync(path.join(__dirname, '..', 'data', 'editions')).filter((f) => f.endsWith('.json')).map((f) => {
+  const e = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'editions', f), 'utf8'));
+  const l = f.replace(/\.json$/, '');
+  if (!e.live && l !== LANG) return null;
+  return [l, l === 'zh' ? 'zh-Hant' : l, new Set(['cities/', 'guide/', 'finder/', 'plan/', 'my-list/', ...(e.cities || []).map((c) => 'cities/' + c.slug + '/')])];
+}).filter(Boolean);
 function head({ title, desc, canon, depth, extra, home }) {
   const R = up(depth);
+  // 都市・ガイドなどのページ:同じページがある公開中の各言語版を、検索エンジンに知らせる
+  if (!home && !PREVIEW && canon.startsWith(OUT + '/')) {
+    const sub = canon.slice(OUT.length + 1);
+    const alts = EDITION_PAGES.filter(([, , pages]) => pages.has(sub));
+    if (alts.length > 1) {
+      extra = (extra || '') + alts.map(([l, hl]) => `<link rel="alternate" hreflang="${hl}" href="${SITE}${l}/${sub}">`).join('\n') + '\n'
+        + (alts.some(([l]) => l === 'en') ? `<link rel="alternate" hreflang="x-default" href="${SITE}en/${sub}">\n` : '');
+    }
+  }
   if (home && !PREVIEW) {
     extra = (extra || '') + LANGS.map(([hl, p]) => `<link rel="alternate" hreflang="${hl}" href="${SITE}${p}">`).join('\n') + `\n<link rel="alternate" hreflang="x-default" href="${SITE}en/">\n`;
   }
