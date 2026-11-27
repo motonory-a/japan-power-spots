@@ -1,0 +1,45 @@
+/* 新しい英語版(作り直し)の仮の見た目。ChatGPTのデザインが届いたら置き換える(2026-11-27) */
+.ed-preview{margin:0;padding:6px 12px;background:#fff4c8;color:#5a4300;font-size:13px;text-align:center}
+.ed-main{max-width:880px;margin:0 auto;padding:16px 12px 40px}
+.ed-kicker{margin:0 0 4px;font-size:13px;letter-spacing:.08em;color:#8a6bbf}
+.ed-lead{font-size:17px;line-height:1.6;margin:.4em 0}
+.ed-sub,.ed-note{font-size:14px;color:#6b6380;margin:.2em 0 .8em}
+.ed-crumbs{font-size:13px;margin:4px 0 10px;color:#6b6380}
+.ed-crumbs a{color:inherit}
+
+.ed-hero{position:relative;color:#fff;background:#2b1a4a}
+.ed-hero img{display:block;width:100%;height:min(62vh,520px);object-fit:cover;opacity:.82}
+.ed-hero-text{position:absolute;left:0;right:0;bottom:0;padding:24px 16px 28px;background:linear-gradient(transparent,rgba(30,15,60,.85));text-align:center}
+.ed-hero-text h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(30px,7vw,48px);line-height:1.15;margin:.1em 0 .3em}
+.ed-hero-text p{margin:0 auto;max-width:34em}
+.ed-hero .ed-kicker{color:#f0d9ff}
+
+.ed-doors{display:grid;gap:10px;margin:-36px 0 16px;position:relative}
+@media (min-width:720px){.ed-doors{grid-template-columns:repeat(3,1fr)}}
+.ed-door,.ed-card{display:block;padding:16px;border-radius:14px;background:#fff;box-shadow:0 4px 18px rgba(60,30,110,.14);text-decoration:none;color:#2b1a4a;border:1px solid #e6dcf5}
+.ed-door b,.ed-card b{display:block;font-size:18px;margin-bottom:4px}
+.ed-door span,.ed-card span{font-size:14px;color:#6b6380}
+.ed-door:hover,.ed-card:hover{border-color:#8a6bbf}
+.ed-two{display:grid;gap:10px}
+@media (min-width:720px){.ed-two{grid-template-columns:repeat(3,1fr)}}
+
+.ed-spots{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+@media (min-width:720px){.ed-spots{grid-template-columns:1fr 1fr}}
+.ed-spot{padding:10px 12px;border:1px solid #ece4f7;border-radius:10px;background:#fff}
+.ed-spot a{text-decoration:none}
+.ed-spot-name{display:block;font-weight:700;font-size:16px}
+.ed-spot-ja{display:block;font-size:12px;color:#8a8399}
+.ed-spot-meta,.ed-spot-bless{display:block;font-size:13px;color:#6b6380;margin-top:2px}
+.ed-spot-bless{color:#8a5a00}
+
+.ed-cities{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+@media (min-width:720px){.ed-cities{grid-template-columns:1fr 1fr}}
+.ed-city a,.ed-city.ed-soon{display:block;padding:12px 14px;border-radius:10px;border:1px solid #e6dcf5;background:#fff;text-decoration:none;color:#2b1a4a}
+.ed-city b{display:block;font-size:17px}
+.ed-city span{font-size:14px;color:#6b6380}
+.ed-city em{display:block;margin-top:4px;font-size:12px;font-style:normal;color:#8a8399}
+.ed-soon{opacity:.6}
+
+.ed-route{padding:12px 0;border-top:1px solid #eee}
+.ed-route h3{margin:0 0 4px;font-size:17px}
+.ed-route ol{margin:.4em 0;padding-left:1.4em}

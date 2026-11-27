@@ -1,0 +1,118 @@
+{
+  "_note": "英語版の見せ方の設定(2026-11-27)。スポットのデータは data/ の共通のものを使う。都市の key・座標は en/i18n-en.js の EN.cities と同じ。説明文は確認できる一般的な内容だけを書く。",
+  "lang": "en",
+  "siteName": "Japan Power Spot Journey",
+  "cities": [
+    {
+      "key": "tokyo",
+      "name": "Tokyo",
+      "slug": "tokyo",
+      "lat": 35.6812,
+      "lon": 139.7671,
+      "region": "Tokyo & Kanto",
+      "tagline": "Shrines hidden in city forests, and old temple towns a short train ride away."
+    },
+    {
+      "key": "kyoto",
+      "name": "Kyoto",
+      "slug": "kyoto",
+      "lat": 34.9858,
+      "lon": 135.7588,
+      "region": "Kansai",
+      "tagline": "The old capital, with more famous shrines and temples than one trip can hold."
+    },
+    {
+      "key": "osaka",
+      "name": "Osaka",
+      "slug": "osaka",
+      "lat": 34.7025,
+      "lon": 135.4959,
+      "region": "Kansai",
+      "tagline": "Lively city shrines, and an easy base for Nara, Kyoto and Mt. Koya."
+    },
+    {
+      "key": "nara",
+      "name": "Nara",
+      "slug": "nara",
+      "lat": 34.6851,
+      "lon": 135.8048,
+      "region": "Kansai",
+      "tagline": "Great temples of the ancient capital, with deer in the park."
+    },
+    {
+      "key": "nikko",
+      "name": "Nikko",
+      "slug": "nikko",
+      "lat": 36.7499,
+      "lon": 139.6075,
+      "region": "Tokyo & Kanto",
+      "tagline": "Mountain shrines and temples among tall cedars, north of Tokyo."
+    },
+    {
+      "key": "hakone",
+      "name": "Hakone & Mt. Fuji",
+      "slug": "hakone-fuji",
+      "lat": 35.2329,
+      "lon": 139.1069,
+      "region": "Central Japan",
+      "tagline": "Lakeside shrines and views of sacred Mt. Fuji, close to Tokyo."
+    },
+    {
+      "key": "ise",
+      "name": "Ise",
+      "slug": "ise",
+      "lat": 34.4875,
+      "lon": 136.7092,
+      "region": "Central Japan",
+      "tagline": "Ise Jingu, the most sacred shrine in Shinto, and the sea at Futami."
+    },
+    {
+      "key": "hiroshima",
+      "name": "Hiroshima & Miyajima",
+      "slug": "hiroshima-miyajima",
+      "lat": 34.3976,
+      "lon": 132.4754,
+      "region": "Chugoku & Shikoku",
+      "tagline": "The island shrine of Itsukushima and its gate standing in the sea."
+    },
+    {
+      "key": "kanazawa",
+      "name": "Kanazawa",
+      "slug": "kanazawa",
+      "lat": 36.5781,
+      "lon": 136.6479,
+      "region": "Central Japan",
+      "tagline": "A castle town on the Sea of Japan with quiet temple districts."
+    },
+    {
+      "key": "fukuoka",
+      "name": "Fukuoka",
+      "slug": "fukuoka",
+      "lat": 33.5897,
+      "lon": 130.4207,
+      "region": "Kyushu & Okinawa",
+      "tagline": "The gateway to Kyushu, with Dazaifu Tenmangu nearby."
+    }
+  ],
+  "buildCities": [
+    "tokyo",
+    "kyoto",
+    "osaka"
+  ],
+  "cityRules": {
+    "nearMinutes": 60,
+    "dayTripMinutes": 150,
+    "perGroup": 12,
+    "routeKm": 25
+  },
+  "home": {
+    "featuredCount": 8
+  },
+  "skip": {
+    "_note": "都市・トップのおすすめに出さない(スポットのページは残す)。Q242803=靖国神社(海外の人には政治的に敏感、英語版の診断でも上位に出していない)、Q1333799=法隆寺地域の仏教建造物(世界遺産の地域名で、法隆寺と重なる)",
+    "q": [
+      "Q242803",
+      "Q1333799"
+    ]
+  }
+}
