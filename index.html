@@ -125,6 +125,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&display=swap">
 <link rel="preload" as="image" type="image/webp" href="assets/img/hero-800.webp" imagesrcset="assets/img/hero-800.webp 800w, assets/img/hero-1200.webp 1200w, assets/img/hero-1672.webp 1672w" imagesizes="(max-width: 1240px) 100vw, 1240px">
 <link rel="stylesheet" href="assets/css/style.css?v=3.23.0">
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 <header class="hero">
@@ -452,6 +453,12 @@
     </div>
     <a href="https://motonory-a.github.io/my-first-project/" target="_blank" rel="noopener noreferrer">魂の系統鑑定サイトを開く</a>
   </section>
+  <section id="install-card" class="install-card" hidden style="margin:24px auto;max-width:720px;padding:18px 20px;border-radius:16px;background:#fff;border:1px solid #e6dcc4;box-shadow:0 4px 14px rgba(75,45,126,.08)">
+    <h2 style="margin:0 0 6px;font-size:1.1rem;color:#4B2D7E">アプリのように使う</h2>
+    <p style="margin:0 0 10px;font-size:.92rem;line-height:1.7">ホーム画面にアイコンを置くと、ワンタップで開けます。行きたい場所・行った場所のスタンプ帳も、そのまま残ります。</p>
+    <button type="button" class="install-btn" hidden style="padding:10px 18px;border:0;border-radius:999px;background:#4B2D7E;color:#fff;font-weight:700;font-size:.95rem">ホーム画面に追加する</button>
+    <ol class="install-how" style="margin:0;padding-left:1.3em;font-size:.9rem;line-height:1.8"></ol>
+  </section>
 </main>
 
 <dialog id="spot-detail" class="spot-detail" aria-labelledby="detail-title"></dialog>
@@ -489,5 +496,6 @@
 <script src="assets/js/detail.js?v=3.23.0"></script>
 <script src="assets/js/daily.js?v=3.23.0"></script>
 <script src="assets/js/app.js?v=3.23.0"></script>
+<script src="assets/js/pwa.js" defer></script>
 </body>
 </html>

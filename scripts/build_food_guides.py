@@ -61,6 +61,7 @@ for page, pg in PAGES.items():
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&display=swap">
 <link rel="stylesheet" href="{pre}assets/css/gourmet.css">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+<link rel="manifest" href="{pre}manifest.webmanifest">
 </head>
 <body class="g-page fg-page">
 <div class="g-head"><a href="gourmet.html">{e(u["back"])}</a><span class="g-langs">{langs}</span></div>
@@ -98,6 +99,7 @@ for page, pg in PAGES.items():
 </footer>
 <script src="{pre}assets/js/config.js"></script>
 <script src="{pre}assets/js/analytics.js"></script>
+<script src="{pre}assets/js/pwa.js" defer></script>
 </body>
 </html>
 ''')
