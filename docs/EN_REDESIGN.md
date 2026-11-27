@@ -106,4 +106,8 @@
 - 2026-11-27 段階2〜3:scripts/build_edition.js・data/editions/en.json・assets/js/edition/app.js(en/app-en.js の写し。ページが分かれていても動く)
   - en-next/:トップ、都市の一覧、都市10(東京・京都・大阪・奈良・日光・箱根と富士山・伊勢・広島と宮島・金沢・福岡)、参拝ガイド、聖地さがし(finder/)、旅程(plan/)、マイリスト(my-list/)
   - 都市・トップのおすすめに出さないもの・都市ごとの先頭(pins)・日帰りの範囲は data/editions/en.json で決める
-- 残り:ChatGPTのデザインの反映 → アッキーのスマホ確認 → /en/ と入れ替え(en-pages の自動作成に build_edition.js を足す、スポットのページの見出し・リンクを新しい形に、旧トップの #finder などの飛び先を案内)
+- 2026-11-27 ChatGPTのデザイン(季節のトップ画像4枚・見本2枚)を反映
+- 2026-11-28 アッキーOK → /en/ と入れ替え(node scripts/build_edition.js --out en)。旧トップの #finder・#planner・#mylist・#list=・#courses は新しいページへ案内。en-pages で毎週作り直す。en-next/ は /en/ へ案内するだけ
+  - 共通の見た目・画像・動き:assets/css/edition.css・assets/img/edition/・assets/js/edition/ui.js
+  - 聖地さがし・旅程・マイリスト・参拝ガイドの欄は、固定したひな形 scripts/i18n/base-en-index.html から取る
+- 残り:スポットのページ(build_en_pages.js)の見た目をそろえる/韓国語版をこの型で作る
