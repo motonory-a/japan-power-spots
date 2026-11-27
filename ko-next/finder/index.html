@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CX2WH9VGQ5"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX2WH9VGQ5');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>나와 맞는 파워스폿 찾기 | 일본 파워스폿 여행</title>
+<meta name="description" content="소원과 숙소 위치, 생일을 알려 주시면 나와 맞는 일본의 신사・절・성지를 추천해 드립니다.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#4B2D7E">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="일본 파워스폿 여행">
+<meta property="og:title" content="나와 맞는 파워스폿 찾기 | 일본 파워스폿 여행">
+<meta property="og:description" content="소원과 숙소 위치, 생일을 알려 주시면 나와 맞는 일본의 신사・절・성지를 추천해 드립니다.">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/edition/hero-autumn-1200.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../en/en.css">
+<link rel="stylesheet" href="../../assets/css/edition.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""></head>
+<body class="en en-page ed ed-ko">
+<p class="ed-preview">새로운 한국어판 미리보기(아직 공개 전) · <a href="../../ko/">지금 사이트</a></p>
+<header class="ed-bar">
+  <a class="ed-brand" href="../../ko-next/"><img src="../../assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>일본 파워스폿 여행</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
+  <nav class="ed-nav"><a href="../../ko-next/cities/">도시별</a><a href="../../en/spots/">모든 스폿</a><a href="../../ko-next/guide/">참배 방법</a><a href="../../ko-next/my-list/">내 리스트 <span class="en-count" data-mylist-count></span></a></nav>
+</header>
+
+<main class="en-main ed-main ed-tool">
+  <nav class="ed-crumbs ed-crumbs-d"><a href="../">홈</a> › 파워스폿 찾기</nav>
+<section class="panel panel-wish" aria-labelledby="h-wish">
+    <h2 id="h-wish">당신의 소원은 무엇인가요?</h2>
+    <p class="lead-small">가장 이루고 싶은 소원을 고르면 아래 검색에 자동으로 들어갑니다.</p>
+    <div class="wish-tiles" id="wish-tiles"></div>
+  </section>
+<section class="panel" id="finder" aria-labelledby="h-finder">
+    <h2 id="h-finder">파워스폿 찾기</h2>
+    <form id="finder-form" novalidate>
+      <div class="en-step">
+        <h3><span class="step-no">1</span>소원 <span class="opt">선택 사항 · 여러 개 선택 가능</span></h3>
+        <div class="chip-row" id="wish-chips"></div>
+        <p class="en-sub-label">경험해 보고 싶은 곳</p>
+        <div class="chip-row" id="exp-chips"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">2</span>생일 <span class="req">필수</span></h3>
+        <input type="date" id="birthday" min="1900-01-01" autocomplete="bday" aria-describedby="bday-note">
+        <p class="note" id="bday-note">구성기학(일본 전통의 길한 방위)과 수비학 계산에 쓰입니다. 정보는 기기 안에만 저장되며 어디에도 보내지지 않습니다.</p>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">3</span>어디에 묵으시나요? <span class="req">필수</span></h3>
+        <select id="city" aria-label="숙소가 있는 도시"></select>
+        <div class="en-origin-actions">
+          <button type="button" class="btn-sub" id="use-location">현재 위치 사용</button>
+          <span class="small">또는 아래 지도를 눌러 호텔 위치를 정하세요</span>
+        </div>
+        <p class="origin-status" id="origin-status" role="status" aria-live="polite"></p>
+        <div id="origin-map" class="en-origin-map" aria-label="출발지를 고르는 지도"></div>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">4</span>어떻게 이동하시나요?</h3>
+        <div class="chip-row" id="mode-chips"></div>
+        <label class="en-inline">편도
+          <select id="time-limit"></select> 이내
+        </label>
+      </div>
+
+      <div class="en-step">
+        <h3><span class="step-no">5</span>언제 가시나요? <span class="opt">선택 사항</span></h3>
+        <input type="date" id="trip-date">
+        <p class="note">날짜를 고르면 그날 호텔에서 출발하는 방위의 길흉을 확인합니다. 고르지 않으면 이번 달의 길한 방위를 쓰고, 가기 좋은 날도 알려 드립니다.</p>
+      </div>
+
+      <div class="form-error" id="form-error" role="alert" tabindex="-1" hidden></div>
+      <button type="submit" class="btn-main en-submit">나의 파워스폿 보기</button>
+    </form>
+  </section>
+<section class="panel" id="results" aria-labelledby="h-results" hidden>
+    <h2 id="h-results">당신의 파워스폿</h2>
+    <div id="result-cards" class="cards"></div>
+    <div id="you-box" class="en-you"></div>
+    <div id="more-box"></div>
+    <div id="result-map" class="en-result-map" aria-label="파워스폿 지도"></div>
+    <p class="note">이동 시간은 직선거리로 계산한 대략적인 값입니다. 출발 전에 Google 지도나 공식 사이트에서 경로, 운영 시간, 교통편을 꼭 확인하세요. 기원 내용은 각 장소의 신이나 이름에 얽혀 예로부터 전해지는 것입니다.</p>
+  </section>
+</main>
+<footer class="en-foot">
+  <p>지도 데이터 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · 장소 정보: OpenStreetMap, Wikidata · 사진: Wikimedia Commons</p>
+  <p class="ed-langs"><a href="../../" hreflang="ja" lang="ja">日本語</a> · <a href="../../en/" hreflang="en" lang="en">English</a> · <a href="../../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a> · <a href="../../ko/" hreflang="ko" lang="ko" aria-current="page">한국어</a> · <a href="../../fr/" hreflang="fr" lang="fr">Français</a> · <a href="../../es/" hreflang="es" lang="es">Español</a></p>
+  <p>일본 파워스폿 여행 / <a href="../../" lang="ja">開運パワースポット巡り</a> · 운영: Akki, the Higher-Dimensional Negotiator(도쿄) · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../../assets/js/config.js?v=3.23.0"></script>
+<script src="../../assets/js/analytics.js?v=3.23.0"></script>
+<script src="../../assets/js/jst-date.js?v=3.23.0"></script>
+<script src="../../data/solar-terms.js?v=3.23.0"></script>
+<script src="../../assets/js/kyusei.js?v=3.23.0"></script>
+<script src="../../data/spots-demo.js?v=3.23.0"></script>
+<script src="../../data/spots-osm.js?v=3.23.0"></script>
+<script src="../../data/curated-info.js?v=3.23.0"></script>
+<script src="../../data/known-benefits.js?v=3.23.0"></script>
+<script src="../../data/en-labels.js?v=3.23.0"></script>
+<script src="../../data/exclude.js?v=3.23.0"></script>
+<script src="../../data/food.js?v=3.23.0"></script>
+<script src="../../data/food-photos.js?v=3.23.0"></script>
+<script src="../../data/gourmet.js?v=3.23.0"></script>
+<script src="../../data/gourmet-ko.js?v=3.23.0"></script>
+<script src="../../assets/js/nearby.js?v=3.23.0"></script>
+<script src="../../assets/js/data.js?v=3.23.0"></script>
+<script src="../../assets/js/diagnosis.js?v=3.23.0"></script>
+<script src="../../assets/js/photos.js?v=3.23.0"></script>
+<script src="../../data/model-courses.js?v=3.23.0"></script>
+<script src="../../intl/i18n-en.js?v=3.23.0"></script>
+<script src="../../ko/i18n.js?v=3.23.0"></script>
+<script src="../../intl/pool-en.js?v=3.23.0"></script>
+<script src="../../intl/mylist.js?v=3.23.0"></script>
+<script src="../../assets/js/edition/app.js"></script>
+
+<script src="../../assets/js/edition/ui.js"></script>
+<script src="../../assets/js/pwa.js" defer></script>
+</body>
+</html>

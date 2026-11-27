@@ -162,7 +162,12 @@ LANGS.forEach((lang) => {
     h = repRe(h, re, (m, v) => `<script src="../intl/${f}${v || ''}"></script>`, f);
   });
   fs.mkdirSync(path.join(ROOT, lang), { recursive: true });
-  fs.writeFileSync(path.join(ROOT, lang, 'index.html'), h);
+  // 作り直す前の形のトップ。新しい版(build_edition.js)の聖地さがし・旅程・マイリスト・参拝ガイドの欄の元にもなる
+  fs.writeFileSync(path.join(__dirname, 'i18n', 'base-' + lang + '-index.html'), h);
+  // 新しい版を公開した言語(data/editions/<言語>.json の live が true)は、<言語>/index.html を上書きしない
+  const edFile = path.join(ROOT, 'data', 'editions', lang + '.json');
+  const live = fs.existsSync(edFile) && JSON.parse(fs.readFileSync(edFile, 'utf8')).live;
+  if (!live) fs.writeFileSync(path.join(ROOT, lang, 'index.html'), h);
   fs.writeFileSync(path.join(ROOT, lang, 'i18n.js'), deepMergeScript(Object.assign({ lang, spotBase: '../en/spots/' }, T.data)));
   console.log(lang + '/index.html・' + lang + '/i18n.js を作りました');
 });

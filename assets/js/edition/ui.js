@@ -17,6 +17,28 @@
     }
   }
 
+  // 英語以外の版:スポットの名前をその言語の名前に替える(Wikidata のラベル。無いものは英語のまま)
+  var lang = (document.documentElement.lang || 'en').toLowerCase();
+  var wl = lang === 'zh-hant' ? 'zh-hant|zh-tw|zh' : lang;
+  var labelEls = lang === 'en' ? [] : Array.prototype.slice.call(document.querySelectorAll('[data-label]'));
+  if (labelEls.length) {
+    var ids = labelEls.map(function (e) { return e.getAttribute('data-label'); }).filter(function (q, i, a) { return a.indexOf(q) === i; });
+    for (var i = 0; i < ids.length; i += 50) {
+      (function (chunk) {
+        fetch('https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels&format=json&origin=*&languages=' + encodeURIComponent(wl) + '&ids=' + chunk.join('|'))
+          .then(function (res) { return res.json(); })
+          .then(function (d) {
+            labelEls.forEach(function (e) {
+              var en = d.entities && d.entities[e.getAttribute('data-label')];
+              if (!en || !en.labels) return;
+              var langs = wl.split('|');
+              for (var k = 0; k < langs.length; k++) { if (en.labels[langs[k]]) { e.textContent = en.labels[langs[k]].value; break; } }
+            });
+          }).catch(function () {});
+      })(ids.slice(i, i + 50));
+    }
+  }
+
   // 写真
   if (!window.SpotPhotos) return;
   var els = Array.prototype.slice.call(document.querySelectorAll('[data-q]')).filter(function (e) { return e.getAttribute('data-q'); });
@@ -46,7 +68,7 @@
     var box = document.querySelector('[data-credits]');
     var list = Object.keys(used);
     if (!box || !list.length) return;
-    box.append('Photos (Wikimedia Commons): ');
+    box.append(({ ko: '사진', 'zh-hant': '照片', fr: 'Photos', es: 'Fotos' }[lang] || 'Photos') + ' (Wikimedia Commons): ');
     list.forEach(function (page, i) {
       var a = document.createElement('a');
       a.href = page; a.target = '_blank'; a.rel = 'noopener noreferrer';

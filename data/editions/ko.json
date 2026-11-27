@@ -1,0 +1,220 @@
+{
+  "_note": "韓国語版の見せ方の設定(2026-11-28)。韓国から何度も来る旅行者向けに、九州・北海道など韓国から直行便の多い地方の都市を多めに。説明文は確認できる一般的な内容だけ。",
+  "lang": "ko",
+  "live": false,
+  "locale": "ko_KR",
+  "siteName": "일본 파워스폿 여행",
+  "cities": [
+    {
+      "key": "fukuoka",
+      "name": "후쿠오카",
+      "slug": "fukuoka",
+      "lat": 33.5902,
+      "lon": 130.4207,
+      "region": "규슈",
+      "pins": [
+        "Q710786"
+      ],
+      "tagline": "한국에서 가장 가까운 큰 도시. 다자이후 텐만구까지 전철로 쉽게 갈 수 있어요."
+    },
+    {
+      "key": "osaka",
+      "name": "오사카",
+      "slug": "osaka",
+      "lat": 34.6661,
+      "lon": 135.501,
+      "region": "간사이",
+      "tagline": "먹거리의 도시이자 교토·나라·고야산으로 가는 거점."
+    },
+    {
+      "key": "tokyo",
+      "name": "도쿄",
+      "slug": "tokyo",
+      "lat": 35.6812,
+      "lon": 139.7671,
+      "region": "간토",
+      "tagline": "도심 속 숲의 신사와, 전철로 금방 가는 옛 절 마을."
+    },
+    {
+      "key": "kyoto",
+      "name": "교토",
+      "slug": "kyoto",
+      "lat": 34.9858,
+      "lon": 135.7588,
+      "region": "간사이",
+      "tagline": "천 년의 옛 수도. 유명한 신사와 절이 한 번의 여행으로는 다 못 볼 만큼 많아요."
+    },
+    {
+      "key": "sapporo",
+      "name": "삿포로",
+      "slug": "sapporo",
+      "lat": 43.0687,
+      "lon": 141.3508,
+      "region": "홋카이도",
+      "pins": [
+        "Q710826"
+      ],
+      "tagline": "홋카이도 여행의 출발점. 홋카이도 신궁과 넓은 자연."
+    },
+    {
+      "key": "nara",
+      "name": "나라",
+      "slug": "nara",
+      "lat": 34.6851,
+      "lon": 135.805,
+      "region": "간사이",
+      "tagline": "옛 수도의 큰 절과, 사슴이 노니는 공원."
+    },
+    {
+      "key": "hiroshima",
+      "name": "히로시마・미야지마",
+      "slug": "hiroshima-miyajima",
+      "lat": 34.3978,
+      "lon": 132.4752,
+      "region": "주고쿠",
+      "pins": [
+        "Q191763"
+      ],
+      "tagline": "바다 위에 선 도리이로 유명한 이쓰쿠시마 신사."
+    },
+    {
+      "key": "nagasaki",
+      "name": "나가사키",
+      "slug": "nagasaki",
+      "lat": 32.7522,
+      "lon": 129.87,
+      "region": "규슈",
+      "tagline": "언덕과 항구의 도시. 역사가 깊은 신사와 절."
+    },
+    {
+      "key": "kagoshima",
+      "name": "가고시마",
+      "slug": "kagoshima",
+      "lat": 31.5841,
+      "lon": 130.542,
+      "region": "규슈",
+      "pins": [
+        "Q704622"
+      ],
+      "tagline": "사쿠라지마가 보이는 남쪽 도시. 기리시마 신궁으로 가는 거점."
+    },
+    {
+      "key": "beppu",
+      "name": "벳푸・오이타",
+      "slug": "beppu-oita",
+      "lat": 33.2797,
+      "lon": 131.5007,
+      "region": "규슈",
+      "pins": [
+        "Q715632"
+      ],
+      "tagline": "온천의 마을. 우사 신궁까지 당일치기로 갈 수 있어요."
+    }
+  ],
+  "buildCities": [
+    "fukuoka",
+    "osaka",
+    "tokyo",
+    "kyoto",
+    "sapporo",
+    "nara",
+    "hiroshima",
+    "nagasaki",
+    "kagoshima",
+    "beppu"
+  ],
+  "cityRules": {
+    "nearMinutes": 60,
+    "dayTripMinutes": 150,
+    "perGroup": 12,
+    "routeKm": 25
+  },
+  "home": {
+    "featuredCount": 8
+  },
+  "skip": {
+    "_note": "en.json と同じ+韓国語版の i18n の exclude(靖国神社・護国神社)。韓国語版だけ追加(推測による配慮):朝鮮出兵・韓国併合などにかかわる人物をまつる神社 Q709822・Q11633364 豊国神社、Q704855 豊國神社(大阪)、Q137707 加藤神社、Q1384780 東郷神社、Q3342690 乃木神社、Q11408100 南洲神社。スポットのページ自体は残る",
+    "q": [
+      "Q242803",
+      "Q1333799",
+      "Q27103981",
+      "Q11581011",
+      "Q16482294",
+      "Q1148463",
+      "Q2815999",
+      "Q709822",
+      "Q11633364",
+      "Q704855",
+      "Q137707",
+      "Q1384780",
+      "Q3342690",
+      "Q11408100"
+    ]
+  },
+  "t": {
+    "preview": "새로운 한국어판 미리보기(아직 공개 전)",
+    "current": "지금 사이트",
+    "byline": "by Akki, the Higher-Dimensional Negotiator",
+    "navCities": "도시별",
+    "navAll": "모든 스폿",
+    "navGuide": "참배 방법",
+    "navList": "내 리스트",
+    "footData": "지도 데이터 © <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap contributors</a> · 장소 정보: OpenStreetMap, Wikidata · 사진: Wikimedia Commons",
+    "footRun": "운영: Akki, the Higher-Dimensional Negotiator(도쿄)",
+    "home": "홈",
+    "cities": "도시별",
+    "minFmt": "약 {m}분",
+    "hourFmt": "약 {h}시간",
+    "hourMinFmt": "약 {h}시간 {m}분",
+    "shrine": "신사",
+    "temple": "절",
+    "cityTitle": "{city}의 파워스폿: 신사・절・성지",
+    "cityDesc": "{city}에서 갈 수 있는 유명한 신사・절・성지 {n}곳. 이동 시간과 하루 코스도 소개합니다. {tagline}",
+    "cityH1": "{city}의 파워스폿",
+    "cityCount": "약 {h}시간 안에 갈 수 있는<br>유명한 성지 {n}곳",
+    "findBtn": "나와 맞는 곳 찾기",
+    "nearH": "{city}와 그 주변",
+    "nearSub": "전철・버스로 약 1시간 이내. 이동 시간은 대략적인 값입니다.",
+    "tripsH": "{city}에서 당일치기",
+    "routesH": "하루에 걸어서 도는 코스",
+    "routesSub": "모든 장소는 공식 사이트에서 확인했습니다.",
+    "routeMap": "Google 지도에서 경로 열기",
+    "miniGuide": "신사・절<br>참배 방법",
+    "miniPlan": "하루하루<br>여행 일정",
+    "miniFood": "일본 지역<br>음식 도감",
+    "citiesTitle": "도시별 파워스폿",
+    "citiesDesc": "후쿠오카・오사카・도쿄・교토・삿포로 등, 묵는 도시에서 갈 수 있는 신사와 절, 성지.",
+    "citiesH1": "어디에 묵으시나요?",
+    "citiesLead": "숙소가 있는 도시를 고르면, 그곳에서 갈 수 있는 성지를 이동 시간・코스와 함께 보여 드려요.",
+    "guideTitle": "일본 신사・절 참배하는 법",
+    "guideDesc": "도리이, 손 씻기, 기도하는 법, 고슈인과 오마모리까지. 일본 신사와 절의 간단한 참배 예절.",
+    "guideCrumb": "참배 방법",
+    "guideH1": "신사와 절 참배하는 법",
+    "finderCrumb": "파워스폿 찾기",
+    "finderTitle": "나와 맞는 파워스폿 찾기",
+    "finderDesc": "소원과 숙소 위치, 생일을 알려 주시면 나와 맞는 일본의 신사・절・성지를 추천해 드립니다.",
+    "planCrumb": "여행 일정 짜기",
+    "planTitle": "하루하루 일본 여행 일정 만들기",
+    "planDesc": "여행할 도시와 날짜를 입력하면, 날마다 묵는 곳에서 길한 방위에 있는 파워스폿을 추천해 드립니다.",
+    "listCrumb": "내 리스트",
+    "listTitle": "내 파워스폿 리스트",
+    "listDesc": "저장한 신사와 절. Google 지도에서 경로로 열거나 친구에게 공유할 수 있어요.",
+    "homeTitle": "{site} | 일본의 신사・절・성지 여행",
+    "homeDesc": "일본의 신사, 절, 신목, 폭포를 묵는 도시, 소원, 지역으로 찾아보세요. 참배 방법과 하루 코스, 길한 날까지.",
+    "heroAlt": "석등이 늘어선 참배길을 따라 붉은 도리이로 걸어가는 여행자",
+    "heroH1": "일본의 성지,<br> 쉽고 즐겁게",
+    "heroP": "신사, 절, 신목, 폭포까지. 가는 방법과 참배하는 법을 함께 알려 드려요.",
+    "doorsAria": "여기서 시작",
+    "door1": "어디에<br>묵으세요?",
+    "door2": "소원이<br>뭔가요?",
+    "door3": "지역별로<br>보기",
+    "featH": "처음 가는 분께 추천하는 곳",
+    "featSub": "도도부현마다 한 곳씩, 공식 사이트에서 확인한 유명한 성지입니다.",
+    "planByCity": "도시별로 찾기",
+    "allCities": "{n}개 도시 모두 보기 ›",
+    "akkiAlt": "이 사이트의 가이드 아키",
+    "akkiH": "안녕하세요, 아키(Akki)입니다.",
+    "akkiP": "일본에서 <b>Akki, the Higher-Dimensional Negotiator</b>로 활동하고 있어요. 요코스카에서 태어나 도쿄에 살고 있으며, 일본의 신사와 성지는 제 삶과 일의 큰 부분입니다.",
+    "akkiLinks": "<a href=\"https://www.instagram.com/japan_psj/\" target=\"_blank\" rel=\"noopener\">Instagram @japan_psj</a> · <a href=\"https://www.youtube.com/@nigihayahi03\" target=\"_blank\" rel=\"noopener\">YouTube</a>"
+  }
+}

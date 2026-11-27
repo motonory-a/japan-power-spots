@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CX2WH9VGQ5"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX2WH9VGQ5');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>내 파워스폿 리스트 | 일본 파워스폿 여행</title>
+<meta name="description" content="저장한 신사와 절. Google 지도에서 경로로 열거나 친구에게 공유할 수 있어요.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#4B2D7E">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="일본 파워스폿 여행">
+<meta property="og:title" content="내 파워스폿 리스트 | 일본 파워스폿 여행">
+<meta property="og:description" content="저장한 신사와 절. Google 지도에서 경로로 열거나 친구에게 공유할 수 있어요.">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/edition/hero-autumn-1200.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../en/en.css">
+<link rel="stylesheet" href="../../assets/css/edition.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""></head>
+<body class="en en-page ed ed-ko">
+<p class="ed-preview">새로운 한국어판 미리보기(아직 공개 전) · <a href="../../ko/">지금 사이트</a></p>
+<header class="ed-bar">
+  <a class="ed-brand" href="../../ko-next/"><img src="../../assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>일본 파워스폿 여행</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
+  <nav class="ed-nav"><a href="../../ko-next/cities/">도시별</a><a href="../../en/spots/">모든 스폿</a><a href="../../ko-next/guide/">참배 방법</a><a href="../../ko-next/my-list/">내 리스트 <span class="en-count" data-mylist-count></span></a></nav>
+</header>
+
+<main class="en-main ed-main ed-tool">
+  <nav class="ed-crumbs ed-crumbs-d"><a href="../">홈</a> › 내 리스트</nav>
+<section class="panel" id="mylist" aria-labelledby="h-mylist">
+    <h2 id="h-mylist">내 리스트 <span class="en-count" data-mylist-count></span></h2>
+    <div id="shared-list" class="en-shared" hidden></div>
+    <div id="mylist-items"></div>
+    <div class="en-btns" id="mylist-actions" hidden>
+      <a class="btn-main en-btn" id="list-route" href="#" target="_blank" rel="noopener">Google 지도에서 경로로 열기</a>
+      <button type="button" class="btn-sub en-btn" id="list-csv">Google 내 지도용 파일 다운로드(CSV)</button>
+      <button type="button" class="btn-sub en-btn" id="list-share">내 리스트 공유</button>
+    </div>
+    <p class="small" id="list-msg" role="status" aria-live="polite"></p>
+    <p class="note">팁: <a href="https://www.google.com/maps/d/" target="_blank" rel="noopener">Google 내 지도</a>에서 "가져오기"를 누르고 CSV 파일을 고르면, 휴대폰에서 모든 장소를 한 지도에 볼 수 있습니다.</p>
+  </section>
+</main>
+<footer class="en-foot">
+  <p>지도 데이터 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · 장소 정보: OpenStreetMap, Wikidata · 사진: Wikimedia Commons</p>
+  <p class="ed-langs"><a href="../../" hreflang="ja" lang="ja">日本語</a> · <a href="../../en/" hreflang="en" lang="en">English</a> · <a href="../../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a> · <a href="../../ko/" hreflang="ko" lang="ko" aria-current="page">한국어</a> · <a href="../../fr/" hreflang="fr" lang="fr">Français</a> · <a href="../../es/" hreflang="es" lang="es">Español</a></p>
+  <p>일본 파워스폿 여행 / <a href="../../" lang="ja">開運パワースポット巡り</a> · 운영: Akki, the Higher-Dimensional Negotiator(도쿄) · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../../assets/js/config.js?v=3.23.0"></script>
+<script src="../../assets/js/analytics.js?v=3.23.0"></script>
+<script src="../../assets/js/jst-date.js?v=3.23.0"></script>
+<script src="../../data/solar-terms.js?v=3.23.0"></script>
+<script src="../../assets/js/kyusei.js?v=3.23.0"></script>
+<script src="../../data/spots-demo.js?v=3.23.0"></script>
+<script src="../../data/spots-osm.js?v=3.23.0"></script>
+<script src="../../data/curated-info.js?v=3.23.0"></script>
+<script src="../../data/known-benefits.js?v=3.23.0"></script>
+<script src="../../data/en-labels.js?v=3.23.0"></script>
+<script src="../../data/exclude.js?v=3.23.0"></script>
+<script src="../../data/food.js?v=3.23.0"></script>
+<script src="../../data/food-photos.js?v=3.23.0"></script>
+<script src="../../data/gourmet.js?v=3.23.0"></script>
+<script src="../../data/gourmet-ko.js?v=3.23.0"></script>
+<script src="../../assets/js/nearby.js?v=3.23.0"></script>
+<script src="../../assets/js/data.js?v=3.23.0"></script>
+<script src="../../assets/js/diagnosis.js?v=3.23.0"></script>
+<script src="../../assets/js/photos.js?v=3.23.0"></script>
+<script src="../../data/model-courses.js?v=3.23.0"></script>
+<script src="../../intl/i18n-en.js?v=3.23.0"></script>
+<script src="../../ko/i18n.js?v=3.23.0"></script>
+<script src="../../intl/pool-en.js?v=3.23.0"></script>
+<script src="../../intl/mylist.js?v=3.23.0"></script>
+<script src="../../assets/js/edition/app.js"></script>
+
+<script src="../../assets/js/edition/ui.js"></script>
+<script src="../../assets/js/pwa.js" defer></script>
+</body>
+</html>
