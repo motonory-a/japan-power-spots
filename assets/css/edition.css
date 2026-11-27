@@ -24,6 +24,8 @@
 .ed-doors{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px;background:linear-gradient(rgba(46,26,85,.85),var(--pu2))}
 .ed-door{display:flex;align-items:center;gap:6px;padding:10px 8px;border-radius:10px;background:var(--cream);border:1.5px solid var(--gold);color:var(--pu2);text-decoration:none;font-weight:700;font-size:13px;line-height:1.2}
 .ed-door svg{width:22px;height:22px;color:var(--pu)}
+/* スマホ:縦長の画像を画面いっぱいに(鳥居と人が上の方、下に見出しとボタン) */
+@media (max-width:700px){.ed-hero img{height:calc(100svh - 52px);min-height:560px;max-height:820px;object-position:50% 35%}}
 @media (min-width:760px){.ed-hero-text{bottom:96px;padding:28px max(16px,calc(50% - 440px))}.ed-doors{padding:14px max(12px,calc(50% - 440px))}.ed-door{font-size:15px;padding:12px}}
 
 /* 中身 */
@@ -43,7 +45,9 @@
 @media (min-width:760px){.ed-spots{grid-template-columns:1fr 1fr}}
 .ed-spot a{display:flex;align-items:center;gap:12px;padding:8px;border-radius:12px;background:#fff;border:1.5px solid #E6D7B4;text-decoration:none;color:var(--ink);box-shadow:0 2px 8px rgba(75,45,126,.06)}
 .ed-spot a:hover{border-color:var(--gold)}
-.ed-thumb{flex:none;width:96px;height:72px;border-radius:8px;background:linear-gradient(135deg,#d9c7f1,#f3e3c0) center/cover no-repeat}
+.ed-thumb{flex:none;width:96px;height:72px;border-radius:8px;background:linear-gradient(135deg,#d9c7f1,#f3e3c0) center/cover no-repeat;background-size:cover;background-position:center}
+.ed-thumb.ed-loaded{animation:edfade .4s ease}
+@keyframes edfade{from{opacity:.3}to{opacity:1}}
 .ed-spot-body{flex:1;min-width:0}
 .ed-spot-name{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:19px;line-height:1.1;color:var(--pu)}
 .ed-spot-ja{display:block;font-size:12px;color:var(--mut);margin:1px 0 4px}

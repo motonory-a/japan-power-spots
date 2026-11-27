@@ -11,8 +11,8 @@
     var m = new Date().getMonth() + 1;
     var season = m >= 3 && m <= 5 ? 'spring' : m >= 6 && m <= 8 ? 'summer' : m >= 9 && m <= 11 ? 'autumn' : 'winter';
     if (season !== 'autumn') {
-      var src = pic.querySelector('source'), img = pic.querySelector('img');
-      if (src) src.srcset = src.srcset.split('autumn').join(season);
+      var img = pic.querySelector('img');
+      Array.prototype.forEach.call(pic.querySelectorAll('source'), function (src) { src.srcset = src.srcset.split('autumn').join(season); });
       if (img) img.src = img.src.split('autumn').join(season);
     }
   }
@@ -24,14 +24,23 @@
   var qs = els.map(function (e) { return e.getAttribute('data-q'); });
   window.SpotPhotos.lookup(qs).then(function (res) {
     var used = {};
+    // 読み込みが終わってから入れる(途中で上だけ見える・白く欠けるのを防ぐ)
+    function show(src, done, fallback) {
+      var im = new Image();
+      im.onload = function () { done('url("' + src.replace(/"/g, '%22') + '")'); };
+      im.onerror = function () { if (fallback && fallback !== src) show(fallback, done); };
+      im.src = src;
+    }
     els.forEach(function (e) {
       var info = res[e.getAttribute('data-q')];
       if (!info) return;
-      var url = 'url("' + info.thumb.replace(/"/g, '%22') + '")';
       var slot = e.querySelector('.ed-thumb');
-      if (slot) slot.style.backgroundImage = url;
-      else if (e.classList.contains('ed-city')) e.style.setProperty('--bg', url);
-      else if (e.classList.contains('ed-cityhero')) e.style.setProperty('--bg', url);
+      if (slot) {
+        // カードの小さな写真は 330px の縮小版(軽い)。出せなければ元の大きさ
+        show(info.thumb.replace(/\/\d+px-/, '/330px-'), function (u) { slot.style.backgroundImage = u; slot.classList.add('ed-loaded'); }, info.thumb);
+      } else {
+        show(info.thumb, function (u) { e.style.setProperty('--bg', u); });
+      }
       used[info.page] = info;
     });
     var box = document.querySelector('[data-credits]');
