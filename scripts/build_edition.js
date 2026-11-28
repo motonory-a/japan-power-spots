@@ -25,6 +25,9 @@ const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? proces
 const LANG = arg('--lang', 'en');
 const OUT = arg('--out', LANG);
 const PREVIEW = OUT !== LANG;
+// トップの最初の画面の案(2026-11-28 グルメを前に出す):--hero a(実写:神社と名物のセット)/ b(旅行者が名物を持つ絵)
+const HERO = arg('--hero', '');
+const MONZEN = require('../data/monzen.js');
 const ED = JSON.parse(fs.readFileSync(r('data/editions/' + LANG + '.json'), 'utf8'));
 const T = ED.t;
 const fill = (s, o) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in o ? o[k] : m));
@@ -340,8 +343,65 @@ function homePage() {
   const featured = SPOTS.filter((s) => s.verified).sort((a, b) => b.fame - a.fame)
     .filter((s) => (seen[s.prefecture_code] = (seen[s.prefecture_code] || 0) + 1) <= 1).slice(0, ED.home.featuredCount);
   const img = '../assets/img/edition/';
+  const BITES = !!HERO || MONZEN.live;
+  const bySlug = {};
+  SPOTS.forEach((s) => { bySlug[s.wikidata] = s.slug; });
+  const biteHref = (q) => (PREVIEW ? '../en-food/spots/' : '../en/spots/') + bySlug[q] + '.html#bite';
+  const mz = '../assets/img/edition/monzen/';
+  const heroText = `<div class="ed-hero-text">
+    <h1>Japan's sacred places —<br> and the local bite after</h1>
+    <p>Shrines and temples, and the old shops at their gates. We checked that each shop still serves it.</p>
+  </div>`;
+  const doors = `<nav class="ed-doors" aria-label="${esc(T.doorsAria)}">
+    <a class="ed-door" href="cities/">${ICON.bed}<span>${T.door1}</span></a>
+    <a class="ed-door" href="finder/">${ICON.torii}<span>${T.door2}</span></a>
+    <a class="ed-door" href="../en/spots/">${ICON.pin}<span>${T.door3}</span></a>
+  </nav>`;
+  let hero;
+  if (HERO === 'a') {
+    hero = `<header class="ed-hero ed-hero-pair" data-pairs>
+  ${MONZEN.hero.map((h, i) => `<div class="ed-pair${i ? '' : ' on'}">
+    <picture><source type="image/webp" srcset="${mz}${h.img}-800.webp 800w, ${mz}${h.img}-1600.webp 1600w" sizes="100vw"><img src="${mz}${h.img}-1600.jpg" alt="${esc(h.place)}" ${i ? 'loading="lazy" ' : ''}decoding="async"></picture>
+    <a class="ed-pair-food" href="${biteHref(h.q)}"><picture><source type="image/webp" srcset="${mz}${h.food.slice(3)}-480.webp"><img src="${mz}${h.food.slice(3)}-480.jpg" alt="${esc(h.bite)}" ${i ? 'loading="lazy" ' : ''}decoding="async"></picture>
+      <span class="ed-pair-cap"><small>${esc(h.place)}, then</small><b>${esc(h.bite)}</b><small>${esc(h.shop)}</small></span></a>
+  </div>`).join('\n  ')}
+  <div class="ed-pair-dots" role="tablist">${MONZEN.hero.map((h, i) => `<button type="button" aria-label="${esc(h.place)}"${i ? '' : ' aria-selected="true"'}></button>`).join('')}</div>
+  ${heroText}
+  ${doors}
+</header>
+<script>(function(){var r=document.querySelector('[data-pairs]');if(!r)return;var p=r.querySelectorAll('.ed-pair'),d=r.querySelectorAll('.ed-pair-dots button'),i=0,t;function go(n){p[i].classList.remove('on');d[i].removeAttribute('aria-selected');i=(n+p.length)%p.length;p[i].classList.add('on');d[i].setAttribute('aria-selected','true');}function run(){clearInterval(t);t=setInterval(function(){go(i+1);},6500);}d.forEach(function(b,k){b.addEventListener('click',function(){go(k);run();});});if(!matchMedia('(prefers-reduced-motion: reduce)').matches)run();})();</script>`;
+  } else if (HERO === 'b') {
+    hero = `<header class="ed-hero ed-hero-b">
+  <picture><source media="(max-width: 700px)" type="image/webp" srcset="${mz}bite-v-640.webp 640w, ${mz}bite-v-941.webp 941w" sizes="100vw"><source media="(max-width: 700px)" srcset="${mz}bite-v-941.jpg" sizes="100vw"><source type="image/webp" srcset="${mz}bite-800.webp 800w, ${mz}bite-1672.webp 1672w" sizes="100vw"><img src="${mz}bite-1672.jpg" alt="A traveler holding freshly grilled mitarashi dango on a shrine approach" width="1672" height="941"></picture>
+  ${heroText}
+  ${doors}
+</header>`;
+  }
+  const biteCards = MONZEN.items.filter((m) => bySlug[m.q[0]]).slice(0, 12).map((m) => {
+    const sp = SPOTS.find((s) => s.wikidata === m.q[0]);
+    const f = m.photo && m.photo.startsWith('mz-') ? MONZEN.photos[m.photo] : null;
+    const fp = m.photo && m.photo.startsWith('fp:') ? FOOD_PHOTOS[m.photo.slice(3)] : null;
+    const src = f ? '../' + f.f + '-480.jpg' : fp ? fp[0] : '';
+    return `<li><a class="ed-bitecard" href="${biteHref(m.q[0])}">${src ? `<span class="ed-bitecard-img" style="background-image:url('${esc(src)}')"></span>` : `<span class="ed-bitecard-img ed-bitecard-noimg" lang="ja">${esc(m.ja)}</span>`}
+      <span class="ed-bitecard-t"><small>${esc(sp.en)}</small><b>${esc(m.en)}</b><small>${esc(m.shop_en)}${m.since ? ' · since ' + m.since : ''}</small></span></a></li>`;
+  }).join('\n');
+  const biteSec = BITES ? `<section class="ed-sec ed-bites">
+    <h2 class="ed-h2">After you pray: one local bite</h2>
+    <p class="ed-sub">The snack pilgrims have eaten at each shrine's gate for generations. We checked that every shop still sells it (November 2026).</p>
+    <ul class="ed-bitecards">${biteCards}</ul>
+  </section>` : '';
+  const cardCredits = BITES ? (() => { const seen = {}; const out = [];
+    MONZEN.items.filter((m) => bySlug[m.q[0]]).slice(0, 12).forEach((m) => {
+      const f = m.photo && m.photo.startsWith('mz-') ? MONZEN.photos[m.photo] : null;
+      const fp = m.photo && m.photo.startsWith('fp:') ? FOOD_PHOTOS[m.photo.slice(3)] : null;
+      const c = f ? [f.page, f.artist, f.license] : fp ? [fp[1], fp[2], fp[3]] : null;
+      if (c && !seen[c[0]]) { seen[c[0]] = 1; out.push(`<a href="${esc(c[0])}" target="_blank" rel="noopener">${esc(c[1])} (${esc(c[2])})</a>`); }
+    });
+    return out.length ? `<p class="ed-hero-credit">Food photos show a typical example of each dish, not necessarily the shop's own (Wikimedia Commons): ${out.join(' · ')}</p>` : ''; })() : '';
+  const heroCredits = HERO === 'a' ? `<p class="ed-hero-credit">Top photos (Wikimedia Commons): ${MONZEN.hero.map((h) => `<a href="${esc(h.page)}" target="_blank" rel="noopener">${esc(h.artist)} (${esc(h.license)})</a>`).join(' · ')} · Food: ${MONZEN.hero.map((h) => MONZEN.photos[h.food]).filter(Boolean).map((f) => `<a href="${esc(f.page)}" target="_blank" rel="noopener">${esc(f.artist)} (${esc(f.license)})</a>`).join(' · ')}</p>`
+    : HERO === 'b' ? `<p class="ed-hero-credit">Top image: AI-generated illustration (not a real person or a specific shrine).</p>` : '';
   return head({ home: true, title: fill(T.homeTitle, { site: ED.siteName }), desc: T.homeDesc, canon: OUT + '/', depth }) + `
-<header class="ed-hero">
+${hero || `<header class="ed-hero">
   <picture data-hero><source media="(max-width: 700px)" type="image/webp" srcset="${img}hero-v-autumn-640.webp 640w, ${img}hero-v-autumn-941.webp 941w" sizes="100vw"><source media="(max-width: 700px)" srcset="${img}hero-v-autumn-640.jpg 640w, ${img}hero-v-autumn-941.jpg 941w" sizes="100vw"><source type="image/webp" srcset="${img}hero-autumn-800.webp 800w, ${img}hero-autumn-1200.webp 1200w, ${img}hero-autumn-1672.webp 1672w" sizes="100vw"><img src="${img}hero-autumn-1200.jpg" alt="${esc(T.heroAlt)}" width="1672" height="941"></picture>
   <div class="ed-hero-text">
     <h1>${T.heroH1}</h1>
@@ -352,13 +412,13 @@ function homePage() {
     <a class="ed-door" href="finder/">${ICON.torii}<span>${T.door2}</span></a>
     <a class="ed-door" href="../en/spots/">${ICON.pin}<span>${T.door3}</span></a>
   </nav>
-</header>
+</header>`}
 <main class="ed-main">
   <section class="ed-sec">
     <h2 class="ed-h2">${esc(T.featH)}</h2>
     <p class="ed-sub">${esc(T.featSub)}</p>
     <ul class="ed-spots">${featured.map((s) => spotItem(s, depth)).join('\n')}</ul>
-  </section>
+  </section>${biteSec ? '\n  ' + biteSec : ''}
   <section class="ed-band">
     <h2 class="ed-h2">${esc(T.planByCity)}</h2>
     <ul class="ed-cities ed-cities-3">${cityCfg.slice(0, 6).map((c) => cityCard(c, 'cities/')).join('\n')}</ul>
@@ -373,7 +433,7 @@ function homePage() {
       <p>${T.akkiLinks}</p>
     </div>
   </section>
-  <p class="ed-credits" data-credits hidden></p>
+  ${heroCredits || cardCredits ? heroCredits + cardCredits + '\n  ' : ''}<p class="ed-credits" data-credits hidden></p>
 </main>
 ` + foot(depth);
 }

@@ -33,6 +33,37 @@ if (process.argv.includes('--pool')) {
   process.exit(0);
 }
 
+// 参拝のあとの一品(data/monzen.js)と、食べ物の写真(data/food-photos.js)
+const MONZEN = require('../data/monzen.js');
+const FOOD_PHOTOS = (() => { const c = {}; vm.createContext(c); vm.runInContext(fs.readFileSync(r('data/food-photos.js'), 'utf8').replace(/^var (\w+)/mg, 'this.$1'), c); return c.FOOD_PHOTOS; })();
+const BITE_OF = {};
+MONZEN.items.forEach((m) => m.q.forEach((q) => { BITE_OF[q] = m; }));
+// --bite-preview <フォルダ>:一品のあるスポットだけ、確認用ページとして書き出す(本番の en/spots は変えない)
+const BITE_PREVIEW = (() => { const i = process.argv.indexOf('--bite-preview'); return i > 0 ? process.argv[i + 1] : ''; })();
+const BITE_ON = !!BITE_PREVIEW || !!MONZEN.live;
+function bitePhoto(m, root) {
+  if (!m.photo) return null;
+  if (m.photo.startsWith('fp:')) { const f = FOOD_PHOTOS[m.photo.slice(3)]; return f ? { src: f[0], page: f[1], artist: f[2], license: f[3] } : null; }
+  const f = MONZEN.photos[m.photo];
+  return f ? { src: root + f.f + '-480.jpg', webp: root + f.f + '-480.webp', page: f.page, artist: f.artist, license: f.license } : null;
+}
+function biteSection(m, root) {
+  const ph = bitePhoto(m, root);
+  const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(m.shop_ja);
+  return `<section class="en-spot-sec ed-bite" id="bite">
+      <h2>After your visit: one local bite</h2>
+      <div class="ed-bite-card">
+        ${ph ? `<picture>${ph.webp ? `<source type="image/webp" srcset="${esc(ph.webp)}">` : ''}<img src="${esc(ph.src)}" alt="${esc(m.en)}" width="240" height="180" loading="lazy" decoding="async"></picture>` : ''}
+        <div>
+          <h3>${esc(m.en)} <span lang="ja">${esc(m.ja)}</span></h3>
+          <p>${esc(m.note)}</p>
+          <p class="ed-bite-shop"><b>${esc(m.shop_en)}</b> <span lang="ja">${esc(m.shop_ja)}</span>${m.since ? ` · since ${m.since}` : ''}<br>${esc(m.where)}</p>
+          <p><a class="btn-sub en-btn" href="${maps}" target="_blank" rel="noopener">Find the shop on Google Maps</a></p>
+          <p class="small">Checked in ${MONZEN.checked.slice(0, 7).replace('-', '/')} that the shop still sells it (${m.src.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">source${m.src.length > 1 ? ' ' + (i + 1) : ''}</a>`).join(', ')}). Opening days change — please check before you go.${ph ? ` Photo (a typical ${esc(m.en.split(' (')[0].toLowerCase())}, not necessarily this shop's): <a href="${esc(ph.page)}" target="_blank" rel="noopener">${esc(ph.artist)}</a>, ${esc(ph.license)}, Wikimedia Commons.` : ''}</p>
+        </div>
+      </div>
+    </section>`;
+}
 const WIKI = fs.existsSync(r('data/en-wiki.json')) ? JSON.parse(fs.readFileSync(r('data/en-wiki.json'), 'utf8')) : {};
 
 // ---------- 小さな道具 ----------
@@ -195,7 +226,7 @@ function spotPage(p) {
       ${her ? `<p><b>Heritage:</b> ${esc(her)}</p>` : ''}
       <p class="small">Blessings are the traditional ones associated with this place's deities, name or local custom.</p>
     </section>
-    <section class="en-spot-sec">
+${BITE_ON && BITE_OF[s.wikidata] ? '    ' + biteSection(BITE_OF[s.wikidata], '../../') + '\n' : ''}    <section class="en-spot-sec">
       <h2>Getting there</h2>
       <ul>${cities.map((x) => `<li>From ${esc(x.label)}: ${fmtMin(x.min)} by train &amp; bus (${Math.round(x.km)} km, rough estimate)</li>`).join('')}</ul>
       ${s.verified && s.verified.official ? `<p><a href="${esc(s.verified.official)}" target="_blank" rel="noopener">Official website</a> (Japanese) — please check opening hours before you go.</p>` : ''}
@@ -263,6 +294,20 @@ ${FOOT}<script src="../mylist.js"></script>
 }
 
 // ---------- 書き出し ----------
+if (BITE_PREVIEW) {
+  const pd = r(path.join(BITE_PREVIEW, 'spots'));
+  fs.mkdirSync(pd, { recursive: true });
+  const list = pages.filter((p) => BITE_OF[p.s.wikidata]);
+  list.forEach((p) => {
+    let h = spotPage(p)
+      .replace(/(href|src)="\.\.\/(?!\.\.\/)/g, '$1="../../en/')
+      .replace(/<link rel="canonical"[^>]*>/, '<meta name="robots" content="noindex,nofollow">')
+      .replace('<main class="en-spot">', '<p class="ed-preview">Preview: "one local bite" for each spot (not public yet) · <a href="../../en/spots/' + p.slug + '.html">current page</a></p>\n<main class="en-spot">');
+    fs.writeFileSync(path.join(pd, p.slug + '.html'), h);
+  });
+  console.log('確認用:' + BITE_PREVIEW + '/spots に ' + list.length + 'ページ(' + list.map((p) => p.slug).join(', ') + ')');
+  process.exit(0);
+}
 const dir = r('en/spots');
 fs.mkdirSync(dir, { recursive: true });
 const keep = new Set(['index.html']);
