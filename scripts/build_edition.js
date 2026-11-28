@@ -230,6 +230,18 @@ function cityPage(c) {
       <ol class="ed-steps">${co.stops.map((st) => { const s = SPOTS.find((x) => x.wikidata === st.q); return '<li>' + (s ? `<a href="${spotHref(s, depth)}" data-label="${s.wikidata}">${esc(s.en)}</a>` : `<span lang="ja">${esc(st.name)}</span>`) + '</li>'; }).join('')}</ol>
       <a class="ed-purple" href="${gm(co)}" target="_blank" rel="noopener">${ICON.pin}${esc(T.routeMap)}</a></div>`).join('\n')}
   </section>` : ''}
+  ${(() => {
+    if (!BITE_ON) return '';
+    const inCity = BITE_ITEMS.map((m) => { const s = SPOTS.find((x) => x.wikidata === m.q[0]); const min = D.estimateMinutes(D.distanceKm(c.lat, c.lon, s.lat, s.lon), transit); return { m, min }; })
+      .filter((x) => x.min <= d.dayMax).sort((a, b) => a.min - b.min).slice(0, 8).map((x) => x.m);
+    if (!inCity.length) return '';
+    return `<section class="ed-sec ed-bites">
+    <h2 class="ed-h2">${esc(fill(BT('biteCityH', 'One local bite after you pray, around {city}'), o))}</h2>
+    <p class="ed-sub">${esc(BT('biteSub', "The snack pilgrims have eaten at each shrine's gate for generations. We checked that every shop still sells it (November 2026)."))}</p>
+    <ul class="ed-bitecards">${biteCardList(inCity, depth)}</ul>
+    ${biteCredits(inCity, depth)}
+  </section>`;
+  })()}
   ${foodSection(c, depth)}
   ${miniCards(depth, '../../')}
   <p class="ed-credits" data-credits hidden></p>
@@ -336,6 +348,39 @@ function guidePage() {
 ` + foot(depth);
 }
 
+
+// ---------- 参拝のあとの一品(data/monzen.js) ----------
+// 言語ごとの文章は item.t[LANG](name, note, where)。無い言語は英語
+const BITE_ON = !!HERO || (MONZEN.live && (LANG === 'en' || (MONZEN.langs || []).indexOf(LANG) !== -1));
+const BT = (k, en) => (T[k] || en);
+function biteTx(m) { const t = (m.t || {})[LANG] || {}; return { name: t.name || m.en, note: t.note || m.note, where: t.where || m.where, shop: t.shop || m.shop_en }; }
+function biteHrefD(q, depth) {
+  const s = SPOTS.find((x) => x.wikidata === q);
+  if (!s) return '';
+  return up(depth) + (PREVIEW && HERO ? 'en-food/spots/' : 'en/spots/') + s.slug + '.html#bite';
+}
+function bitePhotoSrc(m, depth) {
+  const f = m.photo && m.photo.startsWith('mz-') ? MONZEN.photos[m.photo] : null;
+  const fp = m.photo && m.photo.startsWith('fp:') ? FOOD_PHOTOS[m.photo.slice(3)] : null;
+  if (f) return { src: up(depth) + f.f + '-480.jpg', credit: [f.page, f.artist, f.license] };
+  if (fp) return { src: fp[0], credit: [fp[1], fp[2], fp[3]] };
+  return null;
+}
+function biteCardList(items, depth) {
+  return items.map((m) => {
+    const sp = SPOTS.find((s) => s.wikidata === m.q[0]);
+    const ph = bitePhotoSrc(m, depth);
+    const tx = biteTx(m);
+    return `<li><a class="ed-bitecard" href="${biteHrefD(m.q[0], depth)}">${ph ? `<span class="ed-bitecard-img" style="background-image:url('${esc(ph.src)}')"></span>` : `<span class="ed-bitecard-img ed-bitecard-noimg" lang="ja">${esc(m.ja)}</span>`}
+      <span class="ed-bitecard-t"><small data-label="${sp.wikidata}">${esc(sp.en)}</small><b>${esc(tx.name)}</b><small>${esc(tx.shop)}${m.since ? ' · ' + esc(fill(BT('biteSince', 'since {y}'), { y: m.since })) : ''}</small></span></a></li>`;
+  }).join('\n');
+}
+function biteCredits(items, depth) {
+  const seen = {}; const out = [];
+  items.forEach((m) => { const ph = bitePhotoSrc(m, depth); if (ph && !seen[ph.credit[0]]) { seen[ph.credit[0]] = 1; out.push(`<a href="${esc(ph.credit[0])}" target="_blank" rel="noopener">${esc(ph.credit[1])} (${esc(ph.credit[2])})</a>`); } });
+  return out.length ? `<p class="ed-hero-credit">${esc(BT('bitePhotoNote', "Food photos show a typical example of each dish, not necessarily the shop's own"))} (Wikimedia Commons): ${out.join(' · ')}</p>` : '';
+}
+const BITE_ITEMS = MONZEN.items.filter((m) => SPOTS.find((s) => s.wikidata === m.q[0]));
 // ---------- トップ ----------
 function homePage() {
   const depth = 1;
@@ -343,7 +388,7 @@ function homePage() {
   const featured = SPOTS.filter((s) => s.verified).sort((a, b) => b.fame - a.fame)
     .filter((s) => (seen[s.prefecture_code] = (seen[s.prefecture_code] || 0) + 1) <= 1).slice(0, ED.home.featuredCount);
   const img = '../assets/img/edition/';
-  const BITES = !!HERO || (MONZEN.live && LANG === 'en');
+  const BITES = BITE_ON;
   const bySlug = {};
   SPOTS.forEach((s) => { bySlug[s.wikidata] = s.slug; });
   const biteHref = (q) => (PREVIEW ? '../en-food/spots/' : '../en/spots/') + bySlug[q] + '.html#bite';
@@ -381,27 +426,13 @@ function homePage() {
   ${doors}
 </header>`;
   }
-  const biteCards = MONZEN.items.filter((m) => bySlug[m.q[0]]).slice(0, 12).map((m) => {
-    const sp = SPOTS.find((s) => s.wikidata === m.q[0]);
-    const f = m.photo && m.photo.startsWith('mz-') ? MONZEN.photos[m.photo] : null;
-    const fp = m.photo && m.photo.startsWith('fp:') ? FOOD_PHOTOS[m.photo.slice(3)] : null;
-    const src = f ? '../' + f.f + '-480.jpg' : fp ? fp[0] : '';
-    return `<li><a class="ed-bitecard" href="${biteHref(m.q[0])}">${src ? `<span class="ed-bitecard-img" style="background-image:url('${esc(src)}')"></span>` : `<span class="ed-bitecard-img ed-bitecard-noimg" lang="ja">${esc(m.ja)}</span>`}
-      <span class="ed-bitecard-t"><small>${esc(sp.en)}</small><b>${esc(m.en)}</b><small>${esc(m.shop_en)}${m.since ? ' · since ' + m.since : ''}</small></span></a></li>`;
-  }).join('\n');
+  const biteCards = biteCardList(BITE_ITEMS.slice(0, 12), depth);
   const biteSec = BITES ? `<section class="ed-sec ed-bites">
-    <h2 class="ed-h2">After you pray: one local bite</h2>
-    <p class="ed-sub">The snack pilgrims have eaten at each shrine's gate for generations. We checked that every shop still sells it (November 2026).</p>
+    <h2 class="ed-h2">${esc(BT('biteH', 'After you pray: one local bite'))}</h2>
+    <p class="ed-sub">${esc(BT('biteSub', "The snack pilgrims have eaten at each shrine's gate for generations. We checked that every shop still sells it (November 2026)."))}</p>
     <ul class="ed-bitecards">${biteCards}</ul>
   </section>` : '';
-  const cardCredits = BITES ? (() => { const seen = {}; const out = [];
-    MONZEN.items.filter((m) => bySlug[m.q[0]]).slice(0, 12).forEach((m) => {
-      const f = m.photo && m.photo.startsWith('mz-') ? MONZEN.photos[m.photo] : null;
-      const fp = m.photo && m.photo.startsWith('fp:') ? FOOD_PHOTOS[m.photo.slice(3)] : null;
-      const c = f ? [f.page, f.artist, f.license] : fp ? [fp[1], fp[2], fp[3]] : null;
-      if (c && !seen[c[0]]) { seen[c[0]] = 1; out.push(`<a href="${esc(c[0])}" target="_blank" rel="noopener">${esc(c[1])} (${esc(c[2])})</a>`); }
-    });
-    return out.length ? `<p class="ed-hero-credit">Food photos show a typical example of each dish, not necessarily the shop's own (Wikimedia Commons): ${out.join(' · ')}</p>` : ''; })() : '';
+  const cardCredits = BITES ? biteCredits(BITE_ITEMS.slice(0, 12), depth) : '';
   const heroCredits = HERO === 'a' ? `<p class="ed-hero-credit">Top photos (Wikimedia Commons): ${MONZEN.hero.map((h) => `<a href="${esc(h.page)}" target="_blank" rel="noopener">${esc(h.artist)} (${esc(h.license)})</a>`).join(' · ')} · Food: ${MONZEN.hero.map((h) => MONZEN.photos[h.food]).filter(Boolean).map((f) => `<a href="${esc(f.page)}" target="_blank" rel="noopener">${esc(f.artist)} (${esc(f.license)})</a>`).join(' · ')}</p>`
     : (HERO === 'b' || /^p\d$/.test(HERO)) ? `<p class="ed-hero-credit">Top image: AI-generated illustration (not a real person or a specific shrine).</p>` : '';
   return head({ home: true, title: fill(T.homeTitle, { site: ED.siteName }), desc: T.homeDesc, canon: OUT + '/', depth }) + `

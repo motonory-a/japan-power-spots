@@ -220,6 +220,11 @@
     "foodH": "Spécialités à goûter : {pref}",
     "foodSub": "Les plats locaux les plus connus. D'autres dans le guide de la cuisine locale.",
     "foodMore": "Voir le classement de la cuisine locale ›",
-    "go": "Itinéraire"
+    "go": "Itinéraire",
+    "biteH": "Après la prière : une douceur locale",
+    "biteSub": "La gourmandise que les pèlerins dégustent depuis des générations aux portes de chaque sanctuaire. Nous avons vérifié que chaque boutique la vend toujours (novembre 2026).",
+    "biteCityH": "Une douceur locale après la prière, autour de {city}",
+    "biteSince": "depuis {y}",
+    "bitePhotoNote": "Les photos montrent un exemple du plat, pas forcément celui de la boutique"
   }
 }

@@ -220,6 +220,11 @@
     "foodH": "Comida local en {pref}",
     "foodSub": "Los platos locales más conocidos. Hay más en la guía de comida local.",
     "foodMore": "Ver el ranking de comida local ›",
-    "go": "Ruta"
+    "go": "Ruta",
+    "biteH": "Después de rezar: un bocado local",
+    "biteSub": "El bocado que los peregrinos comen desde hace generaciones a las puertas de cada santuario. Comprobamos que cada tienda aún lo vende (noviembre de 2026).",
+    "biteCityH": "Un bocado local después de rezar, cerca de {city}",
+    "biteSince": "desde {y}",
+    "bitePhotoNote": "Las fotos muestran un ejemplo del plato, no necesariamente el de la tienda"
   }
 }

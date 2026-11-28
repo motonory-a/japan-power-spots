@@ -221,6 +221,11 @@
     "foodH": "Local food to try in {pref}",
     "foodSub": "The best-known local dishes, with more in the Local Food Guide.",
     "foodMore": "See the local food ranking ›",
-    "go": "Route"
+    "go": "Route",
+    "biteH": "After you pray: one local bite",
+    "biteSub": "The snack pilgrims have eaten at each shrine's gate for generations. We checked that every shop still sells it (November 2026).",
+    "biteCityH": "One local bite after you pray, around {city}",
+    "biteSince": "since {y}",
+    "bitePhotoNote": "Food photos show a typical example of each dish, not necessarily the shop's own"
   }
 }
