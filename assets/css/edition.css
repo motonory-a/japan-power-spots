@@ -197,3 +197,10 @@
   .ed-pair-dots{top:calc(16px + 46vw * .75 + 100px)}
   .ed-hero-b .ed-hero-text{bottom:auto;top:0;padding-top:22px;padding-bottom:60px;background:linear-gradient(rgba(30,15,60,.72),rgba(30,15,60,.35) 70%,transparent)}
 }
+/* トップ案 p1〜p3(顔の見える旅行者):人物は右寄り。縦長の絵がないときはスマホで右側を見せる */
+.ed-hero-p1 img,.ed-hero-p2 img,.ed-hero-p3 img{object-position:72% 40%}
+@media (max-width:700px){.ed-hero-p1 .ed-hero-text,.ed-hero-p2 .ed-hero-text,.ed-hero-p3 .ed-hero-text{bottom:84px;top:auto;padding-top:20px;padding-bottom:20px;background:linear-gradient(transparent,rgba(30,15,60,.78) 55%)}}
+@media (min-width:760px){
+  .ed-hero-p1 .ed-hero-text,.ed-hero-p2 .ed-hero-text,.ed-hero-p3 .ed-hero-text{top:0;right:auto;width:52%;display:flex;flex-direction:column;justify-content:flex-end;padding-right:24px;background:linear-gradient(90deg,rgba(30,15,60,.82),rgba(30,15,60,.5) 70%,transparent)}
+  .ed-hero-p1 img,.ed-hero-p2 img,.ed-hero-p3 img{height:min(80vh,640px);object-position:60% 35%}
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CX2WH9VGQ5"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX2WH9VGQ5');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My list of power spots | Japan Power Spot Journey</title>
+<meta name="description" content="The shrines and temples you saved, on this device. Open them as a route in Google Maps or share the list.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#4B2D7E">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Japan Power Spot Journey">
+<meta property="og:title" content="My list of power spots | Japan Power Spot Journey">
+<meta property="og:description" content="The shrines and temples you saved, on this device. Open them as a route in Google Maps or share the list.">
+<meta property="og:image" content="https://motonory-a.github.io/japan-power-spots/assets/img/edition/hero-autumn-1200.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../en/en.css">
+<link rel="stylesheet" href="../../assets/css/edition.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""></head>
+<body class="en en-page ed ed-en">
+<p class="ed-preview">Preview of the new English edition (not public yet) · <a href="../../en/">Current site</a></p>
+<header class="ed-bar">
+  <a class="ed-brand" href="../../en-food-p3/"><img src="../../assets/img/flower-of-life-icon.svg" width="34" height="34" alt=""><span><b>Japan Power <i>Spot</i> Journey</b><small>by Akki, the Higher-Dimensional Negotiator</small></span></a>
+  <nav class="ed-nav"><a href="../../en-food-p3/cities/">Cities</a><a href="../../en/spots/">All spots</a><a href="../../en-food-p3/guide/">Shrine guide</a><a href="../../en-food-p3/my-list/">My list <span class="en-count" data-mylist-count></span></a></nav>
+</header>
+
+<main class="en-main ed-main ed-tool">
+  <nav class="ed-crumbs ed-crumbs-d"><a href="../">Home</a> › My list</nav>
+<section class="panel" id="mylist" aria-labelledby="h-mylist">
+    <h2 id="h-mylist">My list <span class="en-count" data-mylist-count></span></h2>
+    <div id="shared-list" class="en-shared" hidden></div>
+    <div id="mylist-items"></div>
+    <div class="en-btns" id="mylist-actions" hidden>
+      <a class="btn-main en-btn" id="list-route" href="#" target="_blank" rel="noopener">Open as a route in Google Maps</a>
+      <button type="button" class="btn-sub en-btn" id="list-csv">Download for Google My Maps (CSV)</button>
+      <button type="button" class="btn-sub en-btn" id="list-share">Share my list</button>
+    </div>
+    <p class="small" id="list-msg" role="status" aria-live="polite"></p>
+    <p class="note">Tip: in <a href="https://www.google.com/maps/d/" target="_blank" rel="noopener">Google My Maps</a>, choose “Import” and select the CSV file to see all your places on one map on your phone.</p>
+  </section>
+</main>
+<footer class="en-foot">
+  <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Place data: OpenStreetMap, Wikidata · Photos: Wikimedia Commons</p>
+  <p class="ed-langs"><a href="../../" hreflang="ja" lang="ja">日本語</a> · <a href="../../en/" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a> · <a href="../../ko/" hreflang="ko" lang="ko">한국어</a> · <a href="../../fr/" hreflang="fr" lang="fr">Français</a> · <a href="../../es/" hreflang="es" lang="es">Español</a></p>
+  <p>Japan Power Spot Journey / <a href="../../" lang="ja">開運パワースポット巡り</a> · Run by Akki, the Higher-Dimensional Negotiator, Tokyo · <a href="https://www.instagram.com/japan_psj/" target="_blank" rel="noopener">Instagram @japan_psj</a></p>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../../assets/js/config.js?v=3.23.0"></script>
+<script src="../../assets/js/analytics.js?v=3.23.0"></script>
+<script src="../../assets/js/jst-date.js?v=3.23.0"></script>
+<script src="../../data/solar-terms.js?v=3.23.0"></script>
+<script src="../../assets/js/kyusei.js?v=3.23.0"></script>
+<script src="../../data/spots-demo.js?v=3.23.0"></script>
+<script src="../../data/spots-osm.js?v=3.23.0"></script>
+<script src="../../data/curated-info.js?v=3.23.0"></script>
+<script src="../../data/known-benefits.js?v=3.23.0"></script>
+<script src="../../data/en-labels.js?v=3.23.0"></script>
+<script src="../../data/exclude.js?v=3.23.0"></script>
+<script src="../../data/food.js?v=3.23.0"></script>
+<script src="../../data/food-photos.js?v=3.23.0"></script>
+<script src="../../data/gourmet.js?v=3.23.0"></script>
+<script src="../../assets/js/nearby.js?v=3.23.0"></script>
+<script src="../../assets/js/data.js?v=3.23.0"></script>
+<script src="../../assets/js/diagnosis.js?v=3.23.0"></script>
+<script src="../../assets/js/photos.js?v=3.23.0"></script>
+<script src="../../data/model-courses.js?v=3.23.0"></script>
+<script src="../i18n-en.js?v=3.23.0"></script>
+<script src="../pool-en.js?v=3.23.0"></script>
+<script src="../mylist.js?v=3.23.0"></script>
+<script src="../../assets/js/edition/app.js"></script>
+
+<script src="../../assets/js/edition/ui.js"></script>
+<script src="../../assets/js/pwa.js" defer></script>
+</body>
+</html>

@@ -370,9 +370,13 @@ function homePage() {
   ${doors}
 </header>
 <script>(function(){var r=document.querySelector('[data-pairs]');if(!r)return;var p=r.querySelectorAll('.ed-pair'),d=r.querySelectorAll('.ed-pair-dots button'),i=0,t;function go(n){p[i].classList.remove('on');d[i].removeAttribute('aria-selected');i=(n+p.length)%p.length;p[i].classList.add('on');d[i].setAttribute('aria-selected','true');}function run(){clearInterval(t);t=setInterval(function(){go(i+1);},6500);}d.forEach(function(b,k){b.addEventListener('click',function(){go(k);run();});});if(!matchMedia('(prefers-reduced-motion: reduce)').matches)run();})();</script>`;
-  } else if (HERO === 'b') {
-    hero = `<header class="ed-hero ed-hero-b">
-  <picture><source media="(max-width: 700px)" type="image/webp" srcset="${mz}bite-v-640.webp 640w, ${mz}bite-v-941.webp 941w" sizes="100vw"><source media="(max-width: 700px)" srcset="${mz}bite-v-941.jpg" sizes="100vw"><source type="image/webp" srcset="${mz}bite-800.webp 800w, ${mz}bite-1672.webp 1672w" sizes="100vw"><img src="${mz}bite-1672.jpg" alt="A traveler holding freshly grilled mitarashi dango on a shrine approach" width="1672" height="941"></picture>
+  } else if (HERO === 'b' || /^p\d$/.test(HERO)) {
+    // b:後ろ姿の絵 / p1〜p3:顔の見える旅行者の絵(縦長の絵があればスマホ用に使う)
+    const hi = HERO === 'b' ? 'bite' : 'face' + HERO.slice(1);
+    const hasV = fs.existsSync(r('assets/img/edition/monzen/' + hi + '-v-941.jpg'));
+    const alt = HERO === 'b' ? 'A traveler holding freshly grilled mitarashi dango on a shrine approach' : 'A traveler smiling and enjoying a local snack on a shrine approach';
+    hero = `<header class="ed-hero ed-hero-b ed-hero-${HERO}">
+  <picture>${hasV ? `<source media="(max-width: 700px)" type="image/webp" srcset="${mz}${hi}-v-640.webp 640w, ${mz}${hi}-v-941.webp 941w" sizes="100vw"><source media="(max-width: 700px)" srcset="${mz}${hi}-v-941.jpg" sizes="100vw">` : ''}<source type="image/webp" srcset="${mz}${hi}-800.webp 800w, ${mz}${hi}-1672.webp 1672w" sizes="100vw"><img src="${mz}${hi}-1672.jpg" alt="${alt}" width="1672" height="941"></picture>
   ${heroText}
   ${doors}
 </header>`;
@@ -399,7 +403,7 @@ function homePage() {
     });
     return out.length ? `<p class="ed-hero-credit">Food photos show a typical example of each dish, not necessarily the shop's own (Wikimedia Commons): ${out.join(' · ')}</p>` : ''; })() : '';
   const heroCredits = HERO === 'a' ? `<p class="ed-hero-credit">Top photos (Wikimedia Commons): ${MONZEN.hero.map((h) => `<a href="${esc(h.page)}" target="_blank" rel="noopener">${esc(h.artist)} (${esc(h.license)})</a>`).join(' · ')} · Food: ${MONZEN.hero.map((h) => MONZEN.photos[h.food]).filter(Boolean).map((f) => `<a href="${esc(f.page)}" target="_blank" rel="noopener">${esc(f.artist)} (${esc(f.license)})</a>`).join(' · ')}</p>`
-    : HERO === 'b' ? `<p class="ed-hero-credit">Top image: AI-generated illustration (not a real person or a specific shrine).</p>` : '';
+    : (HERO === 'b' || /^p\d$/.test(HERO)) ? `<p class="ed-hero-credit">Top image: AI-generated illustration (not a real person or a specific shrine).</p>` : '';
   return head({ home: true, title: fill(T.homeTitle, { site: ED.siteName }), desc: T.homeDesc, canon: OUT + '/', depth }) + `
 ${hero || `<header class="ed-hero">
   <picture data-hero><source media="(max-width: 700px)" type="image/webp" srcset="${img}hero-v-autumn-640.webp 640w, ${img}hero-v-autumn-941.webp 941w" sizes="100vw"><source media="(max-width: 700px)" srcset="${img}hero-v-autumn-640.jpg 640w, ${img}hero-v-autumn-941.jpg 941w" sizes="100vw"><source type="image/webp" srcset="${img}hero-autumn-800.webp 800w, ${img}hero-autumn-1200.webp 1200w, ${img}hero-autumn-1672.webp 1672w" sizes="100vw"><img src="${img}hero-autumn-1200.jpg" alt="${esc(T.heroAlt)}" width="1672" height="941"></picture>
