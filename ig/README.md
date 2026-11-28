@@ -160,9 +160,12 @@
   - zh: 在日本神社、寺院門前吃到好吃的嗎?加上 #OneLocalBiteJapan 分享吧!我們可能會在指南中介紹(一定會先徵求您的同意)。
   - fr: Vous avez goûté une spécialité à l'entrée d'un sanctuaire au Japon ? Publiez-la avec #OneLocalBiteJapan — nous pourrions la présenter dans notre guide (en vous demandant toujours avant).
   - es: ¿Probaste algo rico a la entrada de un santuario en Japón? Súbelo con #OneLocalBiteJapan: quizá lo mostremos en nuestra guía (siempre te preguntaremos antes).
-- 良い投稿を見つけたら、使う前に必ずDMで許可をもらう。Claudeは他人にDMを送らない(アッキーが送る)。DMの文(英語。相手の言語に合わせて直す):
+- 良い投稿を見つけたら、使う前に必ずDMで許可をもらう。DMはClaudeが送る(2026-11-28 アッキーが任せた)。ただし送る前に毎回、候補の一覧(投稿のリンク・相手・DMの文)をアッキーに見せ、チャットでOKをもらってから、アッキーのChromeのInstagramから送る。OKのない相手には送らない。定期作業(人がいない時間)では候補探しと文案づくりまでにして、送らない。
+- 送りすぎるとInstagramに迷惑行為と見られるので、1日5通まで。同じ相手に2回目を送るのは1週間たってから1回だけ。
+- 返事の確認もClaudeがする(Chromeで受信箱を見る)。「Yes」の画面を写真と一緒に「AI共有/旅行者写真」に保存する。
+- DMの文(英語。相手の言語に合わせて直す):
   「Hi! We love your photo from ◯◯. May we show it on our free guide "Japan's Sacred Places" (website + Instagram) with credit to @(相手)? You can ask us to remove it anytime. If OK, please reply "Yes" 🙏」
-- 「Yes」の返事の画面を、写真と一緒に「AI共有/旅行者写真」に保存する。返事がない人の写真は使わない。リポストもしない。
+- 返事がない人の写真は使わない。リポストもしない。
 - 載せるときは必ず「Photo: @相手」と書く。
 
 ## 写真は「話題そのもの」が写っているものだけ（2026-11-19 本人の指摘）
