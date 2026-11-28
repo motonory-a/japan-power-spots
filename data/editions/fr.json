@@ -225,6 +225,8 @@
     "biteSub": "La gourmandise que les pèlerins dégustent depuis des générations aux portes de chaque sanctuaire. Nous avons vérifié que chaque boutique la vend toujours (novembre 2026).",
     "biteCityH": "Une douceur locale après la prière, autour de {city}",
     "biteSince": "depuis {y}",
-    "bitePhotoNote": "Les photos montrent un exemple du plat, pas forcément celui de la boutique"
+    "bitePhotoNote": "Les photos montrent un exemple du plat, pas forcément celui de la boutique",
+    "biteAi": "Illustration IA",
+    "biteAiNote": "Les images marquées « Illustration IA » sont des dessins du plat créés par IA, pas des photos de la boutique."
   }
 }

@@ -205,3 +205,5 @@
   .ed-hero-p1 img,.ed-hero-p2 img,.ed-hero-p3 img{height:min(80vh,640px);object-position:60% 35%}
 }
 @media (max-width:700px){.ed-hero-p1 img{object-position:50% 40%}}
+.ed-bitecard-img,.ed-bite-pic{position:relative}.ed-bite-pic{display:block}
+.ed-ai-badge{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.62);color:#fff;font-style:normal;font-size:11px;line-height:1;padding:4px 7px;border-radius:999px;letter-spacing:.02em}

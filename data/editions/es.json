@@ -225,6 +225,8 @@
     "biteSub": "El bocado que los peregrinos comen desde hace generaciones a las puertas de cada santuario. Comprobamos que cada tienda aún lo vende (noviembre de 2026).",
     "biteCityH": "Un bocado local después de rezar, cerca de {city}",
     "biteSince": "desde {y}",
-    "bitePhotoNote": "Las fotos muestran un ejemplo del plato, no necesariamente el de la tienda"
+    "bitePhotoNote": "Las fotos muestran un ejemplo del plato, no necesariamente el de la tienda",
+    "biteAi": "Ilustración IA",
+    "biteAiNote": "Las imágenes marcadas como «Ilustración IA» son dibujos del plato hechos con IA, no fotos de la tienda."
   }
 }

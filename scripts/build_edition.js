@@ -360,8 +360,9 @@ function biteHrefD(q, depth) {
   return up(depth) + (PREVIEW && HERO ? 'en-food/spots/' : 'en/spots/') + s.slug + '.html#bite';
 }
 function bitePhotoSrc(m, depth) {
-  const f = m.photo && m.photo.startsWith('mz-') ? MONZEN.photos[m.photo] : null;
+  const f = m.photo && (m.photo.startsWith('mz-') || m.photo.startsWith('ai-')) ? MONZEN.photos[m.photo] : null;
   const fp = m.photo && m.photo.startsWith('fp:') ? FOOD_PHOTOS[m.photo.slice(3)] : null;
+  if (f && f.ai) return { src: up(depth) + f.f + '-480.jpg', ai: true };
   if (f) return { src: up(depth) + f.f + '-480.jpg', credit: [f.page, f.artist, f.license] };
   if (fp) return { src: fp[0], credit: [fp[1], fp[2], fp[3]] };
   return null;
@@ -371,14 +372,16 @@ function biteCardList(items, depth) {
     const sp = SPOTS.find((s) => s.wikidata === m.q[0]);
     const ph = bitePhotoSrc(m, depth);
     const tx = biteTx(m);
-    return `<li><a class="ed-bitecard" href="${biteHrefD(m.q[0], depth)}">${ph ? `<span class="ed-bitecard-img" style="background-image:url('${esc(ph.src)}')"></span>` : `<span class="ed-bitecard-img ed-bitecard-noimg" lang="ja">${esc(m.ja)}</span>`}
+    return `<li><a class="ed-bitecard" href="${biteHrefD(m.q[0], depth)}">${ph ? `<span class="ed-bitecard-img" style="background-image:url('${esc(ph.src)}')">${ph.ai ? `<i class="ed-ai-badge">${esc(BT('biteAi', 'AI illustration'))}</i>` : ''}</span>` : `<span class="ed-bitecard-img ed-bitecard-noimg" lang="ja">${esc(m.ja)}</span>`}
       <span class="ed-bitecard-t"><small data-label="${sp.wikidata}">${esc(sp.en)}</small><b>${esc(tx.name)}</b><small>${esc(tx.shop)}${m.since ? ' · ' + esc(fill(BT('biteSince', 'since {y}'), { y: m.since })) : ''}</small></span></a></li>`;
   }).join('\n');
 }
 function biteCredits(items, depth) {
   const seen = {}; const out = [];
-  items.forEach((m) => { const ph = bitePhotoSrc(m, depth); if (ph && !seen[ph.credit[0]]) { seen[ph.credit[0]] = 1; out.push(`<a href="${esc(ph.credit[0])}" target="_blank" rel="noopener">${esc(ph.credit[1])} (${esc(ph.credit[2])})</a>`); } });
-  return out.length ? `<p class="ed-hero-credit">${esc(BT('bitePhotoNote', "Food photos show a typical example of each dish, not necessarily the shop's own"))} (Wikimedia Commons): ${out.join(' · ')}</p>` : '';
+  let ai = false;
+  items.forEach((m) => { const ph = bitePhotoSrc(m, depth); if (ph && ph.ai) ai = true; if (ph && !ph.ai && !seen[ph.credit[0]]) { seen[ph.credit[0]] = 1; out.push(`<a href="${esc(ph.credit[0])}" target="_blank" rel="noopener">${esc(ph.credit[1])} (${esc(ph.credit[2])})</a>`); } });
+  const aiNote = ai ? ' ' + esc(BT('biteAiNote', 'Pictures marked "AI illustration" are AI-made drawings of the dish, not photos of the shop.')) : '';
+  return out.length || ai ? `<p class="ed-hero-credit">${out.length ? `${esc(BT('bitePhotoNote', "Food photos show a typical example of each dish, not necessarily the shop's own"))} (Wikimedia Commons): ${out.join(' · ')}` : ''}${aiNote}</p>` : '';
 }
 const BITE_ITEMS = MONZEN.items.filter((m) => SPOTS.find((s) => s.wikidata === m.q[0]));
 // ---------- トップ ----------

@@ -29,6 +29,14 @@ for m in M:
                 x = im.copy(); x.thumbnail((w, w * 2))
                 x.save(f'{base}-{w}.jpg', quality=82, optimize=True); x.save(f'{base}-{w}.webp', quality=80)
         photos[ph] = {'f': 'assets/img/edition/monzen/' + ph[3:], 'page': info['page'], 'artist': info['artist'][:60], 'license': info['license']}
+    if ph and ph.startswith('ai-'):
+        base = os.path.join(out_dir, ph)
+        if not os.path.exists(base + '-480.jpg'):
+            im = Image.open(os.path.join(ROOT, 'ig/ai', ph[3:] + '.jpg')).convert('RGB')
+            for w in (480, 960):
+                x = im.copy(); x.thumbnail((w, w * 2))
+                x.save(f'{base}-{w}.jpg', quality=82, optimize=True); x.save(f'{base}-{w}.webp', quality=80)
+        photos[ph] = {'f': 'assets/img/edition/monzen/' + ph, 'ai': True}
     key = m['q'][0]
     if key in TX:
         m['t'] = TX[key]

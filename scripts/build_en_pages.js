@@ -45,7 +45,7 @@ function bitePhoto(m, root) {
   if (!m.photo) return null;
   if (m.photo.startsWith('fp:')) { const f = FOOD_PHOTOS[m.photo.slice(3)]; return f ? { src: f[0], page: f[1], artist: f[2], license: f[3] } : null; }
   const f = MONZEN.photos[m.photo];
-  return f ? { src: root + f.f + '-480.jpg', webp: root + f.f + '-480.webp', page: f.page, artist: f.artist, license: f.license } : null;
+  return f ? { src: root + f.f + '-480.jpg', webp: root + f.f + '-480.webp', page: f.page, artist: f.artist, license: f.license, ai: !!f.ai } : null;
 }
 function biteSection(m, root) {
   const ph = bitePhoto(m, root);
@@ -53,13 +53,13 @@ function biteSection(m, root) {
   return `<section class="en-spot-sec ed-bite" id="bite">
       <h2>After your visit: one local bite</h2>
       <div class="ed-bite-card">
-        ${ph ? `<picture>${ph.webp ? `<source type="image/webp" srcset="${esc(ph.webp)}">` : ''}<img src="${esc(ph.src)}" alt="${esc(m.en)}" width="240" height="180" loading="lazy" decoding="async"></picture>` : ''}
+        ${ph ? `<span class="ed-bite-pic"><picture>${ph.webp ? `<source type="image/webp" srcset="${esc(ph.webp)}">` : ''}<img src="${esc(ph.src)}" alt="${esc(m.en)}${ph.ai ? ' (AI illustration)' : ''}" width="240" height="180" loading="lazy" decoding="async"></picture>${ph.ai ? '<i class="ed-ai-badge">AI illustration</i>' : ''}</span>` : ''}
         <div>
           <h3>${esc(m.en)} <span lang="ja">${esc(m.ja)}</span></h3>
           <p>${esc(m.note)}</p>
           <p class="ed-bite-shop"><b>${esc(m.shop_en)}</b> <span lang="ja">${esc(m.shop_ja)}</span>${m.since ? ` · since ${m.since}` : ''}<br>${esc(m.where)}</p>
           <p><a class="btn-sub en-btn" href="${maps}" target="_blank" rel="noopener">Find the shop on Google Maps</a></p>
-          <p class="small">Checked in ${MONZEN.checked.slice(0, 7).replace('-', '/')} that the shop still sells it (${m.src.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">source${m.src.length > 1 ? ' ' + (i + 1) : ''}</a>`).join(', ')}). Opening days change — please check before you go.${ph ? ` Photo (a typical ${esc(m.en.split(' (')[0].toLowerCase())}, not necessarily this shop's): <a href="${esc(ph.page)}" target="_blank" rel="noopener">${esc(ph.artist)}</a>, ${esc(ph.license)}, Wikimedia Commons.` : ''}</p>
+          <p class="small">Checked in ${MONZEN.checked.slice(0, 7).replace('-', '/')} that the shop still sells it (${m.src.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">source${m.src.length > 1 ? ' ' + (i + 1) : ''}</a>`).join(', ')}). Opening days change — please check before you go.${ph && ph.ai ? ` Picture: an AI illustration of a typical ${esc(m.en.split(' (')[0].toLowerCase())}, not a photo of this shop.` : ph ? ` Photo (a typical ${esc(m.en.split(' (')[0].toLowerCase())}, not necessarily this shop's): <a href="${esc(ph.page)}" target="_blank" rel="noopener">${esc(ph.artist)}</a>, ${esc(ph.license)}, Wikimedia Commons.` : ''}</p>
         </div>
       </div>
     </section>`;

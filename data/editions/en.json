@@ -226,6 +226,8 @@
     "biteSub": "The snack pilgrims have eaten at each shrine's gate for generations. We checked that every shop still sells it (November 2026).",
     "biteCityH": "One local bite after you pray, around {city}",
     "biteSince": "since {y}",
-    "bitePhotoNote": "Food photos show a typical example of each dish, not necessarily the shop's own"
+    "bitePhotoNote": "Food photos show a typical example of each dish, not necessarily the shop's own",
+    "biteAi": "AI illustration",
+    "biteAiNote": "Pictures marked \"AI illustration\" are AI-made drawings of the dish, not photos of the shop."
   }
 }
