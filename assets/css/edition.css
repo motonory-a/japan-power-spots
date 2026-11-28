@@ -204,3 +204,4 @@
   .ed-hero-p1 .ed-hero-text,.ed-hero-p2 .ed-hero-text,.ed-hero-p3 .ed-hero-text{top:0;right:auto;width:52%;display:flex;flex-direction:column;justify-content:flex-end;padding-right:24px;background:linear-gradient(90deg,rgba(30,15,60,.82),rgba(30,15,60,.5) 70%,transparent)}
   .ed-hero-p1 img,.ed-hero-p2 img,.ed-hero-p3 img{height:min(80vh,640px);object-position:60% 35%}
 }
+@media (max-width:700px){.ed-hero-p1 img{object-position:50% 40%}}

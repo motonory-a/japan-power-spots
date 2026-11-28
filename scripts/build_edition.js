@@ -26,10 +26,10 @@ const LANG = arg('--lang', 'en');
 const OUT = arg('--out', LANG);
 const PREVIEW = OUT !== LANG;
 // トップの最初の画面の案(2026-11-28 グルメを前に出す):--hero a(実写:神社と名物のセット)/ b(旅行者が名物を持つ絵)
-const HERO = arg('--hero', '');
-const MONZEN = require('../data/monzen.js');
 const ED = JSON.parse(fs.readFileSync(r('data/editions/' + LANG + '.json'), 'utf8'));
 const T = ED.t;
+const HERO = arg('--hero', '') || (ED.home && ED.home.hero) || '';
+const MONZEN = require('../data/monzen.js');
 const fill = (s, o) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in o ? o[k] : m));
 
 // ---------- 共通のデータを読む(ブラウザと同じファイル) ----------
@@ -343,7 +343,7 @@ function homePage() {
   const featured = SPOTS.filter((s) => s.verified).sort((a, b) => b.fame - a.fame)
     .filter((s) => (seen[s.prefecture_code] = (seen[s.prefecture_code] || 0) + 1) <= 1).slice(0, ED.home.featuredCount);
   const img = '../assets/img/edition/';
-  const BITES = !!HERO || MONZEN.live;
+  const BITES = !!HERO || (MONZEN.live && LANG === 'en');
   const bySlug = {};
   SPOTS.forEach((s) => { bySlug[s.wikidata] = s.slug; });
   const biteHref = (q) => (PREVIEW ? '../en-food/spots/' : '../en/spots/') + bySlug[q] + '.html#bite';
