@@ -255,3 +255,33 @@ fx-ot-ko2 | commons:Kusatsu Onsen Yubatake night
 fx-ot-ko3 | commons:Ginzan Onsen street
 fx-ot-zh | commons:Arima Onsen town
 fx-ot-zh2 | commons:Shuzenji Onsen
+# 門前グルメ(参拝のあとの一品)用 2026-11-28
+mz-akafuku | commons:Akafuku mochi
+mz-akafuku2 | commons:Akafuku Ise
+mz-inari | commons:Inarizushi
+mz-inari2 | commons:inari sushi plate
+mz-mitarashi | commons:Mitarashi dango
+mz-mitarashi2 | commons:Mitarashi dango Kyoto
+mz-umegae | commons:Umegae mochi
+mz-umegae2 | commons:Umegaemochi Dazaifu
+mz-warigo | commons:Warigo soba
+mz-warigo2 | commons:Izumo soba
+mz-kishimen | commons:Kishimen
+mz-gomadofu | commons:Goma tofu
+mz-gomadofu2 | commons:Gomadofu Koyasan
+mz-yuba | commons:Nikko yuba
+mz-yuba2 | commons:yuba tofu skin dish
+mz-s-ise | commons:Ise Jingu Naiku Ujibashi
+mz-s-ise2 | commons:Ise Grand Shrine Naiku
+mz-s-fushimi | commons:Fushimi Inari torii
+mz-s-fushimi2 | commons:Fushimi Inari Taisha senbon torii
+mz-s-izumo | commons:Izumo Taisha shimenawa
+mz-s-izumo2 | commons:Izumo Taisha haiden
+mz-s-shimogamo | commons:Shimogamo Shrine romon
+mz-s-shimogamo2 | commons:Shimogamo jinja
+mz-s-dazaifu | commons:Dazaifu Tenmangu honden
+mz-s-dazaifu2 | commons:Dazaifu Tenmangu
+mz-s-atsuta | commons:Atsuta Shrine
+mz-s-koya | commons:Kongobuji Koyasan
+mz-s-koya2 | commons:Koyasan Danjo Garan
+mz-s-nikko | commons:Nikko Toshogu Yomeimon
