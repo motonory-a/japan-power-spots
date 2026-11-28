@@ -285,3 +285,38 @@ mz-s-atsuta | commons:Atsuta Shrine
 mz-s-koya | commons:Kongobuji Koyasan
 mz-s-koya2 | commons:Koyasan Danjo Garan
 mz-s-nikko | commons:Nikko Toshogu Yomeimon
+# 門前グルメ 2回目(写真のない品)2026-11-28
+mz-kibidango | commons:kibi dango kinako Asakusa
+mz-kibidango2 | commons:kibidango kinako
+mz-yakimochi | commons:yakimochi Kamigamo
+mz-yakimochi2 | commons:aoi mochi Kyoto
+mz-amazake | commons:amazake
+mz-amazake2 | commons:amazake cup
+mz-hato | commons:Hato sable
+mz-chikaramochi | commons:chikara mochi Kamakura
+mz-yomogi | commons:yomogi mochi
+mz-yomogi2 | commons:Nakatanidou mochi Nara
+mz-agemomiji | commons:age momiji Miyajima
+mz-kishimen2 | commons:kishimen noodles Nagoya
+mz-kishimen3 | commons:kishimen
+mz-hangan | commons:Rokkatei Hokkaido Jingu
+mz-kyuman | commons:kyuman Kotohira
+mz-yakimusubi | commons:yaki onigiri miso
+mz-manyogayu | commons:Kasuga Ninai Jaya
+mz-umegae3 | commons:umegae mochi plate
+mz-umegae4 | commons:梅ヶ枝餅
+mz-awamochi | commons:awa mochi Sawaya
+mz-awamochi2 | commons:粟餅
+mz-aburimochi | commons:aburi mochi Imamiya
+mz-aburimochi2 | commons:あぶり餅
+mz-tsurigane | commons:tsurigane manju
+mz-karamemochi | commons:Hakone shrine mochi
+mz-kuzumochi | commons:kuzumochi Kawasaki Daishi
+mz-kuzumochi2 | commons:久寿餅
+mz-kusadango | commons:kusa dango Shibamata
+mz-kusadango2 | commons:草だんご
+mz-takosenbei | commons:tako senbei Enoshima
+mz-takosenbei2 | commons:たこせんべい 江の島
+mz-unagi | commons:unaju eel
+mz-unagi2 | commons:Narita unagi
+mz-usaame | commons:宇佐飴
