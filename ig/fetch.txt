@@ -326,3 +326,22 @@ vis-miyajima-street | commons:Miyajima Omotesando shopping street
 vis-ise-oharai | commons:Oharai-machi Ise street
 vis-dazaifu-sando | commons:Dazaifu Tenmangu approach street
 vis-kiyomizu-sannenzaka | commons:Sannenzaka Kyoto street
+mz-yakimochi | commons:葵家やきもち
+mz-yakimochi2 | commons:Kamigamo yakimochi
+mz-kibidango | commons:Asakusa kibidango Azuma
+mz-kibidango2 | commons:きびだんご 浅草
+mz-chikaramochi | commons:力餅家 鎌倉
+mz-chikaramochi2 | commons:Chikaramochiya Kamakura
+mz-agemomiji2 | commons:揚げもみじ
+mz-agemomiji3 | commons:Age momiji manju
+mz-kyuman | commons:灸まん
+mz-kyuman2 | commons:Kyuman Kotohira
+mz-tsurigane | commons:釣鐘まんじゅう
+mz-tsurigane2 | commons:Tsurigane manju
+mz-karamemochi2 | commons:権現からめもち
+mz-kuzumochi3 | commons:Kawasaki Daishi kuzumochi
+mz-kuzumochi4 | commons:久寿餅
+mz-kusadango3 | commons:Shibamata kusa dango
+mz-kusadango4 | commons:草だんご 柴又
+mz-manyogayu | commons:春日荷茶屋
+mz-hangan2 | commons:判官さま 六花亭
