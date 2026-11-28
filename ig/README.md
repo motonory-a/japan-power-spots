@@ -144,6 +144,7 @@
 **1. 無料の写真(Wikimedia Commons)でつなぐ**
 - ig/fetch.txt の `vis-` で始まる行が、参道のにぎわいの写真。使ってよいのは、後ろ姿・遠くの人混みなど、顔で人がわからない写真だけ。顔がわかる人が写っていたら使わない(ぼかしても使わない)。
 - 出典(撮った人・ライセンス)は ig/src/*.json のとおりに表示する。
+- 確認ずみ(2026-11-28):使ってよい=vis-kiyomizu-sannenzaka(三年坂・後ろ姿)、vis-miyajima-street(宮島の鹿)。使わない=vis-nakamise-back(顔がわかる人が多い)。
 
 **2. アッキーが神社で直接お願いする(同意書)**
 - 同意書のページ:https://motonory-a.github.io/japan-power-spots/share/ (英・韓・繁中・仏・西。検索には出ない)。言語を最初から選ぶときは `?lang=ko` などを付ける。
