@@ -138,6 +138,33 @@
 - キャプションの案内は「プロフィールのリンク → 都市のページ」(上の「海外版サイトの都市ページへの案内」)。都市のページにも一品の一覧がある。
 - 一品が増えたら monzen_src.py に足して python3 scripts/build_monzen.py → build_edition.js / build_en_pages.js。
 
+## 旅行者の写真を集める(2026-11-28 アッキー決定:方法1・3・4を組み合わせる)
+サイトとInstagramに「本物の旅行者が門前の一品を楽しむ写真」を載せるため、次の3つを同時に進める。どれも子どもがはっきり写る写真は使わない。写真の許可の記録は必ず残す。
+
+**1. 無料の写真(Wikimedia Commons)でつなぐ**
+- ig/fetch.txt の `vis-` で始まる行が、参道のにぎわいの写真。使ってよいのは、後ろ姿・遠くの人混みなど、顔で人がわからない写真だけ。顔がわかる人が写っていたら使わない(ぼかしても使わない)。
+- 出典(撮った人・ライセンス)は ig/src/*.json のとおりに表示する。
+
+**2. アッキーが神社で直接お願いする(同意書)**
+- 同意書のページ:https://motonory-a.github.io/japan-power-spots/share/ (英・韓・繁中・仏・西。検索には出ない)。言語を最初から選ぶときは `?lang=ko` などを付ける。
+- 流れ:声をかける → スマホでこのページを見せる → 名前・表記名(任意)・3つのチェック・指でサイン → 「同意します」で許可の記録の画像がアッキーのスマホに保存される(ページからはどこにも送らない)。
+- その場で写真をAirDropか本人のInstagram経由でもらう。同意の画像と写真を一緒に、ドライブの「AI共有/旅行者写真」(なければ作る)に入れる。Claudeはそこから選んでサイトに載せる。
+- 声かけの一言(英語):「Hi! I run a free travel guide to Japan's shrines. Could I share your photo with other travelers? It takes one minute.」
+
+**3. Instagramで投稿を募る**
+- ハッシュタグ:**#OneLocalBiteJapan**(海外向け全アカウントで同じ)。
+- 海外向け(en/kr/tw/fr/es)は月2回、募集の投稿を入れる(「参拝のあとの一品」の回の最後の1枚か、キャプションの最後に入れるのでもよい)。
+- 呼びかけ文(各言語):
+  - en: Ate something good at a shrine gate in Japan? Post it with #OneLocalBiteJapan — we may feature it on our guide (we'll always ask first).
+  - ko: 일본 신사·절 앞에서 맛있는 걸 드셨나요? #OneLocalBiteJapan 을 붙여 올려 주세요. 저희 가이드에 소개할 수도 있어요(꼭 먼저 여쭤봅니다).
+  - zh: 在日本神社、寺院門前吃到好吃的嗎?加上 #OneLocalBiteJapan 分享吧!我們可能會在指南中介紹(一定會先徵求您的同意)。
+  - fr: Vous avez goûté une spécialité à l'entrée d'un sanctuaire au Japon ? Publiez-la avec #OneLocalBiteJapan — nous pourrions la présenter dans notre guide (en vous demandant toujours avant).
+  - es: ¿Probaste algo rico a la entrada de un santuario en Japón? Súbelo con #OneLocalBiteJapan: quizá lo mostremos en nuestra guía (siempre te preguntaremos antes).
+- 良い投稿を見つけたら、使う前に必ずDMで許可をもらう。Claudeは他人にDMを送らない(アッキーが送る)。DMの文(英語。相手の言語に合わせて直す):
+  「Hi! We love your photo from ◯◯. May we show it on our free guide "Japan's Sacred Places" (website + Instagram) with credit to @(相手)? You can ask us to remove it anytime. If OK, please reply "Yes" 🙏」
+- 「Yes」の返事の画面を、写真と一緒に「AI共有/旅行者写真」に保存する。返事がない人の写真は使わない。リポストもしない。
+- 載せるときは必ず「Photo: @相手」と書く。
+
 ## 写真は「話題そのもの」が写っているものだけ（2026-11-19 本人の指摘）
 - おみくじの回に京都の住宅街の写真が出てしまい、「おみくじとは無関係な写真。もっとよく考えて写真選定して」と指摘された。
 - 写真は、その投稿の話題そのもの（おみくじの回ならおみくじ、5円玉の回なら5円玉やさい銭箱、お守りの回ならお守り）が、ひと目でわかるように写っているものだけを使う。

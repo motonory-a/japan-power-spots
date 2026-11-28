@@ -320,3 +320,9 @@ mz-takosenbei2 | commons:たこせんべい 江の島
 mz-unagi | commons:unaju eel
 mz-unagi2 | commons:Narita unagi
 mz-usaame | commons:宇佐飴
+vis-nakamise-back | commons:Nakamise-dori crowd Asakusa
+vis-fushimi-torii-walk | commons:Fushimi Inari torii visitors walking
+vis-miyajima-street | commons:Miyajima Omotesando shopping street
+vis-ise-oharai | commons:Oharai-machi Ise street
+vis-dazaifu-sando | commons:Dazaifu Tenmangu approach street
+vis-kiyomizu-sannenzaka | commons:Sannenzaka Kyoto street
