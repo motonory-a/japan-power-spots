@@ -374,7 +374,7 @@ function homePage() {
     // b:後ろ姿の絵 / p1〜p3:顔の見える旅行者の絵(縦長の絵があればスマホ用に使う)
     const hi = HERO === 'b' ? 'bite' : 'face' + HERO.slice(1);
     const hasV = fs.existsSync(r('assets/img/edition/monzen/' + hi + '-v-941.jpg'));
-    const alt = HERO === 'b' ? 'A traveler holding freshly grilled mitarashi dango on a shrine approach' : 'A traveler smiling and enjoying a local snack on a shrine approach';
+    const alt = HERO === 'b' ? 'A traveler holding freshly grilled mitarashi dango on a shrine approach' : 'A traveler smiling with freshly grilled mitarashi dango on a shrine approach';
     hero = `<header class="ed-hero ed-hero-b ed-hero-${HERO}">
   <picture>${hasV ? `<source media="(max-width: 700px)" type="image/webp" srcset="${mz}${hi}-v-640.webp 640w, ${mz}${hi}-v-941.webp 941w" sizes="100vw"><source media="(max-width: 700px)" srcset="${mz}${hi}-v-941.jpg" sizes="100vw">` : ''}<source type="image/webp" srcset="${mz}${hi}-800.webp 800w, ${mz}${hi}-1672.webp 1672w" sizes="100vw"><img src="${mz}${hi}-1672.jpg" alt="${alt}" width="1672" height="941"></picture>
   ${heroText}
